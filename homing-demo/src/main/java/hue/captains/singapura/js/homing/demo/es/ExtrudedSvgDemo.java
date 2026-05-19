@@ -5,13 +5,21 @@ import hue.captains.singapura.js.homing.libs.ThreeJs;
 
 import java.util.List;
 
-public record ExtrudedSvgDemo() implements AppModule<AppModule._None, ExtrudedSvgDemo> {
+public record ExtrudedSvgDemo() implements AppModule<ExtrudedSvgDemo.Params, ExtrudedSvgDemo> {
 
-    record appMain() implements AppModule._AppMain<AppModule._None, ExtrudedSvgDemo> {}
+    record appMain() implements AppModule._AppMain<Params, ExtrudedSvgDemo> {}
 
     public record link() implements AppLink<ExtrudedSvgDemo> {}
 
+    /**
+     * @param animal optional initial animal name; {@code null} → URL fallback,
+     *               then default.
+     */
+    public record Params(String animal) implements AppModule._Param {}
+
     public static final ExtrudedSvgDemo INSTANCE = new ExtrudedSvgDemo();
+
+    @Override public Class<Params> paramsType() { return Params.class; }
 
     @Override
     public String title() {

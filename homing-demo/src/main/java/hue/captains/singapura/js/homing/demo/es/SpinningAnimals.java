@@ -2,6 +2,8 @@ package hue.captains.singapura.js.homing.demo.es;
 
 import hue.captains.singapura.js.homing.core.*;
 import hue.captains.singapura.js.homing.demo.css.SpinningStyles;
+import hue.captains.singapura.js.homing.studio.base.css.StudioStyles;
+import hue.captains.singapura.js.homing.studio.base.ui.StudioElements;
 
 import java.util.List;
 
@@ -30,6 +32,14 @@ public record SpinningAnimals() implements AppModule<AppModule._None, SpinningAn
                         new SpinningStyles.spin_cell(),
                         new SpinningStyles.paused()
                 ), SpinningStyles.INSTANCE))
+                // Studio chrome — Header + brand + breadcrumb plus the layout
+                // classes the shell expects.
+                .add(new ModuleImports<>(List.of(new StudioElements.Header()), StudioElements.INSTANCE))
+                .add(new ModuleImports<>(List.of(
+                        new StudioStyles.st_root(),
+                        new StudioStyles.st_main(),
+                        new StudioStyles.st_loading()
+                ), StudioStyles.INSTANCE))
                 .build();
     }
 

@@ -17,15 +17,20 @@ That's it. No per-app `appMain`, no hand-rolled HTML, no theme registry of its o
 
 ## What the turtle is doing here
 
-The brand mark in the header is the same turtle SVG the `Wonderland` and `DancingAnimals` demos use — typed via `SvgRef<>(CuteAnimal.INSTANCE, new CuteAnimal.turtle())`. Two birds, one asset:
+The brand mark in the header is the same turtle SVG the `DancingAnimals` and `MovingAnimal` games use — typed via `SvgRef<>(CuteAnimal.INSTANCE, new CuteAnimal.turtle())`. Two birds, one asset:
 
 - The demo gets a friendly mark with personality — easier to tell apart from the main studio at a glance.
 - The framework's `SvgRef` primitive gets exercised against an asset *not designed for it* — a 800×800 illustrative SVG with hardcoded dimensions, originally drawn for the SVG-extruder demos. If the framework can host that as a brand logo without per-asset work, the primitive is robust.
 
 ## What's not here
 
-- **No catalogues for the SVG/animation demos** — those still run from `WonderlandDemoServer` on its own port. They predate the typed-Catalogue pattern and their migration is a separate, larger effort. (Per the First-User Discipline, a deliberate deferral, recorded in the v1 release tracker.)
-- **No plan trackers** — the demo studio doesn't track its own implementation. It's a *consumer* of the primitives, not a project artefact.
+- **Plan trackers for the demo's own implementation** — the demo studio doesn't track its own implementation. It's a *consumer* of the primitives, not a project artefact. (Plan trackers live in the framework's own self-studio, where they document the framework's evolution.)
+
+## Apps and docs as siblings — the Site-in-a-Jar POC
+
+Three animal-game SPAs (`MovingAnimal` — platform game; `DancingAnimals` — 5×5 keyboard dance grid; `SpinningAnimals` — auto-rotating gallery) ship as catalogue leaves alongside the documentation. The flagship — `MovingAnimal` — also gets a top-level tile next to the doc tiles. Click any of them: full SPA in the same chrome (header, breadcrumb, theme picker, audio cues).
+
+This is the Site-in-a-Jar shape RFC 0022 + `SiteInAJarPlanData` describe: one Maven jar serving applications and documentation as sibling kinds of typed catalogue leaves. The demo studio is the framework's first dogfood worked example of that shape — proving the typed Catalogue / DocViewer / AppModule machinery doesn't care which kind any given leaf is.
 
 ## Try it
 

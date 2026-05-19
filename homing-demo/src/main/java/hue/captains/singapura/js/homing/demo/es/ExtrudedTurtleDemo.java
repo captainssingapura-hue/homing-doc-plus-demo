@@ -5,13 +5,21 @@ import hue.captains.singapura.js.homing.libs.ThreeJs;
 
 import java.util.List;
 
-public record ExtrudedTurtleDemo() implements AppModule<AppModule._None, ExtrudedTurtleDemo> {
+public record ExtrudedTurtleDemo() implements AppModule<ExtrudedTurtleDemo.Params, ExtrudedTurtleDemo> {
 
-    record appMain() implements AppModule._AppMain<AppModule._None, ExtrudedTurtleDemo> {}
+    record appMain() implements AppModule._AppMain<Params, ExtrudedTurtleDemo> {}
 
     public record link() implements AppLink<ExtrudedTurtleDemo> {}
 
+    /**
+     * @param animal optional initial animal name; {@code null} → fall back to URL
+     *               param, then default {@code "turtle"}.
+     */
+    public record Params(String animal) implements AppModule._Param {}
+
     public static final ExtrudedTurtleDemo INSTANCE = new ExtrudedTurtleDemo();
+
+    @Override public Class<Params> paramsType() { return Params.class; }
 
     @Override
     public String title() {

@@ -12,14 +12,10 @@ class DemoCssConformanceTest extends CssConformanceTest {
     protected List<DomModule<?>> domModules() {
         return List.of(
                 AnimalCell.INSTANCE,
-                BobModule.INSTANCE,
                 DancingAnimals.INSTANCE,
                 SpinningAnimals.INSTANCE,
                 MovingAnimal.INSTANCE,
-                TurtleDemo.INSTANCE,
-                WonderlandDemo.INSTANCE,
-                PlatformerBgm.INSTANCE,
-                DemoCatalogue.INSTANCE
+                PlatformerBgm.INSTANCE
         );
     }
 

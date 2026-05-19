@@ -1,4 +1,37 @@
 function appMain(rootElement) {
+    // Studio chrome shell — see MovingAnimal.js for the same pattern.
+    css.addClass(rootElement, st_root);
+    var _loading = document.createElement("div");
+    css.addClass(_loading, st_loading);
+    _loading.textContent = "Loading…";
+    _loading.style.cssText = "padding:24px;";
+    rootElement.appendChild(_loading);
+    fetch("/brand")
+        .then(function (r) { if (!r.ok) throw new Error("/brand HTTP " + r.status); return r.json(); })
+        .then(function (brand) {
+            rootElement.replaceChildren();
+            rootElement.appendChild(Header({
+                brand:  { href: brand.homeUrl, label: brand.label, logo: brand.logo },
+                crumbs: [
+                    { text: brand.label, href: brand.homeUrl },
+                    { text: "Spinning Animals" }
+                ]
+            }));
+            var _main = document.createElement("div");
+            css.addClass(_main, st_main);
+            rootElement.appendChild(_main);
+            buildSpin(_main);
+        })
+        .catch(function (err) {
+            rootElement.replaceChildren();
+            var e = document.createElement("div");
+            e.style.cssText = "padding:24px;color:#c33;";
+            e.textContent = "Failed to load chrome: " + err.message;
+            rootElement.appendChild(e);
+        });
+}
+
+function buildSpin(rootElement) {
     const h1 = document.createElement("h1");
     css.setClass(h1, spin_title);
     h1.textContent = "Spinning Animals";

@@ -37,6 +37,6 @@ public record DemoFixtures<S extends Studio<?>>(Umbrella<S> umbrella)
     }
 
     @Override public List<ContentTree> trees() {
-        return List.of(AnimalsTree.INSTANCE);
+        return List.of(AnimalsTree.INSTANCE, InteractiveAnimalsTree.INSTANCE);
     }
 }

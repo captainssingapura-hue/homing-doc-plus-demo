@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.demo.studio;
 import hue.captains.singapura.js.homing.core.SvgRef;
 import hue.captains.singapura.js.homing.demo.es.CuteAnimal;
 import hue.captains.singapura.js.homing.studio.base.SvgDoc;
+import hue.captains.singapura.js.homing.studio.base.composed.CodeSegment;
 import hue.captains.singapura.js.homing.studio.base.composed.ComposedDoc;
 import hue.captains.singapura.js.homing.studio.base.composed.ImageSegment;
 import hue.captains.singapura.js.homing.studio.base.composed.SvgSegment;
@@ -92,6 +93,29 @@ public final class ComposedDemoDoc {
                 ImageDemoDoc.INSTANCE,
                 Optional.of("Figure 3 — the ImageDoc kind, in action."));
 
+        var codePrologue = new TextSegment(
+                """
+                A `CodeSegment` carries a source-code listing verbatim. Theme styling (monospace font, inverted surface, horizontal overflow) is inherited from the chrome — no per-segment CSS. The `language` field becomes a `class="language-X"` on the `<code>` element; downstream that wants syntax highlighting can attach a highlighter without framework cooperation.
+                """,
+                Optional.of("And one code listing"));
+
+        var codeSeg = new CodeSegment(
+                """
+                public record ComposedDoc(
+                        UUID            uuid,
+                        String          title,
+                        String          summary,
+                        String          category,
+                        List<Segment>   segments,
+                        List<Reference> references
+                ) implements Doc {
+                    @Override public String kind() { return "composed"; }
+                    @Override public String url()  { return "/app?app=composed-viewer&id=" + uuid; }
+                }
+                """,
+                "java",
+                Optional.of("Figure 4 — `ComposedDoc` itself, as a `CodeSegment`."));
+
         var whatsNext = new TextSegment(
                 """
                 - Phase 5: rewrite the "Why we ditched HTML" case study entirely in this vocabulary — self-proof.
@@ -105,6 +129,7 @@ public final class ComposedDemoDoc {
                 "Strict-typed text + SVG + table + image segments, end-to-end. Every prose block parses under the audit-driven .mdad+ grammar.",
                 "DEMO",
                 List.of(intro, lookingAt, turtleSeg, whyComposed, props,
-                        statusGrid, tableSeg, imagePrologue, imageSeg, whatsNext));
+                        statusGrid, tableSeg, imagePrologue, imageSeg,
+                        codePrologue, codeSeg, whatsNext));
     }
 }

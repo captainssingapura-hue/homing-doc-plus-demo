@@ -1,7 +1,12 @@
-function appMain(rootElement) {
+function appMain(rootElement, paramsOverride) {
     // --- all available SVGs ---
     const animals = { turtle, ghost, broom, penguin, crocodile, whale };
-    let currentAnimal = "turtle";
+    // Per the DocumentaryWidget pattern: paramsOverride (when passed by an
+    // embedding ComposedDoc) wins; otherwise fall back to the framework's
+    // auto-generated `params` const (URL-derived). Default "turtle".
+    const _eff = paramsOverride || params;
+    const _initialAnimal = (_eff && _eff.animal) || "turtle";
+    let currentAnimal = (_initialAnimal in animals) ? _initialAnimal : "turtle";
 
     // --- scene setup ---
     const scene = new Scene();

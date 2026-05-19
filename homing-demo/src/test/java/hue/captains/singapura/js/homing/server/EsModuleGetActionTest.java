@@ -17,24 +17,24 @@ class EsModuleGetActionTest {
     private final EsModuleGetAction action = new EsModuleGetAction(new QueryParamResolver());
 
     @Test
-    void execute_generatesJsForAlice() throws Exception {
-        var query = new ModuleQuery(Alice.class.getCanonicalName());
+    void execute_generatesJsForEsModule() throws Exception {
+        var query = new ModuleQuery(JumpPhysics.class.getCanonicalName());
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
         assertNotNull(result);
         assertEquals("application/javascript", result.contentType());
-        assertTrue(result.body().contains("AliceClass"));
+        assertTrue(result.body().contains("createJumpPhysics"));
         assertTrue(result.body().contains("export {"));
     }
 
     @Test
     void execute_generatesJsForSvgGroup() throws Exception {
-        var query = new ModuleQuery(Wonderland.class.getCanonicalName());
+        var query = new ModuleQuery(CuteAnimal.class.getCanonicalName());
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
         assertNotNull(result);
         assertEquals("application/javascript", result.contentType());
-        assertTrue(result.body().contains("CheshireCat"));
+        assertTrue(result.body().contains("turtle"));
         assertTrue(result.body().contains("export {"));
     }
 
@@ -148,8 +148,8 @@ class EsModuleGetActionTest {
     }
 
     @Test
-    void execute_turtleDemoImportsFromBundledThreeJs() throws Exception {
-        var query = new ModuleQuery(TurtleDemo.class.getCanonicalName());
+    void execute_extrudedTurtleDemoImportsFromBundledThreeJs() throws Exception {
+        var query = new ModuleQuery(ExtrudedTurtleDemo.class.getCanonicalName());
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
         String js = result.body();
 
@@ -160,14 +160,14 @@ class EsModuleGetActionTest {
         assertTrue(js.contains("export {appMain"),
                 "Should export appMain");
         assertTrue(js.contains("new Scene()"),
-                "Should contain turtle scene code");
+                "Should contain three.js scene code");
     }
 
     @Test
     void execute_generatedImportsUseQueryParamPaths() throws Exception {
-        // BobModule imports from Alice and Wonderland — verify the generated import
-        // statements use query-param URLs, not file paths
-        var query = new ModuleQuery("hue.captains.singapura.js.homing.demo.es.BobModule");
+        // AnimalCell is a DomModule that imports SVG beings from CuteAnimal — verify
+        // the generated import statements use query-param URLs, not file paths.
+        var query = new ModuleQuery(AnimalCell.class.getCanonicalName());
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
         assertTrue(result.body().contains("from \"/module?class="),

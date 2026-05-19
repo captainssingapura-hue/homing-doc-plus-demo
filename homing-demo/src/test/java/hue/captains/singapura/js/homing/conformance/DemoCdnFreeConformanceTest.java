@@ -15,14 +15,10 @@ class DemoCdnFreeConformanceTest extends CdnFreeConformanceTest {
     protected List<EsModule<?>> esModules() {
         return List.of(
                 // Demo apps — must not import from any CDN
-                DemoCatalogue.INSTANCE,
                 AnimalCell.INSTANCE,
-                BobModule.INSTANCE,
                 DancingAnimals.INSTANCE,
                 SpinningAnimals.INSTANCE,
                 MovingAnimal.INSTANCE,
-                TurtleDemo.INSTANCE,
-                WonderlandDemo.INSTANCE,
                 PlatformerBgm.INSTANCE,
                 ExtrudedTurtleDemo.INSTANCE,
                 DecomposedSvgDemo.INSTANCE,
@@ -30,6 +26,7 @@ class DemoCdnFreeConformanceTest extends CdnFreeConformanceTest {
                 SvgDecomposer.INSTANCE,
                 SvgExtruder.INSTANCE,
                 JumpPhysics.INSTANCE,
+                PlatformEngine.INSTANCE,
 
                 // Bundled 3rd-party libs — auto-skipped by CdnFreeConformanceTest
                 // since they're BundledExternalModules. Listed here so any future

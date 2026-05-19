@@ -12,10 +12,10 @@ import hue.captains.singapura.js.homing.studio.base.app.StudioBrand;
  * via the closure walk. The standalone brand is the turtle-logoed
  * "Homing · multi-studio · demo" — the umbrella's brand wins when composed.
  *
- * <p>Contributor studios ({@code DemoBaseStudio}, {@code SkillsStudio})
- * are added as sibling entries in the deploy's {@code Umbrella.Group};
- * each contributes its own catalogues, plans, and apps under the same
- * Bootstrap.</p>
+ * <p>Contributor studios (today: {@code DemoBaseStudio}; previously also a
+ * public {@code SkillsStudio} that was retired in 0.0.111) are added as
+ * sibling entries in the deploy's {@code Umbrella.Group}; each contributes
+ * its own catalogues, plans, and apps under the same Bootstrap.</p>
  */
 public record MultiStudio() implements Studio<MultiStudioHome> {
 

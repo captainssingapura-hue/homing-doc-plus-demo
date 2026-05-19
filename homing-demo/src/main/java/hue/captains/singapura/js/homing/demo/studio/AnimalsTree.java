@@ -14,25 +14,26 @@ import java.util.List;
 
 /**
  * RFC 0016 demo — categorises the {@link CuteAnimal} SVG beings into two
- * sub-branches ("Animals" and "Halloween") under one ContentTree.
+ * sub-branches under one ContentTree: <b>Animals</b> and <b>Halloween</b>.
+ * Each leaf wraps an {@link SvgDoc} rendered by the framework's
+ * registered {@code SvgViewer}.
  *
- * <p>Each leaf wraps a {@link SvgDoc} (RFC 0015 Phase 3 Doc subtype) so
- * clicking a tile opens the SVG full-page via the framework's registered
- * {@code SvgViewer} (RFC 0015 Phase 5 ContentViewer). The tree page itself
- * renders as standard catalogue Cards — same chrome, same hover/audio
- * behaviour as every other tile in the framework.</p>
+ * <p>The interactive 3D counterparts to these SVGs live not as tree
+ * leaves but as {@link InteractiveAnimalDoc} entries — one {@code ComposedDoc}
+ * per animal, each embedding the canonical SVG together with three typed
+ * {@code DocumentaryWidget} segments (coin gallery, extruder,
+ * decomposer) pre-selected to that animal via typed {@code Params}.
+ * The Doc-shaped framing carries the framework's chrome around all
+ * the typed segments uniformly; widgets are isolated islands inside
+ * that frame.</p>
  *
  * <p>Tree shape:</p>
  * <pre>
  *   animals (tree id; root)
- *   ├── animals  (TreeBranch)
- *   │   ├── turtle    (TreeLeaf → SvgDoc)
- *   │   ├── penguin   (TreeLeaf → SvgDoc)
- *   │   ├── crocodile (TreeLeaf → SvgDoc)
- *   │   └── whale     (TreeLeaf → SvgDoc)
- *   └── halloween (TreeBranch)
- *       ├── ghost (TreeLeaf → SvgDoc)
- *       └── broom (TreeLeaf → SvgDoc)
+ *   ├── animals       (2D SVG leaves — SvgDoc kind)
+ *   │   ├── turtle / penguin / crocodile / whale
+ *   └── halloween     (2D SVG leaves — SvgDoc kind)
+ *       ├── ghost / broom
  * </pre>
  */
 public final class AnimalsTree {
@@ -44,7 +45,7 @@ public final class AnimalsTree {
     private static ContentTree build() {
         var animalsBranch = new TreeBranch(
                 "animals", "Animals",
-                "Cute critters from around the world.",
+                "Cute critters from around the world. Static 2D SVG leaves — each is an SvgDoc rendered by the framework's SvgViewer.",
                 "CATEGORY", "🐾",
                 List.<TreeNode>of(
                         svgLeaf("turtle",    "Turtle",    "Slow, steady, ancient.",        new CuteAnimal.turtle()),
@@ -55,7 +56,7 @@ public final class AnimalsTree {
 
         var halloweenBranch = new TreeBranch(
                 "halloween", "Halloween",
-                "Spooky companions for the season.",
+                "Spooky companions for the season. Same shape as the Animals branch.",
                 "CATEGORY", "🎃",
                 List.<TreeNode>of(
                         svgLeaf("ghost", "Ghost", "Boo.",          new CuteAnimal.ghost()),
@@ -64,9 +65,7 @@ public final class AnimalsTree {
 
         var root = new TreeBranch(
                 "", "Animals & Halloween",
-                "Cute SVG critters, categorised. A demo of RFC 0016 ContentTree "
-              + "with RFC 0015 polymorphic doc viewer routing — each tile is a Doc "
-              + "of kind \"svg\", rendered by the framework's registered SvgViewer.",
+                "Cute SVG critters, categorised. The interactive 3D counterparts live in the \"Turtle, Interactive\" ComposedDoc — see the home tile.",
                 "TREE", "🌳",
                 List.of(animalsBranch, halloweenBranch));
 

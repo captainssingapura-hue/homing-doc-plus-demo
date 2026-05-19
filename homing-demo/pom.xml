@@ -33,17 +33,11 @@
             <artifactId>homing-studio-base</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- RFC 0009 follow-up: the demo composes multiple studios under
-             one umbrella. After the codebase separation (RFC 0021), the
-             demo depends only on `homing-skills` for SkillsStudio — the
-             framework's own self-documentation studio (`homing-studio`)
-             is intentionally not a demo dependency. A downstream adapter
-             plugs in their own studios as additional umbrella entries. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-skills</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
+        <!-- Per 0.0.111: homing-skills was retired. The demo studio is now
+             the canonical worked example — apps + docs in one jar serves as
+             both the Site-in-a-Jar dogfood and the framework's pedagogy.
+             A downstream adapter plugs in its own studios as additional
+             umbrella entries; nothing in this demo composes a second studio. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance</artifactId>

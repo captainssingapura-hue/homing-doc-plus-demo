@@ -2,6 +2,8 @@ package hue.captains.singapura.js.homing.demo.es;
 
 import hue.captains.singapura.js.homing.core.*;
 import hue.captains.singapura.js.homing.demo.css.SubwayStyles;
+import hue.captains.singapura.js.homing.studio.base.css.StudioStyles;
+import hue.captains.singapura.js.homing.studio.base.ui.StudioElements;
 
 import java.util.List;
 
@@ -29,6 +31,15 @@ public record DancingAnimals() implements AppModule<AppModule._None, DancingAnim
                         new SubwayStyles.subway_grid(),
                         new SubwayStyles.subway_cell()
                 ), SubwayStyles.INSTANCE))
+                // Studio chrome — Header + brand + breadcrumb plus the layout
+                // classes the shell expects. Lets the dance grid sit inside
+                // the standard studio shell.
+                .add(new ModuleImports<>(List.of(new StudioElements.Header()), StudioElements.INSTANCE))
+                .add(new ModuleImports<>(List.of(
+                        new StudioStyles.st_root(),
+                        new StudioStyles.st_main(),
+                        new StudioStyles.st_loading()
+                ), StudioStyles.INSTANCE))
                 .build();
     }
 

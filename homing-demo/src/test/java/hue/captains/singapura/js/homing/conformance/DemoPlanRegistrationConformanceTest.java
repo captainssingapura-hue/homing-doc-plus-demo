@@ -2,16 +2,18 @@ package hue.captains.singapura.js.homing.conformance;
 
 import hue.captains.singapura.js.homing.demo.studio.DemoBaseStudio;
 import hue.captains.singapura.js.homing.demo.studio.multi.MultiStudio;
-import hue.captains.singapura.js.homing.skills.SkillsStudio;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 
 import java.util.List;
 
 /**
- * Mirrors {@code DemoStudioServer.main()}'s umbrella and asserts that
- * every Plan reachable as a catalogue leaf (via {@code Entry.of(this, plan)})
- * is also present in some {@code Studio.plans()} list. Otherwise the
- * tile renders but {@code /plan?id=…} returns 404 (Defect 0005).
+ * Mirrors {@code DemoStudioServer.main()}'s umbrella and asserts that every
+ * Plan reachable as a catalogue leaf (via {@code Entry.of(this, plan)}) is
+ * also present in some {@code Studio.plans()} list. After Defect 0005's
+ * Plan-arm fix (0.0.111) the catalogue-leaf harvest in {@code Bootstrap}
+ * makes the missing-from-{@code Studio.plans()} case structurally
+ * inexpressible; this test stays as defense in depth and a watch for the
+ * reverse drift direction.
  */
 class DemoPlanRegistrationConformanceTest extends PlanRegistrationConformanceTest {
 
@@ -19,8 +21,7 @@ class DemoPlanRegistrationConformanceTest extends PlanRegistrationConformanceTes
     protected List<? extends Studio<?>> studios() {
         return List.of(
                 MultiStudio.INSTANCE,
-                DemoBaseStudio.INSTANCE,
-                SkillsStudio.INSTANCE
+                DemoBaseStudio.INSTANCE
         );
     }
 }

@@ -1,4 +1,45 @@
 function appMain(rootElement) {
+    // Studio chrome shell — Header + breadcrumb on top, st_main wrapper for
+    // the game body. Brand info is server-resolved via /brand so the chrome
+    // tracks the active studio's identity (logo, label, home URL) without
+    // hardcoding anything app-side.
+    css.addClass(rootElement, st_root);
+
+    var loading = document.createElement("div");
+    css.addClass(loading, st_loading);
+    loading.textContent = "Loading…";
+    loading.style.cssText = "padding:24px;";
+    rootElement.appendChild(loading);
+
+    fetch("/brand")
+        .then(function (r) {
+            if (!r.ok) throw new Error("/brand HTTP " + r.status);
+            return r.json();
+        })
+        .then(function (brand) {
+            rootElement.replaceChildren();
+            rootElement.appendChild(Header({
+                brand:  { href: brand.homeUrl, label: brand.label, logo: brand.logo },
+                crumbs: [
+                    { text: brand.label, href: brand.homeUrl },
+                    { text: "Moving Animal" }
+                ]
+            }));
+            var main = document.createElement("div");
+            css.addClass(main, st_main);
+            rootElement.appendChild(main);
+            buildGame(main);
+        })
+        .catch(function (err) {
+            rootElement.replaceChildren();
+            var e = document.createElement("div");
+            e.style.cssText = "padding:24px;color:#c33;";
+            e.textContent = "Failed to load chrome: " + err.message;
+            rootElement.appendChild(e);
+        });
+}
+
+function buildGame(rootElement) {
     var ANIMAL_SIZE = 50;
     var STEP = 5;
     var SKY_H = 120;
@@ -175,40 +216,9 @@ function appMain(rootElement) {
     controls.appendChild(selector);
     rootElement.appendChild(controls);
 
-    // --- Theme switcher ---
-    var themes = [
-        { key: "navy",      label: "Navy" },
-        { key: "air-force", label: "Air Force" },
-        { key: "army",      label: "Army" }
-    ];
-
-    var currentTheme = new URLSearchParams(window.location.search).get("theme") || "navy";
-
-    var themeSwitcher = document.createElement("div");
-    css.setClass(themeSwitcher, pg_theme_switcher);
-
-    var themeLabel = document.createElement("span");
-    css.setClass(themeLabel, pg_theme_label);
-    themeLabel.textContent = "Theme";
-    themeSwitcher.appendChild(themeLabel);
-
-    for (var ti = 0; ti < themes.length; ti++) {
-        (function (t) {
-            var btn = document.createElement("button");
-            css.setClass(btn, pg_theme_btn);
-            if (t.key === currentTheme) css.addClass(btn, pg_theme_btn_active);
-            btn.textContent = t.label;
-            btn.addEventListener("click", function () {
-                if (t.key === currentTheme) return;
-                var url = new URL(window.location.href);
-                url.searchParams.set("theme", t.key);
-                window.location.href = url.toString();
-            });
-            themeSwitcher.appendChild(btn);
-        })(themes[ti]);
-    }
-
-    rootElement.appendChild(themeSwitcher);
+    // Theming flows from the studio chrome's theme picker — no in-page
+    // switcher. The playground uses the framework's standard --color-*
+    // tokens via PlaygroundStyles records.
 
     // --- Measure available width ---
     var viewportW = rootElement.clientWidth || 700;
@@ -259,6 +269,11 @@ function appMain(rootElement) {
 
     // --- DOM: animal ---
     var animal = createAnimalCell(css.className(pg_animal));
+    // The animal cell has no intrinsic size on .pg-animal (the record carries
+    // only positioning rules). Pin it explicitly so the SVG inside scales to
+    // ANIMAL_SIZE rather than the source artwork's intrinsic 800×800.
+    animal.style.width  = ANIMAL_SIZE + "px";
+    animal.style.height = ANIMAL_SIZE + "px";
     world.appendChild(animal);
 
     // --- DOM: score ---
@@ -301,7 +316,9 @@ function appMain(rootElement) {
             }
         });
 
-        // Add new & position
+        // Add new & position. The platform IS the visible standable rect —
+        // no vehicle silhouette child. Simpler shape that lives entirely
+        // inside the framework's standard --color-* theme tokens.
         for (var i = 0; i < currentPlats.length; i++) {
             var p = currentPlats[i];
             var el = platformEls.get(p);
@@ -309,14 +326,6 @@ function appMain(rootElement) {
                 el = document.createElement("div");
                 css.setClass(el, pg_platform);
                 el.style.height = PLATFORM_H + "px";
-                // Vehicle silhouette sits on top of the platform line.
-                // Variant class picks the active theme's vehicle 1/2/3.
-                var vehicleEl = document.createElement("div");
-                var vehicleVariant = (p.vehicle === 2) ? pg_vehicle_v2
-                                   : (p.vehicle === 3) ? pg_vehicle_v3
-                                                       : pg_vehicle_v1;
-                css.setClass(vehicleEl, pg_vehicle, vehicleVariant);
-                el.appendChild(vehicleEl);
                 world.appendChild(el);
                 platformEls.set(p, el);
             }

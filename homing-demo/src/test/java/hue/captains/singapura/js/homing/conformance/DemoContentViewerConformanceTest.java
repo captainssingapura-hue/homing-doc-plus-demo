@@ -2,7 +2,6 @@ package hue.captains.singapura.js.homing.conformance;
 
 import hue.captains.singapura.js.homing.demo.studio.DemoBaseStudio;
 import hue.captains.singapura.js.homing.demo.studio.multi.MultiStudio;
-import hue.captains.singapura.js.homing.skills.SkillsStudio;
 import hue.captains.singapura.js.homing.studio.base.DefaultFixtures;
 import hue.captains.singapura.js.homing.studio.base.Fixtures;
 import hue.captains.singapura.js.homing.studio.base.Studio;
@@ -22,8 +21,7 @@ class DemoContentViewerConformanceTest extends ContentViewerConformanceTest {
 
     private static final List<Studio<?>> STUDIOS = List.of(
             MultiStudio.INSTANCE,
-            DemoBaseStudio.INSTANCE,
-            SkillsStudio.INSTANCE
+            DemoBaseStudio.INSTANCE
     );
 
     private static final Umbrella<Studio<?>> UMBRELLA = new Umbrella.Group<>(

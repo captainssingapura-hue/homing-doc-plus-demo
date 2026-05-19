@@ -1,8 +1,8 @@
 package hue.captains.singapura.js.homing.server;
 
 import hue.captains.singapura.js.homing.core.SimpleAppResolver;
-import hue.captains.singapura.js.homing.demo.es.Alice;
-import hue.captains.singapura.js.homing.demo.es.WonderlandDemo;
+import hue.captains.singapura.js.homing.demo.es.JumpPhysics;
+import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -28,12 +28,12 @@ class AppHtmlGetActionTest {
 
     @Test
     void execute_generatesHtmlForAppModule() throws Exception {
-        var query = byClass(WonderlandDemo.class.getCanonicalName());
+        var query = byClass(MovingAnimal.class.getCanonicalName());
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
         assertEquals("text/html", result.contentType());
-        assertTrue(result.body().contains("<title>Wonderland Demo · Homing</title>"));
-        assertTrue(result.body().contains("/module?class=" + WonderlandDemo.class.getCanonicalName()));
+        assertTrue(result.body().contains("<title>Moving Animal · Homing</title>"));
+        assertTrue(result.body().contains("/module?class=" + MovingAnimal.class.getCanonicalName()));
         assertTrue(result.body().contains("await import(moduleUrl)"));
         assertTrue(result.body().contains("appMain(document.getElementById(\"app\"))"));
         // RFC 0002: themes are explicit. With no ?theme= in the request, the
@@ -45,7 +45,7 @@ class AppHtmlGetActionTest {
 
     @Test
     void execute_respectsThemeOverride() throws Exception {
-        var query = byClass(WonderlandDemo.class.getCanonicalName(), "dark", null);
+        var query = byClass(MovingAnimal.class.getCanonicalName(), "dark", null);
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
         assertTrue(result.body().contains("\"dark\""), "Should include theme override in bootstrap");
@@ -53,7 +53,7 @@ class AppHtmlGetActionTest {
 
     @Test
     void execute_respectsLocaleOverride() throws Exception {
-        var query = byClass(WonderlandDemo.class.getCanonicalName(), null, "fr");
+        var query = byClass(MovingAnimal.class.getCanonicalName(), null, "fr");
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
         assertTrue(result.body().contains("\"fr\""), "Should include locale override in bootstrap");
@@ -61,8 +61,8 @@ class AppHtmlGetActionTest {
 
     @Test
     void execute_failsForNonAppModule() {
-        // Alice is an EsModule but not an AppModule
-        var query = byClass(Alice.class.getCanonicalName());
+        // JumpPhysics is an EsModule but not an AppModule
+        var query = byClass(JumpPhysics.class.getCanonicalName());
         var future = action.execute(query, new EmptyParam.NoHeaders());
 
         var ex = assertThrows(ExecutionException.class, future::get);
@@ -90,18 +90,18 @@ class AppHtmlGetActionTest {
 
     @Test
     void execute_resolvesByAppSimpleName() throws Exception {
-        var resolver = new SimpleAppResolver(List.of(WonderlandDemo.INSTANCE));
+        var resolver = new SimpleAppResolver(List.of(MovingAnimal.INSTANCE));
         var actionWithResolver = new AppHtmlGetAction(new QueryParamResolver(), resolver);
-        var query = byApp(WonderlandDemo.INSTANCE.simpleName());
+        var query = byApp(MovingAnimal.INSTANCE.simpleName());
         var result = actionWithResolver.execute(query, new EmptyParam.NoHeaders()).get();
 
-        assertTrue(result.body().contains("<title>Wonderland Demo · Homing</title>"));
-        assertTrue(result.body().contains("/module?class=" + WonderlandDemo.class.getCanonicalName()));
+        assertTrue(result.body().contains("<title>Moving Animal · Homing</title>"));
+        assertTrue(result.body().contains("/module?class=" + MovingAnimal.class.getCanonicalName()));
     }
 
     @Test
     void execute_returnsNotFoundForUnknownAppName() {
-        var resolver = new SimpleAppResolver(List.of(WonderlandDemo.INSTANCE));
+        var resolver = new SimpleAppResolver(List.of(MovingAnimal.INSTANCE));
         var actionWithResolver = new AppHtmlGetAction(new QueryParamResolver(), resolver);
         var query = byApp("definitely-not-registered");
         var future = actionWithResolver.execute(query, new EmptyParam.NoHeaders());
@@ -122,13 +122,13 @@ class AppHtmlGetActionTest {
 
     @Test
     void execute_appWinsOverClassWhenBothProvided() throws Exception {
-        var resolver = new SimpleAppResolver(List.of(WonderlandDemo.INSTANCE));
+        var resolver = new SimpleAppResolver(List.of(MovingAnimal.INSTANCE));
         var actionWithResolver = new AppHtmlGetAction(new QueryParamResolver(), resolver);
-        // ?app=wonderland-demo &class=Alice — app wins, Alice is ignored.
-        var query = new AppQuery(WonderlandDemo.INSTANCE.simpleName(),
-                                 Alice.class.getCanonicalName(), null, null);
+        // ?app=moving-animal &class=JumpPhysics — app wins, JumpPhysics is ignored.
+        var query = new AppQuery(MovingAnimal.INSTANCE.simpleName(),
+                                 JumpPhysics.class.getCanonicalName(), null, null);
         var result = actionWithResolver.execute(query, new EmptyParam.NoHeaders()).get();
 
-        assertTrue(result.body().contains("<title>Wonderland Demo · Homing</title>"));
+        assertTrue(result.body().contains("<title>Moving Animal · Homing</title>"));
     }
 }

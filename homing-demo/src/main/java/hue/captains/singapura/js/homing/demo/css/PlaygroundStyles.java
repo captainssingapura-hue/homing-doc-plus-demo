@@ -6,24 +6,32 @@ import hue.captains.singapura.js.homing.core.CssImportsFor;
 
 import java.util.List;
 
+/**
+ * Styles for the Animal Platformer demo. Theme-token native — every colour
+ * routes through the framework's standard {@code --color-*} tokens
+ * (HomingDefault / HomingForest / HomingSunset / HomingBauhaus). No demo-local
+ * theme registry, no per-theme {@code CssGroupImpl}. Vehicle silhouettes and
+ * the in-page theme switcher used to live here; both were dropped when the
+ * Site-in-a-Jar POC settled on the studio chrome's theme picker as the single
+ * source of theming.
+ */
 public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
     public static final PlaygroundStyles INSTANCE = new PlaygroundStyles();
 
     public record pg_title() implements CssClass<PlaygroundStyles> {
         @Override public String body() { return """
-                font-size: 2rem;
+                font-size: 1.6rem;
                 font-weight: 800;
                 text-transform: uppercase;
-                letter-spacing: var(--pg-title-letter-spacing);
-                color: var(--pg-title-color);
-                text-shadow: var(--pg-title-text-shadow);
+                letter-spacing: 3px;
+                color: var(--color-text-primary, #222);
                 margin: 0 0 4px 0;
                 """;
         }
     }
     public record pg_hint() implements CssClass<PlaygroundStyles> {
         @Override public String body() { return """
-                color: var(--pg-hint-color);
+                color: var(--color-text-muted, #666);
                 font-style: italic;
                 font-size: 0.9rem;
                 margin: 12px 0 16px 0;
@@ -37,57 +45,16 @@ public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
                 gap: 16px;
                 margin-bottom: 16px;
                 flex-wrap: wrap;
+                color: var(--color-text-primary, #222);
                 """;
         }
     }
     public record pg_size_display() implements CssClass<PlaygroundStyles> {
         @Override public String body() { return """
                 font-size: 0.85rem;
-                color: var(--pg-size-color);
+                color: var(--color-text-link, #0090b0);
                 font-weight: 600;
                 min-width: 80px;
-                """;
-        }
-    }
-    public record pg_theme_switcher() implements CssClass<PlaygroundStyles> {
-        @Override public String body() { return """
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 16px;
-                flex-wrap: wrap;
-                """;
-        }
-    }
-    public record pg_theme_label() implements CssClass<PlaygroundStyles> {
-        @Override public String body() { return """
-                font-size: 0.85rem;
-                font-weight: 600;
-                color: var(--pg-theme-label-color);
-                margin-right: 4px;
-                """;
-        }
-    }
-    public record pg_theme_btn() implements CssClass<PlaygroundStyles> {
-        @Override public String body() { return """
-                padding: 4px 12px;
-                font-size: 0.8rem;
-                font-weight: 500;
-                border: var(--pg-theme-btn-border);
-                border-radius: 4px;
-                background: var(--pg-theme-btn-bg);
-                color: var(--pg-theme-btn-color);
-                cursor: pointer;
-                transition: background 0.15s, border-color 0.15s, color 0.15s;
-                """;
-        }
-    }
-    public record pg_theme_btn_active() implements CssClass<PlaygroundStyles> {
-        @Override public String body() { return """
-                background: var(--pg-theme-btn-active-bg);
-                border-color: var(--pg-theme-btn-active-border);
-                color: var(--pg-theme-btn-active-color);
-                cursor: default;
                 """;
         }
     }
@@ -95,10 +62,10 @@ public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
         @Override public String body() { return """
                 position: relative;
                 overflow: hidden;
-                background: var(--pg-playground-bg);
-                border: var(--pg-playground-border);
+                background: var(--color-surface-inverted, #16213e);
+                border: 1px solid var(--color-border, #ccc);
                 border-radius: 8px;
-                box-shadow: var(--pg-playground-shadow);
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
                 """;
         }
     }
@@ -109,10 +76,10 @@ public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
                 left: 0;
                 right: 0;
                 z-index: 1;
-                background: var(--pg-sky-bg);
-                background-repeat: var(--pg-sky-bg-repeat);
-                background-position: var(--pg-sky-bg-position);
-                background-size: var(--pg-sky-bg-size);
+                background:
+                    radial-gradient(ellipse 110px 55px at 38% 45%, rgba(255,255,255,0.18) 0%, transparent 100%),
+                    radial-gradient(ellipse 85px 50px at 65% 50%, rgba(255,255,255,0.14) 0%, transparent 100%),
+                    radial-gradient(ellipse 75px 42px at 88% 48%, rgba(255,255,255,0.16) 0%, transparent 100%);
                 """;
         }
     }
@@ -136,56 +103,29 @@ public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
         }
     }
     /**
-     * Platform — invisible collision footprint. The visible "platform" is the
-     * vehicle silhouette ({@link pg_vehicle}) which is the platform's only
-     * child. {@code overflow:visible} so the vehicle div (taller than the
-     * 16px collision rect) is not clipped.
+     * Platform — the visible standable rectangle. Theme accent colour as
+     * background, slightly emphasised top edge so the landing line reads
+     * clearly against the inverted-surface playground.
      */
     public record pg_platform() implements CssClass<PlaygroundStyles> {
         @Override public String body() { return """
                 position: absolute;
-                overflow: visible;
-                transition: filter 0.15s;
+                transition: filter 0.15s, background 0.15s;
+                background: var(--color-accent, #4a7aa0);
+                border-radius: 3px;
+                border-top: 2px solid var(--color-accent-emphasis, #6a9ac0);
                 """;
         }
     }
     /**
-     * Active platform — applies a drop-shadow to the platform's subtree, which
-     * outlines the vehicle silhouette in the theme's accent glow colour.
+     * Active platform — the one the animal is currently standing on. Brightens
+     * via a drop-shadow glow in the theme's accent-on contrast.
      */
     public record pg_platform_active() implements CssClass<PlaygroundStyles> {
         @Override public String body() { return """
-                filter: drop-shadow(0 0 8px var(--pg-platform-active-glow));
+                filter: drop-shadow(0 0 8px var(--color-accent-on, rgba(255, 230, 120, 0.85)));
                 """;
         }
-    }
-    /**
-     * Vehicle silhouette — IS the visible platform. Top edge of the SVG is
-     * the standable line (where the animal lands). Sits at the platform's
-     * top edge and extends downward.
-     */
-    public record pg_vehicle() implements CssClass<PlaygroundStyles> {
-        @Override public String body() { return """
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 32px;
-                background-position: center top;
-                background-repeat: no-repeat;
-                background-size: 100% 100%;
-                pointer-events: none;
-                """;
-        }
-    }
-    public record pg_vehicle_v1() implements CssClass<PlaygroundStyles> {
-        @Override public String body() { return "background-image: var(--pg-vehicle-1-bg);"; }
-    }
-    public record pg_vehicle_v2() implements CssClass<PlaygroundStyles> {
-        @Override public String body() { return "background-image: var(--pg-vehicle-2-bg);"; }
-    }
-    public record pg_vehicle_v3() implements CssClass<PlaygroundStyles> {
-        @Override public String body() { return "background-image: var(--pg-vehicle-3-bg);"; }
     }
     public record pg_lava() implements CssClass<PlaygroundStyles> {
         @Override public String body() { return """
@@ -193,7 +133,7 @@ public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
                 bottom: 0;
                 left: 0;
                 right: 0;
-                background: var(--pg-lava-bg);
+                background: linear-gradient(0deg, #6a1a1a 0%, #b04030 60%, rgba(176, 64, 48, 0.4) 100%);
                 z-index: 2;
                 """;
         }
@@ -205,7 +145,7 @@ public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
                 right: 12px;
                 font-size: 1rem;
                 font-weight: 700;
-                color: var(--pg-score-color);
+                color: var(--color-text-on-inverted, #fff);
                 z-index: 3;
                 """;
         }
@@ -218,15 +158,16 @@ public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                background: var(--pg-gameover-bg);
+                background: rgba(0, 0, 0, 0.7);
                 z-index: 10;
+                color: #fff;
                 """;
         }
     }
     public record pg_final_score() implements CssClass<PlaygroundStyles> {
         @Override public String body() { return """
                 font-size: 1.2rem;
-                color: var(--pg-final-score-color);
+                color: #fff;
                 margin: 0 0 16px 0;
                 """;
         }
@@ -236,10 +177,8 @@ public record PlaygroundStyles() implements CssGroup<PlaygroundStyles> {
     public List<CssClass<PlaygroundStyles>> cssClasses() {
         return List.of(
                 new pg_title(), new pg_hint(), new pg_controls(), new pg_size_display(),
-                new pg_theme_switcher(), new pg_theme_label(), new pg_theme_btn(), new pg_theme_btn_active(),
                 new pg_playground(), new pg_sky(), new pg_world(), new pg_animal(),
                 new pg_platform(), new pg_platform_active(),
-                new pg_vehicle(), new pg_vehicle_v1(), new pg_vehicle_v2(), new pg_vehicle_v3(),
                 new pg_lava(), new pg_score(),
                 new pg_gameover(), new pg_final_score()
         );

@@ -10,14 +10,13 @@
     <packaging>pom</packaging>
     <modules>
         <module>homing-demo</module>
-        <module>homing-skills</module>
     </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <homing.core.version>0.0.110</homing.core.version>
+        <homing.core.version>VOID-SNAPSHOT</homing.core.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.12</jacoco.version>
     </properties>

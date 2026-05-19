@@ -3,16 +3,11 @@ package hue.captains.singapura.js.homing.conformance;
 import hue.captains.singapura.js.homing.core.CssGroupImpl;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.demo.es.AnimalCell;
-import hue.captains.singapura.js.homing.demo.es.BobModule;
 import hue.captains.singapura.js.homing.demo.es.DancingAnimals;
-import hue.captains.singapura.js.homing.demo.es.DemoCatalogue;
 import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.es.PlatformerBgm;
 import hue.captains.singapura.js.homing.demo.es.SpinningAnimals;
-import hue.captains.singapura.js.homing.demo.es.TurtleDemo;
-import hue.captains.singapura.js.homing.demo.es.WonderlandDemo;
 import hue.captains.singapura.js.homing.demo.theme.DemoCssGroupImplRegistry;
-import hue.captains.singapura.js.homing.demo.theme.Navy;
 
 import java.util.List;
 
@@ -27,19 +22,19 @@ class DemoCssGroupImplConsistencyTest extends CssGroupImplConsistencyTest {
     protected List<DomModule<?>> domModules() {
         return List.of(
                 AnimalCell.INSTANCE,
-                BobModule.INSTANCE,
                 DancingAnimals.INSTANCE,
                 SpinningAnimals.INSTANCE,
                 MovingAnimal.INSTANCE,
-                TurtleDemo.INSTANCE,
-                WonderlandDemo.INSTANCE,
-                PlatformerBgm.INSTANCE,
-                DemoCatalogue.INSTANCE
+                PlatformerBgm.INSTANCE
         );
     }
 
     @Override
     protected String defaultThemeSlug() {
-        return Navy.INSTANCE.slug();
+        // Studio uses the framework's HomingDefault theme. Demo no longer
+        // ships its own theme registry (military themes removed when the
+        // platformer moved into the studio chrome with standard --color-*
+        // tokens).
+        return "default";
     }
 }
