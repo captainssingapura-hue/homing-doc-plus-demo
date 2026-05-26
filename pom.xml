@@ -6,9 +6,10 @@
 
     <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
     <artifactId>homing-doc-plus-demo</artifactId>
-    <version>void-SNAPSHOT</version>
+    <version>VOID-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>homing-blocks</module>
         <module>homing-demo</module>
     </modules>
 
@@ -16,7 +17,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <homing.core.version>0.0.111</homing.core.version>
+        <homing.core.version>LOCAL-SNAPSHOT</homing.core.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.12</jacoco.version>
     </properties>

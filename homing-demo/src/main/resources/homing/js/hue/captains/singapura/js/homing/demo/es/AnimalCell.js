@@ -6,10 +6,24 @@
 //   - Pure-Component Views: no HTML tag literals; no innerHTML writes.
 //     SVG strings from the typed SvgGroup are parsed via DOMParser and
 //     installed as Nodes.
-//   - Owned References: the wrapper inside each cell is held in liveCells
-//     alongside the cell — no querySelector traversal.
+//   - Owned References: the wrapper inside each cell is held in the scope's
+//     cells array alongside the cell — no querySelector traversal.
 //   - Managed DOM Ops: AnimalCell is a helper used by imperative game-loop
 //     demos, so this doctrine is out of scope (per the SPA-only scoping).
+//
+// Scoping (RFC 0025 Ext1b b.2b fix):
+//   ES modules cache per URL — three workspace widgets all importing AnimalCell
+//   share the same module instance. The original implementation kept
+//   `selectedIndex` and `liveCells` at module level, which meant the selector
+//   in widget A refreshed cells in widget B as well. The fix:
+//
+//     var scope = createAnimalScope();
+//     var cell  = createAnimalCell(className, scope);
+//     var sel   = createAnimalSelector(scope);
+//
+//   Each widget instance mints its own scope; cells + selectedIndex are
+//   per-scope. Legacy callers that don't pass a scope fall back to a shared
+//   default scope (so the original single-instance AppModule pages still work).
 // =============================================================================
 
 const allAnimals = [
@@ -21,9 +35,14 @@ const allAnimals = [
     { name: "Whale", svg: whale }
 ];
 
-var selectedIndex = 0;
-// Each entry is { cell, wrapper } so refreshCells doesn't need a selector lookup.
-var liveCells = [];
+function createAnimalScope() {
+    return { selectedIndex: 0, cells: [] };
+}
+
+// Shared default scope — used by callers that don't pass an explicit scope
+// (legacy AppModules; one-shot rendering contexts where isolation doesn't
+// matter). New widget code should always mint its own via createAnimalScope().
+var _defaultScope = createAnimalScope();
 
 // Parse an SVG string into a typed Node. Done at point-of-use; the framework
 // emits SVGs as strings (typed asset, not HTML authored by consumer code), and
@@ -43,47 +62,47 @@ function parseSvgToNode(svgString) {
     // Force the SVG to fill its container regardless of the source artwork's
     // intrinsic dimensions. The original SVGs declare large explicit sizes
     // (typically 800×800); without overriding, the rendered element ignores
-    // any sizing CSS the consumer expects. The standalone CSS files used to
-    // do this via a `.subway-cell svg { width: 100% }` descendant rule, but
-    // that style is theme-globals territory and isn't reliably available in
-    // the studio chrome context. Setting the attribute directly is robust.
+    // any sizing CSS the consumer expects.
     el.setAttribute("width", "100%");
     el.setAttribute("height", "100%");
     return el;
 }
 
-function currentAnimalSvg() {
-    if (selectedIndex < 0) {
+function _currentSvgFor(scope) {
+    if (scope.selectedIndex < 0) {
         return allAnimals[Math.floor(Math.random() * allAnimals.length)].svg;
     }
-    return allAnimals[selectedIndex].svg;
+    return allAnimals[scope.selectedIndex].svg;
 }
 
-function getAnimalSvg() {
-    // Kept as a backwards-compatible helper for consumers that still want the
-    // raw string (e.g. a future Component impl that templates it). Prefer
-    // calling parseSvgToNode(currentAnimalSvg()) directly when building DOM.
-    return currentAnimalSvg();
-}
-
-function refreshCells() {
-    for (var i = 0; i < liveCells.length; i++) {
-        var w = liveCells[i].wrapper;
-        w.replaceChildren(parseSvgToNode(currentAnimalSvg()));
+function _refreshCellsIn(scope) {
+    for (var i = 0; i < scope.cells.length; i++) {
+        scope.cells[i].wrapper.replaceChildren(parseSvgToNode(_currentSvgFor(scope)));
     }
 }
 
-function createAnimalCell(className) {
+// RFC 0028 cycle 4 — exported entry point for AnimalsParty reactors:
+// set the scope's selected index then refresh cells in one call. Used by
+// animal widgets when they receive an AnimalChanged broadcast from the
+// global Ribbon-driven AnimalsParty.
+function setScopeAnimal(scope, index) {
+    scope.selectedIndex = parseInt(index, 10);
+    _refreshCellsIn(scope);
+}
+
+function createAnimalCell(className, scope) {
+    var s = scope || _defaultScope;
     var cell = document.createElement("div");
     cell.className = className;
     var wrapper = document.createElement("div");
-    wrapper.appendChild(parseSvgToNode(currentAnimalSvg()));
+    wrapper.appendChild(parseSvgToNode(_currentSvgFor(s)));
     cell.appendChild(wrapper);
-    liveCells.push({ cell: cell, wrapper: wrapper });
+    s.cells.push({ cell: cell, wrapper: wrapper });
     return cell;
 }
 
-function createAnimalSelector() {
+function createAnimalSelector(scope) {
+    var s = scope || _defaultScope;
     var container = document.createElement("label");
     container.textContent = "Animal ";
     var select = document.createElement("select");
@@ -97,13 +116,13 @@ function createAnimalSelector() {
         var opt = document.createElement("option");
         opt.value = String(i);
         opt.textContent = allAnimals[i].name;
-        if (i === selectedIndex) opt.selected = true;
+        if (i === s.selectedIndex) opt.selected = true;
         select.appendChild(opt);
     }
 
     select.addEventListener("change", function () {
-        selectedIndex = parseInt(select.value);
-        refreshCells();
+        s.selectedIndex = parseInt(select.value);
+        _refreshCellsIn(s);
     });
 
     container.appendChild(select);

@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
         <artifactId>homing-doc-plus-demo</artifactId>
-        <version>void-SNAPSHOT</version>
+        <version>VOID-SNAPSHOT</version>
     </parent>
 
     <artifactId>homing-demo</artifactId>
@@ -18,6 +18,16 @@
     </properties>
 
     <dependencies>
+        <!-- Sibling sub-studio: the building-blocks reference. The demo's
+             umbrella composes BuildingBlocksStudio alongside MultiStudio +
+             DemoBaseStudio so a deployed demo surfaces the framework's
+             primitives reference under the same chrome as the animal-game
+             content. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>homing-blocks</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-server</artifactId>
@@ -31,6 +41,14 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-studio-base</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- RFC 0025 Ext1 — the workspace's dynamic widget management. The
+             AnimalsPlayground app composes WorkspaceShell + WidgetPicker;
+             DocViewWidget hosts the workspace's pinned introduction. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-workspace</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <!-- Per 0.0.111: homing-skills was retired. The demo studio is now
@@ -47,6 +65,17 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- RFC 0028 cycle 6 phase 2 — pure-JS test fixtures (GraalVM-backed
+             SecretaryTestBase + JsModuleTestBase). One dep, no classifier;
+             the fixtures module hauls GraalVM Polyglot + js-community
+             along transitively so AnimalsSecretary's tests just work. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ssjs-test-fixtures</artifactId>
+            <version>${homing.core.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

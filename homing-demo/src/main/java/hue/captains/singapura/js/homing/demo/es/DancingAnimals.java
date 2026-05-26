@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.studio.base.ui.StudioElements;
 
 import java.util.List;
 
+@LegacyAppMain(reason = "Simple keyboard-driven grid; opportunistic migration after RFC 0024 P3 lands the canonical pattern.")
 public record DancingAnimals() implements AppModule<AppModule._None, DancingAnimals> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, DancingAnimals> {}

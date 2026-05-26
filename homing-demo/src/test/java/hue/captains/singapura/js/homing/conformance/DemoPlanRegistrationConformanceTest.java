@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.conformance;
 
+import hue.captains.singapura.js.homing.studio.base.conformance.PlanRegistrationConformanceTest;
 import hue.captains.singapura.js.homing.demo.studio.DemoBaseStudio;
 import hue.captains.singapura.js.homing.demo.studio.multi.MultiStudio;
 import hue.captains.singapura.js.homing.studio.base.Studio;
