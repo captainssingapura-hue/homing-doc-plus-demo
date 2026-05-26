@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.libs.ThreeJs;
 
 import java.util.List;
 
+@LegacyAppMain(reason = "Three.js decomposition demo; opportunistic migration after RFC 0024 P3.")
 public record DecomposedSvgDemo() implements AppModule<DecomposedSvgDemo.Params, DecomposedSvgDemo> {
 
     record appMain() implements AppModule._AppMain<Params, DecomposedSvgDemo> {}

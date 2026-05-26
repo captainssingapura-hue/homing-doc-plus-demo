@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.demo.es.ExtrudedSvgDemo;
 import hue.captains.singapura.js.homing.demo.es.ExtrudedTurtleDemo;
 import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.es.SpinningAnimals;
+import hue.captains.singapura.js.homing.demo.playground.AnimalsPlayground;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.app.StudioBrand;
 
@@ -42,7 +43,14 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
                 // POC — apps and docs side by side under the same chrome.
                 MovingAnimal.INSTANCE,
                 DancingAnimals.INSTANCE,
-                SpinningAnimals.INSTANCE
+                SpinningAnimals.INSTANCE,
+                // RFC 0024 Phase P1b — the new shell + widget path. Hosts
+                // SvgWidget; cohabits with the legacy SvgViewer.
+                DemoStandardMPA.INSTANCE,
+                // RFC 0025 Ext1b POC — the workspace demo. Hosts a
+                // WidgetPicker over MultiTabPane, with the pinned
+                // DocViewWidget intro + a SpinningAnimalsWidget tile.
+                AnimalsPlayground.INSTANCE
         );
     }
 

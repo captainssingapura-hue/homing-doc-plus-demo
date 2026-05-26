@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.demo.studio.multi;
 
+import hue.captains.singapura.js.homing.blocks.BuildingBlocksCatalogue;
 import hue.captains.singapura.js.homing.demo.studio.DemoStudio;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
@@ -31,7 +32,20 @@ public record LearningStudioCategory()
                         "Demo",
                         "Minimal example studio — turtle brand, intro doc, themes picker.",
                         "STUDIO",
-                        "🎨"))
+                        "🎨")),
+                // 0.1.0 onward — Building Blocks reference studio. Per-block
+                // L1 sub-catalogues (Studio Scaffold, ProseDoc, ComposedDoc,
+                // SvgDoc, Catalogue Pattern, SplitPane, …) each with a guide
+                // + live demo. Authored for downstream agents bootstrapping
+                // a studio on top of the framework.
+                Entry.of(this, new StudioProxy<>(
+                        BuildingBlocksCatalogue.INSTANCE,
+                        "Building Blocks",
+                        "Reference catalogue of the framework's main primitives — each block "
+                      + "shipped as a guide + live demo. The canonical pedagogy for "
+                      + "downstream studio authors.",
+                        "STUDIO",
+                        "🧱"))
         );
     }
 }

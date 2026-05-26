@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.studio.base.ui.StudioElements;
 
 import java.util.List;
 
+@LegacyAppMain(reason = "Animation-heavy platformer; migration tracked as RFC 0024 P3 (the canonical spike).")
 public record MovingAnimal() implements AppModule<AppModule._None, MovingAnimal> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, MovingAnimal> {}

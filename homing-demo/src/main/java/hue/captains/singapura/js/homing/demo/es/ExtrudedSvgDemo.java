@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.libs.ThreeJs;
 
 import java.util.List;
 
+@LegacyAppMain(reason = "Three.js extrusion demo; opportunistic migration after RFC 0024 P3.")
 public record ExtrudedSvgDemo() implements AppModule<ExtrudedSvgDemo.Params, ExtrudedSvgDemo> {
 
     record appMain() implements AppModule._AppMain<Params, ExtrudedSvgDemo> {}

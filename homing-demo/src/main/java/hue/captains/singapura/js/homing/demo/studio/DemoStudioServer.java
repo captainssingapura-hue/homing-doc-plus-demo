@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.demo.studio;
 
+import hue.captains.singapura.js.homing.blocks.BuildingBlocksStudio;
 import hue.captains.singapura.js.homing.demo.studio.multi.MultiStudio;
 import hue.captains.singapura.js.homing.studio.base.Bootstrap;
 import hue.captains.singapura.js.homing.studio.base.DefaultRuntimeParams;
@@ -35,7 +36,13 @@ public final class DemoStudioServer {
                 "Source studios composed onto one server, launched from a typed umbrella.",
                 List.of(
                         new Umbrella.Solo<>(MultiStudio.INSTANCE),
-                        new Umbrella.Solo<>(DemoBaseStudio.INSTANCE)
+                        new Umbrella.Solo<>(DemoBaseStudio.INSTANCE),
+                        // 0.1.0 onward — the building-blocks reference studio
+                        // joins the umbrella so a deployed demo surfaces the
+                        // framework's primitives reference under the same
+                        // chrome as the animal-game content. Sourced from
+                        // the homing-blocks Maven module (sibling).
+                        new Umbrella.Solo<>(BuildingBlocksStudio.INSTANCE)
                 ));
 
         new Bootstrap<>(new DemoFixtures<>(umbrella), new DefaultRuntimeParams(8082)).start();

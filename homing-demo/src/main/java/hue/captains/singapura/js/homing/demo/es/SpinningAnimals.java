@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.studio.base.ui.StudioElements;
 
 import java.util.List;
 
+@LegacyAppMain(reason = "Simple gallery; opportunistic migration after RFC 0024 P3 lands.")
 public record SpinningAnimals() implements AppModule<AppModule._None, SpinningAnimals> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, SpinningAnimals> {}

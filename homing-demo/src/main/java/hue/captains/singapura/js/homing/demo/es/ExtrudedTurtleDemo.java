@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.libs.ThreeJs;
 
 import java.util.List;
 
+@LegacyAppMain(reason = "Three.js coin viewer; migration follows RFC 0024 P3's canonical pattern.")
 public record ExtrudedTurtleDemo() implements AppModule<ExtrudedTurtleDemo.Params, ExtrudedTurtleDemo> {
 
     record appMain() implements AppModule._AppMain<Params, ExtrudedTurtleDemo> {}
