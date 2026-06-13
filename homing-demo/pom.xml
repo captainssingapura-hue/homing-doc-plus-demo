@@ -51,6 +51,42 @@
             <artifactId>homing-workspace</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <!-- RFC 0034 P2-prep Cycle A — generated codec module for the
+             workspace's typed records (PaneId / LayoutNode / WorkspaceState
+             / etc.). Produced at build time by WorkspaceCodecGen into
+             target/classes; never committed. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-workspace-codecs</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- RFC 0034 P2-prep Cycle C — hand-written persistence facade
+             module (WidgetParamsCodecRegistry, LocalStorageStore,
+             captureLiveWorkspace, persister, facade). Sits in its own
+             Maven module to break the codec-module Maven cycle. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-workspace-persistence</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- Universal workspace chrome substrate — GenericWorkspace +
+             WorkspaceSpec composition model. Demo uses it to host
+             AnimalPlaygroundSpec at ?app=genericWorkspace&ws_kind=animalPlayground
+             as the parallel V2 to AnimalsPlayground. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-workspace-shell</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- The Studio Workspace — reusable WorkspaceSpec (kind "studio") that
+             browses a studio's catalogues. Demo hosts StudioWorkspaceSpec at
+             ?app=genericWorkspace&ws_kind=studio with its TreeWidget over the
+             demo's catalogue forest (served by CatalogueTreeGetAction). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-studio-workspace</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
         <!-- Per 0.0.111: homing-skills was retired. The demo studio is now
              the canonical worked example — apps + docs in one jar serves as
              both the Site-in-a-Jar dogfood and the framework's pedagogy.

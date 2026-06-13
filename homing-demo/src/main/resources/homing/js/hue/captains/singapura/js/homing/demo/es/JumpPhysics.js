@@ -35,6 +35,13 @@ function createJumpPhysics(gravity, jumpStrength) {
         },
         getVy() {
             return vy;
+        },
+        // RFC 0029 / Widgets Are State Functions — re-seat physics from a
+        // saved snapshot. evalState's job: same (vy, jumping) ⇒ same next
+        // frame as the session that captured them.
+        restore(savedVy, savedJumping) {
+            vy = (typeof savedVy === "number") ? savedVy : 0;
+            jumping = !!savedJumping;
         }
     };
 }

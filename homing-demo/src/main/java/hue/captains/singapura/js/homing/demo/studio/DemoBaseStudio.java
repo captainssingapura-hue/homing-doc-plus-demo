@@ -7,9 +7,11 @@ import hue.captains.singapura.js.homing.demo.es.ExtrudedSvgDemo;
 import hue.captains.singapura.js.homing.demo.es.ExtrudedTurtleDemo;
 import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.es.SpinningAnimals;
+import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
 import hue.captains.singapura.js.homing.demo.playground.AnimalsPlayground;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.app.StudioBrand;
+import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 
 import java.util.List;
 
@@ -26,6 +28,27 @@ import java.util.List;
  * SvgDoc leaves. The first batch of widget-shaped Docs in the studio.</p>
  */
 public record DemoBaseStudio() implements Studio<DemoStudio> {
+
+    /**
+     * Force-load every {@link hue.captains.singapura.js.homing.workspace.shell.WorkspaceSpec}
+     * so its static initializer registers with {@code WorkspaceSpecRegistry}
+     * before any request can hit {@code GenericWorkspaceChrome}. Class load
+     * is triggered by any reference to this field, which happens when
+     * {@link #INSTANCE} is first read (any boot path touches it).
+     */
+    @SuppressWarnings("unused")
+    private static final Object SPEC_INIT = AnimalPlaygroundSpec.INSTANCE;
+
+    /**
+     * Force-load the {@link StudioWorkspaceSpec} so its static initializer
+     * registers "studio" with {@code WorkspaceSpecRegistry} before any
+     * request can hit {@code GenericWorkspaceChrome}. Reachable at
+     * {@code ?app=genericWorkspace&ws_kind=studio} — the navigation tree
+     * over the demo's catalogue forest.
+     */
+    @SuppressWarnings("unused")
+    private static final Object STUDIO_SPEC_INIT =
+            hue.captains.singapura.js.homing.studio.workspace.StudioWorkspaceSpec.INSTANCE;
 
     public static final DemoBaseStudio INSTANCE = new DemoBaseStudio();
 
@@ -50,7 +73,14 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
                 // RFC 0025 Ext1b POC — the workspace demo. Hosts a
                 // WidgetPicker over MultiTabPane, with the pinned
                 // DocViewWidget intro + a SpinningAnimalsWidget tile.
-                AnimalsPlayground.INSTANCE
+                AnimalsPlayground.INSTANCE,
+                // Post-RFC-0034 — composition-model V2 of the workspace
+                // shell. GenericWorkspace is the single AppModule for
+                // every spec-driven workspace. AnimalPlaygroundSpec self-
+                // registers via static-init triggered by the SPEC_INIT
+                // field above. URL:
+                //   /app?app=genericWorkspace&ws_kind=animalPlayground
+                GenericWorkspace.INSTANCE
         );
     }
 

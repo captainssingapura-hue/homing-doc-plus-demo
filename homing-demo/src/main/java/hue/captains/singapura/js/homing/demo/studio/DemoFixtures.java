@@ -6,9 +6,14 @@ import hue.captains.singapura.js.homing.studio.base.Fixtures;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.Umbrella;
 import hue.captains.singapura.js.homing.studio.base.app.tree.ContentTree;
+import hue.captains.singapura.js.homing.studio.workspace.CatalogueTreeGetAction;
+import hue.captains.singapura.js.homing.studio.workspace.OpenDocGetAction;
+import hue.captains.singapura.tao.http.action.GetAction;
 import hue.captains.singapura.tao.ontology.ValueObject;
+import io.vertx.ext.web.RoutingContext;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -38,5 +43,21 @@ public record DemoFixtures<S extends Studio<?>>(Umbrella<S> umbrella)
 
     @Override public List<ContentTree> trees() {
         return List.of(AnimalsTree.INSTANCE, InteractiveAnimalsTree.INSTANCE);
+    }
+
+    /**
+     * Wire the Studio Workspace's {@code /catalogue-tree} endpoint, rooted
+     * at {@link DemoStudio} (the demo's content L0). The {@code studio}
+     * WorkspaceSpec's pinned {@code TreeWidget} fetches this to draw the
+     * navigation tree at {@code ?app=genericWorkspace&ws_kind=studio}.
+     *
+     * <p>Downstream wiring (not Bootstrap): the action needs the studio's
+     * root {@link hue.captains.singapura.js.homing.studio.base.app.Catalogue},
+     * which the studio already declares.</p>
+     */
+    @Override public Map<String, GetAction<RoutingContext, ?, ?, ?>> harnessGetActions() {
+        return Map.of(
+                "/catalogue-tree", new CatalogueTreeGetAction(DemoStudio.INSTANCE),
+                "/open",           new OpenDocGetAction(DemoStudio.INSTANCE));
     }
 }

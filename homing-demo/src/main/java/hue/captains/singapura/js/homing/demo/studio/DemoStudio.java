@@ -2,7 +2,9 @@ package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
+import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
 import hue.captains.singapura.js.homing.demo.playground.AnimalsPlayground;
+import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
@@ -56,6 +58,20 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
                         AppModule._None.INSTANCE,
                         "Animals Playground",
                         "Workspace demo — pinned intro plus pickable game widgets, dragged into a 2×2 tab layout.")),
+                // Post-RFC-0034 — GenericWorkspace is the substrate's single
+                // composition-model AppModule for EVERY workspace kind; the
+                // ws_kind param selects the WorkspaceSpec. Titled generically
+                // because /app-refs keys breadcrumbs by AppModule simpleName,
+                // not by ws_kind — so this one AppDoc is the breadcrumb leaf
+                // for all kinds (studio, animalPlayground, …). The specific
+                // workspace is named by the chrome's subheader (spec.title),
+                // not here. This catalogue entry opens the Animals Playground
+                // spec as the demo's default landing kind.
+                Entry.of(this, new Navigable<>(
+                        GenericWorkspace.INSTANCE,
+                        new GenericWorkspace.Params(AnimalPlaygroundSpec.INSTANCE.kind()),
+                        "Generic Workspace",
+                        "The substrate's single composition-model workspace app — one AppModule mounts any registered WorkspaceSpec by ws_kind. Opens the Animals Playground spec.")),
                 Entry.of(this, new Navigable<>(
                         TreeAppHost.INSTANCE,
                         new TreeAppHost.Params("animals", null),
