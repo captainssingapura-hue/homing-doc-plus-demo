@@ -50,16 +50,58 @@ import java.util.List;
  * @since RFC 0025 Ext1b b.2b — third WorkspaceWidget port
  *        (controller contract + active gating added b.2d).
  */
-public final class MovingAnimalWidget extends WorkspaceWidget<WorkspaceWidget._None, MovingAnimalWidget> {
+public final class MovingAnimalWidget extends WorkspaceWidget<MovingAnimalWidget.Params, MovingAnimalWidget> {
+
+    /**
+     * Persistable state per the {@code Widgets Are State Functions} doctrine —
+     * the widget's whole identity, exposed at the framework boundary so
+     * save/restore round-trips faithfully.
+     *
+     * <p>Position ({@code worldX/Y, cameraX, facingRight}) places the
+     * animal exactly where it was; {@code score} continues from where it
+     * stopped; {@code gravity / bgmVolume} preserve the slider settings;
+     * {@code gameOver} captures whether the run already ended (so a refresh
+     * doesn't silently resurrect a dead game). Platform layout is
+     * <i>not</i> in Params — the engine regenerates platforms ahead of
+     * {@code cameraX} deterministically, so they re-derive on construct.
+     * The discipline: state in Params, derived state in the DOM cache.</p>
+     */
+    public record Params(
+            double  worldX,
+            double  worldY,
+            double  cameraX,
+            boolean facingRight,
+            int     score,
+            double  gravity,
+            int     bgmVolume,
+            boolean gameOver,
+            // Physics — vy/isJumping needed for the next frame to behave
+            // identically to the frame after capture. Without these, a saved
+            // mid-jump animal lands wrong on restore.
+            double  vy,
+            boolean isJumping) implements WorkspaceWidget._Param {
+
+        /**
+         * Fresh-game defaults — what construct() reads when params is empty.
+         * The presence of {@code DEFAULTS} signals to the widget picker that
+         * the framework knows how to start this widget fresh without a form;
+         * see {@code WidgetEntriesJson.appendParamsFields}. {@code platforms}
+         * (the engine's terrain layout) is not on this record — the array
+         * shape doesn't fit the picker's reflection-driven form layer; the
+         * JS-side codec carries it as a side-channel field.
+         */
+        public static final Params DEFAULTS =
+                new Params(100, 0, 0, true, 0, 0.6, 40, false, 0, false);
+    }
 
     public static final MovingAnimalWidget INSTANCE = new MovingAnimalWidget();
 
     private MovingAnimalWidget() {}
 
-    private record construct() implements WorkspaceWidget._Construct<_None, MovingAnimalWidget> {}
+    private record construct() implements WorkspaceWidget._Construct<Params, MovingAnimalWidget> {}
 
-    @Override protected _Construct<_None, MovingAnimalWidget> construct() { return new construct(); }
-    @Override public Class<_None> paramsType() { return _None.class; }
+    @Override protected _Construct<Params, MovingAnimalWidget> construct() { return new construct(); }
+    @Override public Class<Params> paramsType() { return Params.class; }
     @Override public String title() { return "Moving Animal"; }
     @Override public LifecycleHint lifecycleHint() { return LifecycleHint.MULTI; }
 
@@ -110,6 +152,22 @@ public final class MovingAnimalWidget extends WorkspaceWidget<WorkspaceWidget._N
         return List.of(
                 "    var ANIMAL_SIZE = 50, STEP = 5, SKY_H = 120, VIEWPORT_H = 500,",
                 "        LAVA_H = 40, PLATFORM_H = 16, DEFAULT_GRAVITY = 0.6, JUMP_STRENGTH = 12;",
+                "",
+                "    // ─── Params → initial state (Widgets Are State Functions doctrine) ─",
+                "    //     Read every persistable field from params with the DEFAULTS",
+                "    //     literal as fallback. Same Params ⇒ same construct output.",
+                "    var P = params || {};",
+                "    var initialWorldX      = (typeof P.worldX      === 'number') ? P.worldX      : 100;",
+                "    var initialWorldY      = (typeof P.worldY      === 'number') ? P.worldY      : 0;",
+                "    var initialCameraX     = (typeof P.cameraX     === 'number') ? P.cameraX     : 0;",
+                "    var initialFacingRight = (typeof P.facingRight === 'boolean') ? P.facingRight : true;",
+                "    var initialScore       = (typeof P.score       === 'number') ? P.score       : 0;",
+                "    var initialGravity     = (typeof P.gravity     === 'number') ? P.gravity     : DEFAULT_GRAVITY;",
+                "    var initialBgmVolume   = (typeof P.bgmVolume   === 'number') ? P.bgmVolume   : 40;",
+                "    var initialGameOver    = (typeof P.gameOver    === 'boolean') ? P.gameOver    : false;",
+                "    var initialVy          = (typeof P.vy          === 'number')  ? P.vy          : 0;",
+                "    var initialIsJumping   = (typeof P.isJumping   === 'boolean') ? P.isJumping   : false;",
+                "    var initialPlatforms   = Array.isArray(P.platforms)            ? P.platforms   : null;",
                 "    var root = branch.createElement('root', 'div');",
                 "    css.setClass(root, pg_widget_root);",
                 "",
@@ -191,19 +249,19 @@ public final class MovingAnimalWidget extends WorkspaceWidget<WorkspaceWidget._N
                 "    gravityLabel.textContent = 'Gravity ';",
                 "    var gravitySlider = branch.createElement('gravitySlider', 'input');",
                 "    gravitySlider.type = 'range'; gravitySlider.min = '1'; gravitySlider.max = '20'; gravitySlider.step = '1';",
-                "    gravitySlider.value = String(DEFAULT_GRAVITY * 10);",
+                "    gravitySlider.value = String(Math.round(initialGravity * 10));",
                 "    gravityLabel.appendChild(gravitySlider);",
                 "    var gravityDisplay = branch.createElement('gravityDisplay', 'span');",
                 "    css.setClass(gravityDisplay, pg_size_display);",
-                "    gravityDisplay.textContent = DEFAULT_GRAVITY.toFixed(1);",
+                "    gravityDisplay.textContent = initialGravity.toFixed(1);",
                 "    var bgmLabel = branch.createElement('bgmLabel', 'label');",
                 "    bgmLabel.textContent = 'BGM ';",
                 "    var bgmSlider = branch.createElement('bgmSlider', 'input');",
-                "    bgmSlider.type = 'range'; bgmSlider.min = '0'; bgmSlider.max = '100'; bgmSlider.step = '1'; bgmSlider.value = '40';",
+                "    bgmSlider.type = 'range'; bgmSlider.min = '0'; bgmSlider.max = '100'; bgmSlider.step = '1'; bgmSlider.value = String(initialBgmVolume);",
                 "    bgmLabel.appendChild(bgmSlider);",
                 "    var bgmDisplay = branch.createElement('bgmDisplay', 'span');",
                 "    css.setClass(bgmDisplay, pg_size_display);",
-                "    bgmDisplay.textContent = '40%';",
+                "    bgmDisplay.textContent = initialBgmVolume + '%';",
                 "    var animalScope = createAnimalScope();   // per-instance — no cross-widget bleed",
                 "    var selector = createAnimalSelector(animalScope);",
                 "    controls.appendChild(gravityLabel); controls.appendChild(gravityDisplay);",
@@ -213,9 +271,12 @@ public final class MovingAnimalWidget extends WorkspaceWidget<WorkspaceWidget._N
                 "",
                 "    // ─── World DOM (playground, sky, world, lava, animal, score, overlay) ─",
                 "    var viewportW = root.clientWidth || 700;",
-                "    var physics = createJumpPhysics(DEFAULT_GRAVITY, JUMP_STRENGTH);",
+                "    var physics = createJumpPhysics(initialGravity, JUMP_STRENGTH);",
                 "    var engine  = createPlatformEngine({ viewportW: viewportW, viewportH: VIEWPORT_H, animalW: ANIMAL_SIZE, animalH: ANIMAL_SIZE, platformH: PLATFORM_H, lavaH: LAVA_H, skyH: SKY_H });",
-                "    var worldX = 100, worldY = 0, cameraX = 0, facingRight = true, gameOver = false, score = 0, animFrameId = 0;",
+                "    var worldX = initialWorldX, worldY = initialWorldY, cameraX = initialCameraX,",
+                "        facingRight = initialFacingRight, gameOver = initialGameOver, score = initialScore, animFrameId = 0;",
+                "    // BGM volume → synth dB, mirroring slider 'input' handler arithmetic.",
+                "    bgmSynth.volume.value = (initialBgmVolume === 0) ? -Infinity : (-40 + (initialBgmVolume / 100) * 32);",
                 "",
                 "    var playground = branch.createElement('playground', 'div');",
                 "    css.setClass(playground, pg_playground);",
@@ -277,16 +338,42 @@ public final class MovingAnimalWidget extends WorkspaceWidget<WorkspaceWidget._N
                 "        }",
                 "    }",
                 "",
-                "    function initGame() {",
-                "        worldX = 100; worldY = 0; cameraX = 0; facingRight = true;",
-                "        gameOver = false; score = 0; scoreEl.textContent = '0';",
-                "        overlay.style.display = 'none';",
+                "    // initGame(fresh): when fresh, reset to the doctrine's DEFAULTS;",
+                "    //   when not fresh (boot), honour the restored worldX/Y/cameraX/score",
+                "    //   already set above from params. Same Params ⇒ same DOM rendering.",
+                "    //   When initialPlatforms was supplied (restore path), the engine seats",
+                "    //   those exact platforms instead of generating a fresh PRNG layout —",
+                "    //   physical state survives the round-trip.",
+                "    function initGame(fresh) {",
+                "        if (fresh) {",
+                "            worldX = 100; worldY = 0; cameraX = 0; facingRight = true;",
+                "            gameOver = false; score = 0;",
+                "        }",
+                "        scoreEl.textContent = String(score);",
+                "        overlay.style.display = gameOver ? '' : 'none';",
+                "        if (gameOver) finalScore.textContent = 'Score: ' + score;",
                 "        platformEls.forEach(function (el) { el.remove(); }); platformEls.clear();",
                 "        lastLandedPlatY = null; activePlatform = null;",
-                "        engine.init(worldX, worldY);",
-                "        var hit = engine.findGround(worldX, worldY, 1);",
-                "        if (hit !== null) { worldY = hit.groundY; activePlatform = hit.platform; }",
-                "        engine.generateAhead(worldX + viewportW * 2);",
+                "        if (!fresh && initialPlatforms && initialPlatforms.length > 0) {",
+                "            // Restore path — re-seat exact saved platforms + physics state.",
+                "            engine.restore(initialPlatforms);",
+                "            physics.restore(initialVy, initialIsJumping);",
+                "            var hitR = engine.findGround(worldX, worldY, Math.max(0.001, initialVy));",
+                "            if (hitR !== null) activePlatform = hitR.platform;",
+                "            // Extend the world ahead of the saved camera so the player can",
+                "            // keep running. Existing platforms aren't disturbed by this.",
+                "            engine.generateAhead(Math.max(worldX, cameraX) + viewportW * 2);",
+                "        } else {",
+                "            // Fresh path — engine seeds its own first platform; player",
+                "            // snaps onto it.",
+                "            engine.init(worldX, worldY);",
+                "            var hit = engine.findGround(worldX, worldY, 1);",
+                "            if (hit !== null) { worldY = hit.groundY; activePlatform = hit.platform; }",
+                "            engine.generateAhead(Math.max(worldX, cameraX) + viewportW * 2);",
+                "        }",
+                "        // After restore, drop the one-shot platforms reference so a future",
+                "        // Play-Again (which calls initGame(true)) goes through the fresh path.",
+                "        initialPlatforms = null;",
                 "        updateFlip(); render();",
                 "    }",
                 "    function updateFlip() { animal.style.transform = facingRight ? 'scaleX(1)' : 'scaleX(-1)'; }",
@@ -328,7 +415,7 @@ public final class MovingAnimalWidget extends WorkspaceWidget<WorkspaceWidget._N
                 "        else           bgmSynth.volume.value = -40 + (pct / 100) * 32;",
                 "    });",
                 "    restartBtn.addEventListener('click', function () {",
-                "        initGame(); if (audioReady) startBgm();",
+                "        initGame(true); if (audioReady) startBgm();",
                 "        animFrameId = requestAnimationFrame(frame);",
                 "    });",
                 "",
@@ -355,8 +442,8 @@ public final class MovingAnimalWidget extends WorkspaceWidget<WorkspaceWidget._N
                 "        render();",
                 "        animFrameId = requestAnimationFrame(frame);",
                 "    }",
-                "    initGame();",
-                "    animFrameId = requestAnimationFrame(frame);",
+                "    initGame(false);    // honour restored params on first construct",
+                "    if (!gameOver) animFrameId = requestAnimationFrame(frame);",
                 "    // setActive(true/false) attaches/detaches keyboard listeners and",
                 "    // pauses/resumes BGM. Mouse is gated by the framework overlay.",
                 "    // Multiple MovingAnimal instances coexist cleanly — only the active",
@@ -377,6 +464,37 @@ public final class MovingAnimalWidget extends WorkspaceWidget<WorkspaceWidget._N
                 "    }",
                 "    return {",
                 "        root: root,",
+                "        // currentParams() — the State Monad's execState transposed",
+                "        // to this widget. Snapshot of every persistable field on",
+                "        // Params, captured from the live closure. Framework calls",
+                "        // this at save time; same shape goes back into construct()",
+                "        // at restore time. See Widgets Are State Functions doctrine.",
+                "        currentParams: function () {",
+                "            var gv = parseInt(gravitySlider.value) / 10;",
+                "            var bv = parseInt(bgmSlider.value);",
+                "            // Snapshot platforms — shallow copy of { x, y, w, vehicle } each.",
+                "            // The PRNG-driven engine isn't reproducible from worldX alone, so",
+                "            // the actual layout has to ride along with the rest of Params.",
+                "            var livePlatforms = engine.getPlatforms();",
+                "            var platformsCopy = [];",
+                "            for (var pi = 0; pi < livePlatforms.length; pi++) {",
+                "                var lp = livePlatforms[pi];",
+                "                platformsCopy.push({ x: lp.x, y: lp.y, w: lp.w, vehicle: lp.vehicle });",
+                "            }",
+                "            return {",
+                "                worldX:      worldX,",
+                "                worldY:      worldY,",
+                "                cameraX:     cameraX,",
+                "                facingRight: facingRight,",
+                "                score:       score,",
+                "                gravity:     gv,",
+                "                bgmVolume:   bv,",
+                "                gameOver:    gameOver,",
+                "                vy:          physics.getVy(),",
+                "                isJumping:   physics.isJumping(),",
+                "                platforms:   platformsCopy",
+                "            };",
+                "        },",
                 "        setActive: function (active) {",
                 "            if (active) {",
                 "                document.addEventListener('keydown', keyDown);",

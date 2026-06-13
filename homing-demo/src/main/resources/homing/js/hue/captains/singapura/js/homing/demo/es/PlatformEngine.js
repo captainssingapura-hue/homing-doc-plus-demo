@@ -46,6 +46,32 @@ function createPlatformEngine(config) {
             lastPlatY = startPlat.y;
         },
 
+        // RFC 0029 / Widgets Are State Functions — re-seat the engine from a
+        // captured platform list. The engine's PRNG-based generation is
+        // non-reproducible, so without this the restored player would land
+        // (or fall) onto a freshly-shuffled platform layout that has no
+        // relation to what was saved. Restoring the actual platforms
+        // preserves the physical state the user saw.
+        restore: function (savedPlatforms) {
+            platforms.length = 0;
+            if (!savedPlatforms || savedPlatforms.length === 0) return;
+            var maxRight = 0;
+            var rightmostY = savedPlatforms[savedPlatforms.length - 1].y;
+            for (var i = 0; i < savedPlatforms.length; i++) {
+                var p = savedPlatforms[i];
+                // Defensive: skip malformed entries silently.
+                if (p == null
+                    || typeof p.x !== "number" || typeof p.y !== "number"
+                    || typeof p.w !== "number") continue;
+                var v = (typeof p.vehicle === "number") ? p.vehicle : 1;
+                platforms.push({ x: p.x, y: p.y, w: p.w, vehicle: v });
+                var right = p.x + p.w;
+                if (right > maxRight) { maxRight = right; rightmostY = p.y; }
+            }
+            lastPlatRight = maxRight;
+            lastPlatY     = rightmostY;
+        },
+
         generateAhead: function (untilWorldX) {
             while (lastPlatRight < untilWorldX) {
                 var gap = MIN_GAP + Math.random() * (MAX_GAP - MIN_GAP);
