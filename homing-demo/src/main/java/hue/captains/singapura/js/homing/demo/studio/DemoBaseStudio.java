@@ -11,7 +11,6 @@ import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
 import hue.captains.singapura.js.homing.demo.playground.AnimalsPlayground;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.app.StudioBrand;
-import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 
 import java.util.List;
 
@@ -39,16 +38,8 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
     @SuppressWarnings("unused")
     private static final Object SPEC_INIT = AnimalPlaygroundSpec.INSTANCE;
 
-    /**
-     * Force-load the {@link StudioWorkspaceSpec} so its static initializer
-     * registers "studio" with {@code WorkspaceSpecRegistry} before any
-     * request can hit {@code GenericWorkspaceChrome}. Reachable at
-     * {@code ?app=genericWorkspace&ws_kind=studio} — the navigation tree
-     * over the demo's catalogue forest.
-     */
-    @SuppressWarnings("unused")
-    private static final Object STUDIO_SPEC_INIT =
-            hue.captains.singapura.js.homing.studio.workspace.StudioWorkspaceSpec.INSTANCE;
+    // The Studio Workspace ("studio" spec) is registered for free by
+    // StudioStarterFixtures (via DemoFixtures) — no STUDIO_SPEC_INIT touch here.
 
     public static final DemoBaseStudio INSTANCE = new DemoBaseStudio();
 
@@ -73,14 +64,10 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
                 // RFC 0025 Ext1b POC — the workspace demo. Hosts a
                 // WidgetPicker over MultiTabPane, with the pinned
                 // DocViewWidget intro + a SpinningAnimalsWidget tile.
-                AnimalsPlayground.INSTANCE,
-                // Post-RFC-0034 — composition-model V2 of the workspace
-                // shell. GenericWorkspace is the single AppModule for
-                // every spec-driven workspace. AnimalPlaygroundSpec self-
-                // registers via static-init triggered by the SPEC_INIT
-                // field above. URL:
-                //   /app?app=genericWorkspace&ws_kind=animalPlayground
-                GenericWorkspace.INSTANCE
+                AnimalsPlayground.INSTANCE
+                // GenericWorkspace (the single AppModule for every spec-driven
+                // workspace, incl. ?ws_kind=animalPlayground) is served by
+                // StudioStarterFixtures' harness apps — no need to list it here.
         );
     }
 

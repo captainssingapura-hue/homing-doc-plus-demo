@@ -78,13 +78,13 @@
             <artifactId>homing-workspace-shell</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- The Studio Workspace — reusable WorkspaceSpec (kind "studio") that
-             browses a studio's catalogues. Demo hosts StudioWorkspaceSpec at
-             ?app=genericWorkspace&ws_kind=studio with its TreeWidget over the
-             demo's catalogue forest (served by CatalogueTreeGetAction). -->
+        <!-- RFC 0040 — batteries-included studio starter: StudioStarterFixtures
+             brings the Studio Workspace (genericWorkspace + the "studio" spec +
+             /catalogue-tree over the demo's catalogue forest) out of the box.
+             Pulls homing-studio-workspace / -workspace-shell transitively. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-studio-workspace</artifactId>
+            <artifactId>homing-studio-starter</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <!-- Per 0.0.111: homing-skills was retired. The demo studio is now
