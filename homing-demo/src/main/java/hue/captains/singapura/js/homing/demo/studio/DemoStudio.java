@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.demo.studio;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
-import hue.captains.singapura.js.homing.demo.playground.AnimalsPlayground;
 import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
@@ -50,14 +49,6 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
                         AppModule._None.INSTANCE,
                         "Themes",
                         "Palette previews and one-click activation for Default / Forest / Sunset / Bauhaus.")),
-                // RFC 0025 Ext1b POC — workspace with picker + drag-to-dock.
-                // PINNED introduction auto-spawns; the picker offers MULTI
-                // animal-game widgets the user can open into any pane.
-                Entry.of(this, new Navigable<>(
-                        AnimalsPlayground.INSTANCE,
-                        AppModule._None.INSTANCE,
-                        "Animals Playground",
-                        "Workspace demo — pinned intro plus pickable game widgets, dragged into a 2×2 tab layout.")),
                 // Post-RFC-0034 — GenericWorkspace is the substrate's single
                 // composition-model AppModule for EVERY workspace kind; the
                 // ws_kind param selects the WorkspaceSpec. Titled generically

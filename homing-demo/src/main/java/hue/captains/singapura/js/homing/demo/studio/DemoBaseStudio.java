@@ -8,7 +8,6 @@ import hue.captains.singapura.js.homing.demo.es.ExtrudedTurtleDemo;
 import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.es.SpinningAnimals;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
-import hue.captains.singapura.js.homing.demo.playground.AnimalsPlayground;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.app.StudioBrand;
 
@@ -60,14 +59,11 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
                 SpinningAnimals.INSTANCE,
                 // RFC 0024 Phase P1b — the new shell + widget path. Hosts
                 // SvgWidget; cohabits with the legacy SvgViewer.
-                DemoStandardMPA.INSTANCE,
-                // RFC 0025 Ext1b POC — the workspace demo. Hosts a
-                // WidgetPicker over MultiTabPane, with the pinned
-                // DocViewWidget intro + a SpinningAnimalsWidget tile.
-                AnimalsPlayground.INSTANCE
-                // GenericWorkspace (the single AppModule for every spec-driven
-                // workspace, incl. ?ws_kind=animalPlayground) is served by
-                // StudioStarterFixtures' harness apps — no need to list it here.
+                DemoStandardMPA.INSTANCE
+                // The Animals Playground is served only via GenericWorkspace
+                // (?app=genericWorkspace&ws_kind=animalPlayground), registered
+                // by StudioStarterFixtures' harness apps — no need to list it
+                // here. The legacy ?app=animals-playground V1 shell was removed.
         );
     }
 

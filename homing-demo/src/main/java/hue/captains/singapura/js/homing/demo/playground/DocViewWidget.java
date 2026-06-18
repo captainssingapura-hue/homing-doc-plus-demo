@@ -15,8 +15,8 @@ import java.util.List;
  * surface static doc content (intro notes, cheat-sheets, release notes,
  * help panels…).
  *
- * <p>In the {@link AnimalsPlayground} demo this widget is registered as
- * {@code PINNED} with the playground's introduction as its defaults — the
+ * <p>In the Animals Playground workspace ({@link AnimalPlaygroundSpec}) this
+ * widget is pinned with the playground's introduction as its defaults — the
  * workspace's auto-spawn instantiates one tab at boot, close disabled,
  * so the welcome content is always visible.</p>
  *

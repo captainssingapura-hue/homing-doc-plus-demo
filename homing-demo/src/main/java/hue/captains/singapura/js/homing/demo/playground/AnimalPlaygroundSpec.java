@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.demo.playground;
 
 import hue.captains.singapura.js.homing.demo.es.DancingAnimalsWidget;
+import hue.captains.singapura.js.homing.demo.es.MovingAnimalReplayWidget;
 import hue.captains.singapura.js.homing.demo.es.MovingAnimalWidget;
 import hue.captains.singapura.js.homing.demo.es.SpinningAnimalsWidget;
 import hue.captains.singapura.js.homing.workspace.RibbonItem;
@@ -25,9 +26,11 @@ import static hue.captains.singapura.js.homing.workspace.RibbonItem.ChoiceOption
  * {@code GenericWorkspace} (the substrate's single composition AppModule)
  * via {@code ?app=genericWorkspace&ws_kind=animalPlayground}.
  *
- * <p>Parallel reference to the V1 {@link AnimalsPlayground} — both ship
- * simultaneously. V1 stays untouched as the ground-truth live reference;
- * V2 mounts via {@code mountWorkspaceShell(branch, parent, spec)} in
+ * <p>This is the sole Animals Playground entry point. (The legacy V1
+ * {@code AnimalsPlayground} {@code WorkspaceShell} + per-workspace chrome —
+ * served at {@code ?app=animals-playground} — was removed; this spec-driven
+ * composition is now canonical.) It mounts via
+ * {@code mountWorkspaceShell(branch, parent, spec)} in
  * {@code WorkspaceShellChromeModule.js}.</p>
  *
  * <p>This class is <i>pure declarations</i> — no body JS, no JSON
@@ -84,6 +87,11 @@ public final class AnimalPlaygroundSpec implements WorkspaceSpec {
                         .withGroup(WidgetGroup.of("Games")),
                 WidgetEntry.of(MovingAnimalWidget.class, WidgetLabel.of("Moving Animal"))
                         .withIcon(new WidgetIcon.Emoji("🏃"))
+                        .withGroup(WidgetGroup.of("Games")),
+                // RFC 0028 broadcast feature — passive spectator that mirrors
+                // the live (SINGLETON) Moving Animal game via AnimalsParty.
+                WidgetEntry.of(MovingAnimalReplayWidget.class, WidgetLabel.of("Moving Animal (Replay)"))
+                        .withIcon(new WidgetIcon.Emoji("📺"))
                         .withGroup(WidgetGroup.of("Games"))
         );
     }
@@ -143,19 +151,19 @@ public final class AnimalPlaygroundSpec implements WorkspaceSpec {
         return List.of("DocViewWidget");
     }
 
-    /** Defaults for the pinned introduction — mirrors V1 verbatim. */
+    /** Defaults for the pinned introduction. */
     private static Map<String, String> introDefaults() {
         var d = new LinkedHashMap<String, String>();
-        d.put("title", "Welcome to the Animals Playground (V2)");
+        d.put("title", "Welcome to the Animals Playground");
         d.put("body", String.join("\n",
-                "This is the **composition-model V2** of the Animals Playground —",
-                "mounted via the substrate's `GenericWorkspace` + `WorkspaceSpec`",
-                "rather than a per-workspace chrome class. V1 lives unchanged at",
-                "`?app=animals-playground` as the ground-truth reference; this V2",
-                "lives at `?app=genericWorkspace&ws_kind=animalPlayground`.",
+                "This workspace is mounted via the substrate's `GenericWorkspace`",
+                "+ `WorkspaceSpec` composition model, at",
+                "`?app=genericWorkspace&ws_kind=animalPlayground`.",
                 "",
-                "Open the picker with the **➕** button — the same widgets V1 hosts",
-                "run here unchanged. (Widget independence verified by reuse.)",
+                "Open the picker with the **➕** button, then drag a widget's title",
+                "bar onto any pane to dock it. **Moving Animal** is the live game",
+                "(one instance); open one or more **Moving Animal (Replay)** panes",
+                "to watch it mirrored live via broadcast.",
                 "",
                 "_This introduction is **pinned** — you cannot close it._"
         ));

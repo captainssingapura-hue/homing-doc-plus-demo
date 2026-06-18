@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.demo.es.ExtrudedSvgDemo;
 import hue.captains.singapura.js.homing.demo.es.ExtrudedTurtleDemo;
 import hue.captains.singapura.js.homing.demo.es.JumpPhysics;
 import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
+import hue.captains.singapura.js.homing.demo.es.MovingAnimalGame;
 import hue.captains.singapura.js.homing.demo.es.PlatformEngine;
 import hue.captains.singapura.js.homing.demo.es.PlatformerBgm;
 import hue.captains.singapura.js.homing.demo.es.SpinningAnimals;
@@ -41,6 +42,7 @@ class DemoDoctrineConformanceTest extends DoctrineConformanceTest {
                 ExtrudedTurtleDemo.INSTANCE,
                 JumpPhysics.INSTANCE,
                 MovingAnimal.INSTANCE,
+                MovingAnimalGame.INSTANCE,
                 PlatformEngine.INSTANCE,
                 PlatformerBgm.INSTANCE,
                 SpinningAnimals.INSTANCE,

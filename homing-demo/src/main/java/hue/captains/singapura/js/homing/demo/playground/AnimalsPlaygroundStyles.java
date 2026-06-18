@@ -7,11 +7,10 @@ import hue.captains.singapura.js.homing.core.CssImportsFor;
 import java.util.List;
 
 /**
- * Typed CSS for {@link AnimalsPlaygroundChrome} and the workspace's
- * widgets — host slot, mount scaffolds, loading messages, the "+"
- * launcher, the generic widget root wrapper, the doc-view layout.
- * Replaces every inline cssText the chrome and widgets would otherwise
- * carry. Per RFC 0027.
+ * Typed CSS for the Animals Playground workspace's widgets — the generic
+ * widget root wrapper, the doc-view layout, mount scaffolds, host slot,
+ * loading messages, the "+" launcher. Replaces every inline cssText the
+ * widgets would otherwise carry. Per RFC 0027.
  *
  * <p>Distinct from {@code demo.css.PlaygroundStyles} (the platformer's
  * game-specific styles). The two coexist; this one is workspace-side

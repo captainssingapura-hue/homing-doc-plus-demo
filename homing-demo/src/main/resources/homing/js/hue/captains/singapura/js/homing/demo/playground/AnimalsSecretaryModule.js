@@ -46,6 +46,51 @@ var AnimalsSecretary = {
                 };
             }
 
+            case "GameActionRequested": {
+                // RFC 0028 broadcast feature — a live game event from the
+                // MovingAnimalPlayWidget (or a directed snapshot reply). When
+                // `to` is present, deliver privately to that one member (the
+                // late-join snapshot path); otherwise broadcast to all members.
+                // The play source has no GameAction reactor, so it harmlessly
+                // ignores the echo of its own broadcast. State is untouched —
+                // the Secretary routes game traffic, it does not store it
+                // (history would be unbounded; the snapshot path covers
+                // late-join instead).
+                if (msg.to) {
+                    return {
+                        newState: state,
+                        actions: [{
+                            kind   : "SendToMember",
+                            to     : msg.to,
+                            message: { kind: "GameAction", event: msg.event }
+                        }]
+                    };
+                }
+                return {
+                    newState: state,
+                    actions: [{
+                        kind   : "BroadcastToMembers",
+                        message: { kind: "GameAction", event: msg.event }
+                    }]
+                };
+            }
+
+            case "CurrentGameRequested": {
+                // Late-join sync for replay widgets. Fan the request out to
+                // members; the live play widget answers with a directed
+                // GameActionRequested(to: asker, event: Snapshot). Replays and
+                // the asker itself have no GameSnapshotRequested reactor and
+                // ignore it. Carries the asker's id so the play side can reply
+                // privately.
+                return {
+                    newState: state,
+                    actions: [{
+                        kind   : "BroadcastToMembers",
+                        message: { kind: "GameSnapshotRequested", asker: envelope.from }
+                    }]
+                };
+            }
+
             case "CurrentAnimalRequested": {
                 // Late-join sync. If a concrete animal has been chosen, reply
                 // privately to the asker reusing the AnimalChanged fact shape —
