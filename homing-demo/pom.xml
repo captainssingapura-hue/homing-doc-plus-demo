@@ -28,6 +28,13 @@
             <artifactId>homing-blocks</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Public release docs (0.5.1 onward). The demo's ReleasesCatalogue
+             (sibling to Learning under MultiStudioHome) mounts these. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>homing-docs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-server</artifactId>

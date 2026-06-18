@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+        <artifactId>homing-doc-plus-demo</artifactId>
+        <version>VOID-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>homing-docs</artifactId>
+
+    <description>
+        Public documentation content for the Homing framework — the home for
+        release notes authored as in-studio docs, going forward. Existing
+        release docs (0.5.0 and earlier) remain in homing-self-studio; from
+        0.5.1 on, the canonical, public release docs live here as RigidDoc /
+        ComposedDoc records and are mounted into the demo studio.
+
+        Content only: a library of Doc records. The catalogue that mounts them
+        into a studio tree lives alongside the studio it hangs under (e.g. the
+        demo's ReleasesCatalogue under MultiStudioHome) — this module stays a
+        leaf the studios depend on, never the reverse.
+    </description>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-studio-base</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

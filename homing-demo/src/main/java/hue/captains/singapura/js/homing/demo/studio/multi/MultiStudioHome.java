@@ -28,7 +28,8 @@ public record MultiStudioHome() implements L0_Catalogue<MultiStudioHome> {
 
     @Override public List<? extends L1_Catalogue<MultiStudioHome, ?>> subCatalogues() {
         return List.of(
-                LearningStudioCategory.INSTANCE
+                LearningStudioCategory.INSTANCE,
+                ReleasesCatalogue.INSTANCE
         );
     }
 }
