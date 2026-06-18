@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>homing-blocks</module>
+        <module>homing-docs</module>
         <module>homing-demo</module>
     </modules>
 
