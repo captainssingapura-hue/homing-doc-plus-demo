@@ -14,7 +14,7 @@ import java.util.List;
  * shape, no chrome. The existing {@link SpinningAnimals} {@code AppModule}
  * becomes a thin {@code SingleWidgetMPA} shim around this widget so the
  * standalone page (URL {@code /app?app=spinning-animals}) keeps working
- * while the same body becomes pickable from the {@code AnimalsPlayground}
+ * while the same body becomes pickable from the Animals Playground
  * workspace.
  *
  * <p>Port notes (from the legacy {@code SpinningAnimals.js}):

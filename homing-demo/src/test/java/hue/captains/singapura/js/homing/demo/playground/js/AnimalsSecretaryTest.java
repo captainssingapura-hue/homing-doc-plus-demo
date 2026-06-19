@@ -98,6 +98,49 @@ class AnimalsSecretaryTest extends SecretaryTestBase {
     }
 
     @Nested
+    @DisplayName("GameActionRequested / CurrentGameRequested — broadcast feature")
+    class GameBroadcast {
+        @Test void broadcastsGameActionToMembersWhenNoRecipient() {
+            Value step = dispatch(initial(),
+                    envelope("GameActionRequested",
+                            Map.of("event", Map.of("kind", "Tick", "t", 7)),
+                            "animals/moving-play"));
+            assertStateField(step, "selectedAnimal", "-1");   // routing leaves state untouched
+            assertActionCount(step, 1);
+            assertActionKind(step, 0, "BroadcastToMembers");
+            Value msg = action(step, 0).getMember("message");
+            assertEquals("GameAction", msg.getMember("kind").asString());
+            assertEquals("Tick", msg.getMember("event").getMember("kind").asString());
+            assertEquals(7, msg.getMember("event").getMember("t").asInt());
+        }
+
+        @Test void sendsGameActionPrivatelyWhenRecipientPresent() {
+            Value step = dispatch(initial(),
+                    envelope("GameActionRequested",
+                            Map.of("to", "animals/replay-1",
+                                   "event", Map.of("kind", "Snapshot")),
+                            "animals/moving-play"));
+            assertActionCount(step, 1);
+            assertActionKind(step, 0, "SendToMember");
+            Value act = action(step, 0);
+            assertEquals("animals/replay-1", act.getMember("to").asString());
+            assertEquals("GameAction", act.getMember("message").getMember("kind").asString());
+            assertEquals("Snapshot",
+                    act.getMember("message").getMember("event").getMember("kind").asString());
+        }
+
+        @Test void currentGameRequestedFansOutSnapshotRequestCarryingAsker() {
+            Value step = dispatch(initial(),
+                    envelope("CurrentGameRequested", Map.of(), "animals/replay-7"));
+            assertActionCount(step, 1);
+            assertActionKind(step, 0, "BroadcastToMembers");
+            Value msg = action(step, 0).getMember("message");
+            assertEquals("GameSnapshotRequested", msg.getMember("kind").asString());
+            assertEquals("animals/replay-7", msg.getMember("asker").asString());
+        }
+    }
+
+    @Nested
     @DisplayName("default branch — unknown messages")
     class Unknown {
         @Test void appendsToRecentUnknownAndEmitsNoActions() {

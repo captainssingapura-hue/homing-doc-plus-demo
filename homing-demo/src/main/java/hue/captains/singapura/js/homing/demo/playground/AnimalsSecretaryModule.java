@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import java.util.List;
 
 /**
- * The Secretary for the {@code AnimalsParty} — the {@code AnimalsPlayground}
+ * The Secretary for the {@code AnimalsParty} — the Animals Playground
  * workspace's first downstream ActorParty. Extracted as a standalone JS
  * module per the Diligent Secretaries doctrine's third pillar: pure
  * behaviour functions must be importable in isolation so a GraalVM-backed
@@ -17,8 +17,8 @@ import java.util.List;
  * <p>Exports a single {@code AnimalsSecretary} JS object with two members:
  * {@code initial} (starting state record) and {@code behavior} (the pure
  * {@code (state, envelope) → Step} routing function). The
- * {@link AnimalsPlaygroundChrome} imports both and passes them to the
- * {@code Party} constructor.</p>
+ * {@link AnimalPlaygroundSpec}'s {@code parties()} declaration wires both
+ * into the workspace's {@code AnimalsParty}.</p>
  *
  * <h2>State shape (Diligent Secretaries enrichment)</h2>
  *
