@@ -74,8 +74,8 @@ public final class InteractiveAnimalDoc {
 
         var theSvg = new SvgSegment(
                 doc,
-                Optional.of("Figure 1 — the canonical %s SVG, themed via currentColor (RFC 0017). The same `SvgDoc` instance that powers the leaf in the Animals tree."
-                        .formatted(displayName.toLowerCase(Locale.ROOT))));
+                "Figure 1 — the canonical %s SVG, themed via currentColor."
+                        .formatted(displayName.toLowerCase(Locale.ROOT)));
 
         var coinIntro = new TextSegment(
                 """
@@ -86,8 +86,8 @@ public final class InteractiveAnimalDoc {
         var coinWidget = new DocumentaryWidget<>(
                 ExtrudedTurtleDemo.INSTANCE,
                 new ExtrudedTurtleDemo.Params(animalKey),
-                Optional.of("Figure 2 — `DocumentaryWidget` embedding `ExtrudedTurtleDemo` with `Params(animal=\"%s\")`. Pick a different animal in the in-widget selector to swap the silhouette."
-                        .formatted(animalKey)));
+                "Figure 2 — ExtrudedTurtleDemo with Params(animal=\"%s\")."
+                        .formatted(animalKey));
 
         var extruderIntro = new TextSegment(
                 """
@@ -98,8 +98,8 @@ public final class InteractiveAnimalDoc {
         var extruderWidget = new DocumentaryWidget<>(
                 ExtrudedSvgDemo.INSTANCE,
                 new ExtrudedSvgDemo.Params(animalKey),
-                Optional.of("Figure 3 — `DocumentaryWidget` embedding `ExtrudedSvgDemo` with `Params(animal=\"%s\")`."
-                        .formatted(animalKey)));
+                "Figure 3 — ExtrudedSvgDemo with Params(animal=\"%s\")."
+                        .formatted(animalKey));
 
         var decomposerIntro = new TextSegment(
                 """
@@ -110,8 +110,8 @@ public final class InteractiveAnimalDoc {
         var decomposerWidget = new DocumentaryWidget<>(
                 DecomposedSvgDemo.INSTANCE,
                 new DecomposedSvgDemo.Params(animalKey),
-                Optional.of("Figure 4 — `DocumentaryWidget` embedding `DecomposedSvgDemo` with `Params(animal=\"%s\")`. Each subpath becomes its own positioned mesh; orbit and scrub the depth-spread."
-                        .formatted(animalKey)));
+                "Figure 4 — DecomposedSvgDemo with Params(animal=\"%s\")."
+                        .formatted(animalKey));
 
         var closing = new TextSegment(
                 """

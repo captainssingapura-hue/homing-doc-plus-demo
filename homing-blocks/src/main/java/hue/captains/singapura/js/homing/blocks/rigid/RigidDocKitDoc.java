@@ -1,9 +1,12 @@
 package hue.captains.singapura.js.homing.blocks.rigid;
 
+import hue.captains.singapura.js.homing.blocks.svg.SvgDocDemoDoc;
 import hue.captains.singapura.js.homing.studio.base.composed.ComposedDoc;
+import hue.captains.singapura.js.homing.studio.base.image.ImageDoc;
 import hue.captains.singapura.js.homing.studio.base.rigid.RigidDoc;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * RFC 0042 — a worked demo of the leveled tree-builder DSL. A {@link RigidDoc}
@@ -14,13 +17,22 @@ import java.util.List;
  *
  * <p>It exercises the DSL's range: multi-level nesting (L1→L2→L3), a branch with
  * a lead-in above its children, every inline content kind (prose / markdown /
- * code / table), and a single leaf holding a multi-segment bundle.</p>
+ * code / table / svg / image), and a single leaf holding a multi-segment bundle.</p>
  *
  * @since homing-blocks — RFC 0042 demo
  */
 public final class RigidDocKitDoc {
 
     private RigidDocKitDoc() {}
+
+    /** A raster {@link ImageDoc} shipped on this module's classpath, for the image content-kind demo. */
+    private static final ImageDoc DEMO_IMAGE = new ImageDoc(
+            "homing-blocks/img/svg-image-dsl-demo.png",
+            "image/png",
+            "A themed raster asset — a light diamond emblem on an indigo gradient.",
+            "A registered ImageDoc, inlined as a base64 data URL.",
+            Optional.of(320),
+            Optional.of(180));
 
     public static final RigidDoc INSTANCE = build();
 
@@ -75,6 +87,14 @@ public final class RigidDocKitDoc {
                                 List.of("`.lNbuild()`",  "—",                 "the parent builder"),
                                 List.of("`.build()`",    "—",                 "the `RigidDoc` (root only)")),
                             "The leveled builder's vocabulary")
+                        .l3build()
+                    .l3("SVG")
+                        .text("`.svg(doc)` embeds a registered `SvgDoc` by reference (vector, themable via `currentColor`); `.svg(doc, caption)` overrides the caption for this appearance.")
+                        .svg(SvgDocDemoDoc.INSTANCE, "A registered SvgDoc, embedded by reference")
+                        .l3build()
+                    .l3("Images")
+                        .text("`.image(doc)` embeds a registered `ImageDoc` (raster, inlined as a data URL). The caption override is a single plain `Line` — one line, at most 81 chars.")
+                        .image(DEMO_IMAGE, "A registered ImageDoc, inlined as a data URL")
                         .l3build()
                     .l2build()
                 .l1build()
