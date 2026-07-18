@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.blocks.cataloguepattern.CataloguePattern
 import hue.captains.singapura.js.homing.blocks.modal.ModalCatalogue;
 import hue.captains.singapura.js.homing.blocks.multitabpane.MultiTabPaneCatalogue;
 import hue.captains.singapura.js.homing.blocks.prose.ProseDocCatalogue;
+import hue.captains.singapura.js.homing.blocks.rigid.BringYourOwnTreeDoc;
 import hue.captains.singapura.js.homing.blocks.rigid.RigidDocKitDoc;
 import hue.captains.singapura.js.homing.blocks.scaffold.StudioScaffoldCatalogue;
 import hue.captains.singapura.js.homing.blocks.splitpane.SplitPaneCatalogue;
@@ -69,7 +70,11 @@ public record BuildingBlocksCatalogue()
                 // RFC 0042 — the leveled tree-builder DSL, demonstrated as a
                 // RigidDoc (ComposedDoc's successor) authored entirely through
                 // root().l1().l2()... — a genuinely nested, foldable document.
-                Entry.of(this, RigidDocKitDoc.INSTANCE)
+                Entry.of(this, RigidDocKitDoc.INSTANCE),
+                // Companion guide: mirroring an arbitrary hierarchy into a
+                // RigidDocV2 via the nodes+edges adapter — a per-node content
+                // provider + name-path identity (RFC 0039).
+                Entry.of(this, BringYourOwnTreeDoc.INSTANCE)
         );
     }
 
@@ -87,6 +92,7 @@ public record BuildingBlocksCatalogue()
     }
 
     @Override public List<Doc> docs() {
-        return List.of(BuildingBlocksIntroDoc.INSTANCE, RigidDocKitDoc.INSTANCE);
+        return List.of(BuildingBlocksIntroDoc.INSTANCE, RigidDocKitDoc.INSTANCE,
+                BringYourOwnTreeDoc.INSTANCE);
     }
 }
