@@ -34,6 +34,10 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
                 Entry.of(this, ComposedDemoDoc.INSTANCE),
                 Entry.of(this, TableDemoDoc.INSTANCE),
                 Entry.of(this, ImageDemoDoc.INSTANCE),
+                // A dedicated demo: this studio's own catalogue tree mirrored into
+                // a foldable RigidDoc, each node given a body by an external
+                // content provider (SimpleListSegment + rotating SVG on leaves).
+                Entry.of(this, DemoContentTreeDoc.INSTANCE),
                 // Featured top-level app — the flagship interactive demo, given
                 // a tile of its own on the home page in addition to its entry
                 // inside the AnimalGamesCatalogue sub-catalogue. Demonstrates
@@ -81,6 +85,6 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
     }
 
     @Override public List<Doc> docs() {
-        return List.of(DemoIntroDoc.INSTANCE);
+        return List.of(DemoIntroDoc.INSTANCE, DemoContentTreeDoc.INSTANCE);
     }
 }

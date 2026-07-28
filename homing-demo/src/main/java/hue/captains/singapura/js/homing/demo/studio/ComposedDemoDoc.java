@@ -57,7 +57,7 @@ public final class ComposedDemoDoc {
 
         var turtleSeg = new SvgSegment(
                 turtleDoc,
-                Optional.of("Figure 1 — the demo studio mascot, themed via currentColor (RFC 0017)."));
+                "Figure 1 — the demo studio mascot, themed via currentColor (RFC 0017).");
 
         var whyComposed = new TextSegment(
                 """
@@ -81,7 +81,7 @@ public final class ComposedDemoDoc {
 
         var tableSeg = new TableSegment(
                 TableDemoDoc.INSTANCE,
-                Optional.of("Figure 2 — the phase-rollout grid, embedded inline."));
+                "Figure 2 — the phase-rollout grid, embedded inline.");
 
         var imagePrologue = new TextSegment(
                 """
@@ -91,7 +91,7 @@ public final class ComposedDemoDoc {
 
         var imageSeg = new ImageSegment(
                 ImageDemoDoc.INSTANCE,
-                Optional.of("Figure 3 — the ImageDoc kind, in action."));
+                "Figure 3 — the ImageDoc kind, in action.");
 
         var codePrologue = new TextSegment(
                 """
