@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+        <artifactId>homing-doc-plus-demo</artifactId>
+        <version>VOID-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>mermaid-mirror-demo</artifactId>
+
+    <description>
+        End-to-end demo of running a Mermaid-enabled studio against a self-hosted
+        "manual CDN" instead of the public one:
+
+          • MermaidStudioServer (port 8090) — a tiny studio with one Mermaid doc,
+            whose MermaidProxyModule URL is OVERRIDDEN to the local CDN below.
+          • LocalCdnServer (port 8091) — serves ./mirror/ over HTTP with the CORS
+            headers a cross-origin ES-module import needs.
+          • MermaidDownloader — mirrors Mermaid (entry + transitive chunks) from
+            jsDelivr into ./mirror/ so the local CDN has something to serve.
+
+        See README.md for the run order and a manual-download fallback.
+    </description>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-studio-starter</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-studio-base</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-libs</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

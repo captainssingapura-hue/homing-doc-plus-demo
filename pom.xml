@@ -12,13 +12,15 @@
         <module>homing-blocks</module>
         <module>homing-docs</module>
         <module>homing-demo</module>
+        <module>mermaid-mirror-demo</module>
+        <module>doc-pdf-export</module>
     </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <homing.core.version>LOCAL-SNAPSHOT</homing.core.version>
+        <homing.core.version>0.6.0</homing.core.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.14</jacoco.version>
     </properties>
