@@ -40,3 +40,7 @@ build/
 
 ### Pom Backup ###
 **pom.xml.versionsBackup
+
+### Local dev TLS material (never commit) ###
+**/certs/*.jks
+**/certs/*.p12

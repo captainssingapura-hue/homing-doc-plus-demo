@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.blocks;
 
 import hue.captains.singapura.js.homing.blocks.composed.ComposedDocCatalogue;
 import hue.captains.singapura.js.homing.blocks.cataloguepattern.CataloguePatternCatalogue;
+import hue.captains.singapura.js.homing.blocks.mermaid.MermaidDemoDoc;
 import hue.captains.singapura.js.homing.blocks.modal.ModalCatalogue;
 import hue.captains.singapura.js.homing.blocks.multitabpane.MultiTabPaneCatalogue;
 import hue.captains.singapura.js.homing.blocks.prose.ProseDocCatalogue;
@@ -74,7 +75,10 @@ public record BuildingBlocksCatalogue()
                 // Companion guide: mirroring an arbitrary hierarchy into a
                 // RigidDocV2 via the nodes+edges adapter — a per-node content
                 // provider + name-path identity (RFC 0039).
-                Entry.of(this, BringYourOwnTreeDoc.INSTANCE)
+                Entry.of(this, BringYourOwnTreeDoc.INSTANCE),
+                // Quick demo of Mermaid diagrams-as-text inside a markdown doc,
+                // realised via the configurable MermaidProxyModule.
+                Entry.of(this, MermaidDemoDoc.INSTANCE)
         );
     }
 
@@ -93,6 +97,6 @@ public record BuildingBlocksCatalogue()
 
     @Override public List<Doc> docs() {
         return List.of(BuildingBlocksIntroDoc.INSTANCE, RigidDocKitDoc.INSTANCE,
-                BringYourOwnTreeDoc.INSTANCE);
+                BringYourOwnTreeDoc.INSTANCE, MermaidDemoDoc.INSTANCE);
     }
 }
