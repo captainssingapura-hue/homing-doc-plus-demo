@@ -5,6 +5,8 @@ import hue.captains.singapura.js.homing.studio.base.composed.ComposedDoc;
 import hue.captains.singapura.js.homing.studio.base.image.ImageDoc;
 import hue.captains.singapura.js.homing.studio.base.rigid.RigidDoc;
 
+import static hue.captains.singapura.js.homing.studio.base.composed.RelationCell.cell;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -87,6 +89,16 @@ public final class RigidDocKitDoc {
                                 List.of("`.lNbuild()`",  "—",                 "the parent builder"),
                                 List.of("`.build()`",    "—",                 "the `RigidDoc` (root only)")),
                             "The leveled builder's vocabulary")
+                        .l3build()
+                    .l3("Articulated tables")
+                        .text("`.articulatedRelation(headers, rows, caption)` authors each cell in place as `cell(\"…\")` with chained marks — a status badge (`.success()` / `.warning()` / `.error()`), alignment (`.right()`), and emphasis (`.strong()` / `.muted()`). The builder derives the sparse side-car from where each cell sits, so there are no `(row, col)` indices to track. Below: the Build column is badged, Coverage is right-aligned, and the failing row's number is muted.")
+                        .articulatedRelation(
+                            List.of(cell("Module"), cell("Build"), cell("Coverage").right()),
+                            List.of(
+                                List.of(cell("homing-core").strong(), cell("passing").success(), cell("94%").right()),
+                                List.of(cell("homing-studio-base"),    cell("flaky").warning(),   cell("88%").right()),
+                                List.of(cell("homing-workspace"),      cell("failing").error(),   cell("71%").right().muted())),
+                            "An articulated relation — badge, alignment, and emphasis on select cells")
                         .l3build()
                     .l3("SVG")
                         .text("`.svg(doc)` embeds a registered `SvgDoc` by reference (vector, themable via `currentColor`); `.svg(doc, caption)` overrides the caption for this appearance.")
