@@ -1,7 +1,11 @@
 package hue.captains.singapura.js.homing.blocks.rigid;
 
+import hue.captains.singapura.js.homing.blocks.svg.SvgDocDemoDoc;
 import hue.captains.singapura.js.homing.studio.base.composed.ComposedDoc;
+import hue.captains.singapura.js.homing.studio.base.image.ImageDoc;
 import hue.captains.singapura.js.homing.studio.base.rigid.RigidDoc;
+
+import java.util.Optional;
 
 /**
  * A Building-Blocks guide: <b>Bring Your Own Tree</b> — turning a hierarchy you
@@ -20,6 +24,15 @@ import hue.captains.singapura.js.homing.studio.base.rigid.RigidDoc;
 public final class BringYourOwnTreeDoc {
 
     private BringYourOwnTreeDoc() {}
+
+    /** A raster {@link ImageDoc} on this module's classpath — the visual-segment demo. */
+    private static final ImageDoc DEMO_IMAGE = new ImageDoc(
+            "homing-blocks/img/svg-image-dsl-demo.png",
+            "image/png",
+            "A themed raster asset — a light diamond emblem on an indigo gradient.",
+            "A registered ImageDoc, inlined as a data URL.",
+            Optional.of(320),
+            Optional.of(180));
 
     public static final RigidDoc INSTANCE = build();
 
@@ -107,7 +120,17 @@ public final class BringYourOwnTreeDoc {
                         - **`SvgSegment` / `ImageSegment` / `TableSegment`** — a registered visual `Doc`, by reference, with an optional caption.
                         - **`RelationSegment`** — a typed inline table; **`CodeSegment`** — a verbatim listing.
 
-                        Text is capped by type: a caption or list line is a `Line.Plain` (≤ 81); a title is a `Title` (≤ 66); a `NodeName` is a URL-safe id (≤ 48).""")
+                        Text is capped by type: a caption or list line is a `Line.Plain` (≤ 81); a title is a `Title` (≤ 66); a `NodeName` is a URL-safe id (≤ 48).
+
+                        The two sub-sections below each host one visual segment, embedded by reference.""")
+                .l2("A vector SvgDoc")
+                    .text("`.svg(doc)` embeds a registered `SvgDoc` — vector, themable via `currentColor`.")
+                    .svg(SvgDocDemoDoc.INSTANCE, "A registered SvgDoc, embedded by reference")
+                    .l2build()
+                .l2("A raster ImageDoc")
+                    .text("`.image(doc)` embeds a registered `ImageDoc` — raster, inlined as a base64 data URL.")
+                    .image(DEMO_IMAGE, "A registered ImageDoc, inlined as a data URL")
+                    .l2build()
             .l1build()
 
             .l1("What a node may not hold")
