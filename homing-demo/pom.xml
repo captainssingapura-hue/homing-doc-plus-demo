@@ -99,9 +99,11 @@
              both the Site-in-a-Jar dogfood and the framework's pedagogy.
              A downstream adapter plugs in its own studios as additional
              umbrella entries; nothing in this demo composes a second studio. -->
+        <!-- RFC 0044 Phase 9: gate the demo's served modules on the engine
+             (the old per-scanner homing-conformance dep is gone). -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-conformance</artifactId>
+            <artifactId>homing-conformance-engine</artifactId>
             <version>${homing.core.version}</version>
             <scope>test</scope>
         </dependency>
