@@ -1,6 +1,7 @@
 # RFC 0044 conformance baseline — homing-demo's pre-existing violations, grandfathered to warnings.
 # One finding fingerprint per line: '<moduleClass> [<rule>] <message>' (line-number-independent).
-# The animation demos redraw via rootElement.replaceChildren(); the SVG demos read the view param.
+# The animation demos redraw via rootElement.replaceChildren(); the SVG demos read the view param;
+# two animation modules predate the 250 effective-line global cap.
 # Anything NOT here is a NEW violation and fails the build. Regenerate deliberately; list should shrink.
 #
 hue.captains.singapura.js.homing.demo.es.DancingAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
@@ -8,4 +9,6 @@ hue.captains.singapura.js.homing.demo.es.DecomposedSvgDemo [no-raw-href] raw hre
 hue.captains.singapura.js.homing.demo.es.ExtrudedSvgDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
 hue.captains.singapura.js.homing.demo.es.ExtrudedTurtleDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
 hue.captains.singapura.js.homing.demo.es.MovingAnimal [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
+hue.captains.singapura.js.homing.demo.es.MovingAnimal [max-effective-lines] module exceeds the 250 effective-line limit — split it
+hue.captains.singapura.js.homing.demo.es.MovingAnimalGame [max-effective-lines] module exceeds the 250 effective-line limit — split it
 hue.captains.singapura.js.homing.demo.es.SpinningAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
