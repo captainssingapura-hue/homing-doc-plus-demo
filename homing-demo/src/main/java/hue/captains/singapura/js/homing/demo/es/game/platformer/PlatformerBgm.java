@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.game.platformer;
 
 import hue.captains.singapura.js.homing.core.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public record PlatformerBgm() implements DomModule<PlatformerBgm> {
 
-    record getBgm() implements Exportable._Constant<PlatformerBgm> {}
+    public record getBgm() implements Exportable._Constant<PlatformerBgm> {}
 
     public static final PlatformerBgm INSTANCE = new PlatformerBgm();
 

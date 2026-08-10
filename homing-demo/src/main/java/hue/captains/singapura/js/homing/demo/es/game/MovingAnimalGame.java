@@ -1,4 +1,8 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.game;
+import hue.captains.singapura.js.homing.demo.es.animation.AnimalCell;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.JumpPhysics;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformEngine;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformerBgm;
 
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
@@ -39,7 +43,7 @@ import java.util.List;
  */
 public record MovingAnimalGame() implements DomModule<MovingAnimalGame> {
 
-    record createMovingAnimalGame() implements Exportable._Constant<MovingAnimalGame> {}
+    public record createMovingAnimalGame() implements Exportable._Constant<MovingAnimalGame> {}
 
     public static final MovingAnimalGame INSTANCE = new MovingAnimalGame();
 

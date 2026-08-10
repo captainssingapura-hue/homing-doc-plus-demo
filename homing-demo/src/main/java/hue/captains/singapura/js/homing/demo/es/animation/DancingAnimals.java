@@ -1,4 +1,5 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.animation;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.JumpPhysics;
 
 import hue.captains.singapura.js.homing.core.*;
 import hue.captains.singapura.js.homing.demo.css.SubwayStyles;

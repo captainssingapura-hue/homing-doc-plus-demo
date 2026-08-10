@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
+import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
 import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 import hue.captains.singapura.js.homing.studio.base.Doc;

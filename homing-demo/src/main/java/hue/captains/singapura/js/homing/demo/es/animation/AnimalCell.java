@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.animation;
 
 import hue.captains.singapura.js.homing.core.*;
 
@@ -6,8 +6,8 @@ import java.util.List;
 
 public record AnimalCell() implements DomModule<AnimalCell> {
 
-    record createAnimalCell() implements Exportable._Constant<AnimalCell> {}
-    record createAnimalSelector() implements Exportable._Constant<AnimalCell> {}
+    public record createAnimalCell() implements Exportable._Constant<AnimalCell> {}
+    public record createAnimalSelector() implements Exportable._Constant<AnimalCell> {}
     /** Per-call scope factory — one scope per widget instance so the selector
      *  in widget A doesn't refresh cells in widget B. Returns {selectedIndex,
      *  cells}; pass into createAnimalCell(className, scope) and

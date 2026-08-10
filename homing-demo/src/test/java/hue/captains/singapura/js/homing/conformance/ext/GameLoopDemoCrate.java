@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.conformance.ext;
 
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
-import hue.captains.singapura.js.homing.demo.es.MovingAnimalGame;
+import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.game.platformer;
 
 import hue.captains.singapura.js.homing.core.*;
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 public record JumpPhysics() implements EsModule<JumpPhysics> {
 
-    record createJumpPhysics() implements Exportable._Constant<JumpPhysics> {}
+    public record createJumpPhysics() implements Exportable._Constant<JumpPhysics> {}
 
     public static final JumpPhysics INSTANCE = new JumpPhysics();
 

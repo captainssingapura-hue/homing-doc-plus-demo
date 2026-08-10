@@ -2,11 +2,11 @@ package hue.captains.singapura.js.homing.conformance;
 
 import hue.captains.singapura.js.homing.core.CssGroupImpl;
 import hue.captains.singapura.js.homing.core.DomModule;
-import hue.captains.singapura.js.homing.demo.es.AnimalCell;
-import hue.captains.singapura.js.homing.demo.es.DancingAnimals;
-import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
-import hue.captains.singapura.js.homing.demo.es.PlatformerBgm;
-import hue.captains.singapura.js.homing.demo.es.SpinningAnimals;
+import hue.captains.singapura.js.homing.demo.es.animation.AnimalCell;
+import hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals;
+import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformerBgm;
+import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
 import hue.captains.singapura.js.homing.demo.theme.DemoCssGroupImplRegistry;
 
 import java.util.List;

@@ -8,15 +8,15 @@
 #   - DocViewWidget renders markdown via innerHTML.
 # Anything NOT here is a NEW violation and fails the build. Regenerate deliberately; list should shrink.
 #
-hue.captains.singapura.js.homing.demo.es.DancingAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
-hue.captains.singapura.js.homing.demo.es.SpinningAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
-hue.captains.singapura.js.homing.demo.es.MovingAnimal [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
-hue.captains.singapura.js.homing.demo.es.MovingAnimal [max-effective-lines] module exceeds the 250 effective-line limit — split it
-hue.captains.singapura.js.homing.demo.es.MovingAnimalGame [max-effective-lines] module exceeds the 250 effective-line limit — split it
-hue.captains.singapura.js.homing.demo.es.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): (function (note, t) { setTimeout(function () { deathSynth.triggerAttackRelease(note, '16n'); }, t); })(notes[di], timing[di]);
-hue.captains.singapura.js.homing.demo.es.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): bgmTimer = setTimeout(bgmStep, durationToMs(dur, bgmData.bpm));
-hue.captains.singapura.js.homing.demo.es.DecomposedSvgDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
-hue.captains.singapura.js.homing.demo.es.ExtrudedSvgDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
-hue.captains.singapura.js.homing.demo.es.ExtrudedTurtleDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
+hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
+hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [max-effective-lines] module exceeds the 250 effective-line limit — split it
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [max-effective-lines] module exceeds the 250 effective-line limit — split it
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): (function (note, t) { setTimeout(function () { deathSynth.triggerAttackRelease(note, '16n'); }, t); })(notes[di], timing[di]);
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): bgmTimer = setTimeout(bgmStep, durationToMs(dur, bgmData.bpm));
+hue.captains.singapura.js.homing.demo.es.svg.DecomposedSvgDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
+hue.captains.singapura.js.homing.demo.es.svg.ExtrudedSvgDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
+hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
 hue.captains.singapura.js.homing.demo.playground.DocViewWidget [view-doctrine] innerHTML/outerHTML write (Pure-Component Views): body.innerHTML = marked.parse(md);
