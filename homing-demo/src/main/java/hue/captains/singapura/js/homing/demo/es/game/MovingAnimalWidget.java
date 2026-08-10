@@ -1,4 +1,7 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.game;
+import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimalsWidget;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.JumpPhysics;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformEngine;
 
 import hue.captains.singapura.js.homing.core.Importable;
 import hue.captains.singapura.js.homing.core.ModuleImports;

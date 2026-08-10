@@ -3,7 +3,7 @@ package hue.captains.singapura.js.homing.demo.studio;
 import hue.captains.singapura.js.homing.core.SvgBeing;
 import hue.captains.singapura.js.homing.core.SvgGroup;
 import hue.captains.singapura.js.homing.core.SvgRef;
-import hue.captains.singapura.js.homing.demo.es.CuteAnimal;
+import hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal;
 import hue.captains.singapura.js.homing.studio.base.SvgDoc;
 import hue.captains.singapura.js.homing.studio.base.app.tree.ContentTree;
 import hue.captains.singapura.js.homing.studio.base.app.tree.TreeBranch;

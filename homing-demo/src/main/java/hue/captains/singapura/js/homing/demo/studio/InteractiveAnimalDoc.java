@@ -2,10 +2,10 @@ package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.core.SvgBeing;
 import hue.captains.singapura.js.homing.core.SvgRef;
-import hue.captains.singapura.js.homing.demo.es.CuteAnimal;
-import hue.captains.singapura.js.homing.demo.es.DecomposedSvgDemo;
-import hue.captains.singapura.js.homing.demo.es.ExtrudedSvgDemo;
-import hue.captains.singapura.js.homing.demo.es.ExtrudedTurtleDemo;
+import hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal;
+import hue.captains.singapura.js.homing.demo.es.svg.DecomposedSvgDemo;
+import hue.captains.singapura.js.homing.demo.es.svg.ExtrudedSvgDemo;
+import hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo;
 import hue.captains.singapura.js.homing.studio.base.SvgDoc;
 import hue.captains.singapura.js.homing.studio.base.composed.ComposedDoc;
 import hue.captains.singapura.js.homing.studio.base.composed.DocumentaryWidget;

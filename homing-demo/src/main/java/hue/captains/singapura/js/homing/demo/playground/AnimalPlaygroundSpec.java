@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.demo.playground;
 
-import hue.captains.singapura.js.homing.demo.es.DancingAnimalsWidget;
-import hue.captains.singapura.js.homing.demo.es.MovingAnimalReplayWidget;
-import hue.captains.singapura.js.homing.demo.es.MovingAnimalWidget;
-import hue.captains.singapura.js.homing.demo.es.SpinningAnimalsWidget;
+import hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget;
+import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalReplayWidget;
+import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalWidget;
+import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimalsWidget;
 import hue.captains.singapura.js.homing.workspace.RibbonItem;
 import hue.captains.singapura.js.homing.workspace.WidgetEntry;
 import hue.captains.singapura.js.homing.workspace.WidgetGroup;

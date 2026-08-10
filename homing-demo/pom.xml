@@ -99,11 +99,15 @@
              both the Site-in-a-Jar dogfood and the framework's pedagogy.
              A downstream adapter plugs in its own studios as additional
              umbrella entries; nothing in this demo composes a second studio. -->
+        <!-- RFC 0044 Phase 9: gate the demo's served modules on the engine.
+             RFC 0044 (studio): compile-scoped so the demo can BOTH gate (test)
+             and serve its own conformance studio (main) — this drags the engine
+             + rules along transitively, so the old explicit test-scoped engine
+             dep is gone. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-conformance</artifactId>
+            <artifactId>homing-conformance-studio</artifactId>
             <version>${homing.core.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -122,5 +126,37 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- RFC 0044 (studio) — export the demo's own conformance report at
+                 process-classes into target/classes/conformance-report, where the
+                 conformance studio's ConformanceReportSource reads it back. Uses the
+                 extended GAME_LOOP policy (DemoConformanceExport), so the served
+                 report grades MovingAnimalGame by the downstream game-loop rule set.
+                 The report codecs' JS (ReportCodecsModule.js) already ships in the
+                 homing-conformance-studio jar on the classpath — no codec-gen step
+                 needed here, since the demo's crate does not re-pack that module. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>export-demo-conformance-report</id>
+                        <phase>process-classes</phase>
+                        <goals><goal>java</goal></goals>
+                        <configuration>
+                            <mainClass>hue.captains.singapura.js.homing.demo.conformance.DemoConformanceExport</mainClass>
+                            <arguments>
+                                <argument>${project.build.outputDirectory}/conformance-report</argument>
+                            </arguments>
+                            <classpathScope>compile</classpathScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

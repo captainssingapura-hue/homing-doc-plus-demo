@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.game.platformer;
 
 import hue.captains.singapura.js.homing.core.*;
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 public record PlatformEngine() implements EsModule<PlatformEngine> {
 
-    record createPlatformEngine() implements Exportable._Constant<PlatformEngine> {}
+    public record createPlatformEngine() implements Exportable._Constant<PlatformEngine> {}
 
     public static final PlatformEngine INSTANCE = new PlatformEngine();
 

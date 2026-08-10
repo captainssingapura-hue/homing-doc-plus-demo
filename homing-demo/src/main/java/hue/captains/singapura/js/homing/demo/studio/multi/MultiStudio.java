@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.demo.studio.multi;
 
 import hue.captains.singapura.js.homing.core.SvgRef;
-import hue.captains.singapura.js.homing.demo.es.CuteAnimal;
+import hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.app.StudioBrand;
 

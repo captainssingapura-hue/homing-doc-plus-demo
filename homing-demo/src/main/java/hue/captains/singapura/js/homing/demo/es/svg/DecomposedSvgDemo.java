@@ -1,4 +1,5 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.svg;
+import hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal;
 
 import hue.captains.singapura.js.homing.core.*;
 import hue.captains.singapura.js.homing.libs.ThreeJs;

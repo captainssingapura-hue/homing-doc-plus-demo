@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.demo.es.DancingAnimals;
-import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
-import hue.captains.singapura.js.homing.demo.es.SpinningAnimals;
+import hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals;
+import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
+import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.Navigable;

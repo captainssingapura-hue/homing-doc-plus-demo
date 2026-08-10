@@ -1,8 +1,8 @@
 package hue.captains.singapura.js.homing.server;
 
 import hue.captains.singapura.js.homing.core.SimpleAppResolver;
-import hue.captains.singapura.js.homing.demo.es.JumpPhysics;
-import hue.captains.singapura.js.homing.demo.es.MovingAnimal;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.JumpPhysics;
+import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

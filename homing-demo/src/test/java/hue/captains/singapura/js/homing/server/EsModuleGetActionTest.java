@@ -4,7 +4,10 @@ import hue.captains.singapura.js.homing.core.BundledExternalModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.demo.css.PlaygroundStyles;
-import hue.captains.singapura.js.homing.demo.es.*;
+import hue.captains.singapura.js.homing.demo.es.svg.*;
+import hue.captains.singapura.js.homing.demo.es.animation.*;
+import hue.captains.singapura.js.homing.demo.es.game.*;
+import hue.captains.singapura.js.homing.demo.es.game.platformer.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

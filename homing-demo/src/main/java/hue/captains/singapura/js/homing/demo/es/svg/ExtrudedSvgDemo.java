@@ -1,35 +1,36 @@
-package hue.captains.singapura.js.homing.demo.es;
+package hue.captains.singapura.js.homing.demo.es.svg;
+import hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal;
 
 import hue.captains.singapura.js.homing.core.*;
 import hue.captains.singapura.js.homing.libs.ThreeJs;
 
 import java.util.List;
 
-@LegacyAppMain(reason = "Three.js coin viewer; migration follows RFC 0024 P3's canonical pattern.")
-public record ExtrudedTurtleDemo() implements AppModule<ExtrudedTurtleDemo.Params, ExtrudedTurtleDemo> {
+@LegacyAppMain(reason = "Three.js extrusion demo; opportunistic migration after RFC 0024 P3.")
+public record ExtrudedSvgDemo() implements AppModule<ExtrudedSvgDemo.Params, ExtrudedSvgDemo> {
 
-    record appMain() implements AppModule._AppMain<Params, ExtrudedTurtleDemo> {}
+    record appMain() implements AppModule._AppMain<Params, ExtrudedSvgDemo> {}
 
-    public record link() implements AppLink<ExtrudedTurtleDemo> {}
+    public record link() implements AppLink<ExtrudedSvgDemo> {}
 
     /**
-     * @param animal optional initial animal name; {@code null} → fall back to URL
-     *               param, then default {@code "turtle"}.
+     * @param animal optional initial animal name; {@code null} → URL fallback,
+     *               then default.
      */
     public record Params(String animal) implements AppModule._Param {}
 
-    public static final ExtrudedTurtleDemo INSTANCE = new ExtrudedTurtleDemo();
+    public static final ExtrudedSvgDemo INSTANCE = new ExtrudedSvgDemo();
 
     @Override public Class<Params> paramsType() { return Params.class; }
 
     @Override
     public String title() {
-        return "SVG Coin";
+        return "SVG Extruder";
     }
 
     @Override
-    public ImportsFor<ExtrudedTurtleDemo> imports() {
-        return ImportsFor.<ExtrudedTurtleDemo>builder()
+    public ImportsFor<ExtrudedSvgDemo> imports() {
+        return ImportsFor.<ExtrudedSvgDemo>builder()
                 .add(new ModuleImports<>(List.of(
                         new ThreeJs.Scene(),
                         new ThreeJs.PerspectiveCamera(),
@@ -38,11 +39,7 @@ public record ExtrudedTurtleDemo() implements AppModule<ExtrudedTurtleDemo.Param
                         new ThreeJs.DirectionalLight(),
                         new ThreeJs.Color(),
                         new ThreeJs.Box3(),
-                        new ThreeJs.Vector3(),
-                        new ThreeJs.CylinderGeometry(),
-                        new ThreeJs.MeshStandardMaterial(),
-                        new ThreeJs.Mesh(),
-                        new ThreeJs.Group()
+                        new ThreeJs.Vector3()
                 ), ThreeJs.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new SvgExtruder.extrudeSvg()
@@ -59,7 +56,7 @@ public record ExtrudedTurtleDemo() implements AppModule<ExtrudedTurtleDemo.Param
     }
 
     @Override
-    public ExportsOf<ExtrudedTurtleDemo> exports() {
+    public ExportsOf<ExtrudedSvgDemo> exports() {
         return new ExportsOf<>(INSTANCE, List.of(new appMain()));
     }
 }
