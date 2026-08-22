@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.core.Importable;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.Widget;
 import hue.captains.singapura.js.homing.demo.css.GridDemoStyles;
+import hue.captains.singapura.js.homing.grid.GridCellTypesModule;
 import hue.captains.singapura.js.homing.grid.RelationGridModule;
 import hue.captains.singapura.js.homing.grid.StockCellsModule;
 import hue.captains.singapura.js.homing.studio.base.widget.DocWidget;
@@ -53,6 +54,9 @@ public final class DishListDemoWidget extends DocWidget<DishListDemoWidget.Param
                                 new StockCellsModule.EnumCell()),
                         StockCellsModule.INSTANCE),
                 new ModuleImports<>(
+                        List.of(new GridCellTypesModule.numberType()),
+                        GridCellTypesModule.INSTANCE),
+                new ModuleImports<>(
                         List.of(new DishListRelation.createDishListRelation()),
                         DishListRelation.INSTANCE),
                 new ModuleImports<>(
@@ -79,8 +83,9 @@ public final class DishListDemoWidget extends DocWidget<DishListDemoWidget.Param
                 "    hint.textContent = 'Click / arrows select · Shift extends · Ctrl adds a range · '",
                 "                     + 'Ctrl+A all · Enter or F2 edits, Enter commits, Escape cancels · '",
                 "                     + 'Ctrl+C copies the active range as raw TSV · Del clears the selected '",
-                "                     + 'cells · edit a homogeneous selection to fill it in one commit · '",
-                "                     + 'sort while editing to watch D7 defer the remap';",
+                "                     + 'cells · TYPE onto a selection to replace it live (same EffectiveType '",
+                "                     + 'only — mixed types report an error) · Enter commits, Escape cancels, '",
+                "                     + 'arrows move the caret · sort while editing to watch D7 defer the remap';",
                 "    wrap.appendChild(hint);",
                 "",
                 "    var bar = b.createElement('bar', 'div');",
@@ -108,11 +113,25 @@ public final class DishListDemoWidget extends DocWidget<DishListDemoWidget.Param
                 "        container: host,",
                 "        branch: cellsB,",
                 "        adapter: relation,",
+                "        // FINE-GRAINED EffectiveTypes: price/calories/popularity are all",
+                "        // numbers but DISTINCT types — a bulk edit spanning two of them",
+                "        // is rejected with an error, never silently misapplied.",
                 "        cellFactory: function (column, value) {",
                 "            if (column === 'style') return new EnumCell({ options: STYLES });",
-                "            if (column === 'price') return new NumberCell({ format: function (v) {",
-                "                return '$' + Number(v).toFixed(2); } });",
-                "            return (typeof value === 'number') ? new NumberCell() : new TextCell();",
+                "            if (column === 'price') return new NumberCell({",
+                "                type: numberType('price', { min: 0 }),",
+                "                format: function (v) { return '$' + Number(v).toFixed(2); } });",
+                "            if (column === 'calories') return new NumberCell({",
+                "                type: numberType('calories', { integer: true, min: 0 }) });",
+                "            if (column === 'popularity') return new NumberCell({",
+                "                type: numberType('popularity', { integer: true, min: 0 }) });",
+                "            return new TextCell();",
+                "        },",
+                "        onBulkEditRejected: function (r) {",
+                "            log('bulk edit rejected (' + r.reason + '): ' + r.names.join(' vs '));",
+                "        },",
+                "        onBulkEditCommitted: function (ids, v) {",
+                "            log('bulk edit: ' + ids.length + ' cells = ' + v);",
                 "        },",
                 "        onEditCommitted: function (pk, col, v) { log('committed ' + pk + '.' + col + ' = ' + v); },",
                 "        onViewChanged: function (kind) { log('view changed: ' + kind); },",

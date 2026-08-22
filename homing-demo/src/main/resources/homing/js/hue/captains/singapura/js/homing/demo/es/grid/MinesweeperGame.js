@@ -66,7 +66,11 @@ function createMinesweeperGame(config) {
         columns: function () { var out = []; for (var c = 0; c < N; c++) out.push('c' + c); return out; },
         get:     function (pk, col) { return symbol(state[pk.slice(1)][col.slice(1)]); },
         subscribe:   function (fn) { subs.push(fn); },
-        unsubscribe: function (fn) { var i = subs.indexOf(fn); if (i >= 0) subs.splice(i, 1); }
+        unsubscribe: function (fn) { var i = subs.indexOf(fn); if (i >= 0) subs.splice(i, 1); },
+        /** The grid's commit seam IS the move channel: an instantaneous
+         *  EffectiveType commits the keystroke as the value; the game
+         *  interprets it. Same primitives as any data grid — no side-channel. */
+        update: function (pk, col, keystroke) { act(keystroke, pk, col); }
     };
 
     function reveal(r, c) {

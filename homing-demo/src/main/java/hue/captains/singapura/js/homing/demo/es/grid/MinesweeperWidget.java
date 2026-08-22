@@ -4,20 +4,21 @@ import hue.captains.singapura.js.homing.core.Importable;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.Widget;
 import hue.captains.singapura.js.homing.demo.css.GridDemoStyles;
+import hue.captains.singapura.js.homing.grid.GridCellTypesModule;
 import hue.captains.singapura.js.homing.grid.RelationGridModule;
 import hue.captains.singapura.js.homing.studio.base.widget.DocWidget;
 
 import java.util.List;
 
 /**
- * RFC 0050 Appendix A — Minesweeper, keyboard-only, on the RelationGrid's
- * ACTION variant: {@code editable:false} turns Enter/Space/F/C/R into
- * {@code onAction(key, pk, column)} dispatches that {@link MinesweeperGame}
- * turns into moves; arrows stay with the grid's own shallow keyboard. The
- * cells are a custom mine-tile factory (the GridCellContract's minimal
- * surface — no StockCells needed), and every reveal flows back through the
- * adapter feed into the grid's direct update path: a flood fill lands as
- * ONE batched frame.
+ * RFC 0050 Appendix A — Minesweeper, keyboard-only, on the SAME primitives
+ * as any data grid: the mine tiles carry an INSTANTANEOUS EffectiveType
+ * (f/Enter/Space/c), so each move keystroke is a complete value replacement
+ * committed through {@code adapter.update} — the game interprets it (no
+ * onAction side-channel; multi-select + F flags every selected tile). Arrows
+ * stay with the grid's own shallow keyboard; R (a board-level op) bubbles to
+ * the widget. Every reveal flows back through the adapter feed into the
+ * grid's direct update path: a flood fill lands as ONE batched frame.
  */
 public final class MinesweeperWidget extends DocWidget<MinesweeperWidget.Params,
                                                        MinesweeperWidget> {
@@ -45,6 +46,9 @@ public final class MinesweeperWidget extends DocWidget<MinesweeperWidget.Params,
                 new ModuleImports<>(
                         List.of(new RelationGridModule.RelationGrid()),
                         RelationGridModule.INSTANCE),
+                new ModuleImports<>(
+                        List.of(new GridCellTypesModule.instantType()),
+                        GridCellTypesModule.INSTANCE),
                 new ModuleImports<>(
                         List.of(new MinesweeperGame.createMinesweeperGame()),
                         MinesweeperGame.INSTANCE),
@@ -92,8 +96,11 @@ public final class MinesweeperWidget extends DocWidget<MinesweeperWidget.Params,
                 "        onProgress: function (t) { progress.textContent = t; }",
                 "    });",
                 "",
-                "    // A custom mine-tile cell — the GridCellContract's minimal surface:",
-                "    // fixed square tiles, no editing (the grid runs editable:false).",
+                "    // A custom mine-tile cell on the SAME primitives as any data grid:",
+                "    // its INSTANTANEOUS EffectiveType makes each move keystroke the",
+                "    // complete value — the commit seam (adapter.update) is the move",
+                "    // channel; multi-select + F flags them all in one gesture.",
+                "    var tileType = instantType('mine-tile', ['f', 'F', 'Enter', ' ', 'c', 'C']);",
                 "    function mineCellFactory() {",
                 "        var el = null, val = null;",
                 "        return {",
@@ -104,6 +111,7 @@ public final class MinesweeperWidget extends DocWidget<MinesweeperWidget.Params,
                 "            },",
                 "            update: function (v) { val = v; if (el) el.textContent = v; },",
                 "            onSelect: function () {},",
+                "            effectiveType: function () { return tileType; },",
                 "            getValue: function () { return val; },",
                 "            getValueToCopy: function () { return val == null ? '' : String(val); },",
                 "            dispose: function () { el = null; }",
@@ -117,9 +125,13 @@ public final class MinesweeperWidget extends DocWidget<MinesweeperWidget.Params,
                 "        container: host,",
                 "        branch: cellsB,",
                 "        adapter: game.adapter,",
-                "        editable: false,                       // the ACTION variant",
-                "        cellFactory: mineCellFactory,",
-                "        onAction: game.act",
+                "        cellFactory: mineCellFactory",
+                "    });",
+                "",
+                "    // R restarts the BOARD — a board-level op, not a cell value, so it",
+                "    // lives at the widget: unconsumed keys bubble out of the grid.",
+                "    wrap.addEventListener('keydown', function (e) {",
+                "        if (e.key === 'r' || e.key === 'R') game.reset();",
                 "    });",
                 "",
                 "    grid.focus();"
