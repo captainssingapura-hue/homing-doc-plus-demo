@@ -84,7 +84,7 @@ public final class DishListDemoWidget extends DocWidget<DishListDemoWidget.Param
                 "                     + 'Ctrl+A all · Enter or F2 edits, Enter commits, Escape cancels · '",
                 "                     + 'Ctrl+C copies the active range as raw TSV · Del clears the selected '",
                 "                     + 'cells · TYPE onto a selection to replace it live (same EffectiveType '",
-                "                     + 'only — mixed types report an error) · drag a header edge to resize '",
+                "                     + 'only — mixed types report an error) · drag a header edge to resize, its BODY '",
                 "                     + '(staged — Esc abandons) · Alt+←/→ resizes the cursor column · '",
                 "                     + 'save/restore round-trips the arranged view · '",
                 "                     + 'sort while editing to watch D7 defer the remap';",
