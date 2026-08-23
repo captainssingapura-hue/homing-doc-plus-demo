@@ -115,6 +115,7 @@ public final class DishListDemoWidget extends DocWidget<DishListDemoWidget.Param
                 "        container: host,",
                 "        branch: cellsB,",
                 "        adapter: relation,",
+                "        label: 'Dish list — six dishes by ingredient, style, calories, price and popularity',",
                 "        // FINE-GRAINED EffectiveTypes: price/calories/popularity are all",
                 "        // numbers but DISTINCT types — a bulk edit spanning two of them",
                 "        // is rejected with an error, never silently misapplied.",
