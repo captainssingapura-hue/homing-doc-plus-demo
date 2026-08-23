@@ -88,17 +88,14 @@ public record GridDemoStyles() implements CssGroup<GridDemoStyles> {
                 """;
         }
     }
-    /** The board host — a game board has no header band (nested rule). */
+    /** The board host. The header band is gone via header.show=false on the
+     *  grid itself — this used to need a nested thead{display:none} rule. */
     public record ms_host() implements CssClass<GridDemoStyles> {
         @Override public String body() { return """
                 display: inline-block;
                 border: 1px solid var(--color-border);
                 border-radius: 6px;
                 overflow: hidden;
-
-                thead {
-                    display: none;
-                }
                 """;
         }
     }
