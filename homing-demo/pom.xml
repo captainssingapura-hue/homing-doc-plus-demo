@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -50,7 +50,14 @@
             <artifactId>homing-studio-base</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- RFC 0025 Ext1 — the workspace's dynamic widget management. The
+        <!-- RFC 0050 - the Relation Grid: the Dish List + Minesweeper
+             companion widgets consume the generic table primitive. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-relation-grid</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- RFC 0025 Ext1 â€” the workspace's dynamic widget management. The
              AnimalsPlayground app composes WorkspaceShell + WidgetPicker;
              DocViewWidget hosts the workspace's pinned introduction. -->
         <dependency>
@@ -58,7 +65,7 @@
             <artifactId>homing-workspace</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- RFC 0034 P2-prep Cycle A — generated codec module for the
+        <!-- RFC 0034 P2-prep Cycle A â€” generated codec module for the
              workspace's typed records (PaneId / LayoutNode / WorkspaceState
              / etc.). Produced at build time by WorkspaceCodecGen into
              target/classes; never committed. -->
@@ -67,7 +74,7 @@
             <artifactId>homing-workspace-codecs</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- RFC 0034 P2-prep Cycle C — hand-written persistence facade
+        <!-- RFC 0034 P2-prep Cycle C â€” hand-written persistence facade
              module (WidgetParamsCodecRegistry, LocalStorageStore,
              captureLiveWorkspace, persister, facade). Sits in its own
              Maven module to break the codec-module Maven cycle. -->
@@ -76,7 +83,7 @@
             <artifactId>homing-workspace-persistence</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- Universal workspace chrome substrate — GenericWorkspace +
+        <!-- Universal workspace chrome substrate â€” GenericWorkspace +
              WorkspaceSpec composition model. Demo uses it to host
              AnimalPlaygroundSpec at ?app=genericWorkspace&ws_kind=animalPlayground
              as the parallel V2 to AnimalsPlayground. -->
@@ -85,7 +92,7 @@
             <artifactId>homing-workspace-shell</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- RFC 0040 — batteries-included studio starter: StudioStarterFixtures
+        <!-- RFC 0040 â€” batteries-included studio starter: StudioStarterFixtures
              brings the Studio Workspace (genericWorkspace + the "studio" spec +
              /catalogue-tree over the demo's catalogue forest) out of the box.
              Pulls homing-studio-workspace / -workspace-shell transitively. -->
@@ -95,13 +102,13 @@
             <version>${homing.core.version}</version>
         </dependency>
         <!-- Per 0.0.111: homing-skills was retired. The demo studio is now
-             the canonical worked example — apps + docs in one jar serves as
+             the canonical worked example â€” apps + docs in one jar serves as
              both the Site-in-a-Jar dogfood and the framework's pedagogy.
              A downstream adapter plugs in its own studios as additional
              umbrella entries; nothing in this demo composes a second studio. -->
         <!-- RFC 0044 Phase 9: gate the demo's served modules on the engine.
              RFC 0044 (studio): compile-scoped so the demo can BOTH gate (test)
-             and serve its own conformance studio (main) — this drags the engine
+             and serve its own conformance studio (main) â€” this drags the engine
              + rules along transitively, so the old explicit test-scoped engine
              dep is gone. -->
         <dependency>
@@ -115,7 +122,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- RFC 0028 cycle 6 phase 2 — pure-JS test fixtures (GraalVM-backed
+        <!-- RFC 0028 cycle 6 phase 2 â€” pure-JS test fixtures (GraalVM-backed
              SecretaryTestBase + JsModuleTestBase). One dep, no classifier;
              the fixtures module hauls GraalVM Polyglot + js-community
              along transitively so AnimalsSecretary's tests just work. -->
@@ -129,13 +136,13 @@
 
     <build>
         <plugins>
-            <!-- RFC 0044 (studio) — export the demo's own conformance report at
+            <!-- RFC 0044 (studio) â€” export the demo's own conformance report at
                  process-classes into target/classes/conformance-report, where the
                  conformance studio's ConformanceReportSource reads it back. Uses the
                  extended GAME_LOOP policy (DemoConformanceExport), so the served
                  report grades MovingAnimalGame by the downstream game-loop rule set.
                  The report codecs' JS (ReportCodecsModule.js) already ships in the
-                 homing-conformance-studio jar on the classpath — no codec-gen step
+                 homing-conformance-studio jar on the classpath â€” no codec-gen step
                  needed here, since the demo's crate does not re-pack that module. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

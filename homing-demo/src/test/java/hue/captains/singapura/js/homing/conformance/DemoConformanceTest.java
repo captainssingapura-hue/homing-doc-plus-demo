@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.conformance.engine.ConformanceEngine;
 import hue.captains.singapura.js.homing.conformance.engine.ServedModuleRenderer;
 import hue.captains.singapura.js.homing.conformance.rules.CrateClosure;
 import hue.captains.singapura.js.homing.conformance.rules.CrateConformance;
+import hue.captains.singapura.js.homing.conformance.rules.CrateCoverage;
 import hue.captains.singapura.js.homing.conformance.rules.Finding;
 import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.conformance.rules.Severity;
@@ -51,6 +52,17 @@ class DemoConformanceTest {
                 "every served homing-demo module must be declared in HomingDemoCrate");
         assertEquals(List.of(), crate.illegalImports(),
                 "every cross-crate import must be declared in HomingDemoCrate.requires()");
+    }
+
+    @Test
+    void everyServedModuleIsCrated() {
+        // Whole-app coverage: nothing in homing-demo's build output may serve
+        // without belonging to a crate (the build-time half of closing the
+        // serve-without-conformance leak; the runtime crate-gate is the other half).
+        List<String> gaps = CrateCoverage.check(
+                CrateClosure.of(DemoConformance.TOP_LEVEL), List.of(HomingDemoCrate.class));
+        assertEquals(List.of(), gaps,
+                () -> "served modules missing from every crate:\n" + String.join("\n", gaps));
     }
 
     @Test

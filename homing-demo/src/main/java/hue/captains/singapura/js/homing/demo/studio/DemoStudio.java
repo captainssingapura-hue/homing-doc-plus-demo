@@ -81,7 +81,7 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
     }
 
     @Override public List<? extends L1_Catalogue<DemoStudio, ?>> subCatalogues() {
-        return List.of(AnimalGamesCatalogue.INSTANCE);
+        return List.of(AnimalGamesCatalogue.INSTANCE, GridDemosCatalogue.INSTANCE);
     }
 
     @Override public List<Doc> docs() {

@@ -32,6 +32,14 @@ import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalReplayWidget;
 import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalWidget;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformEngine;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformerBgm;
+import hue.captains.singapura.js.homing.demo.css.GridDemoStyles;
+import hue.captains.singapura.js.homing.demo.es.grid.DishListDemoApp;
+import hue.captains.singapura.js.homing.demo.es.grid.DishListDemoWidget;
+import hue.captains.singapura.js.homing.demo.es.grid.DishListRelation;
+import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp;
+import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperGame;
+import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperWidget;
+import hue.captains.singapura.js.homing.grid.RelationGridCrate;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimalsWidget;
 import hue.captains.singapura.js.homing.demo.es.svg.SvgDecomposer;
@@ -79,7 +87,9 @@ public final class HomingDemoCrate implements Crate {
                 WorkspacePersistenceCrate.INSTANCE,
                 WorkspaceShellCrate.INSTANCE,
                 StudioWorkspaceCrate.INSTANCE,
-                LibsCrate.INSTANCE);
+                LibsCrate.INSTANCE,
+                // RFC 0050 — the Relation Grid primitive family.
+                RelationGridCrate.INSTANCE);
     }
 
     @Override
@@ -112,6 +122,14 @@ public final class HomingDemoCrate implements Crate {
                 CrateEntry.of(AnimalsPlaygroundStyles.INSTANCE),
                 CrateEntry.of(AnimalsSecretaryModule.INSTANCE),
                 CrateEntry.of(DocViewWidget.INSTANCE),
-                CrateEntry.of(DemoStandardMPA.INSTANCE));
+                CrateEntry.of(DemoStandardMPA.INSTANCE),
+                // RFC 0050 — the Relation Grid's companion demos.
+                CrateEntry.of(GridDemoStyles.INSTANCE),
+                CrateEntry.of(DishListRelation.INSTANCE),
+                CrateEntry.of(DishListDemoWidget.INSTANCE),
+                CrateEntry.of(DishListDemoApp.INSTANCE),
+                CrateEntry.of(MinesweeperGame.INSTANCE),
+                CrateEntry.of(MinesweeperWidget.INSTANCE),
+                CrateEntry.of(MinesweeperDemoApp.INSTANCE));
     }
 }
