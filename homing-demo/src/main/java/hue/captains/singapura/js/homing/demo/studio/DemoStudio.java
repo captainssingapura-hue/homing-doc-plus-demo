@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
 import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 import hue.captains.singapura.js.homing.studio.base.Doc;
@@ -38,16 +37,12 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
                 // a foldable RigidDoc, each node given a body by an external
                 // content provider (SimpleListSegment + rotating SVG on leaves).
                 Entry.of(this, DemoContentTreeDoc.INSTANCE),
-                // Featured top-level app — the flagship interactive demo, given
-                // a tile of its own on the home page in addition to its entry
-                // inside the AnimalGamesCatalogue sub-catalogue. Demonstrates
-                // the Site-in-a-Jar shape: apps and docs side by side under
-                // shared chrome.
-                Entry.of(this, new Navigable<>(
-                        MovingAnimal.INSTANCE,
-                        AppModule._None.INSTANCE,
-                        "Moving Animal",
-                        "Platform game served as a top-level catalogue leaf. The first AppModule on the demo studio's home page — apps and docs side by side, one chrome, one jar.")),
+                // RFC 0051 — "Moving Animal" used to be echoed here as a featured
+                // tile, in addition to its canonical entry in AnimalGamesCatalogue.
+                // Under the path axiom a navigable has at most ONE position, so the
+                // echo is gone. The Site-in-a-Jar shape it illustrated — apps and
+                // docs side by side under one chrome — is still on this very page:
+                // the doc tiles above sit beside the app tiles below.
                 Entry.of(this, new Navigable<>(
                         ThemesIntro.INSTANCE,
                         AppModule._None.INSTANCE,

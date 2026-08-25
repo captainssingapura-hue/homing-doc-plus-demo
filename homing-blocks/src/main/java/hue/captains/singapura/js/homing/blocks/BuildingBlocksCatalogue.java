@@ -10,7 +10,6 @@ import hue.captains.singapura.js.homing.blocks.rigid.BringYourOwnTreeDoc;
 import hue.captains.singapura.js.homing.blocks.rigid.RigidDocKitDoc;
 import hue.captains.singapura.js.homing.blocks.scaffold.StudioScaffoldCatalogue;
 import hue.captains.singapura.js.homing.blocks.splitpane.SplitPaneCatalogue;
-import hue.captains.singapura.js.homing.blocks.splitpane.SplitPaneDemoApp;
 import hue.captains.singapura.js.homing.blocks.svg.SvgDocCatalogue;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
@@ -57,17 +56,12 @@ public record BuildingBlocksCatalogue()
     @Override public List<Entry<BuildingBlocksCatalogue>> leaves() {
         return List.of(
                 Entry.of(this, BuildingBlocksIntroDoc.INSTANCE),
-                // Featured top-level demo on the L0 home — the flagship
-                // workspace-substrate exhibit. Same Navigable shape as the
-                // demo studio's "Moving Animal" featured tile: an AppModule
-                // tile rendered alongside the doc + sub-catalogue tiles.
-                Entry.of(this, new Navigable<>(
-                        SplitPaneDemoApp.INSTANCE,
-                        new SplitPaneDemoApp.Params(),
-                        "SplitPane — Live Demo",
-                        "Top-level app demoing the SplitPane primitive. Fixed 4-quadrant "
-                      + "layout: swatch, counter, log, prose. Drag the dividers — the "
-                      + "substrate beneath the future flexible workspace.")),
+                // RFC 0051 — the SplitPane demo's featured echo used to sit here,
+                // duplicating its canonical entry one level down in
+                // SplitPaneCatalogue. Under the path axiom a navigable has at
+                // most ONE position, so the echo is gone; the demo lives with its
+                // guide, where SplitPaneCatalogue already shows the same
+                // doc-tile-beside-app-tile shape this echo was illustrating.
                 // RFC 0042 — the leveled tree-builder DSL, demonstrated as a
                 // RigidDoc (ComposedDoc's successor) authored entirely through
                 // root().l1().l2()... — a genuinely nested, foldable document.
