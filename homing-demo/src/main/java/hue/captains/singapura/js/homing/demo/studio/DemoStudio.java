@@ -5,6 +5,11 @@ import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
 import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
+import hue.captains.singapura.js.homing.studio.base.app.DocTreeViewer;
+import hue.captains.singapura.js.homing.studio.base.composed.ComposedViewer;
+import hue.captains.singapura.js.homing.studio.base.image.ImageViewer;
+import hue.captains.singapura.js.homing.studio.base.table.TableViewer;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L0_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
@@ -29,14 +34,27 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
 
     @Override public List<Entry<DemoStudio>> leaves() {
         return List.of(
-                Entry.of(this, DemoIntroDoc.INSTANCE),
-                Entry.of(this, ComposedDemoDoc.INSTANCE),
-                Entry.of(this, TableDemoDoc.INSTANCE),
-                Entry.of(this, ImageDemoDoc.INSTANCE),
+                // RFC 0051 Phase 6 - the placement names the viewer. A doc no
+                // longer says how it opens; this catalogue does, for the doc it
+                // places here.
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(DemoIntroDoc.INSTANCE.uuid().toString()),
+                        DemoIntroDoc.INSTANCE),
+                Entry.of(this, ComposedViewer.INSTANCE,
+                        new ComposedViewer.Params(ComposedDemoDoc.INSTANCE.uuid().toString()),
+                        ComposedDemoDoc.INSTANCE),
+                Entry.of(this, TableViewer.INSTANCE,
+                        new TableViewer.Params(TableDemoDoc.INSTANCE.uuid().toString()),
+                        TableDemoDoc.INSTANCE),
+                Entry.of(this, ImageViewer.INSTANCE,
+                        new ImageViewer.Params(ImageDemoDoc.INSTANCE.uuid().toString()),
+                        ImageDemoDoc.INSTANCE),
                 // A dedicated demo: this studio's own catalogue tree mirrored into
                 // a foldable RigidDoc, each node given a body by an external
                 // content provider (SimpleListSegment + rotating SVG on leaves).
-                Entry.of(this, DemoContentTreeDoc.INSTANCE),
+                Entry.of(this, DocTreeViewer.INSTANCE,
+                        new DocTreeViewer.Params(DemoContentTreeDoc.INSTANCE.uuid().toString()),
+                        DemoContentTreeDoc.INSTANCE),
                 // RFC 0051 — "Moving Animal" used to be echoed here as a featured
                 // tile, in addition to its canonical entry in AnimalGamesCatalogue.
                 // Under the path axiom a navigable has at most ONE position, so the
