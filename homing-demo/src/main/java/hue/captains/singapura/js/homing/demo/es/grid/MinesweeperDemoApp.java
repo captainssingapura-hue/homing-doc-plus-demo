@@ -21,7 +21,14 @@ public final class MinesweeperDemoApp extends WorkspaceMPA<MinesweeperDemoApp.Pa
     public record link()    implements AppLink<MinesweeperDemoApp> {}
 
     @Override public String simpleName() { return "minesweeper"; }
+    /** RFC 0051 A9 - an empty Params record is genuinely paramless, but cannot
+     *  use ParamCodec.None, which is typed to _None. Without this the app had
+     *  no codec at all and its address was minted by reflection. */
+    public static final hue.captains.singapura.js.homing.core.ParamCodec<Params> CODEC =
+            hue.captains.singapura.js.homing.core.ParamCodec.ofEmpty(Params::new);
+
     @Override public Class<Params> paramsType() { return Params.class; }
+    @Override public hue.captains.singapura.js.homing.core.ParamCodec<Params> paramCodec() { return CODEC; }
     @Override public String title() { return "Minesweeper"; }
 
     @Override
