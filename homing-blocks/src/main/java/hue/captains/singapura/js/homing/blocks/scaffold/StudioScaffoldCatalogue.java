@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.blocks.scaffold;
 import hue.captains.singapura.js.homing.blocks.BuildingBlocksCatalogue;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 
@@ -29,8 +30,12 @@ public record StudioScaffoldCatalogue()
 
     @Override public List<Entry<StudioScaffoldCatalogue>> leaves() {
         return List.of(
-                Entry.of(this, StudioScaffoldGuideDoc.INSTANCE),
-                Entry.of(this, StudioScaffoldDemoDoc.INSTANCE)
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(StudioScaffoldGuideDoc.INSTANCE.uuid().toString()),
+                        StudioScaffoldGuideDoc.INSTANCE),
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(StudioScaffoldDemoDoc.INSTANCE.uuid().toString()),
+                        StudioScaffoldDemoDoc.INSTANCE)
         );
     }
 

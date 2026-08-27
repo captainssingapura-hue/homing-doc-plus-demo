@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.blocks.prose;
 import hue.captains.singapura.js.homing.blocks.BuildingBlocksCatalogue;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 
@@ -25,8 +26,12 @@ public record ProseDocCatalogue()
 
     @Override public List<Entry<ProseDocCatalogue>> leaves() {
         return List.of(
-                Entry.of(this, ProseDocGuideDoc.INSTANCE),
-                Entry.of(this, ProseDocDemoDoc.INSTANCE)
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(ProseDocGuideDoc.INSTANCE.uuid().toString()),
+                        ProseDocGuideDoc.INSTANCE),
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(ProseDocDemoDoc.INSTANCE.uuid().toString()),
+                        ProseDocDemoDoc.INSTANCE)
         );
     }
 

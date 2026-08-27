@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.blocks.composed;
 import hue.captains.singapura.js.homing.blocks.BuildingBlocksCatalogue;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
+import hue.captains.singapura.js.homing.studio.base.composed.ComposedViewer;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 
@@ -26,8 +28,12 @@ public record ComposedDocCatalogue()
 
     @Override public List<Entry<ComposedDocCatalogue>> leaves() {
         return List.of(
-                Entry.of(this, ComposedDocGuideDoc.INSTANCE),
-                Entry.of(this, ComposedDocDemo.INSTANCE)
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(ComposedDocGuideDoc.INSTANCE.uuid().toString()),
+                        ComposedDocGuideDoc.INSTANCE),
+                Entry.of(this, ComposedViewer.INSTANCE,
+                        new ComposedViewer.Params(ComposedDocDemo.INSTANCE.uuid().toString()),
+                        ComposedDocDemo.INSTANCE)
         );
     }
 

@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.blocks.splitpane;
 import hue.captains.singapura.js.homing.blocks.BuildingBlocksCatalogue;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.Navigable;
@@ -42,7 +43,9 @@ public record SplitPaneCatalogue()
 
     @Override public List<Entry<SplitPaneCatalogue>> leaves() {
         return List.of(
-                Entry.of(this, SplitPaneGuideDoc.INSTANCE),
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(SplitPaneGuideDoc.INSTANCE.uuid().toString()),
+                        SplitPaneGuideDoc.INSTANCE),
                 // Top-level demo app — opens SplitPaneDemoApp's
                 // SingleWidgetMPA shell at /app?app=split-pane-demo.
                 // Same shape as the future workspace shell will take:

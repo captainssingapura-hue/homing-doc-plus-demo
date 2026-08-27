@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.blocks.modal;
 import hue.captains.singapura.js.homing.blocks.BuildingBlocksCatalogue;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.Navigable;
@@ -51,7 +52,9 @@ public record ModalCatalogue()
 
     @Override public List<Entry<ModalCatalogue>> leaves() {
         return List.of(
-                Entry.of(this, ModalGuideDoc.INSTANCE),
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(ModalGuideDoc.INSTANCE.uuid().toString()),
+                        ModalGuideDoc.INSTANCE),
                 Entry.of(this, new Navigable<>(
                         ModalDemoApp.INSTANCE,
                         new ModalDemoApp.Params(),

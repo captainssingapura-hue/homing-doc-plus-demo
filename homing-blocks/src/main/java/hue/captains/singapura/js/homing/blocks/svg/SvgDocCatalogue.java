@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.blocks.svg;
 import hue.captains.singapura.js.homing.blocks.BuildingBlocksCatalogue;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
+import hue.captains.singapura.js.homing.studio.base.app.SvgViewer;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 
@@ -26,8 +28,12 @@ public record SvgDocCatalogue()
 
     @Override public List<Entry<SvgDocCatalogue>> leaves() {
         return List.of(
-                Entry.of(this, SvgDocGuideDoc.INSTANCE),
-                Entry.of(this, SvgDocDemoDoc.INSTANCE)
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(SvgDocGuideDoc.INSTANCE.uuid().toString()),
+                        SvgDocGuideDoc.INSTANCE),
+                Entry.of(this, SvgViewer.INSTANCE,
+                        new SvgViewer.Params(SvgDocDemoDoc.INSTANCE.uuid().toString()),
+                        SvgDocDemoDoc.INSTANCE)
         );
     }
 
