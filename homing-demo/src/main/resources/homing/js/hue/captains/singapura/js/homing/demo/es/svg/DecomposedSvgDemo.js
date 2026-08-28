@@ -1,9 +1,11 @@
-function appMain(rootElement, paramsOverride) {
+function appMain(rootElement, params) {
     const animals = { turtle, ghost, broom, penguin, crocodile, whale };
-    // paramsOverride wins (ComposedDoc embed); fall back to framework-generated
-    // `params` const (URL-derived) for standalone.
-    const _eff = paramsOverride || params;
-    const _initialAnimal = (_eff && _eff.animal) || "turtle";
+    // RFC 0051 — params are HANDED IN: stamped by the server when this app is
+    // the page, passed explicitly when a ComposedDoc embeds it. This used to
+    // fall back to a framework-generated `params` const derived from
+    // window.location.search, which meant two answers in one module that
+    // agreed only for as long as no default, redirect or coercion differed.
+    const _initialAnimal = (params && params.animal) || "turtle";
     let currentAnimal = (_initialAnimal in animals) ? _initialAnimal : "turtle";
 
     // --- scene ---
