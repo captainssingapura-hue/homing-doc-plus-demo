@@ -11,7 +11,7 @@ import hue.captains.singapura.js.homing.studio.base.composed.SvgSegment;
 import hue.captains.singapura.js.homing.studio.base.composed.UnorderedListSegment;
 import hue.captains.singapura.js.homing.studio.base.composed.graph.RigidNode;
 import hue.captains.singapura.js.homing.studio.base.composed.text.Line;
-import hue.captains.singapura.js.homing.studio.base.composed.text.NodeName;
+import hue.captains.singapura.js.homing.tree.NodeName;
 import hue.captains.singapura.js.homing.studio.base.composed.text.Title;
 import hue.captains.singapura.js.homing.studio.base.rigid.RigidDocV2;
 import hue.captains.singapura.js.homing.studio.base.tree.CatalogueTreeAdapter;
