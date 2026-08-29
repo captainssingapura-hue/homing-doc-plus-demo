@@ -1,11 +1,15 @@
 package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
 import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
+import hue.captains.singapura.js.homing.studio.base.app.DocTreeViewer;
+import hue.captains.singapura.js.homing.studio.base.composed.ComposedViewer;
+import hue.captains.singapura.js.homing.studio.base.image.ImageViewer;
+import hue.captains.singapura.js.homing.studio.base.table.TableViewer;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L0_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
@@ -30,24 +34,33 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
 
     @Override public List<Entry<DemoStudio>> leaves() {
         return List.of(
-                Entry.of(this, DemoIntroDoc.INSTANCE),
-                Entry.of(this, ComposedDemoDoc.INSTANCE),
-                Entry.of(this, TableDemoDoc.INSTANCE),
-                Entry.of(this, ImageDemoDoc.INSTANCE),
+                // RFC 0051 Phase 6 - the placement names the viewer. A doc no
+                // longer says how it opens; this catalogue does, for the doc it
+                // places here.
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(DemoIntroDoc.INSTANCE.uuid().toString()),
+                        DemoIntroDoc.INSTANCE),
+                Entry.of(this, ComposedViewer.INSTANCE,
+                        new ComposedViewer.Params(ComposedDemoDoc.INSTANCE.uuid().toString()),
+                        ComposedDemoDoc.INSTANCE),
+                Entry.of(this, TableViewer.INSTANCE,
+                        new TableViewer.Params(TableDemoDoc.INSTANCE.uuid().toString()),
+                        TableDemoDoc.INSTANCE),
+                Entry.of(this, ImageViewer.INSTANCE,
+                        new ImageViewer.Params(ImageDemoDoc.INSTANCE.uuid().toString()),
+                        ImageDemoDoc.INSTANCE),
                 // A dedicated demo: this studio's own catalogue tree mirrored into
                 // a foldable RigidDoc, each node given a body by an external
                 // content provider (SimpleListSegment + rotating SVG on leaves).
-                Entry.of(this, DemoContentTreeDoc.INSTANCE),
-                // Featured top-level app — the flagship interactive demo, given
-                // a tile of its own on the home page in addition to its entry
-                // inside the AnimalGamesCatalogue sub-catalogue. Demonstrates
-                // the Site-in-a-Jar shape: apps and docs side by side under
-                // shared chrome.
-                Entry.of(this, new Navigable<>(
-                        MovingAnimal.INSTANCE,
-                        AppModule._None.INSTANCE,
-                        "Moving Animal",
-                        "Platform game served as a top-level catalogue leaf. The first AppModule on the demo studio's home page — apps and docs side by side, one chrome, one jar.")),
+                Entry.of(this, DocTreeViewer.INSTANCE,
+                        new DocTreeViewer.Params(DemoContentTreeDoc.INSTANCE.uuid().toString()),
+                        DemoContentTreeDoc.INSTANCE),
+                // RFC 0051 — "Moving Animal" used to be echoed here as a featured
+                // tile, in addition to its canonical entry in AnimalGamesCatalogue.
+                // Under the path axiom a navigable has at most ONE position, so the
+                // echo is gone. The Site-in-a-Jar shape it illustrated — apps and
+                // docs side by side under one chrome — is still on this very page:
+                // the doc tiles above sit beside the app tiles below.
                 Entry.of(this, new Navigable<>(
                         ThemesIntro.INSTANCE,
                         AppModule._None.INSTANCE,

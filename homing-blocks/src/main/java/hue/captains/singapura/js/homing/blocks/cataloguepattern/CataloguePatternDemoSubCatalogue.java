@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.blocks.cataloguepattern;
 
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L2_Catalogue;
 
@@ -32,7 +33,9 @@ public record CataloguePatternDemoSubCatalogue()
 
     @Override public List<Entry<CataloguePatternDemoSubCatalogue>> leaves() {
         return List.of(
-                Entry.of(this, CataloguePatternDemoLeafDoc.INSTANCE)
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(CataloguePatternDemoLeafDoc.INSTANCE.uuid().toString()),
+                        CataloguePatternDemoLeafDoc.INSTANCE)
         );
     }
 

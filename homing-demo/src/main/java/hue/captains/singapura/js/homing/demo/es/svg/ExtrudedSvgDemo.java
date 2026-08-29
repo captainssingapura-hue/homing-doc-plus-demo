@@ -23,6 +23,30 @@ public record ExtrudedSvgDemo() implements AppModule<ExtrudedSvgDemo.Params, Ext
 
     @Override public Class<Params> paramsType() { return Params.class; }
 
+    /**
+     * RFC 0051 — {@code animal} is OPTIONAL: absent means the app's own
+     * default, so this reports Ok with a null rather than Missing.
+     *
+     * <p>Declaring a codec is what stops {@code ParamsWriter} emitting a
+     * module-level {@code params} const derived from
+     * {@code window.location.search}. This app used to carry both — the
+     * generated const and the {@code appMain} argument — and picked between
+     * them at runtime, which is two answers in one module agreeing only for
+     * as long as no default, redirect or coercion differed.</p>
+     */
+    public static final ParamCodec<Params> CODEC = new ParamCodec<>() {
+        @Override public Decoded<Params> from(java.util.Map<String, java.util.List<String>> query) {
+            return Decoded.ok(new Params(QueryString.first(query, "animal")));
+        }
+        @Override public java.util.Map<String, java.util.List<String>> to(Params params) {
+            var out = QueryString.params();
+            QueryString.put(out, "animal", params.animal());
+            return out;
+        }
+    };
+
+    @Override public ParamCodec<Params> paramCodec() { return CODEC; }
+
     @Override
     public String title() {
         return "SVG Extruder";

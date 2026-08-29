@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.demo.studio.multi;
 import hue.captains.singapura.js.homing.docs.releases.Release0_5_1Doc;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocTreeViewer;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 
@@ -36,7 +37,9 @@ public record ReleasesCatalogue()
     @Override public List<Entry<ReleasesCatalogue>> leaves() {
         // Newest first. Prepend new releases here.
         return List.of(
-                Entry.of(this, Release0_5_1Doc.INSTANCE)
+                Entry.of(this, DocTreeViewer.INSTANCE,
+                        new DocTreeViewer.Params(Release0_5_1Doc.INSTANCE.uuid().toString()),
+                        Release0_5_1Doc.INSTANCE)
         );
     }
 

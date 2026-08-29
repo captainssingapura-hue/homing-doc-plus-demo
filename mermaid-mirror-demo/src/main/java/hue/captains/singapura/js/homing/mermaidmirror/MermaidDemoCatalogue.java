@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.mermaidmirror;
 
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L0_Catalogue;
 
@@ -22,7 +23,9 @@ public record MermaidDemoCatalogue()
     @Override public String icon()  { return "🧜"; }
 
     @Override public List<Entry<MermaidDemoCatalogue>> leaves() {
-        return List.of(Entry.of(this, MermaidMirrorDoc.INSTANCE));
+        return List.of(Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(MermaidMirrorDoc.INSTANCE.uuid().toString()),
+                        MermaidMirrorDoc.INSTANCE));
     }
 
     @Override public List<Doc> docs() {

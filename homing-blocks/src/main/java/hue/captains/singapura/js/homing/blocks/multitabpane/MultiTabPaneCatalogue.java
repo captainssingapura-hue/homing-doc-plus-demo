@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.blocks.multitabpane;
 import hue.captains.singapura.js.homing.blocks.BuildingBlocksCatalogue;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
+import hue.captains.singapura.js.homing.studio.base.app.DocReader;
 import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.Navigable;
@@ -45,7 +46,9 @@ public record MultiTabPaneCatalogue()
 
     @Override public List<Entry<MultiTabPaneCatalogue>> leaves() {
         return List.of(
-                Entry.of(this, MultiTabPaneGuideDoc.INSTANCE),
+                Entry.of(this, DocReader.INSTANCE,
+                        new DocReader.Params(MultiTabPaneGuideDoc.INSTANCE.uuid().toString()),
+                        MultiTabPaneGuideDoc.INSTANCE),
                 Entry.of(this, new Navigable<>(
                         MultiTabPaneDemoApp.INSTANCE,
                         new MultiTabPaneDemoApp.Params(),
