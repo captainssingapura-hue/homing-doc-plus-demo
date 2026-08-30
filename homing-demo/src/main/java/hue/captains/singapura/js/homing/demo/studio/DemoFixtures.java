@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.studio.base.Fixtures;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.Umbrella;
-import hue.captains.singapura.js.homing.studio.base.app.tree.ContentTree;
+import hue.captains.singapura.js.homing.studio.base.app.tree.DynamicCatalogue;
 import hue.captains.singapura.js.homing.studio.starter.StudioStarterFixtures;
 import hue.captains.singapura.tao.http.action.GetAction;
 import hue.captains.singapura.tao.ontology.ValueObject;
@@ -52,7 +52,7 @@ public record DemoFixtures<S extends Studio<?>>(Umbrella<S> umbrella)
         return starter().harnessGetActions();
     }
 
-    @Override public List<ContentTree> trees() {
+    @Override public List<DynamicCatalogue> trees() {
         return List.of(AnimalsTree.INSTANCE, InteractiveAnimalsTree.INSTANCE);
     }
 }

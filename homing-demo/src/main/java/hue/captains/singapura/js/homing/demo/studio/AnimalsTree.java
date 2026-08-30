@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.core.SvgGroup;
 import hue.captains.singapura.js.homing.core.SvgRef;
 import hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal;
 import hue.captains.singapura.js.homing.studio.base.SvgDoc;
-import hue.captains.singapura.js.homing.studio.base.app.tree.ContentTree;
+import hue.captains.singapura.js.homing.studio.base.app.tree.DynamicCatalogue;
 import hue.captains.singapura.js.homing.studio.base.app.tree.TreeBranch;
 import hue.captains.singapura.js.homing.studio.base.app.tree.TreeLeaf;
 import hue.captains.singapura.js.homing.studio.base.app.tree.TreeNode;
@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * RFC 0016 demo — categorises the {@link CuteAnimal} SVG beings into two
- * sub-branches under one ContentTree: <b>Animals</b> and <b>Halloween</b>.
+ * sub-branches under one DynamicCatalogue: <b>Animals</b> and <b>Halloween</b>.
  * Each leaf wraps an {@link SvgDoc} rendered by the framework's
  * registered {@code SvgViewer}.
  *
@@ -40,9 +40,9 @@ public final class AnimalsTree {
 
     private AnimalsTree() {}
 
-    public static final ContentTree INSTANCE = build();
+    public static final DynamicCatalogue INSTANCE = build();
 
-    private static ContentTree build() {
+    private static DynamicCatalogue build() {
         var animalsBranch = new TreeBranch(
                 "animals", "Animals",
                 "Cute critters from around the world. Static 2D SVG leaves — each is an SvgDoc rendered by the framework's SvgViewer.",
@@ -69,7 +69,7 @@ public final class AnimalsTree {
                 "TREE", "🌳",
                 List.of(animalsBranch, halloweenBranch));
 
-        return new ContentTree("animals", root);
+        return new DynamicCatalogue("animals", root);
     }
 
     /** Build a tree leaf wrapping an {@link SvgDoc} that points at the given

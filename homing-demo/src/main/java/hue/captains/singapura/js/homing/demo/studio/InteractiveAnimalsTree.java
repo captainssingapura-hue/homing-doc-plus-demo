@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.demo.studio;
 
-import hue.captains.singapura.js.homing.studio.base.app.tree.ContentTree;
+import hue.captains.singapura.js.homing.studio.base.app.tree.DynamicCatalogue;
 import hue.captains.singapura.js.homing.studio.base.app.tree.TreeBranch;
 import hue.captains.singapura.js.homing.studio.base.app.tree.TreeLeaf;
 import hue.captains.singapura.js.homing.studio.base.app.tree.TreeNode;
@@ -29,9 +29,9 @@ public final class InteractiveAnimalsTree {
 
     private InteractiveAnimalsTree() {}
 
-    public static final ContentTree INSTANCE = build();
+    public static final DynamicCatalogue INSTANCE = build();
 
-    private static ContentTree build() {
+    private static DynamicCatalogue build() {
         var animalsBranch = new TreeBranch(
                 "animals", "Animals",
                 "Interactive 3D versions of the cute critters. Each leaf is a ComposedDoc — canonical SVG plus three typed DocumentaryWidget segments (coin, extruder, decomposer) pre-selected to that animal.",
@@ -58,7 +58,7 @@ public final class InteractiveAnimalsTree {
                 "TREE", "🪄",
                 List.of(animalsBranch, halloweenBranch));
 
-        return new ContentTree("interactive-animals", root);
+        return new DynamicCatalogue("interactive-animals", root);
     }
 
     private static TreeLeaf leafFor(String slug, ComposedDoc doc) {

@@ -84,7 +84,7 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
                         TreeAppHost.INSTANCE,
                         new TreeAppHost.Params("animals", null),
                         "Animals & Halloween",
-                        "RFC 0016 ContentTree demo — cute SVG critters categorised into two branches.")),
+                        "RFC 0016 DynamicCatalogue demo — cute SVG critters categorised into two branches.")),
                 Entry.of(this, new Navigable<>(
                         TreeAppHost.INSTANCE,
                         new TreeAppHost.Params("interactive-animals", null),
