@@ -14,7 +14,6 @@ import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L0_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.Navigable;
-import hue.captains.singapura.js.homing.studio.base.app.tree.TreeAppHost;
 import hue.captains.singapura.js.homing.studio.base.theme.ThemesIntro;
 
 import java.util.List;
@@ -79,17 +78,7 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
                         GenericWorkspace.INSTANCE,
                         new GenericWorkspace.Params(AnimalPlaygroundSpec.INSTANCE.kind()),
                         "Generic Workspace",
-                        "The substrate's single composition-model workspace app — one AppModule mounts any registered WorkspaceSpec by ws_kind. Opens the Animals Playground spec.")),
-                Entry.of(this, new Navigable<>(
-                        TreeAppHost.INSTANCE,
-                        new TreeAppHost.Params("animals", null),
-                        "Animals & Halloween",
-                        "RFC 0016 DynamicCatalogue demo — cute SVG critters categorised into two branches.")),
-                Entry.of(this, new Navigable<>(
-                        TreeAppHost.INSTANCE,
-                        new TreeAppHost.Params("interactive-animals", null),
-                        "Interactive Animals & Halloween",
-                        "Same two-branch shape as Animals & Halloween, but each leaf opens a per-animal ComposedDoc with three DocumentaryWidget segments (coin / extruder / decomposer)."))
+                        "The substrate's single composition-model workspace app — one AppModule mounts any registered WorkspaceSpec by ws_kind. Opens the Animals Playground spec."))
         );
     }
 

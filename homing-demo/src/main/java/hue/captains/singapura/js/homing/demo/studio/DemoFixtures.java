@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.studio.base.Fixtures;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.Umbrella;
-import hue.captains.singapura.js.homing.studio.base.app.tree.DynamicCatalogue;
 import hue.captains.singapura.js.homing.studio.starter.StudioStarterFixtures;
 import hue.captains.singapura.tao.http.action.GetAction;
 import hue.captains.singapura.tao.ontology.ValueObject;
@@ -17,16 +16,16 @@ import java.util.Objects;
 /**
  * homing-demo's Fixtures override. It is {@link StudioStarterFixtures} — the
  * batteries-included studio + workspace wiring (RFC 0040) — plus the one
- * demo-specific thing: {@link #trees()}, surfacing the {@link AnimalsTree}
- * demo ContentTrees.
+ * batteries-included studio + workspace wiring (RFC 0040), and nothing more.
+ *
  *
  * <p>The Studio Workspace (the {@code genericWorkspace} app, the {@code studio}
  * spec, and {@code GET /catalogue-tree} rooted at the umbrella's primary
  * {@code home()} — here {@code MultiStudioHome}) now arrives for free by
  * delegating to the starter; no hand-wired workspace endpoint or app remains.
- * The {@code trees()} seam still demonstrates how a studio registers
- * data-authored ContentTrees — Bootstrap wires {@code TreeRegistry} /
- * {@code TreeGetAction} / {@code TreeAppHost} automatically when non-empty.</p>
+ * (The trees() seam went with the tree app - RFC 0053.)
+ *
+ *
  */
 public record DemoFixtures<S extends Studio<?>>(Umbrella<S> umbrella)
         implements Fixtures<S>, ValueObject {
@@ -50,9 +49,5 @@ public record DemoFixtures<S extends Studio<?>>(Umbrella<S> umbrella)
 
     @Override public Map<String, GetAction<RoutingContext, ?, ?, ?>> harnessGetActions() {
         return starter().harnessGetActions();
-    }
-
-    @Override public List<DynamicCatalogue> trees() {
-        return List.of(AnimalsTree.INSTANCE, InteractiveAnimalsTree.INSTANCE);
     }
 }
