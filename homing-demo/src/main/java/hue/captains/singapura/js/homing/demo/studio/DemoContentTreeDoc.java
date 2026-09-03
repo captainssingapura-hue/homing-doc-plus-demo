@@ -11,17 +11,14 @@ import hue.captains.singapura.js.homing.studio.base.composed.SvgSegment;
 import hue.captains.singapura.js.homing.studio.base.composed.UnorderedListSegment;
 import hue.captains.singapura.js.homing.studio.base.composed.graph.RigidNode;
 import hue.captains.singapura.js.homing.studio.base.composed.text.Line;
-import hue.captains.singapura.js.homing.studio.base.composed.text.NodeName;
+import hue.captains.singapura.js.homing.tree.NodeName;
 import hue.captains.singapura.js.homing.studio.base.composed.text.Title;
 import hue.captains.singapura.js.homing.studio.base.rigid.RigidDocV2;
-import hue.captains.singapura.js.homing.studio.base.tree.CatalogueTreeAdapter;
-import hue.captains.singapura.js.homing.studio.base.tree.CatalogueTreeNode;
-import hue.captains.singapura.js.homing.tree.Category;
-import hue.captains.singapura.js.homing.tree.DimensionKey;
-import hue.captains.singapura.js.homing.tree.DimensionValue;
-import hue.captains.singapura.js.homing.tree.DisplayLabel;
-import hue.captains.singapura.js.homing.tree.Kind;
-import hue.captains.singapura.js.homing.tree.Summary;
+import hue.captains.singapura.js.homing.studio.base.tree.CatalogueNormalizer;
+import hue.captains.singapura.js.homing.studio.base.tree.CatalogueTree;
+import hue.captains.singapura.js.homing.studio.base.tree.Illustration;
+import hue.captains.singapura.js.homing.studio.base.tree.ListingDetails;
+import hue.captains.singapura.js.homing.tree.NormalizedNode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,7 +29,7 @@ import java.util.function.Function;
 
 /**
  * A dedicated demo: the demo studio's <b>catalogue tree</b> (the one the Studio
- * Workspace Navigator draws, via {@link CatalogueTreeAdapter}) mirrored into a
+ * Workspace Navigator draws, via {@link CatalogueNormalizer}) mirrored into a
  * foldable {@link RigidDocV2}. It showcases the "bring your own tree" adapter:
  *
  * <ul>
@@ -44,7 +41,7 @@ import java.util.function.Function;
  *   <li><b>Name-path identity</b> — content is addressed by the stable
  *       nodeName-chain ({@code "animals/turtle"}), which survives sibling
  *       reordering, rather than a fragile positional path.</li>
- *   <li><b>One content provider</b> — a single {@code Function<CatalogueTreeNode,
+ *   <li><b>One content provider</b> — a single {@code Function<Vertex,
  *       RigidNodeContent>} ({@link #contentProvider()}) resolves every node's body
  *       from its source: a leaf gets a captioned {@link UnorderedListSegment} + a
  *       rotating {@link SvgSegment}, a branch a plain {@link ParagraphSegment}.</li>
@@ -93,30 +90,49 @@ public final class DemoContentTreeDoc {
      * sibling-unique {@link NodeName} gives each node its name-path segment. The
      * normalizer inverts the pointers and validates the whole thing.
      */
-    static List<RigidNode<CatalogueTreeNode>> buildNodes() {
-        CatalogueTreeNode source = CatalogueTreeAdapter.INSTANCE.adapt(DemoStudio.INSTANCE);
-        var all = new ArrayList<RigidNode<CatalogueTreeNode>>();
+    static List<RigidNode<Vertex>> buildNodes() {
+        // RFC 0053: the normalized tree, and the details its identities resolve to.
+        // Structure and description arrive as two halves from one walk, so this demo
+        // now mirrors the SAME producer the boot gate checks rather than a second
+        // derivation of the same catalogue.
+        CatalogueTree tree = CatalogueNormalizer.INSTANCE.toCatalogueTree(DemoStudio.INSTANCE);
+        Vertex source = vertexOf(tree, tree.structure());
+        var all = new ArrayList<RigidNode<Vertex>>();
 
         // Each node wraps its source catalogue node; content is resolved later by
         // the one provider. The root reads as this demo, not "Demo Studio", and
         // anchors a fixed, readable name-path root.
-        RigidNode<CatalogueTreeNode> root = RigidNode.root(source, new NodeName("studio"), title(TITLE));
+        RigidNode<Vertex> root = RigidNode.root(source, new NodeName("studio"), title(TITLE));
         all.add(root);
-        addChildren(source, root, all);
+        addChildren(tree, source, root, all);
         return all;
     }
 
-    private static void addChildren(CatalogueTreeNode parentSrc,
-            RigidNode<CatalogueTreeNode> parentNode, List<RigidNode<CatalogueTreeNode>> all) {
+    /**
+     * A vertex of the normalized tree paired with what its identity resolves to.
+     * The structure half knows children and segments; the details half knows how it
+     * reads. Pairing them here keeps the content provider a pure function, which is
+     * what {@code RigidDocV2.fromNodes} asks for.
+     */
+    record Vertex(NormalizedNode node, Illustration look) {}
+
+    private static Vertex vertexOf(CatalogueTree tree, NormalizedNode n) {
+        ListingDetails d = tree.details().get(n.identity());
+        return new Vertex(n, d == null ? Illustration.of(n.segment().value(), "") : d.illustration());
+    }
+
+    private static void addChildren(CatalogueTree tree, Vertex parentSrc,
+            RigidNode<Vertex> parentNode, List<RigidNode<Vertex>> all) {
         var usedNames = new HashSet<String>();
-        for (CatalogueTreeNode kidSrc : parentSrc.kids()) {
-            String label = dim(kidSrc, DisplayLabel.INSTANCE);
+        for (NormalizedNode kid : parentSrc.node().children()) {
+            Vertex kidSrc = vertexOf(tree, kid);
+            String label = kidSrc.look().label();
             // The parent object already exists, so parent.child(...) fixes the level
             // (parent.level + 1). The child wraps the source node; no content here.
-            RigidNode<CatalogueTreeNode> kidNode =
+            RigidNode<Vertex> kidNode =
                     parentNode.child(kidSrc, uniqueSiblingName(label, usedNames), title(label));
             all.add(kidNode);
-            addChildren(kidSrc, kidNode, all);
+            addChildren(tree, kidSrc, kidNode, all);
         }
     }
 
@@ -125,7 +141,7 @@ public final class DemoContentTreeDoc {
      * catalogue node. Dispatches internally (leaf vs branch); a downstream app is
      * free to resolve content however it likes inside this one function.
      */
-    private static Function<CatalogueTreeNode, RigidNodeContent> contentProvider() {
+    private static Function<Vertex, RigidNodeContent> contentProvider() {
         int[] rotation = {0};   // rotates illustrations across leaves, in build order
         return node -> contentFor(node, rotation);
     }
@@ -148,13 +164,17 @@ public final class DemoContentTreeDoc {
      * <b>not</b> build structure: a leaf gets a captioned list + illustration, a
      * branch a plain paragraph.
      */
-    private static RigidNodeContent contentFor(CatalogueTreeNode node, int[] rotation) {
-        String label    = dim(node, DisplayLabel.INSTANCE);
-        String summary  = dim(node, Summary.INSTANCE);
-        String kind     = dim(node, Kind.INSTANCE);
-        String category = dim(node, Category.INSTANCE);
+    private static RigidNodeContent contentFor(Vertex v, int[] rotation) {
+        // Four named fields off ONE resolved answer, where four dimension lookups
+        // through a keyed map used to be. Nothing here can ask for a key the node
+        // does not have.
+        Illustration look = v.look();
+        String label    = look.label();
+        String summary  = look.summary();
+        String kind     = look.kind();
+        String category = look.badge();
 
-        if (node.kids().isEmpty()) {
+        if (v.node().children().isEmpty()) {
             // Leaf: a homogeneous bullet list (one ParagraphSegment per item) + a rotating illustration.
             var bullets = new ArrayList<Listable>();
             if (!summary.isBlank()) bullets.add(ParagraphSegment.of(summary));
@@ -170,11 +190,6 @@ public final class DemoContentTreeDoc {
         String body = (summary.isBlank() ? label : label + " — " + summary)
                 + " A section of the demo studio's content tree, mirrored into this RigidDocV2.";
         return new RigidNodeContent(List.of(ParagraphSegment.of(body)));
-    }
-
-    private static String dim(CatalogueTreeNode n, DimensionKey key) {
-        DimensionValue v = n.dimensions().get(key);
-        return v == null ? "" : v.displayText();
     }
 
     /** Clip to the {@code Line.Plain} cap so a caption/item never overflows. */
