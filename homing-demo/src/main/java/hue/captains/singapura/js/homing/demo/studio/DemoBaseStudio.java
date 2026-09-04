@@ -10,6 +10,7 @@ import hue.captains.singapura.js.homing.demo.es.grid.DishListDemoApp;
 import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
+import hue.captains.singapura.js.homing.demo.playground.TableWorkbenchSpec;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.app.StudioBrand;
 
@@ -38,6 +39,12 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
      */
     @SuppressWarnings("unused")
     private static final Object SPEC_INIT = AnimalPlaygroundSpec.INSTANCE;
+
+    /** Same force-load, for the RFC 0050 Table Workbench
+     *  ({@code ?app=genericWorkspace&ws_kind=tableWorkbench}) — the bench of
+     *  Relation Grids in shapes the two companion demos never take. */
+    @SuppressWarnings("unused")
+    private static final Object TABLE_WORKBENCH_SPEC_INIT = TableWorkbenchSpec.INSTANCE;
 
     // The Studio Workspace ("studio" spec) is registered for free by
     // StudioStarterFixtures (via DemoFixtures) — no STUDIO_SPEC_INIT touch here.
