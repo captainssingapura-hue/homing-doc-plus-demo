@@ -15,6 +15,13 @@ import java.util.List;
  * Both consume the upstream {@code homing-relation-grid} primitive; both are
  * built in parallel with the core phases, each at whatever functionality the
  * core supports so far.
+ *
+ * <p>Both are also SMALL on purpose, which is their one blind spot: neither has
+ * a row below the fold, so neither can express a scrolling defect. The Table
+ * Workbench covers that — a workspace of grids in shapes these two never take,
+ * at {@code ?app=genericWorkspace&ws_kind=tableWorkbench}. It is reached by URL
+ * rather than by a tile here because {@code GenericWorkspace} already holds its
+ * one catalogue position under the path axiom (see {@link DemoStudio}).</p>
  */
 public record GridDemosCatalogue() implements L1_Catalogue<DemoStudio, GridDemosCatalogue> {
 
@@ -22,7 +29,7 @@ public record GridDemosCatalogue() implements L1_Catalogue<DemoStudio, GridDemos
 
     @Override public DemoStudio parent()  { return DemoStudio.INSTANCE; }
     @Override public String     name()    { return "The Relation Grid"; }
-    @Override public String     summary() { return "RFC 0050's two triangulating companion demos on the generic table primitive: the Dish List exercises the full spreadsheet surface (view ops, selection, editing, the live direct-update column); Minesweeper proves the same grid drives a keyboard-only game through the onAction variant."; }
+    @Override public String     summary() { return "RFC 0050's two triangulating companion demos on the generic table primitive: the Dish List exercises the full spreadsheet surface (view ops, selection, editing, the live direct-update column); Minesweeper proves the same grid drives a keyboard-only game through the onAction variant. Both fit on screen by design — for grids that do not, the Table Workbench benches five oversized shapes at ?app=genericWorkspace&ws_kind=tableWorkbench."; }
     @Override public String     badge()   { return "GRID"; }
     @Override public String     icon()    { return "🧮"; }
 
