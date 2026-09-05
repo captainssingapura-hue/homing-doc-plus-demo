@@ -63,9 +63,16 @@ function createSpecimenRelation(shape) {
     }
 
     var subs = [];
+    var isNumeric = function (col) { return col === '#' || /^\d{4}-\d{2}$/.test(col); };
     return {
         pks:     function () { return pks; },
         columns: function () { return columns; },
+        /** The Relation's meta (ext6): the ordinal and the period columns
+         *  order by value — 2 before 10, not '10' before '2'; the named text
+         *  columns in natural order. Mandatory to sort; the grid never guesses. */
+        columnMeta: function (col) {
+            return { compare: isNumeric(col) ? compareNumbers : compareText };
+        },
         get:     function (pk, col) { return data[pk] ? data[pk][col] : undefined; },
         subscribe:   function (fn) { subs.push(fn); },
         unsubscribe: function (fn) { var i = subs.indexOf(fn); if (i >= 0) subs.splice(i, 1); },

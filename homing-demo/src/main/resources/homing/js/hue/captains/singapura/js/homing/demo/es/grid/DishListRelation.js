@@ -8,6 +8,11 @@
 // =============================================================================
 
 function createDishListRelation() {
+    // The style enum's DECLARED order — the cell's options AND the sort order,
+    // from one place. Sorting by style yields this sequence, not the alphabet.
+    var STYLES = ['Chinese', 'French', 'English', 'German', 'USA', 'Italian'];
+    var NUMERIC = { calories: true, price: true, popularity: true };
+    var byStyle = compareByOrder(STYLES);
     var data = {
         mapo:   { ingredient: 'tofu',    style: 'Chinese', calories: 480, price: 9.5,  popularity: 71 },
         coq:    { ingredient: 'chicken', style: 'French',  calories: 610, price: 18,   popularity: 64 },
@@ -20,6 +25,14 @@ function createDishListRelation() {
     return {
         pks:     function () { return Object.keys(data); },
         columns: function () { return ['ingredient', 'style', 'calories', 'price', 'popularity']; },
+        styles:  STYLES,
+        /** The Relation's meta (ext6): every column declares how it orders.
+         *  A comparator is mandatory to sort — the grid never guesses. */
+        columnMeta: function (col) {
+            return { compare: col === 'style' ? byStyle
+                            : NUMERIC[col]    ? compareNumbers
+                            :                   compareText };
+        },
         get:     function (pk, col) { return data[pk] ? data[pk][col] : undefined; },
         subscribe:   function (fn) { subs.push(fn); },
         unsubscribe: function (fn) { var i = subs.indexOf(fn); if (i >= 0) subs.splice(i, 1); },

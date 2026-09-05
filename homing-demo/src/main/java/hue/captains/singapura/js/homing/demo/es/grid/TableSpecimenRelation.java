@@ -4,6 +4,8 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
+import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.grid.GridComparatorsModule;
 
 import java.util.List;
 
@@ -25,7 +27,12 @@ public record TableSpecimenRelation() implements DomModule<TableSpecimenRelation
 
     @Override
     public ImportsFor<TableSpecimenRelation> imports() {
-        return ImportsFor.noImports();
+        return ImportsFor.<TableSpecimenRelation>builder()
+                .add(new ModuleImports<>(
+                        List.of(new GridComparatorsModule.compareNumbers(),
+                                new GridComparatorsModule.compareText()),
+                        GridComparatorsModule.INSTANCE))
+                .build();
     }
 
     @Override
