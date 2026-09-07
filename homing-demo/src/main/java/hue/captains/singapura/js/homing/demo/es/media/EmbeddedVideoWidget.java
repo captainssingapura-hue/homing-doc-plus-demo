@@ -104,8 +104,8 @@ public final class EmbeddedVideoWidget
                     "老饭骨 — the same masters again, on the Sichuan grandmaster's line"),
             new Take("wEkVkT6IU9M", "美食作家王刚",
                     "美食作家王刚 — a head chef's Sichuan method, start to finish"),
-            new Take("KFZX7VRN_oY", "特厨眼博",
-                    "特厨眼博 — the take that sold out a Beijing dining room"),
+            new Take("KFZX7VRN_oY", "特厨隋卞",
+                    "特厨隋卞 — the take that sold out a Beijing dining room"),
             new Take("-AZ87qyHQ88", "大师的菜",
                     "大师的菜 — where the name 宫保 comes from, and what makes it authentic")
     );
