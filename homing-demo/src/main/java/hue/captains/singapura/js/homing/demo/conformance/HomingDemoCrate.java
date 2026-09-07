@@ -17,6 +17,7 @@ import hue.captains.singapura.js.homing.demo.css.AliceStyles;
 import hue.captains.singapura.js.homing.demo.css.BaseStyles;
 import hue.captains.singapura.js.homing.demo.css.PlaygroundStyles;
 import hue.captains.singapura.js.homing.demo.css.SpinningStyles;
+import hue.captains.singapura.js.homing.demo.css.VideoStyles;
 import hue.captains.singapura.js.homing.demo.css.SubwayStyles;
 import hue.captains.singapura.js.homing.demo.es.animation.AnimalCell;
 import hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal;
@@ -48,6 +49,7 @@ import hue.captains.singapura.js.homing.demo.es.grid.WideTableWidget;
 import hue.captains.singapura.js.homing.grid.RelationGridCrate;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimalsWidget;
+import hue.captains.singapura.js.homing.demo.es.media.EmbeddedVideoWidget;
 import hue.captains.singapura.js.homing.demo.es.svg.SvgDecomposer;
 import hue.captains.singapura.js.homing.demo.es.svg.SvgExtruder;
 import hue.captains.singapura.js.homing.demo.playground.AnimalsPlaygroundStyles;
@@ -105,6 +107,7 @@ public final class HomingDemoCrate implements Crate {
                 CrateEntry.of(BaseStyles.INSTANCE),
                 CrateEntry.of(PlaygroundStyles.INSTANCE),
                 CrateEntry.of(SpinningStyles.INSTANCE),
+                CrateEntry.of(VideoStyles.INSTANCE),
                 CrateEntry.of(SubwayStyles.INSTANCE),
                 CrateEntry.of(AnimalCell.INSTANCE),
                 CrateEntry.of(CuteAnimal.INSTANCE),
@@ -123,6 +126,7 @@ public final class HomingDemoCrate implements Crate {
                 CrateEntry.of(PlatformerBgm.INSTANCE),
                 CrateEntry.of(SpinningAnimals.INSTANCE),
                 CrateEntry.of(SpinningAnimalsWidget.INSTANCE),
+                CrateEntry.of(EmbeddedVideoWidget.INSTANCE),
                 CrateEntry.of(SvgDecomposer.INSTANCE),
                 CrateEntry.of(SvgExtruder.INSTANCE),
                 CrateEntry.of(AnimalsPlaygroundStyles.INSTANCE),

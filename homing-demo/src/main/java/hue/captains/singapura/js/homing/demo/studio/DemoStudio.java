@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
+import hue.captains.singapura.js.homing.demo.playground.VideoRoomSpec;
 import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
@@ -79,6 +80,15 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
                         new GenericWorkspace.Params(AnimalPlaygroundSpec.INSTANCE.kind()),
                         "Generic Workspace",
                         "The substrate's single composition-model workspace app — one AppModule mounts any registered WorkspaceSpec by ws_kind. Opens the Animals Playground spec."))
+,
+                // A second kind, reached by a second hand-written leaf - which is
+                // precisely the cost RFC 0058 proposes to remove by deriving the
+                // tree from the registry instead.
+                Entry.of(this, new Navigable<>(
+                        GenericWorkspace.INSTANCE,
+                        new GenericWorkspace.Params(VideoRoomSpec.INSTANCE.kind()),
+                        "Video Room",
+                        "A workspace of embedded videos. Each pane pauses itself when it stops being the active tab."))
         );
     }
 
