@@ -50,7 +50,15 @@ import java.util.List;
  */
 public final class DemoStudioServer {
 
-    private static final int HTTP_PORT = 8082;
+    /**
+     * 8082, or {@code -Ddemo.port=…} — the same seam
+     * {@link hue.captains.singapura.js.homing.demo.conformance.DemoConformanceStudioServer}
+     * opens with {@code conformance.port}. A second checkout of this repo cannot
+     * start while the first holds the default, and a port is not a property of
+     * the demo. HTTPS keeps its fixed port: the dev certificate names one host,
+     * and moving the port is not what makes a second TLS instance work.
+     */
+    private static final int HTTP_PORT = Integer.getInteger("demo.port", 8082);
     private static final int HTTPS_PORT = 8443;
     private static final String DEFAULT_PASSWORD = "changeit";
     private static final String CERTS_DIR = "homing-demo/certs/";
@@ -118,7 +126,7 @@ public final class DemoStudioServer {
         try {
             var report = new TlsPreflight().inspect(params);
             if (report.isEmpty()) {
-                System.out.println("Transport: plain HTTP on port " + HTTP_PORT);
+                System.out.println("Transport: plain HTTP on port " + params.port());
                 return true;
             }
             var tls = report.get();
@@ -149,6 +157,7 @@ public final class DemoStudioServer {
                   jks    [keystore] [password] HTTPS on 8443 with a legacy JKS keystore
 
                 Keystore defaults to homing-demo/certs/dev-keystore.p12 (or .jks),
-                password defaults to 'changeit'.""");
+                password defaults to 'changeit'.
+                The HTTP port is -Ddemo.port=... when 8082 is taken.""");
     }
 }
