@@ -16,6 +16,12 @@ import java.util.List;
  * with container-query units. A workspace pane is resized by dragging a
  * divider, so a video that only fitted one axis would be letterboxed on the
  * other for most of its life.</p>
+ *
+ * <p><b>Why the rail is under the stage and not beside it.</b> A rail beside a
+ * 16:9 player takes its width from the video, and a pane is already as narrow as
+ * the user's divider left it. Under the stage the rail costs one row of height
+ * and never competes: the player keeps the whole width, and five takes that do
+ * not fit scroll sideways instead of squeezing the thing they are about.</p>
  */
 public record VideoStyles() implements CssGroup<VideoStyles> {
 
@@ -34,6 +40,16 @@ public record VideoStyles() implements CssGroup<VideoStyles> {
             """; }
     }
 
+    /** Dish on the left, position in the list on the right, on one baseline. */
+    public record vid_head() implements CssClass<VideoStyles> {
+        @Override public String body() { return """
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: var(--space-3);
+            """; }
+    }
+
     public record vid_title() implements CssClass<VideoStyles> {
         @Override public String body() { return """
             margin: 0;
@@ -43,6 +59,20 @@ public record VideoStyles() implements CssGroup<VideoStyles> {
             """; }
     }
 
+    /**
+     * "3 / 5". Tabular figures on purpose — a counter that changes width as it
+     * counts drags the heading beside it around.
+     */
+    public record vid_count() implements CssClass<VideoStyles> {
+        @Override public String body() { return """
+            flex: 0 0 auto;
+            font-size: 12px;
+            font-variant-numeric: tabular-nums;
+            color: var(--color-text-muted);
+            """; }
+    }
+
+    /** Says which take is playing. Reactive — it is the selection, in words. */
     public record vid_note() implements CssClass<VideoStyles> {
         @Override public String body() { return """
             margin: 0;
@@ -83,6 +113,70 @@ public record VideoStyles() implements CssGroup<VideoStyles> {
             """; }
     }
 
+    /**
+     * The strip of takes. Fixed height at the foot of the column, scrolling
+     * sideways when the takes outrun the pane — the house rule for wide content,
+     * and the reason the player never has to give up width for it.
+     */
+    public record vid_rail() implements CssClass<VideoStyles> {
+        @Override public String body() { return """
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            overflow-x: auto;
+            padding-bottom: var(--space-1);
+            """; }
+    }
+
+    /** One take. Quiet by default; one line, clipped rather than wrapped. */
+    public record vid_take() implements CssClass<VideoStyles> {
+        @Override public String body() { return """
+            flex: 0 0 auto;
+            max-width: 180px;
+            font: inherit;
+            font-size: 12px;
+            padding: var(--space-1) var(--space-3);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            """; }
+    }
+
+    /**
+     * The take on the stage. A filled shape, like the dialog's primary action —
+     * the one place in the strip that reads as solid, which is what makes it
+     * findable without a second size or weight.
+     */
+    public record vid_take_on() implements CssClass<VideoStyles> {
+        @Override public String body() { return """
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: var(--color-accent-on);
+            font-weight: 600;
+            """; }
+    }
+
+    /**
+     * {@code :focus-visible} rather than {@code :focus}, which is what the rest
+     * of the studio uses. The strip activates on click as well as on Enter, and
+     * a ring left behind by the pointer would mark a take the keyboard is not
+     * on — the ring here means "arrows move from here", so it must appear only
+     * when arrows are how you arrived.
+     */
+    public record vid_take_focus() implements CssClass<VideoStyles> {
+        @Override public String pseudoState() { return ":focus-visible"; }
+        @Override public String body() { return """
+            outline: 2px solid var(--color-accent-emphasis);
+            outline-offset: 1px;
+            """; }
+    }
+
     @Override
     public CssImportsFor<VideoStyles> cssImports() {
         return CssImportsFor.none(this);
@@ -90,7 +184,8 @@ public record VideoStyles() implements CssGroup<VideoStyles> {
 
     @Override
     public List<CssClass<VideoStyles>> cssClasses() {
-        return List.of(new vid_root(), new vid_title(), new vid_note(),
-                       new vid_stage(), new vid_frame());
+        return List.of(new vid_root(), new vid_head(), new vid_title(), new vid_count(),
+                       new vid_note(), new vid_stage(), new vid_frame(),
+                       new vid_rail(), new vid_take(), new vid_take_on(), new vid_take_focus());
     }
 }
