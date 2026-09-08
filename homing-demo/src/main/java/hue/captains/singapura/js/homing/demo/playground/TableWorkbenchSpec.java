@@ -12,6 +12,8 @@ import hue.captains.singapura.js.homing.workspace.WidgetGroup;
 import hue.captains.singapura.js.homing.workspace.WidgetIcon;
 import hue.captains.singapura.js.homing.workspace.WidgetLabel;
 import hue.captains.singapura.js.homing.workspace.shell.ActionDispatch;
+import hue.captains.singapura.js.homing.workspace.shell.Arrangement;
+import hue.captains.singapura.js.homing.workspace.shell.PaneArrangements;
 import hue.captains.singapura.js.homing.workspace.shell.PartyDecl;
 import hue.captains.singapura.js.homing.workspace.shell.WidgetCodecRef;
 import hue.captains.singapura.js.homing.workspace.shell.WorkspaceSpec;
@@ -111,13 +113,17 @@ public final class TableWorkbenchSpec implements WorkspaceSpec {
     @Override public List<WidgetCodecRef> widgetCodecs() { return List.of(); }
 
     @Override
-    public List<String> pinnedSpawns() {
-        // The instructions only. A pinned kind is FILTERED OUT of the picker
-        // (PickerTabFlowModule), so pinning a specimen would both cap it at one
-        // instance and make it unreachable whenever the pinned path does not
-        // run — and docking two of the SAME specimen, one sorted and one not,
-        // is a comparison this bench exists to allow.
-        return List.of("DocViewWidget");
+    public Arrangement arrangement() {
+        // RFC 0060 D20 — the instructions open in the bench's one pane. This was
+        // pinnedSpawns("DocViewWidget"), and the note that used to sit here was
+        // entirely about working AROUND the picker filter: a pinned kind was
+        // hidden from the picker, so pinning a specimen would have capped it at
+        // one instance and blocked exactly the side-by-side comparison — one
+        // sorted, one not — this bench exists for. That filter is gone, so
+        // seeding a widget no longer says anything about how many may exist.
+        return PaneArrangements.SINGLE.allocate()
+                .place(PaneArrangements.Single.MAIN, DocViewWidget.class)
+                .build();
     }
 
     private static Map<String, String> introDefaults() {
