@@ -10,6 +10,8 @@ import hue.captains.singapura.js.homing.workspace.WidgetGroup;
 import hue.captains.singapura.js.homing.workspace.WidgetIcon;
 import hue.captains.singapura.js.homing.workspace.WidgetLabel;
 import hue.captains.singapura.js.homing.workspace.shell.ActionDispatch;
+import hue.captains.singapura.js.homing.workspace.shell.Arrangement;
+import hue.captains.singapura.js.homing.workspace.shell.PaneArrangements;
 import hue.captains.singapura.js.homing.workspace.shell.PartyDecl;
 import hue.captains.singapura.js.homing.workspace.shell.WidgetCodecRef;
 import hue.captains.singapura.js.homing.workspace.shell.WorkspaceSpec;
@@ -143,12 +145,14 @@ public final class AnimalPlaygroundSpec implements WorkspaceSpec {
     }
 
     @Override
-    public List<String> pinnedSpawns() {
-        // The welcome doc auto-mounts in slot 'tl' at boot. Spec-level
-        // declaration — independent of the widget class's default
-        // lifecycleHint (DocViewWidget itself stays MULTI; the spec is
-        // what decides one instance auto-spawns here).
-        return List.of("DocViewWidget");
+    public Arrangement arrangement() {
+        // RFC 0060 D20 — the welcome doc opens in the workspace's one pane. This
+        // was pinnedSpawns("DocViewWidget"); it is the same seed said in the
+        // vocabulary that can also say WHERE, and it no longer hides the widget
+        // from the picker — DocViewWidget is MULTI, so a second one is allowed.
+        return PaneArrangements.SINGLE.allocate()
+                .place(PaneArrangements.Single.MAIN, DocViewWidget.class)
+                .build();
     }
 
     /** Defaults for the pinned introduction. */
