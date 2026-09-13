@@ -5,6 +5,8 @@ import hue.captains.singapura.js.homing.studio.base.Fixtures;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.Umbrella;
 import hue.captains.singapura.js.homing.studio.starter.StudioStarterFixtures;
+import hue.captains.singapura.js.homing.workspace.shell.WorkspaceGroupRegistry;
+import hue.captains.singapura.js.homing.workspace.shell.WorkspaceGroups;
 import hue.captains.singapura.tao.http.action.GetAction;
 import hue.captains.singapura.tao.ontology.ValueObject;
 import io.vertx.ext.web.RoutingContext;
@@ -32,6 +34,13 @@ public record DemoFixtures<S extends Studio<?>>(Umbrella<S> umbrella)
 
     public DemoFixtures {
         Objects.requireNonNull(umbrella);
+        // RFC 0058 — the two workspace groups, after the starter has registered the
+        // studio spec (a group validates that every kind it holds is registered),
+        // then law 4: every group placed exactly once under the umbrella's home,
+        // walked through the hosted studios' proxies.
+        new StudioStarterFixtures<>(umbrella);
+        DemoWorkspaceGroups.register();
+        WorkspaceGroups.assertPlacedOnce(umbrella.studios().get(0).home(), WorkspaceGroupRegistry.INSTANCE);
     }
 
     /** The batteries-included starter we are, plus the demo's trees. */

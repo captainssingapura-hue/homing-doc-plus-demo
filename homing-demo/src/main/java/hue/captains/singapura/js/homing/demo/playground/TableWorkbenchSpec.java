@@ -58,6 +58,7 @@ public final class TableWorkbenchSpec implements WorkspaceSpec {
 
     @Override public String kind()  { return "tableWorkbench"; }
     @Override public String title() { return "Table Workbench"; }
+    @Override public String section() { return "Data"; }    // RFC 0058
 
     @Override
     public List<WidgetEntry> widgetEntries() {
