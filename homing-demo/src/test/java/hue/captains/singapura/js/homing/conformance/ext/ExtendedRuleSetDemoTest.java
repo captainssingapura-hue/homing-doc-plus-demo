@@ -91,6 +91,23 @@ class ExtendedRuleSetDemoTest {
     }
 
     @Test
+    void theDomOwnerLaneRidesAlongToo() {
+        JsRuleSet rules = POLICY.rulesFor(GAME_LOOP);
+        // A game loop that styles inline: a clean loop by the RAF rule, but the
+        // lane's no-inline-style fires — an extension type is not an exemption.
+        ServedModule inline = gameLoop("demo.InlineLoop",
+                "playground.style.height = VIEWPORT_H + 'px';",
+                "requestAnimationFrame(frame);");
+
+        List<Finding> findings = rules.checkAll(inline);
+
+        assertTrue(findings.stream().anyMatch(f -> f.rule().value().equals("no-inline-style")),
+                "the DOM-owner lane applies to the extension type");
+        assertTrue(rules.rules().containsAll(DefaultJsRulePolicy.DOM_OWNER_DISCIPLINE),
+                "the game-loop set carries the whole DOM-owner discipline");
+    }
+
+    @Test
     void standardTypesAreUndisturbedAndCannotBeRemapped() {
         // The composite still routes a standard type to the framework's own rule set.
         JsRuleSet consumerViaComposite = POLICY.rulesFor(StandardJsModuleType.CONSUMER);
