@@ -8,24 +8,7 @@
 #   - DocViewWidget renders markdown via innerHTML.
 # Anything NOT here is a NEW violation and fails the build. Regenerate deliberately; list should shrink.
 #
-hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
-hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
-hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
-hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [max-effective-lines] module exceeds the 250 effective-line limit — split it
-hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [max-effective-lines] module exceeds the 250 effective-line limit — split it
-hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): (function (note, t) { setTimeout(function () { deathSynth.triggerAttackRelease(note, '16n'); }, t); })(notes[di], timing[di]);
-hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): bgmTimer = setTimeout(bgmStep, durationToMs(dur, bgmData.bpm));
-hue.captains.singapura.js.homing.demo.es.svg.DecomposedSvgDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
-hue.captains.singapura.js.homing.demo.es.svg.ExtrudedSvgDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
-hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
-hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
-hue.captains.singapura.js.homing.demo.playground.DocViewWidget [view-doctrine] innerHTML/outerHTML write (Pure-Component Views): body.innerHTML = marked.parse(md);
-
-# ---- 2026-08-22: the 0.7.0 view-rule surface (no-inline-style / no-literal-color /
-# use-dom-ops-party / view-doctrine / no-raw-href) grandfathered over the pre-existing
-# modules AND the WorkspaceMPA-GENERATED appMain boilerplate (mainHost tweaks, error
-# fallbacks) that every MPA app inherits — framework debt, tracked upstream. The
-# hand-written RFC 0050 grid demo widgets are strict-clean and NOT listed here.
+hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [no-raw-css] raw CSS operation (use css.* API): cell.className = className;
 hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var cell = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var container = document.createElement("label");
 hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var opt = document.createElement("option");
@@ -150,6 +133,7 @@ hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal [no-literal-color]
 hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): fill="none" stroke="#8B7536" stroke-width="3" stroke-linecap="round"/>
 hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): fill="none" stroke="#C9A84C" stroke-width="2"/>
 hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): fill="url(#lensGrad)" stroke="#8B7536" stroke-width="2.5"/>
+hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): _loading.style.cssText = "padding:24px;";
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): cells.forEach((cell, i) => cell.style.transform = reversed[i] ? "scaleX(-1)" : "scaleX(1)");
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): cells.forEach((cell, i) => cell.style.transform = reversed[i] ? "scaleX(1)" : "scaleX(-1)");
@@ -165,6 +149,7 @@ hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [use-dom-ops-p
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): cells[n].style.marginTop = offsets[n] + 'px';
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): for (var j = 0; j < cells.length; j++) cells[j].style.transform = reversed[j] ? 'scaleX(1)' : 'scaleX(-1)';
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): for (var k = 0; k < cells.length; k++) cells[k].style.transform = reversed[k] ? 'scaleX(-1)' : 'scaleX(1)';
+hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): _loading.style.cssText = "padding:24px;";
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): cells[i].style.transform = "rotate(" + angles[i] + "deg)";
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): e.style.cssText = "padding:24px;color:#c33;";
@@ -180,6 +165,8 @@ hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [use-dom-ops-
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var _main = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var e = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimalsWidget [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): cells[j].style.transform = 'rotate(' + angles[j] + 'deg)';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [max-effective-lines] module exceeds the 250 effective-line limit — split it
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.height = ANIMAL_SIZE + "px";
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.left = worldX + "px";
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.top = worldY + "px";
@@ -220,6 +207,25 @@ hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [use-dom-ops-party] r
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var scoreEl = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var sky = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var world = document.createElement("div");
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [max-effective-lines] module exceeds the 250 effective-line limit — split it
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.left = worldX + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.top  = worldY + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.width = ANIMAL_SIZE + 'px'; animal.style.height = ANIMAL_SIZE + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): css.setClass(lava, pg_lava); lava.style.height = LAVA_H + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): css.setClass(sky, pg_sky); sky.style.height = SKY_H + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): el.style.height = PLATFORM_H + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): el.style.left = p.x + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): el.style.top  = p.y + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): el.style.width = p.w + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): function updateFlip() { animal.style.transform = facingRight ? 'scaleX(1)' : 'scaleX(-1)'; }
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): overlay.style.display = '';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): overlay.style.display = 'none';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): overlay.style.display = gameOver ? '' : 'none';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): playground.style.height = VIEWPORT_H + 'px';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): world.style.transform = 'translateX(' + (-cameraX) + 'px)';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): (function (note, t) { setTimeout(function () { deathSynth.triggerAttackRelease(note, '16n'); }, t); })(notes[di], timing[di]);
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): bgmTimer = setTimeout(bgmStep, durationToMs(dur, bgmData.bpm));
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): el = document.createElement('div');
 hue.captains.singapura.js.homing.demo.es.grid.DishListDemoApp [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): errEl.style.cssText = 'padding:20px;color:#900;background:#fee;border:1px solid #c00;margin:20px;white-space:pre-wrap;font-family:monospace;';
 hue.captains.singapura.js.homing.demo.es.grid.DishListDemoApp [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): mainHost.style.display  = 'flex';
 hue.captains.singapura.js.homing.demo.es.grid.DishListDemoApp [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): mainHost.style.maxWidth = 'none';
@@ -245,6 +251,7 @@ hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [no-inline-styl
 hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): errEl.style.cssText = 'padding:20px;color:#900;background:#fee;border:1px solid #c00;margin:20px;white-space:pre-wrap;font-family:monospace;';
 hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): noWidgetEl.style.cssText = 'padding:20px;color:#666;font-family:sans-serif;';
 hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): unknownEl.style.cssText = 'padding:20px;color:#900;font-family:sans-serif;';
+hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
 hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var errEl = document.createElement('pre');
 hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var noWidgetEl = document.createElement('div');
 hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var rootEl = document.createElement('div');
@@ -328,14 +335,15 @@ hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [use-dom-ops-par
 hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): const thickLabel = document.createElement("label");
 hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): const zoomLabel = document.createElement("label");
 hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): const zoomSlider = document.createElement("input");
+hue.captains.singapura.js.homing.demo.playground.DocViewWidget [view-doctrine] innerHTML/outerHTML write (Pure-Component Views): body.innerHTML = marked.parse(md);
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): errEl.style.cssText = 'padding:20px;color:#900;background:#fee;border:1px solid #c00;margin:20px;white-space:pre-wrap;font-family:monospace;';
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): noWidgetEl.style.cssText = 'padding:20px;color:#666;font-family:sans-serif;';
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): unknownEl.style.cssText = 'padding:20px;color:#900;font-family:sans-serif;';
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): errEl.style.cssText = 'padding:20px;color:#900;background:#fee;border:1px solid #c00;margin:20px;white-space:pre-wrap;font-family:monospace;';
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): noWidgetEl.style.cssText = 'padding:20px;color:#666;font-family:sans-serif;';
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): unknownEl.style.cssText = 'padding:20px;color:#900;font-family:sans-serif;';
+hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var errEl = document.createElement('pre');
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var noWidgetEl = document.createElement('div');
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var rootEl = document.createElement('div');
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var unknownEl = document.createElement('div');
-hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp [no-raw-href] raw href operation (use href.* API): var sp = new URLSearchParams(window.location.search);

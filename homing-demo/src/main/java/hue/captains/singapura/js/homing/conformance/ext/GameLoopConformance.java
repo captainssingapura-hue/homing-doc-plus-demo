@@ -3,12 +3,9 @@ package hue.captains.singapura.js.homing.conformance.ext;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.JsRuleSet;
-import hue.captains.singapura.js.homing.conformance.rules.MaxEffectiveLinesRule;
-import hue.captains.singapura.js.homing.conformance.rules.NoCdnImportRule;
 import hue.captains.singapura.js.homing.conformance.rules.RuleSetId;
 import hue.captains.singapura.js.homing.core.JsModuleType;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,19 +21,22 @@ import java.util.Map;
  * new {@link GameLoopModuleType#GAME_LOOP} dispatches through the composite's
  * dictionary. The framework is closed for modification, open for extension.</p>
  *
- * <p>Note the rule set: it <b>reuses two framework global rules</b> ({@code
- * no-cdn-import}, {@code max-effective-lines}) and adds the library's own {@link
- * RafGameLoopRule}. A downstream is free to fold in whichever framework rules it
- * wants and layer its own on top — a rule is shared, composable data.</p>
+ * <p><b>Extension is not exemption.</b> A game loop builds and styles DOM, so its
+ * rule set sits in the framework's <b>DOM-owner lane</b>: the full discipline a
+ * consumer carries, plus the library's own {@link RafGameLoopRule} on top. The
+ * earlier shape — the two global rules plus the RAF rule and nothing about the
+ * DOM — is exactly what {@code extendedWith} now refuses: it left
+ * {@code MovingAnimalGame}'s inline style writes outside every DOM rule while
+ * the type looked policed. The lane is the floor; the RAF rule is what the
+ * library adds.</p>
  */
 public final class GameLoopConformance {
 
     private GameLoopConformance() {}
 
-    /** The downstream's rule set for a game-loop module: framework globals + its own rule. */
-    public static final JsRuleSet GAME_LOOP_RULES = new JsRuleSet(
-            new RuleSetId("game-loop"), "Game loop",
-            List.of(NoCdnImportRule.INSTANCE, MaxEffectiveLinesRule.INSTANCE, RafGameLoopRule.INSTANCE));
+    /** The downstream's rule set for a game-loop module: the DOM-owner lane + its own rule. */
+    public static final JsRuleSet GAME_LOOP_RULES = DefaultJsRulePolicy.domOwnerLane(
+            new RuleSetId("game-loop"), "Game loop", RafGameLoopRule.INSTANCE);
 
     /** <i>The</i> framework policy, extended with this library's {@code GAME_LOOP} type → rule set. */
     public static final JsRulePolicy POLICY = DefaultJsRulePolicy.INSTANCE.extendedWith(
