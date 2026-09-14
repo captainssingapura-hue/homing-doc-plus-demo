@@ -1,7 +1,12 @@
 package hue.captains.singapura.js.homing.demo.studio.multi;
 
+import hue.captains.singapura.js.homing.demo.studio.DemoWorkspaceGroups;
+import hue.captains.singapura.js.homing.studio.base.app.Entry;
 import hue.captains.singapura.js.homing.studio.base.app.L0_Catalogue;
 import hue.captains.singapura.js.homing.studio.base.app.L1_Catalogue;
+import hue.captains.singapura.js.homing.studio.base.app.Navigable;
+import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.js.homing.workspace.shell.WorkspaceGroupApp;
 
 import java.util.List;
 
@@ -31,6 +36,23 @@ public record MultiStudioHome() implements L0_Catalogue<MultiStudioHome> {
                 LearningStudioCategory.INSTANCE,
                 GuidesCatalogue.INSTANCE,
                 ReleasesCatalogue.INSTANCE
+        );
+    }
+
+    /**
+     * RFC 0058 — the Studio Workspace, placed once on the umbrella's home so its
+     * Navigator browses the whole composed tree. The {@code studio} kind is the
+     * anchor inside the group ({@code #ws/workspaces/studio}); the group is the
+     * leaf, at {@code /cat/studio}.
+     */
+    @Override public List<Entry<MultiStudioHome>> leaves() {
+        return List.of(
+                Entry.of(this, new Navigable<>(
+                        WorkspaceGroupApp.INSTANCE,
+                        new WorkspaceGroupApp.Params(DemoWorkspaceGroups.STUDIO),
+                        "Studio",
+                        "The Studio Workspace — Navigator, Summary and Document over every studio on this server, plus the DomOpsParty monitor."),
+                        new NodeName("studio"))
         );
     }
 }

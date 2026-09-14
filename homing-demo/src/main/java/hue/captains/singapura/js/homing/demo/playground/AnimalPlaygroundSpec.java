@@ -73,6 +73,7 @@ public final class AnimalPlaygroundSpec implements WorkspaceSpec {
 
     @Override public String kind()  { return "animalPlayground"; }
     @Override public String title() { return "Animals Playground (V2)"; }
+    @Override public String section() { return "Games"; }   // RFC 0058 — its heading in the Apps group
 
     @Override
     public List<WidgetEntry> widgetEntries() {

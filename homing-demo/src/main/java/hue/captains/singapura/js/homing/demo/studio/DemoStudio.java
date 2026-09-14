@@ -1,9 +1,8 @@
 package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
-import hue.captains.singapura.js.homing.demo.playground.VideoRoomSpec;
-import hue.captains.singapura.js.homing.workspace.shell.GenericWorkspace;
+import hue.captains.singapura.js.homing.workspace.shell.WorkspaceGroupApp;
+import hue.captains.singapura.js.homing.tree.NodeName;
 import hue.captains.singapura.js.homing.studio.base.Doc;
 import hue.captains.singapura.js.homing.studio.base.DocProvider;
 import hue.captains.singapura.js.homing.studio.base.app.DocReader;
@@ -66,29 +65,18 @@ public record DemoStudio() implements L0_Catalogue<DemoStudio>, DocProvider {
                         AppModule._None.INSTANCE,
                         "Themes",
                         "Palette previews and one-click activation for Default / Forest / Sunset / Bauhaus.")),
-                // Post-RFC-0034 — GenericWorkspace is the substrate's single
-                // composition-model AppModule for EVERY workspace kind; the
-                // ws_kind param selects the WorkspaceSpec. Titled generically
-                // because /app-refs keys breadcrumbs by AppModule simpleName,
-                // not by ws_kind — so this one AppDoc is the breadcrumb leaf
-                // for all kinds (studio, animalPlayground, …). The specific
-                // workspace is named by the chrome's subheader (spec.title),
-                // not here. This catalogue entry opens the Animals Playground
-                // spec as the demo's default landing kind.
+                // RFC 0058 — the demo's workspaces are ONE leaf: the Apps group, on
+                // the authentic-path app. The kinds inside it — Animals Playground
+                // (Games), Video Room (Media), Table Workbench (Data) — are anchors,
+                // #ws/<section>/<kind>, switched in place from the workspace title.
+                // This replaces two hand-written kind leaves, and gives the Table
+                // Workbench an address it never had.
                 Entry.of(this, new Navigable<>(
-                        GenericWorkspace.INSTANCE,
-                        new GenericWorkspace.Params(AnimalPlaygroundSpec.INSTANCE.kind()),
-                        "Generic Workspace",
-                        "The substrate's single composition-model workspace app — one AppModule mounts any registered WorkspaceSpec by ws_kind. Opens the Animals Playground spec."))
-,
-                // A second kind, reached by a second hand-written leaf - which is
-                // precisely the cost RFC 0058 proposes to remove by deriving the
-                // tree from the registry instead.
-                Entry.of(this, new Navigable<>(
-                        GenericWorkspace.INSTANCE,
-                        new GenericWorkspace.Params(VideoRoomSpec.INSTANCE.kind()),
-                        "Video Room",
-                        "A workspace of embedded videos. Each pane pauses itself when it stops being the active tab."))
+                        WorkspaceGroupApp.INSTANCE,
+                        new WorkspaceGroupApp.Params(DemoWorkspaceGroups.APPS),
+                        "Apps",
+                        "The demo's workspaces — games, media and data — switched in place from the title. Opens the Animals Playground."),
+                        new NodeName("apps"))
         );
     }
 

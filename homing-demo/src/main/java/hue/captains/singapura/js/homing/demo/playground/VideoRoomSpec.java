@@ -40,7 +40,7 @@ public final class VideoRoomSpec implements WorkspaceSpec {
 
     @Override public String kind()  { return "videoRoom"; }
     @Override public String title() { return "Video Room"; }
-    @Override public String group() { return "Media"; }
+    @Override public String section() { return "Media"; }   // RFC 0058
 
     @Override
     public List<WidgetEntry> widgetEntries() {
