@@ -12,6 +12,8 @@
         <module>homing-blocks</module>
         <module>homing-docs</module>
         <module>homing-demo</module>
+        <!-- RFC 0066 - the bare app: served and themed with no studio on the classpath. -->
+        <module>bare-app-demo</module>
         <module>mermaid-mirror-demo</module>
         <module>doc-pdf-export</module>
     </modules>
