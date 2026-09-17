@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.theme.color.ThemeColorCrate;
+import hue.captains.singapura.js.homing.theme.type.ThemeTypeCrate;
 
 import java.util.List;
 import java.util.Set;
@@ -13,7 +14,8 @@ import java.util.TreeSet;
 /**
  * RFC 0044 crate for the bare app — three served modules, and the three
  * framework crates they import: DomOpsParty (core-js), the CSS manager and
- * the preference steward (server), the global palette (theme-color). That
+ * the preference steward (server), the colour and type palettes (theme-color,
+ * theme-type). That
  * list is the whole dependency of a themed JS app on the framework, and the
  * crate rule proves it on every build.
  */
@@ -26,7 +28,7 @@ public final class BareAppCrate implements Crate {
     @Override public String name() { return "bare-app-demo"; }
 
     @Override public List<Crate> requires() {
-        return List.of(CoreJsCrate.INSTANCE, ServerCrate.INSTANCE, ThemeColorCrate.INSTANCE);
+        return List.of(CoreJsCrate.INSTANCE, ServerCrate.INSTANCE, ThemeColorCrate.INSTANCE, ThemeTypeCrate.INSTANCE);
     }
 
     @Override public List<CrateEntry> entries() {

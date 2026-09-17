@@ -3,10 +3,11 @@ package hue.captains.singapura.js.homing.demo.bare;
 import hue.captains.singapura.js.homing.core.CssVar;
 import hue.captains.singapura.js.homing.core.PaletteProvision;
 import hue.captains.singapura.js.homing.core.Theme;
-import hue.captains.singapura.js.homing.core.ThemeGlobals;
 import hue.captains.singapura.js.homing.server.ThemeRegistry;
 import hue.captains.singapura.js.homing.theme.color.GlobalColorPalette;
 import hue.captains.singapura.js.homing.theme.color.HomingVars;
+import hue.captains.singapura.js.homing.theme.type.GlobalTypePalette;
+import hue.captains.singapura.js.homing.theme.type.HomingFonts;
 
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,15 @@ public final class BareThemes {
                     Map.entry(HomingVars.RADIUS_LG, "12px")
             );
         }
+
+        /** System faces — the bare app has no typographic identity beyond the platform's. */
+        public record Fonts() implements GlobalTypePalette.Provision<Chalk> {
+            public static final Fonts INSTANCE = new Fonts();
+            @Override public Chalk theme() { return Chalk.INSTANCE; }
+            @Override public Map<CssVar, String> values() {
+                return Map.of(HomingFonts.FONT_BODY, "system-ui, sans-serif", HomingFonts.FONT_DISPLAY, "system-ui, sans-serif", HomingFonts.FONT_MONO, "ui-monospace, monospace");
+            }
+        }
     }
 
     /** Dark — slate with a cold blue accent. */
@@ -122,13 +132,14 @@ public final class BareThemes {
                     Map.entry(HomingVars.RADIUS_LG, "12px")
             );
         }
+/** The same system faces as Chalk — a shared provider would be the studio's answer. */        public record Fonts() implements GlobalTypePalette.Provision<Slate> {            public static final Fonts INSTANCE = new Fonts();            @Override public Slate theme() { return Slate.INSTANCE; }            @Override public Map<CssVar, String> values() { return Chalk.Fonts.INSTANCE.values(); }        }
     }
 
     /**
-     * The registry: two themes, two provisions, no globals. The first theme
-     * listed is the default the page is served under. {@code palette()} is
-     * derived from the provisions — {@code GlobalColorPalette} — and that is
-     * the prior the server writes into every subgraph.
+     * The registry: two themes, a colour and a type provision each. The first theme
+     * listed is the default the page is served under. {@code priors()} is
+     * derived from the provisions — colour, then type — and those are
+     * the priors the server writes into every subgraph.
      */
     public static final class Registry implements ThemeRegistry {
         public static final Registry INSTANCE = new Registry();
@@ -137,11 +148,10 @@ public final class BareThemes {
         @Override public List<Theme> themes() {
             return List.of(Chalk.INSTANCE, Slate.INSTANCE);
         }
+        /** Colour and type, per theme — the two priors this app reaches. */
         @Override public List<PaletteProvision<?, ?>> palettes() {
-            return List.of(Chalk.Palette.INSTANCE, Slate.Palette.INSTANCE);
-        }
-        @Override public List<ThemeGlobals<?>> globals() {
-            return List.of();
+            return List.of(Chalk.Palette.INSTANCE, Slate.Palette.INSTANCE,
+                           Chalk.Fonts.INSTANCE,   Slate.Fonts.INSTANCE);
         }
     }
 }

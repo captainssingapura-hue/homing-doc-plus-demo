@@ -23,7 +23,7 @@ public record SwatchboardStyles() implements CssGroup<SwatchboardStyles> {
                 padding: var(--space-6) var(--space-7);
                 background: var(--color-surface);
                 color: var(--color-text-primary);
-                font-family: system-ui, sans-serif;
+                font-family: var(--font-body);
                 """; }
     }
 
@@ -119,7 +119,7 @@ public record SwatchboardStyles() implements CssGroup<SwatchboardStyles> {
 
     public record sb_name() implements CssClass<SwatchboardStyles> {
         @Override public String body() { return """
-                font-family: ui-monospace, monospace;
+                font-family: var(--font-mono);
                 font-size: 12px;
                 color: var(--color-text-primary);
                 """; }
@@ -127,7 +127,7 @@ public record SwatchboardStyles() implements CssGroup<SwatchboardStyles> {
 
     public record sb_value() implements CssClass<SwatchboardStyles> {
         @Override public String body() { return """
-                font-family: ui-monospace, monospace;
+                font-family: var(--font-mono);
                 font-size: 12px;
                 color: var(--color-text-muted);
                 """; }

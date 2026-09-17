@@ -47,6 +47,11 @@
             <artifactId>homing-theme-color</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-theme-type</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
         <!-- RFC 0044 — the crate checks for this module's own gate. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
