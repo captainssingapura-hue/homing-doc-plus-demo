@@ -2,8 +2,10 @@ package hue.captains.singapura.js.homing.demo.bare;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
+import hue.captains.singapura.js.homing.core.CssVar;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * The Swatchboard's classes. Every body reads the global palette and declares
@@ -94,8 +96,12 @@ public record SwatchboardStyles() implements CssGroup<SwatchboardStyles> {
                 """; }
     }
 
+    /** RFC 0066 Law 5 — the one custom property Swatchboard.js writes per chip: the token the chip paints. */
+    public static final CssVar CHIP = new CssVar("--sb-chip");
+
     /** The chip: painted with the token it names, set from JS as a custom property. */
     public record sb_chip() implements CssClass<SwatchboardStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(CHIP); }
         @Override public String body() { return """
                 flex: 0 0 auto;
                 width: 36px;
@@ -108,6 +114,7 @@ public record SwatchboardStyles() implements CssGroup<SwatchboardStyles> {
 
     /** A scale token has no colour to paint; the chip shows the size instead. */
     public record sb_chip_scale() implements CssClass<SwatchboardStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(CHIP); }
         @Override public String body() { return """
                 background: var(--color-accent);
                 width: var(--sb-chip);

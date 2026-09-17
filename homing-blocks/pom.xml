@@ -52,12 +52,6 @@
             <version>${homing.core.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-conformance</artifactId>
-            <version>${homing.core.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
