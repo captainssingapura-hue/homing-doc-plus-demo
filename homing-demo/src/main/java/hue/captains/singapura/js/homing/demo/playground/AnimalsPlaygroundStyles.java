@@ -2,7 +2,6 @@ package hue.captains.singapura.js.homing.demo.playground;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.CssImportsFor;
 
 import java.util.List;
 
@@ -112,8 +111,4 @@ public record AnimalsPlaygroundStyles() implements CssGroup<AnimalsPlaygroundSty
         );
     }
 
-    @Override
-    public CssImportsFor<AnimalsPlaygroundStyles> cssImports() {
-        return CssImportsFor.none(this);
-    }
 }

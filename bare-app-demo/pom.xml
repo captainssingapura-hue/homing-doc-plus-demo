@@ -9,24 +9,15 @@
         <version>VOID-SNAPSHOT</version>
     </parent>
 
-    <artifactId>homing-blocks</artifactId>
+    <artifactId>bare-app-demo</artifactId>
 
     <description>
-        Building-blocks reference studio. A standalone runnable studio that
-        documents the framework's main primitives — Studio scaffold, ProseDoc,
-        ComposedDoc, SvgDoc, Catalogue pattern, etc. — each as a per-block
-        sub-catalogue containing one guide doc plus at least one live demo doc.
-
-        The audience is downstream agents: an LLM or developer can land on
-        any block's L1 catalogue and find both the "how to use" prose
-        (guide) and a working "this is what it looks like" exhibit (demo)
-        side by side. Reading the demo's Java source teaches the pattern
-        by example.
-
-        Independent of homing-demo. The demo studio composes this module
-        as a sub-studio (RFC 0011 cross-studio refs) so a deployed demo
-        surfaces both the animal-game content AND the building-blocks
-        reference under one chrome.
+        RFC 0066 — the bare app: a JS app served and themed by the framework
+        with NO studio on the classpath. core + core-js + server + theme-color,
+        two themes of its own, one Provision each, and a page (Swatchboard)
+        that shows every token of the global palette as the browser computes
+        it, with a picker that switches the theme live. The proof that the
+        theme design core is the framework's, not the studio's.
     </description>
 
     <properties>
@@ -38,18 +29,35 @@
     <dependencies>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-core</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-core-js</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-server</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-libs</artifactId>
+            <artifactId>homing-theme-color</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-studio-base</artifactId>
+            <artifactId>homing-theme-type</artifactId>
             <version>${homing.core.version}</version>
+        </dependency>
+        <!-- RFC 0044 — the crate checks for this module's own gate. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-conformance-rules</artifactId>
+            <version>${homing.core.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -57,5 +65,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

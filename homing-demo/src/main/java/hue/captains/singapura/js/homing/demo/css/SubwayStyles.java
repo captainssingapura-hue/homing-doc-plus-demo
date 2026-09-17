@@ -2,7 +2,6 @@ package hue.captains.singapura.js.homing.demo.css;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.CssImportsFor;
 
 import java.util.List;
 
@@ -68,8 +67,4 @@ public record SubwayStyles() implements CssGroup<SubwayStyles> {
                 new subway_grid(), new subway_cell());
     }
 
-    @Override
-    public CssImportsFor<SubwayStyles> cssImports() {
-        return CssImportsFor.none(this);
-    }
 }

@@ -2,7 +2,6 @@ package hue.captains.singapura.js.homing.server;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.CssImportsFor;
 import hue.captains.singapura.js.homing.core.UtilityCssClass;
 import org.junit.jupiter.api.Test;
 
@@ -37,13 +36,10 @@ class CssGroupContentProviderTest {
             return List.of(new fix_root(), new bg_accent(), new p_4());
         }
 
-        @Override public CssImportsFor<FixtureStyles> cssImports() {
-            return CssImportsFor.none(this);
-        }
     }
 
     private final CssGroupContentProvider<FixtureStyles> provider =
-            new CssGroupContentProvider<>(FixtureStyles.INSTANCE, null, new QueryParamResolver());
+            new CssGroupContentProvider<>(FixtureStyles.INSTANCE, null, new QueryParamResolver(), List.of());
 
     @Test
     void emits_plainCssClass_asBareCls() {
@@ -78,6 +74,7 @@ class CssGroupContentProviderTest {
         String js = String.join("\n", provider.content());
 
         assertTrue(js.contains("import { CssClassManagerInstance as _css }"));
-        assertTrue(js.contains("await _css.loadCss(\"" + FixtureStyles.class.getCanonicalName() + "\");"));
+        // RFC 0064/0066 — the load carries the group's dependency subgraph as data.
+        assertTrue(js.contains("await _css.loadCss(\"" + FixtureStyles.class.getCanonicalName() + "\", {"), js);
     }
 }

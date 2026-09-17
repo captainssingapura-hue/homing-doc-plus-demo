@@ -44,19 +44,21 @@ class AppHtmlGetActionTest {
     }
 
     @Test
-    void execute_respectsThemeOverride() throws Exception {
+    /** RFC 0064 — the address's ?theme= is the client's to read; the server forwards none. */
+    void execute_ignoresThemeOverride() throws Exception {
         var query = byClass(MovingAnimal.class.getCanonicalName(), "dark", null);
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
-        assertTrue(result.body().contains("\"dark\""), "Should include theme override in bootstrap");
+        assertFalse(result.body().contains("\"dark\""), "RFC 0064: the server no longer forwards ?theme=");
     }
 
     @Test
-    void execute_respectsLocaleOverride() throws Exception {
+    /** RFC 0064 — likewise ?locale=. */
+    void execute_ignoresLocaleOverride() throws Exception {
         var query = byClass(MovingAnimal.class.getCanonicalName(), null, "fr");
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
-        assertTrue(result.body().contains("\"fr\""), "Should include locale override in bootstrap");
+        assertFalse(result.body().contains("\"fr\""), "RFC 0064: the server no longer forwards ?locale=");
     }
 
     @Test
