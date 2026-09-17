@@ -2,7 +2,6 @@ package hue.captains.singapura.js.homing.demo.css;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.CssImportsFor;
 
 import java.util.List;
 
@@ -177,10 +176,6 @@ public record VideoStyles() implements CssGroup<VideoStyles> {
             """; }
     }
 
-    @Override
-    public CssImportsFor<VideoStyles> cssImports() {
-        return CssImportsFor.none(this);
-    }
 
     @Override
     public List<CssClass<VideoStyles>> cssClasses() {

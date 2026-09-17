@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals;
 import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformerBgm;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
-import hue.captains.singapura.js.homing.demo.theme.DemoCssGroupImplRegistry;
+import hue.captains.singapura.js.homing.studio.themes.StudioWorkspaceThemes;
 
 import java.util.List;
 
@@ -15,7 +15,9 @@ class DemoCssGroupImplConsistencyTest extends CssGroupImplConsistencyTest {
 
     @Override
     protected List<CssGroupImpl<?, ?>> impls() {
-        return DemoCssGroupImplRegistry.ALL;
+        // RFC 0066 — the demo installs the starter's themes; their provisions and
+        // overrides are the impls every reachable group renders under.
+        return StudioWorkspaceThemes.INSTANCE.impls();
     }
 
     @Override

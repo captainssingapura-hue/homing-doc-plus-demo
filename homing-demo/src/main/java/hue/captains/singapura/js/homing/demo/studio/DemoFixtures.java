@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.studio.base.Fixtures;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.Umbrella;
+import hue.captains.singapura.js.homing.server.ThemeRegistry;
 import hue.captains.singapura.js.homing.studio.starter.StudioStarterFixtures;
 import hue.captains.singapura.js.homing.workspace.shell.WorkspaceGroupRegistry;
 import hue.captains.singapura.js.homing.workspace.shell.WorkspaceGroups;
@@ -58,5 +59,10 @@ public record DemoFixtures<S extends Studio<?>>(Umbrella<S> umbrella)
 
     @Override public Map<String, GetAction<RoutingContext, ?, ?, ?>> harnessGetActions() {
         return starter().harnessGetActions();
+    }
+
+    /** RFC 0066 — the eleven themes the starter installs; studio-base ships none. */
+    @Override public ThemeRegistry themeRegistry() {
+        return starter().themeRegistry();
     }
 }

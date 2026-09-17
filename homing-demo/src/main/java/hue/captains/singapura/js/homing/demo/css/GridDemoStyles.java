@@ -2,7 +2,6 @@ package hue.captains.singapura.js.homing.demo.css;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.CssImportsFor;
 
 import java.util.List;
 
@@ -185,8 +184,4 @@ public record GridDemoStyles() implements CssGroup<GridDemoStyles> {
                 new tw_root(), new tw_host(), new tw_readout());
     }
 
-    @Override
-    public CssImportsFor<GridDemoStyles> cssImports() {
-        return CssImportsFor.none(this);
-    }
 }

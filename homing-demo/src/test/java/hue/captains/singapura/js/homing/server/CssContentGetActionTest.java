@@ -4,12 +4,13 @@ import hue.captains.singapura.js.homing.core.CssBlock;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssGroupImpl;
-import hue.captains.singapura.js.homing.core.CssImportsFor;
+import hue.captains.singapura.js.homing.core.CssVar;
+import hue.captains.singapura.js.homing.core.PaletteClass;
+import hue.captains.singapura.js.homing.core.PaletteProvision;
 import hue.captains.singapura.js.homing.core.Theme;
 import hue.captains.singapura.js.homing.core.UtilityCssClass;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,28 +72,12 @@ class CssContentGetActionTest {
             return List.of(new bare_label(), new bare_link_hover(), new bg_accent(), new p_4(), new inline_bodied());
         }
 
-        @Override public CssImportsFor<TestStyles> cssImports() {
-            return CssImportsFor.none(this);
-        }
     }
 
     public record TestStylesTheme() implements TestStyles.Impl<TestTheme> {
         public static final TestStylesTheme INSTANCE = new TestStylesTheme();
         @Override public TestTheme theme() { return TestTheme.INSTANCE; }
 
-        @Override public Map<String, String> cssVariables() {
-            var m = new LinkedHashMap<String, String>();
-            m.put("--prim-amber", "#F4B942");
-            m.put("--prim-navy",  "#1E2761");
-            return m;
-        }
-
-        @Override public Map<String, String> semanticTokens() {
-            var m = new LinkedHashMap<String, String>();
-            m.put("--color-accent", "var(--prim-amber)");
-            m.put("--color-link",   "var(--prim-navy)");
-            return m;
-        }
 
         @Override public CssBlock<TestStyles.bare_label>      bare_label()      { return CssBlock.of("font-weight: 700;"); }
         @Override public CssBlock<TestStyles.bare_link_hover> bare_link_hover() { return CssBlock.of("color: red;"); }
@@ -125,26 +110,31 @@ class CssContentGetActionTest {
                 "no bare selector when pseudoState set. css:\n" + css);
     }
 
+    /** RFC 0066 — a PROVIDED class: the theme's provision is its :root body. */
+    public record Palette() implements CssGroup<Palette> {
+        public static final Palette INSTANCE = new Palette();
+        public static final CssVar ACCENT = new CssVar("--color-accent");
+        public record palette() implements PaletteClass<Palette> {
+            @Override public java.util.Set<CssVar> declares() { return java.util.Set.of(ACCENT); }
+        }
+        @Override public boolean prior() { return true; }
+        @Override public List<CssClass<Palette>> cssClasses() { return List.of(new palette()); }
+    }
+    public record PaletteTheme() implements PaletteProvision<Palette, TestTheme> {
+        public static final PaletteTheme INSTANCE = new PaletteTheme();
+        @Override public Palette group() { return Palette.INSTANCE; }
+        @Override public TestTheme theme() { return TestTheme.INSTANCE; }
+        @Override public Map<CssVar, String> values() { return Map.of(Palette.ACCENT, "#F4B942"); }
+    }
+
     @Test
-    void renders_primitivesAndSemanticTokens_inOneRootBlock_primitivesFirst() throws Exception {
-        var query = new ModuleQuery(TestStyles.class.getName(), null, null);
-        var css   = action.execute(query, new EmptyParam.NoHeaders()).get().body();
-
-        int rootStart = css.indexOf(":root {");
-        int rootEnd   = css.indexOf("}", rootStart);
-        assertTrue(rootStart >= 0, "must emit :root. css:\n" + css);
-        String rootBody = css.substring(rootStart, rootEnd);
-
-        assertTrue(rootBody.contains("--prim-amber: #F4B942;"),                "primitive emitted");
-        assertTrue(rootBody.contains("--color-accent: var(--prim-amber);"),    "semantic emitted");
-
-        int primIdx = rootBody.indexOf("--prim-amber");
-        int semIdx  = rootBody.indexOf("--color-accent");
-        assertTrue(primIdx < semIdx, "primitives precede semantic tokens");
-
-        int secondRoot = css.indexOf(":root {", rootStart + 1);
-        assertTrue(secondRoot < 0 || secondRoot > rootEnd,
-                "primitives + semantic share one :root block");
+    void renders_aPaletteClass_asTheProvisionsRootBlock() throws Exception {
+        var paletteAction = new CssContentGetAction(List.of(PaletteTheme.INSTANCE), TestTheme.INSTANCE);
+        var query = new ModuleQuery(Palette.class.getName(), null, null);
+        var css   = paletteAction.execute(query, new EmptyParam.NoHeaders()).get().body();
+        assertTrue(css.contains(":root {"), "must emit :root. css:\n" + css);
+        assertTrue(css.contains("--color-accent: #F4B942;"), "the binding. css:\n" + css);
+        assertFalse(css.contains(".palette {"), "a palette has no class rule. css:\n" + css);
     }
 
     @Test

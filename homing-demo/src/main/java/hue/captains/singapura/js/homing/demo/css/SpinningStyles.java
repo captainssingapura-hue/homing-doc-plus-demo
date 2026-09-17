@@ -2,7 +2,6 @@ package hue.captains.singapura.js.homing.demo.css;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.CssImportsFor;
 
 import java.util.List;
 
@@ -73,8 +72,4 @@ public record SpinningStyles() implements CssGroup<SpinningStyles> {
                 new spin_grid(), new spin_cell(), new paused());
     }
 
-    @Override
-    public CssImportsFor<SpinningStyles> cssImports() {
-        return CssImportsFor.none(this);
-    }
 }
