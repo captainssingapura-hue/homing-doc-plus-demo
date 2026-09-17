@@ -43,7 +43,7 @@ public final class BareAppServer {
                 ResourceReader.INSTANCE,
                 BareThemes.Registry.INSTANCE,
                 AppMeta.DEFAULT,
-                BareAppCrate.servable());
+                List.of(BareAppCrate.INSTANCE));
         var rootRedirect = new RootRedirectGetAction(Swatchboard.INSTANCE.simpleName());
         var registry = new ActionRegistry<RoutingContext>() {
             @Override public Map<String, GetAction<RoutingContext, ?, ?, ?>> getActions() {

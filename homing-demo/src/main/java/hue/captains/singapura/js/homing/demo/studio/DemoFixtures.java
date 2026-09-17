@@ -61,8 +61,15 @@ public record DemoFixtures<S extends Studio<?>>(Umbrella<S> umbrella)
         return starter().harnessGetActions();
     }
 
-    /** RFC 0066 — the eleven themes the starter installs; studio-base ships none. */
+    /** RFC 0066 — the designs the starter installs; studio-base ships none. */
     @Override public ThemeRegistry themeRegistry() {
         return starter().themeRegistry();
+    }
+
+    /** RFC 0044 — the starter's crate roots plus the demo's own: what this studio serves, by name. */
+    @Override public List<hue.captains.singapura.js.homing.core.Crate> crates() {
+        var roots = new java.util.ArrayList<hue.captains.singapura.js.homing.core.Crate>(starter().crates());
+        roots.add(hue.captains.singapura.js.homing.demo.conformance.HomingDemoCrate.INSTANCE);
+        return roots;
     }
 }

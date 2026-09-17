@@ -17,7 +17,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EsModuleGetActionTest {
 
-    private final EsModuleGetAction action = new EsModuleGetAction(new QueryParamResolver());
+    /** The action resolves a name by lookup against what a deployment serves: the demo's crate closure, plus this test's own bundled module. */
+    private static ServedModules served() {
+        var byName = new java.util.LinkedHashMap<String, hue.captains.singapura.js.homing.core.EsModule<?>>(
+                ServedModules.of(List.of(hue.captains.singapura.js.homing.demo.conformance.HomingDemoCrate.INSTANCE)).byName());
+        byName.put(TestBundledModule.class.getCanonicalName(), TestBundledModule.INSTANCE);
+        return new ServedModules(byName);
+    }
+
+    private final EsModuleGetAction action = new EsModuleGetAction(new QueryParamResolver(),
+            hue.captains.singapura.js.homing.core.util.ResourceReader.INSTANCE, served());
 
     @Test
     void execute_generatesJsForEsModule() throws Exception {
@@ -62,7 +71,7 @@ class EsModuleGetActionTest {
         // file's content is shipped to the browser as-is, with no imports prefix,
         // no exports suffix, and no css/href injection.
         // getName() returns the binary name (with `$` for nesting); Class.forName needs that form
-        var query = new ModuleQuery(TestBundledModule.class.getName());
+        var query = new ModuleQuery(TestBundledModule.class.getCanonicalName());
         var result = action.execute(query, new EmptyParam.NoHeaders()).get();
 
         assertNotNull(result);
