@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.demo.conformance;
 import hue.captains.singapura.js.homing.conformance.ext.GameLoopModuleType;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
+import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
 import hue.captains.singapura.js.homing.libs.LibsCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
@@ -55,6 +56,10 @@ import hue.captains.singapura.js.homing.demo.es.svg.SvgExtruder;
 import hue.captains.singapura.js.homing.demo.playground.AnimalsPlaygroundStyles;
 import hue.captains.singapura.js.homing.demo.playground.AnimalsSecretaryModule;
 import hue.captains.singapura.js.homing.demo.playground.DocViewWidget;
+import hue.captains.singapura.js.homing.demo.playground.ClassTableWidget;
+import hue.captains.singapura.js.homing.demo.playground.StateTableWidget;
+import hue.captains.singapura.js.homing.demo.playground.TableDemoModule;
+import hue.captains.singapura.js.homing.demo.playground.TableDemoStyles;
 import hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA;
 
 import java.util.List;
@@ -90,6 +95,7 @@ public final class HomingDemoCrate implements Crate {
                 CoreJsCrate.INSTANCE,
                 ServerCrate.INSTANCE,
                 StudioBaseCrate.INSTANCE,
+                DesignCrate.INSTANCE,
                 WorkspaceCrate.INSTANCE,
                 WorkspaceCodecsCrate.INSTANCE,
                 WorkspacePersistenceCrate.INSTANCE,
@@ -132,6 +138,11 @@ public final class HomingDemoCrate implements Crate {
                 CrateEntry.of(AnimalsPlaygroundStyles.INSTANCE),
                 CrateEntry.of(AnimalsSecretaryModule.INSTANCE),
                 CrateEntry.of(DocViewWidget.INSTANCE),
+                // The Tables Playground — plain tables under the design substrate, by state and by class.
+                CrateEntry.of(TableDemoStyles.INSTANCE),
+                CrateEntry.of(TableDemoModule.INSTANCE),
+                CrateEntry.of(StateTableWidget.INSTANCE),
+                CrateEntry.of(ClassTableWidget.INSTANCE),
                 CrateEntry.of(DemoStandardMPA.INSTANCE),
                 // RFC 0050 — the Relation Grid's companion demos.
                 CrateEntry.of(GridDemoStyles.INSTANCE),

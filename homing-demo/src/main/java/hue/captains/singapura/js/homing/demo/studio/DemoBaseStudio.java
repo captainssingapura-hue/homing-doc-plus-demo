@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
 import hue.captains.singapura.js.homing.demo.playground.TableWorkbenchSpec;
+import hue.captains.singapura.js.homing.demo.playground.TablesPlaygroundSpec;
 import hue.captains.singapura.js.homing.demo.playground.VideoRoomSpec;
 import hue.captains.singapura.js.homing.studio.base.Studio;
 import hue.captains.singapura.js.homing.studio.base.app.StudioBrand;
@@ -49,6 +50,10 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
 
     @SuppressWarnings("unused")
     private static final Object VIDEO_ROOM_SPEC_INIT = VideoRoomSpec.INSTANCE;
+
+    /** The Tables Playground — plain tables lifted by state and by class, side by side. */
+    @SuppressWarnings("unused")
+    private static final Object TABLES_PLAYGROUND_SPEC_INIT = TablesPlaygroundSpec.INSTANCE;
 
     // The Studio Workspace ("studio" spec) is registered for free by
     // StudioStarterFixtures (via DemoFixtures) — no STUDIO_SPEC_INIT touch here.
