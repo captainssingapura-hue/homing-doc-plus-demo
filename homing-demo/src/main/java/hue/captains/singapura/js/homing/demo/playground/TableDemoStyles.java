@@ -17,7 +17,7 @@ import static hue.captains.singapura.js.homing.design.Text.*;
  * it means. Two routes to a lifted cell or row sit side by side here:
  *
  * <ul>
- *   <li><b>State</b> — {@link tdm_cell} wears the {@code Interactive} pairs and
+ *   <li><b>State</b> — {@link tdm_cell} wears the {@code Selectable} pairs and
  *       flips {@code aria-selected}, {@code aria-current} or
  *       {@code data-highlighted}; the design's word at that slot is the look.</li>
  *   <li><b>Class</b> — {@link tdm_cell_lifted} and {@link tdm_row_lifted} wear
@@ -55,16 +55,16 @@ public record TableDemoStyles() implements CssGroup<TableDemoStyles> {
     }
 
     /**
-     * An interactive cell: one class, every state a slot — hover, selected,
-     * current, highlighted, focus. Stacks above its neighbours while lifted,
+     * A selectable cell — one of many, flat until it is the one: one class, every
+     * state a slot — hover, selected, current, highlighted, focus. Stacks above its neighbours while lifted,
      * so its shadow is not painted over by the cell after it.
      */
     public record tdm_cell() implements CssClass<TableDemoStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(
-                of(Interactive.class, Color.Surface.class), of(Interactive.class, Color.Ink.class),
-                of(Interactive.class, Color.Edge.class), of(Interactive.class, Shape.Rule.class),
-                of(Interactive.class, Shape.Shadow.class), of(Interactive.class, Motion.Transform.class),
-                of(Interactive.class, Motion.Ease.class), of(Interactive.class, Affordance.Cursor.class)); }
+                of(Selectable.class, Color.Surface.class), of(Selectable.class, Color.Ink.class),
+                of(Selectable.class, Color.Edge.class), of(Selectable.class, Shape.Rule.class),
+                of(Selectable.class, Shape.Shadow.class), of(Selectable.class, Motion.Transform.class),
+                of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class)); }
         @Override public String body() { return """
                 padding: 10px 14px;
                 vertical-align: top;
