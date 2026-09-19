@@ -11,7 +11,6 @@ import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesApp;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget;
-import hue.captains.singapura.js.homing.site.demo.gallery.prefs.ThemeWidget;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
@@ -48,12 +47,11 @@ public final class GalleryCrate implements Crate {
                 CrateEntry.of(GridApp.INSTANCE),
                 CrateEntry.of(TreeApp.INSTANCE),
                 CrateEntry.of(DialogApp.INSTANCE),
-                // The preferences: the page, the site's own stamped registry, and the two
-                // widgets that are the site's - the tree master and the theme.
+                // The preferences: the page, the site's own stamped registry, and the one
+                // widget that is the site's - the tree master; the theme widget is the MPA's.
                 CrateEntry.of(PreferencesApp.INSTANCE),
                 CrateEntry.of(GalleryPreferences.INSTANCE),
                 CrateEntry.of(PreferencesTreeWidget.INSTANCE),
-                CrateEntry.of(ThemeWidget.INSTANCE),
                 CrateEntry.of(GalleryRelations.INSTANCE),
                 CrateEntry.of(GalleryStyles.INSTANCE));
     }

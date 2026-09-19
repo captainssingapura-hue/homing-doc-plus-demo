@@ -8,15 +8,17 @@ import hue.captains.singapura.js.homing.preferences.PreferencesRegistry;
 import hue.captains.singapura.js.homing.preferences.ScaleWidget;
 import hue.captains.singapura.js.homing.preferences.ToggleWidget;
 import hue.captains.singapura.js.homing.preferences.WidgetProvider;
+import hue.captains.singapura.js.homing.site.mpa.ThemeWidget;
 
 import java.util.List;
 import java.util.Map;
 
 /**
  * The gallery's preferences: a rigid tree with a widget on every node,
- * stamped into this module. The theme is one setting with a widget of its
- * own that reads {@code /themes}; the rest are the generic kinds. The
- * master is the relation tree, from its own repo, wrapped as a widget.
+ * stamped into this module. The theme is the MPA's own widget over
+ * {@code /themes}; the rest are the generic kinds. The master is the
+ * relation tree, from its own repo, wrapped as a widget. Given to the MPA,
+ * so the bar's button opens this tree; also a page of its own.
  *
  * <p>Only the theme is read by anything today. The locale and the editor
  * settings are kept by the steward and shown here so that the tree, the

@@ -32,6 +32,7 @@ class GallerySiteTest {
         assertTrue(body.contains("const theme = \"editorial\";"), body);
         assertTrue(body.contains("brand: Object.freeze({label:\"Gallery\",href:\"\\/\"})"), body);   // jsString escapes the slash
         assertTrue(body.contains("crumbs: Object.freeze([])"), body);
+        assertTrue(body.contains("preferences: Object.freeze({module:\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences\"})"), body);
         int chrome = body.indexOf("site.mpa.MpaChrome");
         int app    = body.indexOf("demo.gallery.WelcomeApp");
         assertTrue(chrome > 0 && app > chrome, "chrome import before app import: " + body);
@@ -83,7 +84,7 @@ class GallerySiteTest {
         String json = hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences.INSTANCE.json(resolver);
         assertTrue(json.contains("\"master\":{\"module\":\"/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget\""), json);
         assertTrue(json.contains("\"preferences/theme\":{\"label\":\"Theme\""), json);
-        assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.ThemeWidget"), json);
+        assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.site.mpa.ThemeWidget"), json);
         assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.preferences.ScaleWidget"), json);
         assertTrue(json.contains("\"preferences/editor/wrap\""), json);
         // the page imports the view and the registry only; no widget module is on it
