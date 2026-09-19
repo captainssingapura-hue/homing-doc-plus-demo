@@ -36,6 +36,7 @@ public record GallerySite() implements Site {
     static final AppPage<?, ?> GRID    = MPA.page(GridApp.INSTANCE);
     static final AppPage<?, ?> TREE    = MPA.page(TreeApp.INSTANCE);
     static final AppPage<?, ?> DIALOG  = MPA.page(DialogApp.INSTANCE);
+    static final AppPage<?, ?> PANES   = MPA.page(PanesApp.INSTANCE);
     static final AppPage<?, ?> PREFS   = MPA.page(PreferencesApp.INSTANCE);
 
     static final Navigable PLAIN = q -> new HtmlPageContent("""
@@ -60,6 +61,7 @@ public record GallerySite() implements Site {
             case "grid"    -> path.depth() == 1 ? Optional.of(placed(GRID, "Grid", path)) : Optional.empty();
             case "tree"    -> path.depth() == 1 ? Optional.of(placed(TREE, "Tree", path)) : Optional.empty();
             case "dialog"  -> path.depth() == 1 ? Optional.of(placed(DIALOG, "Dialog", path)) : Optional.empty();
+            case "panes"   -> path.depth() == 1 ? Optional.of(placed(PANES, "Panes", path)) : Optional.empty();
             case "preferences" -> path.depth() == 1 ? Optional.of(placed(PREFS, "Preferences", path)) : Optional.empty();
             default        -> Optional.empty();
         };

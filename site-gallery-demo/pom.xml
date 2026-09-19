@@ -45,6 +45,11 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-panes</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-studio-themes</artifactId>
             <version>${homing.core.version}</version>
         </dependency>

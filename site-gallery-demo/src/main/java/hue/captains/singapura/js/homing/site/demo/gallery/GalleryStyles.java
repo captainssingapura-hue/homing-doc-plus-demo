@@ -19,7 +19,7 @@ import static hue.captains.singapura.js.homing.design.Text.Kicker;
 import static hue.captains.singapura.js.homing.design.Text.Lede;
 import static hue.captains.singapura.js.homing.design.Text.Numeral;
 
-/** The pages' own classes — kicker, title, lede, count, two grids, the host box and its status line. Cards and buttons are the shared elements'. */
+/** The pages' own classes — kicker, title, lede, count, two grids, the host boxes, the log and the status line. Cards and buttons are the shared elements'. */
 public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     public static final GalleryStyles INSTANCE = new GalleryStyles();
@@ -73,6 +73,28 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
+    /** The box a pane is given: a raised edge and a fixed height the pane fills. */
+    public record ga_pane_host() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return """
+            height: 360px;
+            overflow: hidden;
+            """;
+        }
+    }
+
+    /** The log under the pane: one line per mutation, newest last, scrolling. */
+    public record ga_log() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
+        @Override public String body() { return """
+            margin-top: 10px;
+            max-height: 160px;
+            overflow: auto;
+            white-space: pre;
+            """;
+        }
+    }
+
     /** The line under the box: the party's numbers. */
     public record ga_status() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
@@ -82,6 +104,6 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_count(), new ga_buttons(),
-                       new ga_host(), new ga_status());
+                       new ga_host(), new ga_pane_host(), new ga_log(), new ga_status());
     }
 }
