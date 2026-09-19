@@ -14,6 +14,9 @@
         <module>homing-demo</module>
         <!-- RFC 0066 - the bare app: served and themed with no studio on the classpath. -->
         <module>bare-app-demo</module>
+        <!-- RFC 0066 E3 - the gallery: JS apps under the standard MPA, and the
+             relation grid and its tree as pages beside them. -->
+        <module>site-gallery-demo</module>
         <module>mermaid-mirror-demo</module>
         <module>doc-pdf-export</module>
     </modules>
@@ -23,6 +26,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <homing.core.version>LOCAL-SNAPSHOT</homing.core.version>
+        <homing.relgrid.version>LOCAL-SNAPSHOT</homing.relgrid.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.14</jacoco.version>
     </properties>
