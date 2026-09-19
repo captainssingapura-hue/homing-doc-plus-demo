@@ -5,7 +5,7 @@
 // handed to the pane. The pane reports; the page acts on the report: it
 // tells the active widget so, and dissolves a closed tab's branch after
 // the pane has disposed the widget. The plus opens a picker in the dialog.
-// Every report goes on the log under the pane, in the studio pane's shapes.
+// Every event goes on the log under the pane as the data it is.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "panesPage" });
@@ -44,9 +44,9 @@ var KINDS = [
 
 var NOTES = [
     "A tab's widget is never detached on a switch: its panel is hidden and shown, so a scroll position or a caret survives.",
-    "Drag a chip sideways to reorder; the pane reports onTabMoved with this pane as both source and destination.",
-    "The pane never calls setActive. This page does, from onTabActivated, as the workspace's focus machinery will.",
-    "Close a tab and the pane disposes the widget first, reports onTabRemoved, then activates a neighbour."
+    "Drag a chip sideways to reorder; the pane reports a TabMoved with this pane as both source and destination.",
+    "The pane never calls setActive. This page does, on TabActivated, as the workspace's focus machinery will.",
+    "Close a tab and the pane disposes the widget first, reports TabRemoved, then activates a neighbour."
 ];
 
 function appMain(el) {
@@ -67,7 +67,7 @@ function appMain(el) {
     css.addClass(lede, ga_lede);
     lede.textContent = "One pane of tabs. Each tab holds a widget by the base's contract, constructed by this page on a branch "
         + "of its own; the plus asks the page, the page asks you. Switch by click, reorder by drag, close on the cross. "
-        + "What the pane reports is written below it.";
+        + "Every event the pane reports is written below it, as the data it is.";
     el.appendChild(lede);
 
     var host = branch.createElement("host", "div");
@@ -95,24 +95,32 @@ function appMain(el) {
     var pane = null;
     function state() { status.textContent = "state: " + JSON.stringify(pane.getState()); }
 
+    // The event as data: every field but the widget, which does not travel.
+    function line(ev) {
+        return JSON.stringify(ev, function (k, v) { return k === "widget" ? undefined : v; });
+    }
+
     pane = mountMultiTabPane({
         branch: branch, host: host, slotId: "main", budget: 8,
-        onAddTab:       function (slotId) { say("onAddTab(" + slotId + ")"); pick(); },
-        onTabAdded:     function (slotId, tab, i) { say("onTabAdded(" + slotId + ", " + tab.id + ", " + i + ")"); state(); },
-        onTabAttached:  function (slotId, tab, i) { say("onTabAttached(" + slotId + ", " + tab.id + ", " + i + ")"); state(); },
-        onTabRemoved:   function (slotId, tab, i) {
-            say("onTabRemoved(" + slotId + ", " + tab.id + ", " + i + ")");
-            branch.dissolveBranch(branches.get(tab.id));   // the widget was disposed by the pane already
-            branches.delete(tab.id);
-            state();
-        },
-        onTabMoved:     function (src, tab, si, dest, di) { say("onTabMoved(" + src + ", " + tab.id + ", " + si + ", " + dest + ", " + di + ")"); state(); },
-        onTabActivated: function (slotId, tabId) {
-            say("onTabActivated(" + slotId + ", " + tabId + ")");
-            pane.tabs().forEach(function (id) {
-                var w = pane.widgetOf(id);
-                if (w && typeof w.setActive === "function") w.setActive(id === tabId);
-            });
+        onEvent: function (ev) {
+            say(line(ev));
+            switch (ev.kind) {
+                case "AddRequested":
+                    pick();
+                    break;
+                case "TabRemoved":
+                    branch.dissolveBranch(branches.get(ev.tab.id));   // the widget was disposed by the pane already
+                    branches.delete(ev.tab.id);
+                    break;
+                case "TabActivated":
+                    pane.tabs().forEach(function (id) {
+                        var w = pane.widgetOf(id);
+                        if (w && typeof w.setActive === "function") w.setActive(id === ev.tabId);
+                    });
+                    break;
+                default:
+                    break;   // TabAdded, TabAttached, TabMoved: the log is enough
+            }
             state();
         }
     });
