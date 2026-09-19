@@ -7,6 +7,11 @@ import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.relgrid.RelGridCrate;
 import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolCrate;
 import hue.captains.singapura.js.homing.reltree.RelTreeCrate;
+import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
+import hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences;
+import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesApp;
+import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget;
+import hue.captains.singapura.js.homing.site.demo.gallery.prefs.ThemeWidget;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
@@ -14,9 +19,9 @@ import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import java.util.List;
 
 /**
- * The gallery's served modules: five apps, their domain and their styles, on
- * the MPA's crate, the shared elements, the dialog, and the grid family's
- * three crates.
+ * The gallery's served modules: six apps, their domain, the preferences
+ * registry and two widgets, and their styles, on the MPA's crate, the shared
+ * elements, the dialog, the preferences, and the grid family's three crates.
  * The core-js and design crates are named directly although the MPA's crate
  * carries both: the apps import the party themselves, the grid's styles wear
  * words and its crate leaves the targets to its host, and the crate rule reads
@@ -31,7 +36,8 @@ public final class GalleryCrate implements Crate {
     @Override public String name() { return "homing-site-demo-gallery"; }
 
     @Override public List<Crate> requires() {
-        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, CoreJsCrate.INSTANCE, DesignCrate.INSTANCE,
+        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE,
+                       CoreJsCrate.INSTANCE, DesignCrate.INSTANCE,
                        RelGridCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
     }
 
@@ -42,6 +48,12 @@ public final class GalleryCrate implements Crate {
                 CrateEntry.of(GridApp.INSTANCE),
                 CrateEntry.of(TreeApp.INSTANCE),
                 CrateEntry.of(DialogApp.INSTANCE),
+                // The preferences: the page, the site's own stamped registry, and the two
+                // widgets that are the site's - the tree master and the theme.
+                CrateEntry.of(PreferencesApp.INSTANCE),
+                CrateEntry.of(GalleryPreferences.INSTANCE),
+                CrateEntry.of(PreferencesTreeWidget.INSTANCE),
+                CrateEntry.of(ThemeWidget.INSTANCE),
                 CrateEntry.of(GalleryRelations.INSTANCE),
                 CrateEntry.of(GalleryStyles.INSTANCE));
     }

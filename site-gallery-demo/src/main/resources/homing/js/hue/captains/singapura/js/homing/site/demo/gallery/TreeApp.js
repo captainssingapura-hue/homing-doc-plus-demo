@@ -44,7 +44,8 @@ function appMain(el) {
     var store = createBooksStore();
     var relation = createShelfTreeRelation(store, { branch: cellsB });
     var activated = null;
-    var tree = new RelTree({
+    var tree = null;   // onArranged fires during construction, before this is assigned
+    tree = new RelTree({
         container: host,
         branch: treeB,
         relation: relation,
@@ -57,7 +58,7 @@ function appMain(el) {
     });
 
     function report() {
-        var c = tree.cursor();
+        var c = tree ? tree.cursor() : null;
         status.textContent = relation.cellCount() + " cells minted"
             + (c === null ? "" : " · cursor at " + c)
             + (activated === null ? "" : " · activated " + activated);

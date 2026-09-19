@@ -6,6 +6,7 @@ import hue.captains.singapura.js.homing.site.Path;
 import hue.captains.singapura.js.homing.site.Router;
 import hue.captains.singapura.js.homing.site.Site;
 import hue.captains.singapura.js.homing.site.Trail;
+import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesApp;
 import hue.captains.singapura.js.homing.site.mpa.AppPage;
 import hue.captains.singapura.js.homing.site.mpa.Brand;
 import hue.captains.singapura.js.homing.site.mpa.StandardMpa;
@@ -34,6 +35,7 @@ public record GallerySite() implements Site {
     static final AppPage<?, ?> GRID    = MPA.page(GridApp.INSTANCE);
     static final AppPage<?, ?> TREE    = MPA.page(TreeApp.INSTANCE);
     static final AppPage<?, ?> DIALOG  = MPA.page(DialogApp.INSTANCE);
+    static final AppPage<?, ?> PREFS   = MPA.page(PreferencesApp.INSTANCE);
 
     static final Navigable PLAIN = q -> new HtmlPageContent("""
             <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Plain · Gallery</title></head>
@@ -57,6 +59,7 @@ public record GallerySite() implements Site {
             case "grid"    -> path.depth() == 1 ? Optional.of(placed(GRID, "Grid", path)) : Optional.empty();
             case "tree"    -> path.depth() == 1 ? Optional.of(placed(TREE, "Tree", path)) : Optional.empty();
             case "dialog"  -> path.depth() == 1 ? Optional.of(placed(DIALOG, "Dialog", path)) : Optional.empty();
+            case "preferences" -> path.depth() == 1 ? Optional.of(placed(PREFS, "Preferences", path)) : Optional.empty();
             default        -> Optional.empty();
         };
     }

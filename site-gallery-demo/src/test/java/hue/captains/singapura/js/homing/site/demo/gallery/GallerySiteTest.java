@@ -68,13 +68,27 @@ class GallerySiteTest {
 
     @Test
     void theGridAndTheTreeArePagesToldTheirTrail() {
-        for (String arm : List.of("grid", "tree", "dialog")) {
+        for (String arm : List.of("grid", "tree", "dialog", "preferences")) {
             var body = GallerySite.INSTANCE.router().resolve(Path.of(arm)).orElseThrow().html(Query.NONE).body();
-            assertTrue(body.contains("demo.gallery." + Character.toUpperCase(arm.charAt(0)) + arm.substring(1) + "App"), body);
+            assertTrue(body.contains(Character.toUpperCase(arm.charAt(0)) + arm.substring(1) + "App"), body);
             assertTrue(body.contains("Object.freeze({text:\"Gallery\",href:\"\\/\"})"), body);
             assertTrue(body.contains("href:\"\\/" + arm + "\""), body);
             assertTrue(GallerySite.INSTANCE.router().resolve(Path.of(arm, "more")).isEmpty());
         }
+    }
+
+    @Test
+    void theRegistryNamesEveryWidgetByItsServedAddress() {
+        var resolver = new hue.captains.singapura.js.homing.server.QueryParamResolver("/module");
+        String json = hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences.INSTANCE.json(resolver);
+        assertTrue(json.contains("\"master\":{\"module\":\"/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget\""), json);
+        assertTrue(json.contains("\"preferences/theme\":{\"label\":\"Theme\""), json);
+        assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.ThemeWidget"), json);
+        assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.preferences.ScaleWidget"), json);
+        assertTrue(json.contains("\"preferences/editor/wrap\""), json);
+        // the page imports the view and the registry only; no widget module is on it
+        var body = GallerySite.INSTANCE.router().resolve(Path.of("preferences")).orElseThrow().html(Query.NONE).body();
+        assertFalse(body.contains("ThemeWidget") || body.contains("ScaleWidget"), "widgets are not imported by the page");
     }
 
     @Test
@@ -108,6 +122,7 @@ class GallerySiteTest {
         assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("RelGridStyles")), "the grid's styles are served");
         assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("RelTreeStyles")), "the tree's styles are served");
         assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("DialogStyles")), "the dialog's styles are served");
+        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("PreferencesStyles")), "the preferences' styles are served");
         var worn = Deployment.wornBy(groups);
         assertTrue(worn.size() > 60, "the chrome, the apps, the grid and the tree wear many pairs; found " + worn.size());
         for (Theme t : StudioThemeRegistry.INSTANCE.themes()) {
