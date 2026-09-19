@@ -6,11 +6,8 @@ import hue.captains.singapura.js.homing.demo.es.svg.DecomposedSvgDemo;
 import hue.captains.singapura.js.homing.demo.es.svg.ExtrudedSvgDemo;
 import hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo;
 import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
-import hue.captains.singapura.js.homing.demo.es.grid.DishListDemoApp;
-import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
-import hue.captains.singapura.js.homing.demo.playground.TableWorkbenchSpec;
 import hue.captains.singapura.js.homing.demo.playground.TablesPlaygroundSpec;
 import hue.captains.singapura.js.homing.demo.playground.VideoRoomSpec;
 import hue.captains.singapura.js.homing.studio.base.Studio;
@@ -42,12 +39,6 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
     @SuppressWarnings("unused")
     private static final Object SPEC_INIT = AnimalPlaygroundSpec.INSTANCE;
 
-    /** Same force-load, for the RFC 0050 Table Workbench
-     *  ({@code ?app=genericWorkspace&ws_kind=tableWorkbench}) — the bench of
-     *  Relation Grids in shapes the two companion demos never take. */
-    @SuppressWarnings("unused")
-    private static final Object TABLE_WORKBENCH_SPEC_INIT = TableWorkbenchSpec.INSTANCE;
-
     @SuppressWarnings("unused")
     private static final Object VIDEO_ROOM_SPEC_INIT = VideoRoomSpec.INSTANCE;
 
@@ -77,11 +68,7 @@ public record DemoBaseStudio() implements Studio<DemoStudio> {
                 SpinningAnimals.INSTANCE,
                 // RFC 0024 Phase P1b — the new shell + widget path. Hosts
                 // SvgWidget; cohabits with the legacy SvgViewer.
-                DemoStandardMPA.INSTANCE,
-                // RFC 0050 — the Relation Grid's two companion demos, under
-                // the GridDemosCatalogue sub-catalogue.
-                DishListDemoApp.INSTANCE,
-                MinesweeperDemoApp.INSTANCE
+                DemoStandardMPA.INSTANCE
                 // The Animals Playground is served only via GenericWorkspace
                 // (?app=genericWorkspace&ws_kind=animalPlayground), registered
                 // by StudioStarterFixtures' harness apps — no need to list it
