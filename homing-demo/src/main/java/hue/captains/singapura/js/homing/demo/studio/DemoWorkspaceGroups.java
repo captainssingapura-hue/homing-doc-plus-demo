@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.demo.studio;
 
 import hue.captains.singapura.js.homing.demo.playground.AnimalPlaygroundSpec;
-import hue.captains.singapura.js.homing.demo.playground.TableWorkbenchSpec;
 import hue.captains.singapura.js.homing.demo.playground.TablesPlaygroundSpec;
 import hue.captains.singapura.js.homing.demo.playground.VideoRoomSpec;
 import hue.captains.singapura.js.homing.studio.workspace.StudioWorkspaceSpec;
@@ -46,7 +45,7 @@ public final class DemoWorkspaceGroups {
         if (registry.get(APPS).isEmpty()) {
             registry.register(WorkspaceGroup.of(APPS, "Apps",
                     "The demo's own workspaces — games, media and data — switched in place from the title.",
-                    List.of(AnimalPlaygroundSpec.INSTANCE, VideoRoomSpec.INSTANCE, TableWorkbenchSpec.INSTANCE, TablesPlaygroundSpec.INSTANCE)));
+                    List.of(AnimalPlaygroundSpec.INSTANCE, VideoRoomSpec.INSTANCE, TablesPlaygroundSpec.INSTANCE)));
         }
     }
 

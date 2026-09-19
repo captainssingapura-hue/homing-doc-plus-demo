@@ -50,13 +50,6 @@
             <artifactId>homing-studio-base</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- RFC 0050 - the Relation Grid: the Dish List + Minesweeper
-             companion widgets consume the generic table primitive. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-relation-grid</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
         <!-- RFC 0025 Ext1 â€” the workspace's dynamic widget management. The
              AnimalsPlayground app composes WorkspaceShell + WidgetPicker;
              DocViewWidget hosts the workspace's pinned introduction. -->

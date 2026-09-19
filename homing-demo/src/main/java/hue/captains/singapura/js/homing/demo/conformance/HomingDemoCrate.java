@@ -34,20 +34,6 @@ import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalReplayWidget;
 import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalWidget;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformEngine;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformerBgm;
-import hue.captains.singapura.js.homing.demo.css.GridDemoStyles;
-import hue.captains.singapura.js.homing.demo.es.grid.DishListDemoApp;
-import hue.captains.singapura.js.homing.demo.es.grid.DishListDemoWidget;
-import hue.captains.singapura.js.homing.demo.es.grid.DishListRelation;
-import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperDemoApp;
-import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperGame;
-import hue.captains.singapura.js.homing.demo.es.grid.MinesweeperWidget;
-import hue.captains.singapura.js.homing.demo.es.grid.HeaderlessTableWidget;
-import hue.captains.singapura.js.homing.demo.es.grid.TableSpecimenRelation;
-import hue.captains.singapura.js.homing.demo.es.grid.TallTableWidget;
-import hue.captains.singapura.js.homing.demo.es.grid.UnfrozenHeaderTableWidget;
-import hue.captains.singapura.js.homing.demo.es.grid.VastTableWidget;
-import hue.captains.singapura.js.homing.demo.es.grid.WideTableWidget;
-import hue.captains.singapura.js.homing.grid.RelationGridCrate;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
 import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimalsWidget;
 import hue.captains.singapura.js.homing.demo.es.media.EmbeddedVideoWidget;
@@ -101,9 +87,7 @@ public final class HomingDemoCrate implements Crate {
                 WorkspacePersistenceCrate.INSTANCE,
                 WorkspaceShellCrate.INSTANCE,
                 StudioWorkspaceCrate.INSTANCE,
-                LibsCrate.INSTANCE,
-                // RFC 0050 — the Relation Grid primitive family.
-                RelationGridCrate.INSTANCE);
+                LibsCrate.INSTANCE);
     }
 
     @Override
@@ -143,24 +127,6 @@ public final class HomingDemoCrate implements Crate {
                 CrateEntry.of(TableDemoModule.INSTANCE),
                 CrateEntry.of(StateTableWidget.INSTANCE),
                 CrateEntry.of(ClassTableWidget.INSTANCE),
-                CrateEntry.of(DemoStandardMPA.INSTANCE),
-                // RFC 0050 — the Relation Grid's companion demos.
-                CrateEntry.of(GridDemoStyles.INSTANCE),
-                CrateEntry.of(DishListRelation.INSTANCE),
-                CrateEntry.of(DishListDemoWidget.INSTANCE),
-                CrateEntry.of(DishListDemoApp.INSTANCE),
-                CrateEntry.of(MinesweeperGame.INSTANCE),
-                CrateEntry.of(MinesweeperWidget.INSTANCE),
-                CrateEntry.of(MinesweeperDemoApp.INSTANCE),
-                // RFC 0050 — the Table Workbench specimens
-                // (?app=genericWorkspace&ws_kind=tableWorkbench). One widget per
-                // shape: the workspace keys tabs and pins by widget simple name,
-                // so specimens sharing a class would be tabs it cannot tell apart.
-                CrateEntry.of(TableSpecimenRelation.INSTANCE),
-                CrateEntry.of(TallTableWidget.INSTANCE),
-                CrateEntry.of(WideTableWidget.INSTANCE),
-                CrateEntry.of(VastTableWidget.INSTANCE),
-                CrateEntry.of(UnfrozenHeaderTableWidget.INSTANCE),
-                CrateEntry.of(HeaderlessTableWidget.INSTANCE));
+                CrateEntry.of(DemoStandardMPA.INSTANCE));
     }
 }
