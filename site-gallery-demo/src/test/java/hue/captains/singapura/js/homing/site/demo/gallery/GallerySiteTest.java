@@ -68,9 +68,9 @@ class GallerySiteTest {
 
     @Test
     void theGridAndTheTreeArePagesToldTheirTrail() {
-        for (String arm : List.of("grid", "tree")) {
+        for (String arm : List.of("grid", "tree", "dialog")) {
             var body = GallerySite.INSTANCE.router().resolve(Path.of(arm)).orElseThrow().html(Query.NONE).body();
-            assertTrue(body.contains("demo.gallery." + (arm.equals("grid") ? "GridApp" : "TreeApp")), body);
+            assertTrue(body.contains("demo.gallery." + Character.toUpperCase(arm.charAt(0)) + arm.substring(1) + "App"), body);
             assertTrue(body.contains("Object.freeze({text:\"Gallery\",href:\"\\/\"})"), body);
             assertTrue(body.contains("href:\"\\/" + arm + "\""), body);
             assertTrue(GallerySite.INSTANCE.router().resolve(Path.of(arm, "more")).isEmpty());
@@ -107,6 +107,7 @@ class GallerySiteTest {
         for (var m : served.byName().values()) if (m instanceof CssGroup<?> g) groups.add(g);
         assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("RelGridStyles")), "the grid's styles are served");
         assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("RelTreeStyles")), "the tree's styles are served");
+        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("DialogStyles")), "the dialog's styles are served");
         var worn = Deployment.wornBy(groups);
         assertTrue(worn.size() > 60, "the chrome, the apps, the grid and the tree wear many pairs; found " + worn.size());
         for (Theme t : StudioThemeRegistry.INSTANCE.themes()) {

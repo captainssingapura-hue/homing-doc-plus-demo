@@ -14,7 +14,8 @@ var PAGES = [
     { title: "A plain page", badge: "HTML", text: "Not under the chrome at all: the router serves a string, and the MPA is nowhere in it.", link: "/plain" },
     { title: "The flat address", badge: "PERMALINK", text: "The framework's permalink for a JS app, /app?app=welcome, served by the MPA's own route.", link: "/app?app=welcome" },
     { title: "Grid", badge: "REL-GRID", text: "The relation grid from its own repo, over twelve books, as a page under the chrome. Titles and ratings edit.", link: "/grid" },
-    { title: "Tree", badge: "REL-TREE", text: "The same books as shelf \u2192 book in the relation tree. An unfold is a question on the ask channel.", link: "/tree" }
+    { title: "Tree", badge: "REL-TREE", text: "The same books as shelf \u2192 book in the relation tree. An unfold is a question on the ask channel.", link: "/tree" },
+    { title: "Dialog", badge: "UI-DIALOG", text: "A frame that owns the screen: inert behind, keys captured, Escape, Enter, focus given back. And one that does not.", link: "/dialog" }
 ];
 
 function appMain(el) {

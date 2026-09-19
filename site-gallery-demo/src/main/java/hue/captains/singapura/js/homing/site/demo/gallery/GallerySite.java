@@ -33,6 +33,7 @@ public record GallerySite() implements Site {
     static final AppPage<?, ?> WELCOME = MPA.page(WelcomeApp.INSTANCE);
     static final AppPage<?, ?> GRID    = MPA.page(GridApp.INSTANCE);
     static final AppPage<?, ?> TREE    = MPA.page(TreeApp.INSTANCE);
+    static final AppPage<?, ?> DIALOG  = MPA.page(DialogApp.INSTANCE);
 
     static final Navigable PLAIN = q -> new HtmlPageContent("""
             <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Plain · Gallery</title></head>
@@ -55,6 +56,7 @@ public record GallerySite() implements Site {
             case "counter" -> counter(path);
             case "grid"    -> path.depth() == 1 ? Optional.of(placed(GRID, "Grid", path)) : Optional.empty();
             case "tree"    -> path.depth() == 1 ? Optional.of(placed(TREE, "Tree", path)) : Optional.empty();
+            case "dialog"  -> path.depth() == 1 ? Optional.of(placed(DIALOG, "Dialog", path)) : Optional.empty();
             default        -> Optional.empty();
         };
     }
