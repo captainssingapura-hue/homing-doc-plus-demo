@@ -6,9 +6,9 @@
 
 const _owner = Object.freeze({ toString: () => "preferencesPage" });
 
-function appMain(el) {
-    var branch = domOpsParty.createBranch("preferencesPage");
+function construct(branch, params) {
     branch.activate(_owner);
+    var el = branch.createElement("root", "div");
 
     var kicker = branch.createElement("kicker", "div");
     css.addClass(kicker, ga_kicker);
@@ -29,5 +29,10 @@ function appMain(el) {
 
     var host = branch.createElement("host", "div");
     el.appendChild(host);
-    mountPreferencesView(branch, host, PREFERENCES);
+    var view = mountPreferencesView(branch, host, PREFERENCES);
+    return { root: el, dispose: function () { view.dispose(); } };
+}
+
+function appMain(el, params) {
+    el.appendChild(construct(domOpsParty.createBranch("preferencesPage"), params).root);
 }

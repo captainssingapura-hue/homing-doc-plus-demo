@@ -7,9 +7,9 @@
 
 const _owner = Object.freeze({ toString: () => "gridPage" });
 
-function appMain(el) {
-    var branch = domOpsParty.createBranch("gridPage");
+function construct(branch, params) {
     branch.activate(_owner);
+    var el = branch.createElement("root", "div");
 
     var kicker = branch.createElement("kicker", "div");
     css.addClass(kicker, ga_kicker);
@@ -61,4 +61,9 @@ function appMain(el) {
             + (c ? " · cursor at " + JSON.stringify(c) : "");
     }
     report();
+    return { root: el, dispose: function () { if (grid) grid.destroy(); relation.dispose(); } };
+}
+
+function appMain(el, params) {
+    el.appendChild(construct(domOpsParty.createBranch("gridPage"), params).root);
 }

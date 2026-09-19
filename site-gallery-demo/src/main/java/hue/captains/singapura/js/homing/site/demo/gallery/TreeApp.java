@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.core.AppModule;
+import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -21,6 +22,8 @@ public record TreeApp() implements AppModule<AppModule._None, TreeApp> {
     public static final TreeApp INSTANCE = new TreeApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, TreeApp> {}
+    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
+    public record construct() implements Exportable._Constant<TreeApp> {}
 
     @Override public String title()      { return "Tree"; }
     @Override public String simpleName() { return "tree"; }
@@ -46,6 +49,6 @@ public record TreeApp() implements AppModule<AppModule._None, TreeApp> {
 
     @Override
     public ExportsOf<TreeApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
     }
 }

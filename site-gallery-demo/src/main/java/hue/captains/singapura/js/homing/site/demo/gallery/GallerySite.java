@@ -32,6 +32,7 @@ public record GallerySite() implements Site {
     public static final StandardMpa MPA = StandardMpa.of(
             Brand.of("Gallery"), StudioThemeRegistry.INSTANCE, GalleryPreferences.INSTANCE, GalleryCrate.INSTANCE);
 
+    static final AppPage<?, ?> SHELL   = MPA.page(GalleryShellApp.INSTANCE, new GalleryShellApp.Params(""));
     static final AppPage<?, ?> WELCOME = MPA.page(WelcomeApp.INSTANCE);
     static final AppPage<?, ?> GRID    = MPA.page(GridApp.INSTANCE);
     static final AppPage<?, ?> TREE    = MPA.page(TreeApp.INSTANCE);
@@ -55,7 +56,8 @@ public record GallerySite() implements Site {
     @Override
     public Router router() {
         return path -> switch (path.head().orElse("")) {
-            case ""        -> path.isRoot() ? Optional.of(WELCOME) : Optional.empty();
+            case ""        -> path.isRoot() ? Optional.of(SHELL) : Optional.empty();
+            case "welcome" -> path.depth() == 1 ? Optional.of(placed(WELCOME, "Welcome", path)) : Optional.empty();
             case "plain"   -> path.depth() == 1 ? Optional.of(PLAIN) : Optional.empty();
             case "counter" -> counter(path);
             case "grid"    -> path.depth() == 1 ? Optional.of(placed(GRID, "Grid", path)) : Optional.empty();

@@ -8,15 +8,19 @@ import java.util.List;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
 import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
+import static hue.captains.singapura.js.homing.design.Interaction.Focus;
 import static hue.captains.singapura.js.homing.design.Layer.Raised;
 import static hue.captains.singapura.js.homing.design.Target.Color;
+import static hue.captains.singapura.js.homing.design.Target.Motion;
 import static hue.captains.singapura.js.homing.design.Target.Shape;
 import static hue.captains.singapura.js.homing.design.Target.Type;
+import static hue.captains.singapura.js.homing.design.Text.Body;
 import static hue.captains.singapura.js.homing.design.Text.Caption;
 import static hue.captains.singapura.js.homing.design.Text.Code;
 import static hue.captains.singapura.js.homing.design.Text.Display;
 import static hue.captains.singapura.js.homing.design.Text.Kicker;
 import static hue.captains.singapura.js.homing.design.Text.Lede;
+import static hue.captains.singapura.js.homing.design.Text.Link;
 import static hue.captains.singapura.js.homing.design.Text.Numeral;
 
 /** The pages' own classes — kicker, title, lede, count, two grids, the host boxes, the log and the status line. Cards and buttons are the shared elements'. */
@@ -95,6 +99,69 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
+    // ── The shell ─────────────────────────────────────────────────────────────
+
+    /** The shell: fills the full-bleed slot; the splitter fills it. */
+    public record ga_shell() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            """;
+        }
+    }
+
+    /** The navigator's box: the tree, scrolling on its own. */
+    public record ga_shell_nav() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: auto;
+            padding: 12px 8px;
+            """;
+        }
+    }
+
+    /** The demo's box: a reading column inside the pane, scrolling on its own. */
+    public record ga_shell_demo() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: auto;
+            padding: 24px 28px 32px;
+            """;
+        }
+    }
+
+    /** The explanation's box: raised, scrolling on its own. */
+    public record ga_shell_explain() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class)); }
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: auto;
+            padding: 18px 28px 24px;
+            """;
+        }
+    }
+
+    /** The explanation's paragraph, in body ink. */
+    public record ga_explain_text() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Body.class, Color.Ink.class), of(Body.class, Type.Face.class)); }
+        @Override public String body() { return """
+            margin: 0 0 14px;
+            max-width: 72ch;
+            line-height: 1.55;
+            """;
+        }
+    }
+
+    /** The link to the page the demo also is. */
+    public record ga_explain_link() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Link.class, Color.Ink.class), of(Link.class, Type.Decoration.class), of(Link.class, Motion.Ease.class), of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
+        @Override public String body() { return ""; }
+    }
+
     /** The line under the box: the party's numbers. */
     public record ga_status() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
@@ -104,6 +171,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_count(), new ga_buttons(),
-                       new ga_host(), new ga_pane_host(), new ga_log(), new ga_status());
+                       new ga_host(), new ga_pane_host(), new ga_log(), new ga_status(),
+                       new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link());
     }
 }

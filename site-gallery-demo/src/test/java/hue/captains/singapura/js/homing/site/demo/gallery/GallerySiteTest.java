@@ -26,17 +26,40 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GallerySiteTest {
 
     @Test
-    void theWelcomePageImportsTheChromeThenTheApp() {
+    void theShellIsTheRootAndImportsTheChromeThenTheApp() {
         var body = GallerySite.INSTANCE.router().resolve(Path.ROOT).orElseThrow().html(Query.NONE).body();
-        assertTrue(body.contains("<title>Welcome · Gallery</title>"), body);
+        assertTrue(body.contains("<title>Gallery · Gallery</title>"), body);
         assertTrue(body.contains("const theme = \"editorial\";"), body);
         assertTrue(body.contains("brand: Object.freeze({label:\"Gallery\",href:\"\\/\"})"), body);   // jsString escapes the slash
         assertTrue(body.contains("crumbs: Object.freeze([])"), body);
         assertTrue(body.contains("preferences: Object.freeze({module:\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences\"})"), body);
         int chrome = body.indexOf("site.mpa.MpaChrome");
-        int app    = body.indexOf("demo.gallery.WelcomeApp");
+        int app    = body.indexOf("demo.gallery.GalleryShellApp");
         assertTrue(chrome > 0 && app > chrome, "chrome import before app import: " + body);
+        assertTrue(body.contains("const params = Object.freeze({});"), body);   // no demo asked for: the first
+        var asked = GallerySite.INSTANCE.router().resolve(Path.ROOT).orElseThrow().html(Query.of("demo", "grid")).body();
+        assertTrue(asked.contains("const params = Object.freeze({\"demo\":\"grid\"});"), asked);
+        assertFalse(body.contains("WelcomeApp"), "the welcome page is not on the shell");
+    }
+
+    @Test
+    void theWelcomePageStaysUnderItsOwnArm() {
+        var body = GallerySite.INSTANCE.router().resolve(Path.of("welcome")).orElseThrow().html(Query.NONE).body();
+        assertTrue(body.contains("<title>Welcome · Gallery</title>"), body);
         assertTrue(body.contains("appMain(main);"), body);   // paramless: nothing stamped
+    }
+
+    @Test
+    void theDemosNameEveryAppByItsServedAddressAndTheNavigator() {
+        var resolver = new hue.captains.singapura.js.homing.server.QueryParamResolver("/module");
+        String json = GalleryDemos.INSTANCE.json(resolver);
+        assertTrue(json.startsWith("{\"label\":\"Gallery\",\"tree\":{\"segment\":\"gallery\",\"children\":[{\"segment\":\"welcome\""), json);
+        // jsString escapes the slash, which JSON allows
+        assertTrue(json.contains("\"navigator\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget\""), json);
+        assertTrue(json.contains("\"gallery\\/counter\":{\"label\":\"Counter\""), json);
+        assertTrue(json.contains("\"widget\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.CounterApp\",\"export\":\"construct\",\"params\":{\"start\":\"7\"}}"), json);
+        assertTrue(json.contains("\"page\":\"\\/panes\""), json);
+        for (var d : GalleryDemos.DEMOS) assertTrue(GallerySite.INSTANCE.router().resolve(Path.parse(d.page())).isPresent(), d.page() + " is a page");
     }
 
     @Test

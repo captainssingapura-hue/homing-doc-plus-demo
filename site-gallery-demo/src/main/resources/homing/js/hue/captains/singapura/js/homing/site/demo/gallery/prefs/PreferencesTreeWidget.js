@@ -2,7 +2,7 @@
 // PreferencesTreeWidget — the master: RelTree over the rigid tree in params.
 //
 //   construct(branch, params) → { root, onSelect(fn), select(path), dispose() }
-//   params: { tree: <canonical rigid tree JSON>, labels: { path: label }, folder? }
+//   params: { tree: <canonical rigid tree JSON>, labels: { path: label }, label?, folder? }
 //
 // The relation is the rigid tree read once: every node a place, keyed by
 // its path, open from the start, with the label the tree carries as its
@@ -65,7 +65,7 @@ function construct(branch, params) {
         container: root,
         branch: branch.createBranch("tree"),
         relation: relation,
-        label: "Preferences",
+        label: params.label || "Preferences",
         folder: !!params.folder,
         ask: function (q, mask) { return relation.answer(q, mask); },
         onCursorMoved: function (key) { listeners.forEach(function (fn) { fn(key); }); }

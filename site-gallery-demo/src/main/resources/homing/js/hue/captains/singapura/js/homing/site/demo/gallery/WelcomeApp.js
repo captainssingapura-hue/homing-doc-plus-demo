@@ -20,9 +20,9 @@ var PAGES = [
     { title: "Panes", badge: "UI-PANES", text: "One pane of tabs holding widgets by the base's contract: add from a picker, switch, drag a chip to reorder, close. Every mutation is on the log below it.", link: "/panes" }
 ];
 
-function appMain(el) {
-    var branch = domOpsParty.createBranch("welcome");
+function construct(branch, params) {
     branch.activate(_owner);
+    var el = branch.createElement("root", "div");
 
     var kicker = branch.createElement("kicker", "div");
     css.addClass(kicker, ga_kicker);
@@ -57,4 +57,9 @@ function appMain(el) {
         }));
     }
     el.appendChild(cards);
+    return { root: el, dispose: function () {} };
+}
+
+function appMain(el, params) {
+    el.appendChild(construct(domOpsParty.createBranch("welcome"), params).root);
 }

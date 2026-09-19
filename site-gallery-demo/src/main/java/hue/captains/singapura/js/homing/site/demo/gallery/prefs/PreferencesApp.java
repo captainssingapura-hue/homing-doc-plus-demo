@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery.prefs;
 
 import hue.captains.singapura.js.homing.core.AppModule;
+import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -23,6 +24,8 @@ public record PreferencesApp() implements AppModule<AppModule._None, Preferences
     public static final PreferencesApp INSTANCE = new PreferencesApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, PreferencesApp> {}
+    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
+    public record construct() implements Exportable._Constant<PreferencesApp> {}
 
     @Override public String title()      { return "Preferences"; }
     @Override public String simpleName() { return "preferences"; }
@@ -43,6 +46,6 @@ public record PreferencesApp() implements AppModule<AppModule._None, Preferences
 
     @Override
     public ExportsOf<PreferencesApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
     }
 }

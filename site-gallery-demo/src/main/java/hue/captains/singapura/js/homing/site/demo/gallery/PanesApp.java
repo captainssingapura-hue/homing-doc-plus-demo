@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.core.AppModule;
+import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -24,6 +25,8 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
     public static final PanesApp INSTANCE = new PanesApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, PanesApp> {}
+    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
+    public record construct() implements Exportable._Constant<PanesApp> {}
 
     @Override public String title()      { return "Panes"; }
     @Override public String simpleName() { return "panes"; }
@@ -50,6 +53,6 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
 
     @Override
     public ExportsOf<PanesApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
     }
 }

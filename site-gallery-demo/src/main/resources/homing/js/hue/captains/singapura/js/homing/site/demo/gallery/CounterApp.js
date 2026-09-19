@@ -7,9 +7,9 @@
 
 const _owner = Object.freeze({ toString: () => "counter" });
 
-function appMain(el, params) {
-    var branch = domOpsParty.createBranch("counter");
+function construct(branch, params) {
     branch.activate(_owner);
+    var el = branch.createElement("root", "div");
 
     var start = params && params.start ? parseInt(params.start, 10) : 0;
     if (isNaN(start)) start = 0;
@@ -47,4 +47,9 @@ function appMain(el, params) {
     buttons.appendChild(Button(branch, "reset", { label: "reset", kind: "plain", onClick: function () { value = start; draw(); } }));
     el.appendChild(buttons);
     draw();
+    return { root: el, dispose: function () {} };
+}
+
+function appMain(el, params) {
+    el.appendChild(construct(domOpsParty.createBranch("counter"), params).root);
 }

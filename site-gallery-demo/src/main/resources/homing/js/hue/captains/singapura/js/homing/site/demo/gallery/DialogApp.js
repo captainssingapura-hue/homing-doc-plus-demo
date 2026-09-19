@@ -6,9 +6,9 @@
 
 const _owner = Object.freeze({ toString: () => "dialogPage" });
 
-function appMain(el) {
-    var branch = domOpsParty.createBranch("dialogPage");
+function construct(branch, params) {
     branch.activate(_owner);
+    var el = branch.createElement("root", "div");
 
     var kicker = branch.createElement("kicker", "div");
     css.addClass(kicker, ga_kicker);
@@ -104,4 +104,9 @@ function appMain(el) {
         });
         dlg.setAction("apply", { enabled: false });
     } }));
+    return { root: el, dispose: function () {} };
+}
+
+function appMain(el, params) {
+    el.appendChild(construct(domOpsParty.createBranch("dialogPage"), params).root);
 }

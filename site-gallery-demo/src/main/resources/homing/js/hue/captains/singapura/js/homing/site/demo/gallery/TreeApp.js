@@ -6,9 +6,9 @@
 
 const _owner = Object.freeze({ toString: () => "treePage" });
 
-function appMain(el) {
-    var branch = domOpsParty.createBranch("treePage");
+function construct(branch, params) {
     branch.activate(_owner);
+    var el = branch.createElement("root", "div");
 
     var kicker = branch.createElement("kicker", "div");
     css.addClass(kicker, ga_kicker);
@@ -64,4 +64,9 @@ function appMain(el) {
             + (activated === null ? "" : " · activated " + activated);
     }
     report();
+    return { root: el, dispose: function () { if (tree) tree.destroy(); relation.dispose(); } };
+}
+
+function appMain(el, params) {
+    el.appendChild(construct(domOpsParty.createBranch("treePage"), params).root);
 }

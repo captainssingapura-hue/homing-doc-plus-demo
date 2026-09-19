@@ -49,9 +49,9 @@ var NOTES = [
     "Close a tab and the pane disposes the widget first, reports TabRemoved, then activates a neighbour."
 ];
 
-function appMain(el) {
-    var branch = domOpsParty.createBranch("panesPage");
+function construct(branch, params) {
     branch.activate(_owner);
+    var el = branch.createElement("root", "div");
 
     var kicker = branch.createElement("kicker", "div");
     css.addClass(kicker, ga_kicker);
@@ -178,4 +178,9 @@ function appMain(el) {
     row.appendChild(Button(branch, "closeAll", { label: "Close every tab", kind: "plain", onClick: function () {
         pane.getState().tabs.forEach(function (t) { if (!t.pinned) pane.removeTab(t.id); });
     } }));
+    return { root: el, dispose: function () { pane.dispose(); } };
+}
+
+function appMain(el, params) {
+    el.appendChild(construct(domOpsParty.createBranch("panesPage"), params).root);
 }
