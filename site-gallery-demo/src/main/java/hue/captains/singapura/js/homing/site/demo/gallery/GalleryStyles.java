@@ -77,11 +77,13 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
-    /** The box a pane is given: a raised edge and a fixed height the pane fills. */
+    /** The box a pane is given: a raised edge, a fixed height, a flex column the pane fills as its item. */
     public record ga_pane_host() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return """
             height: 360px;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
             """;
         }
