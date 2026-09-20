@@ -96,6 +96,19 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
+    /** The box the docks split and the desk lies over: positioned, so the desk can be a layer; a flex column for the splitter. */
+    public record ga_dock_box() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return """
+            position: relative;
+            height: 480px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            """;
+        }
+    }
+
     /** The log under the pane: one line per mutation, newest last, scrolling. */
     public record ga_log() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
@@ -201,7 +214,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
-                       new ga_host(), new ga_pane_host(), new ga_log(), new ga_status(),
+                       new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_log(), new ga_status(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }

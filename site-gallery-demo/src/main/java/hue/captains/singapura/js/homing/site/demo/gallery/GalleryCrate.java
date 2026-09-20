@@ -15,6 +15,7 @@ import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeW
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
+import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
 import hue.captains.singapura.js.homing.ui.split.UiSplitCrate;
@@ -39,7 +40,7 @@ public final class GalleryCrate implements Crate {
     @Override public String name() { return "homing-site-demo-gallery"; }
 
     @Override public List<Crate> requires() {
-        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiSplitCrate.INSTANCE,
+        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiDockingCrate.INSTANCE, UiSplitCrate.INSTANCE,
                        CoreJsCrate.INSTANCE, DesignCrate.INSTANCE, ServerCrate.INSTANCE,
                        RelGridCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
     }
@@ -57,6 +58,7 @@ public final class GalleryCrate implements Crate {
                 CrateEntry.of(ButtonsApp.INSTANCE),
                 CrateEntry.of(CardsApp.INSTANCE),
                 CrateEntry.of(FloatingApp.INSTANCE),
+                CrateEntry.of(DockingApp.INSTANCE),
                 // The preferences: the page, the site's own stamped registry, and the one
                 // widget that is the site's - the tree master; the theme widget is the MPA's.
                 CrateEntry.of(PreferencesApp.INSTANCE),

@@ -97,6 +97,14 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "Every mutation is one FloatEvents object on one sink — Opened, Moved, Resized, Raised, Closed — reported "
                     + "once when it happened, never per pixel.",
                     "/floating", FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
+            new Demo("docking", "Dock and undock", "Three docks, a desk over them, tabs that float and land.",
+                    "The multi-tab pane is the dock; the split only subdivides; the desk floats over both. A tab is one record — "
+                    + "id, title, widget — with one placement at a time: in a dock's strip, or afloat in a frame of its own. Pull a chip "
+                    + "off a strip and the tab floats under the same hand, widget and all; drag a float over a dock and the dock wears "
+                    + "the drop-target word and marks where the tab would land on the strip; let go there and it is a tab, let go over content and it stays afloat; "
+                    + "let go and it is a tab there. A float stays within the box. Every step is data on one sink: Undocked and Docked "
+                    + "from the docking, Opened, Released and the rest from the desk, TabAttached and the rest from the docks.",
+                    "/docking", DockingApp.INSTANCE, "DockingWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "
