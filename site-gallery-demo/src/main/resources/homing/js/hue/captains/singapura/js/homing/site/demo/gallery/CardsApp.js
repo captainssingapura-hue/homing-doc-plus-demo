@@ -2,13 +2,13 @@
 // CardsApp — the card, exercised. A grid of cards at one size slider; one with
 // text longer than its frame, so the body scrolls; one with a caller's own tree
 // in the body; one with an action, so it is a button to the keyboard too; and
-// the same card at −1, 0 and 1 in a row. The card is a hard frame: the grid
-// gives it its width, the design its proportion, and what is inside fits.
+// the same card at −1, 0 and 1 in a row. The card is a hard frame: the design
+// gives it its measure, grown by its size, and what is inside fits it.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "cardsPage" });
 
-var LONG = "A card is a hard frame. Its inline size is its host's — here, a grid track — and its block size follows the "
+var LONG = "A card is a hard frame. Its inline size is the design's, grown by its size, and its block size follows the "
     + "proportion the design gives a card: three by two for Editorial, squarer for Neo-Brutalism, wide for Neo-Futurism. "
     + "What is inside fits the card, not the other way round: the head and the foot are fixed, and the body takes what is "
     + "left and scrolls beyond it. This paragraph is longer than the frame on purpose, so the body has something to scroll. "
@@ -92,7 +92,7 @@ class CardsWidget {
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_cards);
         [-1, 0, 1].map(function (s) {
-            var c = new CardBuilder().title(s === 0 ? "regular" : s > 0 ? "+1" : "−1").badge("SIZE").text("The inset, the gap, the least width and the type grow by the design's ratios; the proportion holds.").size(s)
+            var c = new CardBuilder().title(s === 0 ? "regular" : s > 0 ? "+1" : "−1").badge("SIZE").text("The measure, the inset, the gap and the type grow by the design's ratios; the proportion holds.").size(s)
                 .build(branch.createBranch("sized-" + (s < 0 ? "m1" : s)));
             row.appendChild(c.root);
             return c;

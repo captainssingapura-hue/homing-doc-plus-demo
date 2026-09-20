@@ -51,8 +51,9 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     public record ga_cards() implements CssClass<GalleryStyles> {
         @Override public String body() { return """
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
             gap: 16px;
             """;
         }
