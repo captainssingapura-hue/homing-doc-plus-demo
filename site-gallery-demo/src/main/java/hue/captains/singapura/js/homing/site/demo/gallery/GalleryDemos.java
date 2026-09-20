@@ -103,7 +103,9 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "only reorders — up or sideways changes nothing; pulled down off the strip, the tab floats under the same hand, "
                     + "widget and all. Drag a float over the strip and the dock wears the drop-target word and marks where the tab "
                     + "would land; let go there and it is a tab, let go over content and it stays afloat. Every chip is in the tab "
-                    + "order, and the design draws its hover, its press, the selected one and the focus ring. A float stays within the "
+                    + "order, and the design draws its hover, its press, the selected one and the focus ring. The chip is Control.Tab "
+                    + "to the design — like a button, but a hard frame whose measure is the design's, wide and low as a browser's tab, "
+                    + "the label ellipsised within; the sliders set the tabs' size and aspect, 0 the design's. A float stays within the "
                     + "box. Every step is data on one sink: Undocked and Docked from the docking, Opened, Released and the rest from "
                     + "the desk, TabAttached and the rest from the dock.",
                     "/docking", DockingApp.INSTANCE, "DockingWidget", Map.of()),

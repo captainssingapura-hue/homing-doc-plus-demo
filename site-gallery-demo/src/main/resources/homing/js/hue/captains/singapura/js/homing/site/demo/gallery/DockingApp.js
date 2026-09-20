@@ -3,8 +3,10 @@
 // pull a chip down off the strip and the tab floats under the hand; drag a
 // floating pane over the strip and it is offered — the dock lit, the mark
 // where it would land — and dropped there it is a tab. A drag along the
-// strip only reorders; the Tab key walks the chips. A pane floats only
-// within the box. Every mutation is a line on the log.
+// strip only reorders; the Tab key walks the chips. The chips are tabs to
+// the design — a hard frame, wide and low — and two sliders set their size
+// and their aspect. A pane floats only within the box. Every mutation is a
+// line on the log.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "dockingPage" });
@@ -72,6 +74,11 @@ class DockingWidget {
             + "let go and it is a tab there. The Tab key walks the chips. A float stays within the box.";
         el.appendChild(lede);
 
+        // ── the chips' size and aspect ────────────────────────────────────
+        var controls = branch.createElement("controls", "div");
+        css.addClass(controls, ga_buttons);
+        el.appendChild(controls);
+
         // ── the box: the dock filling it, the desk over it ────────────────
         var box = branch.createElement("box", "div");
         css.addClass(box, ga_dock_box);
@@ -111,6 +118,8 @@ class DockingWidget {
             onDragOut: function (tab, e) { docking.undock(dock, tab, e); }
         });
         this._dock = dock;
+        controls.appendChild(this._slider(branch, "size", "the tabs' size", -1, 1, 0.1, 0, function (v) { dock.size(v); return v.toFixed(1); }));
+        controls.appendChild(this._slider(branch, "aspect", "the tabs' aspect", -1, 1, 0.1, 0, function (v) { dock.aspect(v); return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }));
         this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink });
         var docking = this._docking;
         docking.addDock(dock);
@@ -127,6 +136,29 @@ class DockingWidget {
         docking.desk.open({ id: "afloat", title: "Afloat", widget: tab("afloat", "Afloat", NoteWidget, { text: "Drop me on the strip." }).widget, x: 60, y: 200, w: 260, h: 140 });
 
         this.root = el;
+    }
+
+    /** A labelled range with a readout; onValue draws the readout and does the work. */
+    _slider(branch, name, label, min, max, step, value, onValue) {
+        var wrap = branch.createElement(name + "-wrap", "div");
+        css.addClass(wrap, ga_control);
+        var lab = branch.createElement(name + "-label", "span");
+        css.addClass(lab, ga_control_label);
+        lab.textContent = label;
+        var range = branch.createElement(name + "-range", "input");
+        range.type = "range";
+        css.addClass(range, pv_range);
+        range.min = min; range.max = max; range.step = step; range.value = value;
+        range.setAttribute("aria-label", label);
+        var out = branch.createElement(name + "-out", "span");
+        css.addClass(out, ga_control_readout);
+        function draw() { out.textContent = onValue(Number(range.value)); }
+        range.addEventListener("input", draw);
+        wrap.appendChild(lab);
+        wrap.appendChild(range);
+        wrap.appendChild(out);
+        draw();
+        return wrap;
     }
 
     dispose() { this._docking.dispose(); this._dock.dispose(); }
