@@ -120,8 +120,7 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "
-                    + "sink, written under the pane as the data it is. The splitter this shell is laid out with is the pane's "
-                    + "sibling module.",
+                    + "sink, written under the pane as the data it is.",
                     "/panes", PanesApp.INSTANCE, "PanesWidget", Map.of())
     );
 

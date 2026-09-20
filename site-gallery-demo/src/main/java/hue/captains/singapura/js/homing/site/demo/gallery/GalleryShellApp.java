@@ -12,15 +12,16 @@ import hue.captains.singapura.js.homing.core.js.ServingContextModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.server.HrefManager;
 import hue.captains.singapura.js.homing.site.mpa.MpaStyles;
-import hue.captains.singapura.js.homing.ui.split.SplitPaneModule;
+import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * The gallery as a shell: a fixed one–two split under the chrome — the
- * navigator on the left, the chosen demo top right, its explanation under
- * it. The navigator is the relation tree over the demos; the demo is the
+ * The gallery as a shell: a split grid of three cells under the chrome,
+ * arranged once — the navigator on the left, the chosen demo top right, its
+ * explanation under it; the dividers drag, nothing subdivides or goes. The
+ * navigator is the relation tree over the demos; the demo is the
  * demo app as a widget, imported when first chosen and kept in a slot; the
  * explanation is what {@link GalleryDemos} says of it, with a link to the
  * page the demo also is. {@code ?demo=<slug>} opens on that demo, and the
@@ -54,7 +55,7 @@ public record GalleryShellApp() implements AppModule<GalleryShellApp.Params, Gal
     public ImportsFor<GalleryShellApp> imports() {
         return ImportsFor.<GalleryShellApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SplitPaneModule.SplitPane()), SplitPaneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ServingContextModule.withServingContext()), ServingContextModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))

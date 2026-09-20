@@ -1,7 +1,8 @@
 // =============================================================================
-// GalleryShellApp — the gallery as a shell. A fixed one–two split fills the
-// slot: the navigator on the left, the chosen demo top right, its
-// explanation under it. The navigator is the relation tree over DEMOS; the
+// GalleryShellApp — the gallery as a shell. A split grid of three cells,
+// arranged once and never re-arranged, fills the slot: the navigator on the
+// left, the chosen demo top right, its explanation under it — the dividers
+// drag, nothing subdivides or goes. The navigator is the relation tree over DEMOS; the
 // demo is the demo app's widget class, imported through the serving context
 // when first chosen and kept in a slot after; the explanation is what DEMOS
 // says, with a link to the page the demo also is. The address follows.
@@ -33,26 +34,26 @@ function appMain(el, params) {
     css.addClass(shell, ga_shell);
     el.appendChild(shell);
 
-    var split = new SplitPane(branch.createBranch("split"), {
-        host: shell, minPanePx: 160,
+    var grid = new SplitGrid(branch.createBranch("grid"), {
+        host: shell, minCellPx: 160,
         layout: { kind: "split", orientation: "horizontal", children: [
-            { pane: { kind: "leaf", slotId: "nav" }, ratio: 1 },
-            { pane: { kind: "split", orientation: "vertical", children: [
-                { pane: { kind: "leaf", slotId: "demo" }, ratio: 5 },
-                { pane: { kind: "leaf", slotId: "explain" }, ratio: 3 } ] }, ratio: 4 } ] }
+            { node: { kind: "cell", id: "nav" }, ratio: 1 },
+            { node: { kind: "split", orientation: "vertical", children: [
+                { node: { kind: "cell", id: "demo" }, ratio: 5 },
+                { node: { kind: "cell", id: "explain" }, ratio: 3 } ] }, ratio: 4 } ] }
     });
 
     var navHost = branch.createElement("navHost", "div");
     css.addClass(navHost, ga_shell_nav);
-    split.slot("nav").appendChild(navHost);
+    grid.cell("nav").appendChild(navHost);
 
     var demoHost = branch.createElement("demoHost", "div");
     css.addClass(demoHost, ga_shell_demo);
-    split.slot("demo").appendChild(demoHost);
+    grid.cell("demo").appendChild(demoHost);
 
     var explain = branch.createElement("explain", "div");
     css.addClass(explain, ga_shell_explain);
-    split.slot("explain").appendChild(explain);
+    grid.cell("explain").appendChild(explain);
     var kicker = branch.createElement("kicker", "div");
     css.addClass(kicker, ga_kicker);
     var title = branch.createElement("title", "h2");
