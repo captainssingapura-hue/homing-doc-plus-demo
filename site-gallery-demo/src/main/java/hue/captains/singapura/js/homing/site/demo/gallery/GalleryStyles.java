@@ -63,7 +63,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     }
 
     public record ga_buttons() implements CssClass<GalleryStyles> {
-        @Override public String body() { return "display: flex; gap: 10px;"; }
+        @Override public String body() { return "display: flex; flex-wrap: wrap; align-items: center; gap: 10px;"; }
     }
 
     /** The box a grid or a tree is given: a raised edge, its own scroll. */

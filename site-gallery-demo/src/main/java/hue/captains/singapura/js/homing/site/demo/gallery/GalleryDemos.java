@@ -77,7 +77,9 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "slider: at 1 the word as the design binds it, at 0 the design's neutral, at −1 the meaning turned the other way. "
                     + "A colour word is a semantic surface complete: the surface, the ink on it and the edge move together, each along "
                     + "the anchors its design gives it. The live one is a danger button whose extent follows the rows an action would "
-                    + "touch: safe at none, dangerous at all.",
+                    + "touch: safe at none, dangerous at all. The size is the other number: 0 regular, 1 the biggest, −1 the smallest, "
+                    + "exponential, and every length the design gives a button — its inset, gap, least width and type — grows by the "
+                    + "ratio the design gives that length; the five sit at −1, −½, 0, ½ and 1, and the slider moves the rest.",
                     "/buttons", ButtonsApp.INSTANCE, "ButtonsWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "

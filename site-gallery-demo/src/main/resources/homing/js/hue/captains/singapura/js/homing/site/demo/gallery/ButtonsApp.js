@@ -3,7 +3,10 @@
 // a row, with one extent slider over all of them: 1 is the word as the design
 // binds it, 0 the design's neutral, −1 the meaning turned the other way. A
 // live one under it: a danger button whose extent follows how many rows an
-// action would touch — safe at none, dangerous at all. And off, for all.
+// action would touch — safe at none, dangerous at all. A size slider over all
+// of them: 0 regular, 1 the biggest, −1 the smallest, every length the design
+// gives a button growing by its own ratio — and one word at five sizes, so the
+// curve is visible. And off, for all.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "buttonsPage" });
@@ -29,7 +32,9 @@ class ButtonsWidget {
         lede.textContent = "A button is built through its builder: the builder says which element to mint, the caller mints it "
             + "on its own branch, the properties are set one by one, and build dresses the element. A colour word is a "
             + "semantic surface complete — the surface, the ink on it, the edge — and one number, the extent, moves them all "
-            + "together along the anchors each design gives them.";
+            + "together along the anchors each design gives them. A second number, the size, grows every length the design "
+            + "gives a button — the inset, the gap, the least width, the type — each by its own ratio: 0 is regular, 1 the "
+            + "biggest, −1 the smallest, and the way between is exponential, so both ends are the same step.";
         el.appendChild(lede);
 
         var log = branch.createElement("log", "div");
@@ -62,6 +67,29 @@ class ButtonsWidget {
         });
         el.appendChild(extent);
 
+        // ── one size for all, and one word at five ────────────────────────
+        var sizes = branch.createElement("sizes", "div");
+        css.addClass(sizes, ga_kicker);
+        sizes.textContent = "the size";
+        el.appendChild(sizes);
+        var sizeRow = branch.createElement("sizeRow", "div");
+        css.addClass(sizeRow, ga_buttons);
+        this._sized = [-1, -0.5, 0, 0.5, 1].map(function (s) {
+            var b = new ButtonBuilder().label(s === 0 ? "regular" : (s > 0 ? "+" : "−") + Math.abs(s)).colour("primary").size(s).onClick(function () { say("size " + s + " pressed"); });
+            var btn = b.build(branch.createElement("size-" + String(s).replace("-", "m").replace(".", "_"), b.tag));
+            sizeRow.appendChild(btn.el);
+            return btn;
+        });
+        el.appendChild(sizeRow);
+        this._size = 0;
+        var size = this._slider(branch, "size", "size, for all of them", -1, 1, 0.05, 0, function (v) {
+            self._size = v;
+            self._buttons.forEach(function (b) { b.size(v); });
+            if (self._delete) self._delete.size(v);
+            return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : "");
+        });
+        el.appendChild(size);
+
         // ── a live one ────────────────────────────────────────────────────
         var live = branch.createElement("live", "div");
         css.addClass(live, ga_kicker);
@@ -73,6 +101,7 @@ class ButtonsWidget {
         this._delete = del.build(branch.createElement("delete", del.tag));
         liveRow.appendChild(this._delete.el);
         el.appendChild(liveRow);
+        this._delete.size(this._size);
         this._rows = 0;
         var rows = this._slider(branch, "rows", "rows the action touches", 0, 100, 1, 0, function (n) {
             self._rows = n;
@@ -90,6 +119,7 @@ class ButtonsWidget {
         var toggle = new ButtonBuilder().label("Switch them all off").plain().onClick(function () {
             on = !on;
             self._buttons.forEach(function (b) { b.setOn(on); });
+            self._sized.forEach(function (b) { b.setOn(on); });
             self._delete.setOn(on);
             toggleBtn.label(on ? "Switch them all off" : "Switch them all on");
         });
