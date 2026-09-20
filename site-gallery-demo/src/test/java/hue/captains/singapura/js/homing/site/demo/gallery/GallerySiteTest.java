@@ -97,7 +97,7 @@ class GallerySiteTest {
 
     @Test
     void theGridAndTheTreeArePagesToldTheirTrail() {
-        for (String arm : List.of("grid", "tree", "dialog", "preferences", "panes", "buttons")) {
+        for (String arm : List.of("grid", "tree", "dialog", "preferences", "panes", "buttons", "cards")) {
             var body = GallerySite.INSTANCE.router().resolve(Path.of(arm)).orElseThrow().html(Query.NONE).body();
             assertTrue(body.contains(Character.toUpperCase(arm.charAt(0)) + arm.substring(1) + "App"), body);
             assertTrue(body.contains("Object.freeze({text:\"Gallery\",to:\"\\/\"})"), body);

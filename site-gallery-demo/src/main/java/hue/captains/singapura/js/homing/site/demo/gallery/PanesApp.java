@@ -37,7 +37,7 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.Button(), new Elements.Card()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Elements.Button(), new Elements.CardBuilder()), Elements.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),

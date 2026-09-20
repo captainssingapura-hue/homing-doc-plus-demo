@@ -18,7 +18,8 @@ var PAGES = [
     { title: "Dialog", badge: "UI-DIALOG", text: "A frame that owns the screen: inert behind, keys captured, Escape, Enter, focus given back. And one that does not.", link: "/dialog" },
     { title: "Preferences", badge: "PREFERENCES", text: "A rigid tree of preferences on the left, the chosen one's widget on the right, each loaded when first chosen. Theme, locale, editor.", link: "/preferences" },
     { title: "Panes", badge: "UI-PANES", text: "One pane of tabs holding widgets by the base's contract: add from a picker, switch, drag a chip to reorder, close. Every mutation is on the log below it.", link: "/panes" },
-    { title: "Buttons", badge: "UI-ELEMENTS", text: "The button through its builder: six colour words under one extent slider, and a danger button whose extent follows the data.", link: "/buttons" }
+    { title: "Buttons", badge: "UI-ELEMENTS", text: "The button through its builder: six colour words under one extent slider, and a danger button whose extent follows the data.", link: "/buttons" },
+    { title: "Cards", badge: "UI-ELEMENTS", text: "The card through its builder: a hard frame the grid sizes and the design proportions; one that scrolls, one with its own body, one with an action.", link: "/cards" }
 ];
 
 class WelcomeWidget {
@@ -51,12 +52,8 @@ class WelcomeWidget {
         var cards = branch.createElement("cards", "div");
         css.addClass(cards, ga_cards);
         for (var i = 0; i < PAGES.length; i++) {
-            cards.appendChild(new Card(branch.createBranch("card-" + i), {
-                title: PAGES[i].title,
-                text:  PAGES[i].text,
-                badge: PAGES[i].badge,
-                link:  { to: PAGES[i].link }
-            }).root);
+            cards.appendChild(new CardBuilder().title(PAGES[i].title).text(PAGES[i].text).badge(PAGES[i].badge).link(PAGES[i].link)
+                .build(branch.createBranch("card-" + i)).root);
         }
         el.appendChild(cards);
         this.root = el;

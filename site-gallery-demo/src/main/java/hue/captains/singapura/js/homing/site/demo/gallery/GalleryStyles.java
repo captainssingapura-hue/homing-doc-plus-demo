@@ -43,6 +43,12 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return "margin: 0 0 28px; max-width: 46rem;"; }
     }
 
+    /** A list a caller mints in a card's body: the card bounds it. */
+    public record ga_card_list() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class)); }
+        @Override public String body() { return "margin: 0; padding-left: 18px;"; }
+    }
+
     public record ga_cards() implements CssClass<GalleryStyles> {
         @Override public String body() { return """
             display: grid;
@@ -193,7 +199,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
-        return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_count(), new ga_buttons(),
+        return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
                        new ga_host(), new ga_pane_host(), new ga_log(), new ga_status(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());

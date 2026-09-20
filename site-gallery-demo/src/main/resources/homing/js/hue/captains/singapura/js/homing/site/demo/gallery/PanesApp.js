@@ -13,7 +13,7 @@ const _owner = Object.freeze({ toString: () => "panesPage" });
 // Three kinds of tab widget, each a class by the base's contract.
 class CardTab {
     constructor(branch, params) {
-        this.root = new Card(branch.createBranch("card"), { title: params.title, badge: params.badge, text: params.text }).root;
+        this.root = new CardBuilder().title(params.title).badge(params.badge).text(params.text).build(branch.createBranch("card")).root;
     }
     setActive(on) { this.root.setAttribute("data-active", on ? "true" : "false"); }
 }

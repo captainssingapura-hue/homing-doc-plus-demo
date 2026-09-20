@@ -81,6 +81,13 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "exponential, and every length the design gives a button — its inset, gap, least width and type — grows by the "
                     + "ratio the design gives that length; the five sit at −1, −½, 0, ½ and 1, and the slider moves the rest.",
                     "/buttons", ButtonsApp.INSTANCE, "ButtonsWidget", Map.of()),
+            new Demo("cards", "Cards", "The card, through its builder.",
+                    "A card is Container.Card.Base to the design: a raised box whose measure is its own. The grid gives it its "
+                    + "width, the design its proportion, and what is inside fits it — the head and the foot are fixed, the body "
+                    + "scrolls beyond what they leave. It lifts on hover and presses as an enlarged button would, and with an "
+                    + "action it is a button to the keyboard too and rings on focus. The size slider grows every length the "
+                    + "design gives a card and its parts, each by its own ratio; the proportion holds.",
+                    "/cards", CardsApp.INSTANCE, "CardsWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "

@@ -36,7 +36,7 @@ public record WelcomeApp() implements AppModule<AppModule._None, WelcomeApp> {
     public ImportsFor<WelcomeApp> imports() {
         return ImportsFor.<WelcomeApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.Card()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Elements.CardBuilder()), Elements.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),
