@@ -21,7 +21,8 @@ var PAGES = [
     { title: "Buttons", badge: "UI-ELEMENTS", text: "The button through its builder: six colour words under one extent slider, and a danger button whose extent follows the data.", link: "/buttons" },
     { title: "Cards", badge: "UI-ELEMENTS", text: "The card through its builder: a hard frame the design measures and proportions, grown by its size; one that scrolls, one with its own body, one with an action.", link: "/cards" },
     { title: "Floating panes", badge: "UI-FLOATING", text: "A desk and the panes that float on it: opened with a widget, dragged by the head, sized by the corner, raised by a press, closed by the cross or Escape.", link: "/floating" },
-    { title: "Dock and undock", badge: "UI-DOCKING", text: "Three docks in a split and a desk over them: pull a chip off a strip and it floats; drop a float on a dock and it lands where the mark says.", link: "/docking" }
+    { title: "Dock and undock", badge: "UI-DOCKING", text: "Three docks in a split and a desk over them: pull a chip off a strip and it floats; drop a float on a dock and it lands where the mark says.", link: "/docking" },
+    { title: "Split grid", badge: "UI-SPLITGRID", text: "Rows and columns of cells that share their space: split beside a cell, remove one, drag the dividers; the grid arranges, the page fills.", link: "/splitgrid" }
 ];
 
 class WelcomeWidget {

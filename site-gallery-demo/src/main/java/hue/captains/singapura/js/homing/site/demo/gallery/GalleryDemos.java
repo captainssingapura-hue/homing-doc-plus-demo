@@ -105,6 +105,14 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "let go and it is a tab there. A float stays within the box. Every step is data on one sink: Undocked and Docked "
                     + "from the docking, Opened, Released and the rest from the desk, TabAttached and the rest from the docks.",
                     "/docking", DockingApp.INSTANCE, "DockingWidget", Map.of()),
+            new Demo("splitgrid", "Split grid", "Rows and columns of cells, arranged; what is in them, the page's.",
+                    "The split grid is a container in the relation grid's sense: the page mints what goes in a cell, the grid arranges "
+                    + "the cells — a tree of rows and columns sharing their space by ratio, a divider between neighbours — and reports "
+                    + "every change of arrangement as data: TracksChanged, Subdivided, Removed. Subdivide beside a cell and it gets a "
+                    + "sibling in the same row or column, or becomes a split of two when the orientation differs; remove one and its "
+                    + "room goes to its neighbour, a split of one giving way. A cell's element is minted once and kept through every "
+                    + "re-arrangement, so what the page put in it stays put; the last cell cannot go.",
+                    "/splitgrid", SplitGridApp.INSTANCE, "SplitGridWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "
