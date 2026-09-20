@@ -99,10 +99,10 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     "/floating", FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
             new Demo("docking", "Dock and undock", "One dock, a desk over it, tabs that float and land.",
                     "The multi-tab pane is the dock; the desk floats over it. A tab is one record — id, title, widget — with one "
-                    + "placement at a time: in the dock's strip, or afloat in a frame of its own. A drag along the strip reorders and "
-                    + "only reorders — up or sideways changes nothing; pulled down off the strip, the tab floats under the same hand, "
-                    + "widget and all. Drag a float over the strip and the dock wears the drop-target word and marks where the tab "
-                    + "would land; let go there and it is a tab, let go over content and it stays afloat. Every chip is in the tab "
+                    + "placement at a time: in the dock's strip, or afloat in a frame of its own. A drag along the strip reorders, on "
+                    + "its rail; pulling a tab off to float is being worked out on the tab strip page and comes here after — a holder "
+                    + "may undock by call meanwhile. Drag a float over the strip and the dock wears the drop-target word and marks where "
+                    + "the tab would land; let go there and it is a tab, let go over content and it stays afloat. Every chip is in the tab "
                     + "order, and the design draws its hover, its press, the selected one and the focus ring. The chip is Control.Tab "
                     + "to the design — like a button, but a hard frame whose measure is the design's, wide and low as a browser's tab, "
                     + "the label ellipsised within; the sliders set the tabs' size and aspect, 0 the design's. A float stays within the "
@@ -121,16 +121,15 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "marks that cell current in the grid. A widget switcher in the making: a shortcut raises the mirror, the arrows "
                     + "pick a pane, the owner makes it active.",
                     "/splitgrid", SplitGridApp.INSTANCE, "SplitGridWidget", Map.of()),
-            new Demo("tabstrip", "Tab strip", "The strip alone: the drag that is a browser's.",
-                    "The tab strip without a pane, to see the drag on its own. Press a chip and it is selected, before any release. "
-                    + "Drag it and it goes where the hand goes — the press is remembered as an offset within the chip, so the chip is "
-                    + "placed and the hand never asked where on it the press was — kept within the row and never above its slot; the "
-                    + "slot it is nearest is where it will land, and the chips between step aside, live, as it passes them. Let go and "
-                    + "it lands. Pull it down until two thirds of it is off the strip and it leaves the row — the same chip, now afloat: "
-                    + "free under the hand, left where the hand lets go, the row closed behind it; press it again and bring it back "
-                    + "onto the strip and it is seated. A dock hands the chip off instead, to a floating pane under the same hand at "
-                    + "the same place in it — until the pane is led by the floating tab itself. TabDrag does the arithmetic, headless: "
-                    + "the bar as slots at one pitch, the nearest slot, who steps aside, how much is off.",
+            new Demo("tabstrip", "Tab strip", "The strip alone: the drag that is a browser's, along a rail.",
+                    "The tab strip without a pane, to see the drag on its own. Press a chip and it is selected and lifted, before any "
+                    + "release — pressed is grabbed. Drag it and it goes where the hand goes along the row — the press is remembered as "
+                    + "an offset within the chip, so the chip is placed and the hand never asked where on it the press was — kept within "
+                    + "the row and on its rail however the hand wanders; the slot it is nearest is where it will land, and the chips "
+                    + "between step aside, live, as it passes them. Let go and it settles onto its slot, eased as the design eases it, "
+                    + "the others stepping back at once. Leaving the row — the tab that detaches and floats — is being worked out here "
+                    + "next; a dock takes a tab by call meanwhile. TabHand is the hand, TabDrag the arithmetic, headless: the bar as "
+                    + "slots at one pitch, the nearest slot, who steps aside.",
                     "/tabstrip", TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "

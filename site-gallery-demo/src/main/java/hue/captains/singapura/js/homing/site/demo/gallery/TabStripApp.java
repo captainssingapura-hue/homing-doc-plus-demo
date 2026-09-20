@@ -8,14 +8,13 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.preferences.PreferencesStyles;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
 import hue.captains.singapura.js.homing.ui.panes.TabStripModule;
 
 import java.util.List;
 
 /**
- * The tab strip page: the strip alone, no pane — five chips, the drag that is a browser's, a shelf for the chips
- * pulled off, a slider for the chips' size, and the log of every step.
+ * The tab strip page: the strip alone, no pane — five chips, the drag that is a browser's along a rail, a slider
+ * for the chips' size, and the log of every step.
  */
 public record TabStripApp() implements AppModule<AppModule._None, TabStripApp> {
 
@@ -32,7 +31,6 @@ public record TabStripApp() implements AppModule<AppModule._None, TabStripApp> {
     public ImportsFor<TabStripApp> imports() {
         return ImportsFor.<TabStripApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripModule.TabStrip()), TabStripModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesStyles.pv_range()), PreferencesStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(

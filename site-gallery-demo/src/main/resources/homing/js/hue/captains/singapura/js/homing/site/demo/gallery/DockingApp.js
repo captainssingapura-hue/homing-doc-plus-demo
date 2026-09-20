@@ -1,12 +1,12 @@
 // =============================================================================
 // DockingApp — dock and undock. One dock filling the box and a desk over it:
-// pull a chip down off the strip and the tab floats under the hand; drag a
-// floating pane over the strip and it is offered — the dock lit, the mark
-// where it would land — and dropped there it is a tab. A drag along the
-// strip only reorders; the Tab key walks the chips. The chips are tabs to
-// the design — a hard frame, wide and low — and two sliders set their size
-// and their aspect. A pane floats only within the box. Every mutation is a
-// line on the log.
+// drag a floating pane over the strip and it is offered — the dock lit, the
+// mark where it would land — and dropped there it is a tab; the cross on a
+// chip closes it. A drag along the strip reorders, on its rail — pulling a
+// tab off to float is being worked out on the tab strip page and comes here
+// after. The Tab key walks the chips. The chips are tabs to the design — a
+// hard frame, wide and low — and two sliders set their size and their aspect.
+// A pane floats only within the box. Every mutation is a line on the log.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "dockingPage" });
@@ -50,8 +50,7 @@ class NoteWidget {
 
 var _NOTE = "A tab is one record — id, title, widget — and has one placement at a time: in a dock's strip, or afloat in "
     + "a frame of its own. The dock is the multi-tab pane; the desk floats over it. "
-    + "Pull this chip down off its strip and the tab floats under your hand; drop the float on the strip and it lands where "
-    + "the mark says; let go over content and it stays afloat.";
+    + "Drop the float on the strip and it lands where the mark says; let go over content and it stays afloat.";
 
 class DockingWidget {
     constructor(branch, params) {
@@ -69,9 +68,9 @@ class DockingWidget {
         el.appendChild(title);
         var lede = branch.createElement("lede", "p");
         css.addClass(lede, ga_lede);
-        lede.textContent = "One dock and a desk over it. Drag a chip along the strip: it reorders, and only reorders. Pull it down off "
-            + "the strip: the tab floats under your hand. Drag a float over the strip: the dock lights and marks where the tab would land; "
-            + "let go and it is a tab there. The Tab key walks the chips. A float stays within the box.";
+        lede.textContent = "One dock and a desk over it. Drag a chip along the strip: it reorders, on its rail. Drag a float over the "
+            + "strip: the dock lights and marks where the tab would land; let go and it is a tab there. The Tab key walks the chips. "
+            + "A float stays within the box. Pulling a tab off to float comes here once the strip has it.";
         el.appendChild(lede);
 
         // ── the chips' size and aspect ────────────────────────────────────
@@ -113,10 +112,7 @@ class DockingWidget {
             }
         }
 
-        var dock = new MultiTabPane(branch.createBranch("dock"), {
-            host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink,
-            onDragOut: function (tab, e, grab) { docking.undock(dock, tab, e, grab); }
-        });
+        var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink });
         this._dock = dock;
         controls.appendChild(this._slider(branch, "size", "the tabs' size", -1, 1, 0.1, 0, function (v) { dock.size(v); return v.toFixed(1); }));
         controls.appendChild(this._slider(branch, "aspect", "the tabs' aspect", -1, 1, 0.1, 0, function (v) { dock.aspect(v); return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }));
