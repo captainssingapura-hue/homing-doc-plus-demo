@@ -8,6 +8,7 @@ import java.util.List;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
 import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
+import static hue.captains.singapura.js.homing.design.Interaction.Current;
 import static hue.captains.singapura.js.homing.design.Interaction.Focus;
 import static hue.captains.singapura.js.homing.design.Layer.Raised;
 import static hue.captains.singapura.js.homing.design.Target.Color;
@@ -111,6 +112,12 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
             overflow: hidden;
             """;
         }
+    }
+
+    /** The cell card the mirror's cursor is at: the current one. */
+    public record ga_grid_cell_current() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Current.class, Color.Surface.class), of(Current.class, Color.Edge.class)); }
+        @Override public String body() { return ""; }
     }
 
     /** The box the docks split and the desk lies over: positioned, so the desk can be a layer; a flex column for the splitter. */
@@ -231,7 +238,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
-                       new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_grid_cell(), new ga_log(), new ga_status(),
+                       new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_log(), new ga_status(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }

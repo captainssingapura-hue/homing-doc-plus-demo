@@ -111,7 +111,11 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "every change of arrangement as data: TracksChanged, Subdivided, Removed. Subdivide beside a cell and it gets a "
                     + "sibling in the same row or column, or becomes a split of two when the orientation differs; remove one and its "
                     + "room goes to its neighbour, a split of one giving way. A cell's element is minted once and kept through every "
-                    + "re-arrangement, so what the page put in it stays put; the last cell cannot go.",
+                    + "re-arrangement, so what the page put in it stays put; the last cell cannot go. Under the grid, its mirror: the "
+                    + "same arrangement drawn from the geometry — headless, the same rectangles flex computes — at a scale the slider "
+                    + "sets, with a cursor the arrows move from cell to cell by the workspace's rule once the mirror has focus; the page "
+                    + "marks that cell current in the grid. A widget switcher in the making: a shortcut raises the mirror, the arrows "
+                    + "pick a pane, the owner makes it active.",
                     "/splitgrid", SplitGridApp.INSTANCE, "SplitGridWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "

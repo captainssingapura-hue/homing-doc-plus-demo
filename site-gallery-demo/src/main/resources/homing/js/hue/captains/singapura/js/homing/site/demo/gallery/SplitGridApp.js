@@ -2,8 +2,12 @@
 // SplitGridApp — the split grid, exercised. One cell to start; what the page
 // puts in each cell is its own — a small card of buttons: split it left,
 // right, above or below, or remove it — and the grid arranges. Drag the
-// dividers. Every change of arrangement is a line on the log, and the layout
-// as the grid reports it is printed under it.
+// dividers. Under the grid, its mirror: the same arrangement drawn from the
+// geometry at a scale the slider sets, with a cursor the arrows move from cell
+// to cell by the workspace's rule once the mirror has focus — the page marks
+// the same cell's card current in the grid. Every change of arrangement and
+// every move of the cursor is a line on the log, and the layout as the grid
+// reports it is printed under it.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "splitGridPage" });
@@ -30,6 +34,7 @@ class CellWidget {
         root.appendChild(row);
         this.root = root;
     }
+    current(on) { css.toggleClass(this.root, ga_grid_cell_current, !!on); }
 }
 
 class SplitGridWidget {
@@ -56,6 +61,13 @@ class SplitGridWidget {
         css.addClass(box, ga_pane_host);
         el.appendChild(box);
 
+        // ── the mirror, and its scale ─────────────────────────────────────
+        var mirrorRow = branch.createElement("mirrorRow", "div");
+        css.addClass(mirrorRow, ga_buttons);
+        var mirrorHost = branch.createElement("mirrorHost", "div");
+        mirrorRow.appendChild(mirrorHost);
+        el.appendChild(mirrorRow);
+
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
         log.setAttribute("aria-live", "polite");
@@ -70,6 +82,7 @@ class SplitGridWidget {
             log.scrollTop = log.scrollHeight;
             shown.textContent = JSON.stringify(self._grid.layout(), null, 1).replace(/\n\s*/g, " ");
         }
+        function reflect() { self._mirror.reflect(self._grid.layout(), self._grid.box()); }
 
         this._grid = new SplitGrid(branch.createBranch("grid"), {
             host: box, minCellPx: 90, layout: { kind: "cell", id: "a" },
@@ -80,11 +93,24 @@ class SplitGridWidget {
                     case "Removed":       say("Removed    " + ev.cellId); break;
                     default:              say(ev.kind);
                 }
+                reflect();
             }
         });
         var grid = this._grid;
         this._widgets = new Map();
         var n = 0;
+
+        this._mirror = new SplitGridMirror(branch.createBranch("mirror"), { host: mirrorHost, scale: 0.25, onEvent: function (ev) {
+            if (ev.kind !== "CursorMoved") return;
+            say("Cursor     " + ev.cellId + "  by " + ev.by);
+            self._widgets.forEach(function (w, id) { w.current(id === ev.cellId); });
+        } });
+        var scale = this._slider(branch, "scale", "the mirror's scale", 0.1, 0.5, 0.05, 0.25, function (v) { self._mirror.scale(v); return v.toFixed(2); });
+        mirrorRow.appendChild(scale);
+        var hint = branch.createElement("hint", "span");
+        css.addClass(hint, ga_control_readout);
+        hint.textContent = "click the mirror, then the arrows move the cursor";
+        mirrorRow.appendChild(hint);
 
         function fill(id) {
             var w = new CellWidget(branch.createBranch("cell-" + id), { id: id,
@@ -95,10 +121,36 @@ class SplitGridWidget {
         }
         fill("a");
         say("one cell, a");
+        this._onResize = function () { reflect(); };
+        window.addEventListener("resize", this._onResize);
+        requestAnimationFrame(reflect);
         this.root = el;
     }
 
-    dispose() { this._grid.dispose(); }
+    /** A labelled range with a readout; onValue draws the readout and does the work. */
+    _slider(branch, name, label, min, max, step, value, onValue) {
+        var wrap = branch.createElement(name + "-wrap", "div");
+        css.addClass(wrap, ga_control);
+        var lab = branch.createElement(name + "-label", "span");
+        css.addClass(lab, ga_control_label);
+        lab.textContent = label;
+        var range = branch.createElement(name + "-range", "input");
+        range.type = "range";
+        css.addClass(range, pv_range);
+        range.min = min; range.max = max; range.step = step; range.value = value;
+        range.setAttribute("aria-label", label);
+        var out = branch.createElement(name + "-out", "span");
+        css.addClass(out, ga_control_readout);
+        function draw() { out.textContent = onValue(Number(range.value)); }
+        range.addEventListener("input", draw);
+        wrap.appendChild(lab);
+        wrap.appendChild(range);
+        wrap.appendChild(out);
+        draw();
+        return wrap;
+    }
+
+    dispose() { window.removeEventListener("resize", this._onResize); this._mirror.dispose(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {
