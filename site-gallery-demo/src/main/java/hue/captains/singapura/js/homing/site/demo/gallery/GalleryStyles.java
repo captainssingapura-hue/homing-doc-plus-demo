@@ -164,6 +164,27 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return ""; }
     }
 
+    /** A control row: a label, a range and a readout, on one line. */
+    public record ga_control() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0 20px;
+            """;
+        }
+    }
+
+    public record ga_control_label() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Muted.class, Color.Ink.class)); }
+        @Override public String body() { return "min-width: 160px;"; }
+    }
+
+    public record ga_control_readout() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
+        @Override public String body() { return "min-width: 180px; white-space: nowrap;"; }
+    }
+
     /** The line under the box: the party's numbers. */
     public record ga_status() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
@@ -174,6 +195,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_count(), new ga_buttons(),
                        new ga_host(), new ga_pane_host(), new ga_log(), new ga_status(),
-                       new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link());
+                       new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
+                       new ga_control(), new ga_control_label(), new ga_control_readout());
     }
 }

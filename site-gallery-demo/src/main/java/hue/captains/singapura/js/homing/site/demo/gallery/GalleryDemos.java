@@ -72,6 +72,13 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "steward and follows it, so a theme picked here is worn by this shell as it is picked. The same view is "
                     + "behind the bar's Preferences button.",
                     "/preferences", PreferencesApp.INSTANCE, "PreferencesWidget", Map.of()),
+            new Demo("buttons", "Buttons", "The button, through its builder.",
+                    "Every colour word the builder knows — plain, primary, secondary, danger, warning, success — under one extent "
+                    + "slider: at 1 the word as the design binds it, at 0 the design's neutral, at −1 the meaning turned the other way. "
+                    + "A colour word is a semantic surface complete: the surface, the ink on it and the edge move together, each along "
+                    + "the anchors its design gives it. The live one is a danger button whose extent follows the rows an action would "
+                    + "touch: safe at none, dangerous at all.",
+                    "/buttons", ButtonsApp.INSTANCE, "ButtonsWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "
