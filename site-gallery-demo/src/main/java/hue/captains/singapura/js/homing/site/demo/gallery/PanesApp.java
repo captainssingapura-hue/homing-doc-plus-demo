@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.dialog.Dialog;
+import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
-import hue.captains.singapura.js.homing.ui.panes.MultiTabPane;
+import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
     public static final PanesApp INSTANCE = new PanesApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, PanesApp> {}
-    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
-    public record construct() implements Exportable._Constant<PanesApp> {}
+    /** The app as a widget by the base's contract: {@code new PanesWidget(branch, params)}; appMain delegates to it. */
+    public record PanesWidget() implements Exportable._Constant<PanesApp> {}
 
     @Override public String title()      { return "Panes"; }
     @Override public String simpleName() { return "panes"; }
@@ -35,8 +35,8 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
     public ImportsFor<PanesApp> imports() {
         return ImportsFor.<PanesApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new MultiTabPane.mountMultiTabPane()), MultiTabPane.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Dialog.openDialog()), Dialog.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Elements.Button(), new Elements.Card()), Elements.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
@@ -53,6 +53,6 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
 
     @Override
     public ExportsOf<PanesApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new PanesWidget()));
     }
 }

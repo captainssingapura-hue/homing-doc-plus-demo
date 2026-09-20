@@ -1,6 +1,11 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.conformance.rules.CrateDependencyRule;
+import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
+import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
+import hue.captains.singapura.js.homing.core.ModuleForm;
+import hue.captains.singapura.js.homing.core.StandardJsModuleType;
+import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.conformance.rules.OrphanCheck;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.Theme;
@@ -55,9 +60,9 @@ class GallerySiteTest {
         String json = GalleryDemos.INSTANCE.json(resolver);
         assertTrue(json.startsWith("{\"label\":\"Gallery\",\"tree\":{\"segment\":\"gallery\",\"children\":[{\"segment\":\"welcome\""), json);
         // jsString escapes the slash, which JSON allows
-        assertTrue(json.contains("\"navigator\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget\""), json);
+        assertTrue(json.contains("\"navigator\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidgetModule\""), json);
         assertTrue(json.contains("\"gallery\\/counter\":{\"label\":\"Counter\""), json);
-        assertTrue(json.contains("\"widget\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.CounterApp\",\"export\":\"construct\",\"params\":{\"start\":\"7\"}}"), json);
+        assertTrue(json.contains("\"widget\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.CounterApp\",\"export\":\"CounterWidget\",\"params\":{\"start\":\"7\"}}"), json);
         assertTrue(json.contains("\"page\":\"\\/panes\""), json);
         for (var d : GalleryDemos.DEMOS) assertTrue(GallerySite.INSTANCE.router().resolve(Path.parse(d.page())).isPresent(), d.page() + " is a page");
     }
@@ -105,10 +110,10 @@ class GallerySiteTest {
     void theRegistryNamesEveryWidgetByItsServedAddress() {
         var resolver = new hue.captains.singapura.js.homing.server.QueryParamResolver("/module");
         String json = hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences.INSTANCE.json(resolver);
-        assertTrue(json.contains("\"master\":{\"module\":\"/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget\""), json);
+        assertTrue(json.contains("\"master\":{\"module\":\"/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidgetModule\""), json);
         assertTrue(json.contains("\"preferences/theme\":{\"label\":\"Theme\""), json);
-        assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.site.mpa.ThemeWidget"), json);
-        assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.preferences.ScaleWidget"), json);
+        assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.site.mpa.ThemeWidgetModule"), json);
+        assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.preferences.ScaleWidgetModule"), json);
         assertTrue(json.contains("\"preferences/editor/wrap\""), json);
         // the page imports the view and the registry only; no widget module is on it
         var body = GallerySite.INSTANCE.router().resolve(Path.of("preferences")).orElseThrow().html(Query.NONE).body();
@@ -119,6 +124,22 @@ class GallerySiteTest {
     void theCrateHoldsEveryServedModuleAndImportsOnlyWhatItRequires() {
         assertEquals(List.of(), OrphanCheck.check(GalleryCrate.INSTANCE));
         assertEquals(List.of(), CrateDependencyRule.check(GalleryCrate.INSTANCE));
+    }
+
+    /** Every JS module the gallery serves keeps the consumer lane over its source: classes exported, no inline style, no raw DOM, no raw href. */
+    @Test
+    void everyGalleryModuleKeepsTheConsumerLane() {
+        int checked = 0;
+        for (var entry : GalleryCrate.INSTANCE.entries()) {
+            if (entry.form() != ModuleForm.RESOURCE_BACKED) continue;
+            var type = entry.declaredType() instanceof StandardJsModuleType t ? t : StandardJsModuleType.CONSUMER;
+            String m = entry.moduleClass();
+            String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
+            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src));
+            assertEquals(List.of(), findings, () -> m + ": " + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
+            checked++;
+        }
+        assertTrue(checked >= 10, "the apps, the shell, the relations, the tree widget; checked " + checked);
     }
 
     @Test

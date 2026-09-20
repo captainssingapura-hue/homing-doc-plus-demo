@@ -22,8 +22,8 @@ public record GridApp() implements AppModule<AppModule._None, GridApp> {
     public static final GridApp INSTANCE = new GridApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, GridApp> {}
-    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
-    public record construct() implements Exportable._Constant<GridApp> {}
+    /** The app as a widget by the base's contract: {@code new GridWidget(branch, params)}; appMain delegates to it. */
+    public record GridWidget() implements Exportable._Constant<GridApp> {}
 
     @Override public String title()      { return "Grid"; }
     @Override public String simpleName() { return "grid"; }
@@ -34,8 +34,8 @@ public record GridApp() implements AppModule<AppModule._None, GridApp> {
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RelGridModule.RelGrid()), RelGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new GalleryRelations.createBooksStore(),
-                        new GalleryRelations.createBooksRelation()
+                        new GalleryRelations.BooksStore(),
+                        new GalleryRelations.BooksRelation()
                 ), GalleryRelations.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
@@ -49,6 +49,6 @@ public record GridApp() implements AppModule<AppModule._None, GridApp> {
 
     @Override
     public ExportsOf<GridApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new GridWidget()));
     }
 }

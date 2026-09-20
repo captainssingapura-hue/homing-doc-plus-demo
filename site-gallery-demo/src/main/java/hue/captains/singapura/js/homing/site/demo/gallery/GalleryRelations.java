@@ -19,9 +19,9 @@ import java.util.List;
  */
 public record GalleryRelations() implements DomModule<GalleryRelations> {
 
-    public record createBooksStore()         implements Exportable._Constant<GalleryRelations> {}
-    public record createBooksRelation()      implements Exportable._Constant<GalleryRelations> {}
-    public record createShelfTreeRelation()  implements Exportable._Constant<GalleryRelations> {}
+    public record BooksStore()         implements Exportable._Constant<GalleryRelations> {}
+    public record BooksRelation()      implements Exportable._Constant<GalleryRelations> {}
+    public record ShelfTreeRelation()  implements Exportable._Constant<GalleryRelations> {}
 
     public static final GalleryRelations INSTANCE = new GalleryRelations();
 
@@ -40,6 +40,6 @@ public record GalleryRelations() implements DomModule<GalleryRelations> {
 
     @Override
     public ExportsOf<GalleryRelations> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new createBooksStore(), new createBooksRelation(), new createShelfTreeRelation()));
+        return new ExportsOf<>(INSTANCE, List.of(new BooksStore(), new BooksRelation(), new ShelfTreeRelation()));
     }
 }

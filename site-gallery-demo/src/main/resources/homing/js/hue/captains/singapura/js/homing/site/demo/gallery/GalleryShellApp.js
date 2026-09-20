@@ -2,22 +2,22 @@
 // GalleryShellApp — the gallery as a shell. A fixed one–two split fills the
 // slot: the navigator on the left, the chosen demo top right, its
 // explanation under it. The navigator is the relation tree over DEMOS; the
-// demo is the demo app's construct, imported through the serving context
+// demo is the demo app's widget class, imported through the serving context
 // when first chosen and kept in a slot after; the explanation is what DEMOS
 // says, with a link to the page the demo also is. The address follows.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "galleryShell" });
-var _loaded = new Map();   // module url → Promise<construct>
+var _loaded = new Map();   // module url → Promise<class>
 
 function _load(entry) {
     var url = withServingContext(entry.module);
     var p = _loaded.get(url);
     if (!p) {
         p = import(url).then(function (m) {
-            var fn = m[entry.export || "construct"];
-            if (typeof fn !== "function") throw new Error("[galleryShell] " + entry.module + " exports no " + (entry.export || "construct"));
-            return fn;
+            var Widget = m[entry.export];
+            if (typeof Widget !== "function") throw new Error("[galleryShell] " + entry.module + " exports no class " + entry.export);
+            return Widget;
         });
         _loaded.set(url, p);
     }
@@ -33,8 +33,8 @@ function appMain(el, params) {
     css.addClass(shell, ga_shell);
     el.appendChild(shell);
 
-    var split = mountSplitPane({
-        branch: branch, host: shell, minPanePx: 160,
+    var split = new SplitPane(branch.createBranch("split"), {
+        host: shell, minPanePx: 160,
         layout: { kind: "split", orientation: "horizontal", children: [
             { pane: { kind: "leaf", slotId: "nav" }, ratio: 1 },
             { pane: { kind: "split", orientation: "vertical", children: [
@@ -69,8 +69,8 @@ function appMain(el, params) {
     explain.appendChild(text);
     explain.appendChild(link);
 
-    var navSlot  = createWidgetSlot({ branch: branch, host: navHost });
-    var demoSlot = createWidgetSlot({ branch: branch, host: demoHost });
+    var navSlot  = new WidgetSlot({ branch: branch, host: navHost });
+    var demoSlot = new WidgetSlot({ branch: branch, host: demoHost });
     var wanted = null;
 
     function describe(path, d) {
@@ -90,8 +90,8 @@ function appMain(el, params) {
         var slug = path.slice(path.lastIndexOf("/") + 1);
         try { history.replaceState(null, "", "?demo=" + encodeURIComponent(slug)); } catch (e) {}
         if (demoSlot.has(path)) { demoSlot.show(path); return; }
-        _load(d.widget).then(function (construct) {
-            if (wanted === path) demoSlot.show(path, construct, d.widget.params);
+        _load(d.widget).then(function (Widget) {
+            if (wanted === path) demoSlot.show(path, Widget, d.widget.params);
         }).catch(function (e) { console.error("[galleryShell] demo '" + path + "' failed", e); });
     }
 
@@ -99,8 +99,8 @@ function appMain(el, params) {
     var asked = params && params.demo ? "gallery/" + params.demo : null;
     var initial = asked && DEMOS.demos[asked] ? asked : first;
 
-    _load(DEMOS.navigator).then(function (construct) {
-        var nav = navSlot.show("navigator", construct, { tree: DEMOS.tree, labels: DEMOS.labels, label: DEMOS.label });
+    _load(DEMOS.navigator).then(function (Navigator) {
+        var nav = navSlot.show("navigator", Navigator, { tree: DEMOS.tree, labels: DEMOS.labels, label: DEMOS.label });
         nav.onSelect(select);
         nav.select(initial);
         select(initial);

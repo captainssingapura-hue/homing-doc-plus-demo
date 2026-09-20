@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.preferences.PreferencesRegistry;
-import hue.captains.singapura.js.homing.preferences.PreferencesView;
+import hue.captains.singapura.js.homing.preferences.PreferencesViewModule;
 import hue.captains.singapura.js.homing.site.demo.gallery.GalleryStyles;
 
 import java.util.List;
@@ -24,8 +24,8 @@ public record PreferencesApp() implements AppModule<AppModule._None, Preferences
     public static final PreferencesApp INSTANCE = new PreferencesApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, PreferencesApp> {}
-    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
-    public record construct() implements Exportable._Constant<PreferencesApp> {}
+    /** The app as a widget by the base's contract: {@code new PreferencesWidget(branch, params)}; appMain delegates to it. */
+    public record PreferencesWidget() implements Exportable._Constant<PreferencesApp> {}
 
     @Override public String title()      { return "Preferences"; }
     @Override public String simpleName() { return "preferences"; }
@@ -34,7 +34,7 @@ public record PreferencesApp() implements AppModule<AppModule._None, Preferences
     public ImportsFor<PreferencesApp> imports() {
         return ImportsFor.<PreferencesApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PreferencesView.mountPreferencesView()), PreferencesView.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PreferencesViewModule.PreferencesView()), PreferencesViewModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesRegistry.PREFERENCES()), GalleryPreferences.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
@@ -46,6 +46,6 @@ public record PreferencesApp() implements AppModule<AppModule._None, Preferences
 
     @Override
     public ExportsOf<PreferencesApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new PreferencesWidget()));
     }
 }

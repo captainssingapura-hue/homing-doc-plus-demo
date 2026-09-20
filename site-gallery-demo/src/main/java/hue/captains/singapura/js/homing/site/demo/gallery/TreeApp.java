@@ -22,8 +22,8 @@ public record TreeApp() implements AppModule<AppModule._None, TreeApp> {
     public static final TreeApp INSTANCE = new TreeApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, TreeApp> {}
-    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
-    public record construct() implements Exportable._Constant<TreeApp> {}
+    /** The app as a widget by the base's contract: {@code new TreeWidget(branch, params)}; appMain delegates to it. */
+    public record TreeWidget() implements Exportable._Constant<TreeApp> {}
 
     @Override public String title()      { return "Tree"; }
     @Override public String simpleName() { return "tree"; }
@@ -34,8 +34,8 @@ public record TreeApp() implements AppModule<AppModule._None, TreeApp> {
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RelTreeModule.RelTree()), RelTreeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new GalleryRelations.createBooksStore(),
-                        new GalleryRelations.createShelfTreeRelation()
+                        new GalleryRelations.BooksStore(),
+                        new GalleryRelations.ShelfTreeRelation()
                 ), GalleryRelations.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
@@ -49,6 +49,6 @@ public record TreeApp() implements AppModule<AppModule._None, TreeApp> {
 
     @Override
     public ExportsOf<TreeApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new TreeWidget()));
     }
 }

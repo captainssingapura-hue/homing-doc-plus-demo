@@ -20,46 +20,50 @@ var PAGES = [
     { title: "Panes", badge: "UI-PANES", text: "One pane of tabs holding widgets by the base's contract: add from a picker, switch, drag a chip to reorder, close. Every mutation is on the log below it.", link: "/panes" }
 ];
 
-function construct(branch, params) {
-    branch.activate(_owner);
-    var el = branch.createElement("root", "div");
+class WelcomeWidget {
+    constructor(branch, params) {
+        branch.activate(_owner);
+        var el = branch.createElement("root", "div");
 
-    var kicker = branch.createElement("kicker", "div");
-    css.addClass(kicker, ga_kicker);
-    kicker.textContent = "homing-site-mpa";
-    el.appendChild(kicker);
+        var kicker = branch.createElement("kicker", "div");
+        css.addClass(kicker, ga_kicker);
+        kicker.textContent = "homing-site-mpa";
+        el.appendChild(kicker);
 
-    var title = branch.createElement("title", "h1");
-    css.addClass(title, ga_title);
-    title.textContent = "Gallery";
-    el.appendChild(title);
+        var title = branch.createElement("title", "h1");
+        css.addClass(title, ga_title);
+        title.textContent = "Gallery";
+        el.appendChild(title);
 
-    var lede = branch.createElement("lede", "p");
-    css.addClass(lede, ga_lede);
-    el.appendChild(lede);
-    function wearing() {
-        lede.textContent = "Two JS apps as pages under the standard chrome, wearing "
-            + (css.theme() || "the default") + ". The bar, the trail and the theme menu are the MPA's; "
-            + "this page is an AppModule mounted in the slot it was given. Pick another theme on the bar and "
-            + "every sheet on the page follows.";
+        var lede = branch.createElement("lede", "p");
+        css.addClass(lede, ga_lede);
+        el.appendChild(lede);
+        function wearing() {
+            lede.textContent = "Two JS apps as pages under the standard chrome, wearing "
+                + (css.theme() || "the default") + ". The bar, the trail and the theme menu are the MPA's; "
+                + "this page is an AppModule mounted in the slot it was given. Pick another theme on the bar and "
+                + "every sheet on the page follows.";
+        }
+        wearing();
+        css.onThemeApplied(wearing);
+
+        var cards = branch.createElement("cards", "div");
+        css.addClass(cards, ga_cards);
+        for (var i = 0; i < PAGES.length; i++) {
+            cards.appendChild(new Card(branch.createBranch("card-" + i), {
+                title: PAGES[i].title,
+                text:  PAGES[i].text,
+                badge: PAGES[i].badge,
+                link:  { to: PAGES[i].link }
+            }).root);
+        }
+        el.appendChild(cards);
+        this.root = el;
     }
-    wearing();
-    css.onThemeApplied(wearing);
 
-    var cards = branch.createElement("cards", "div");
-    css.addClass(cards, ga_cards);
-    for (var i = 0; i < PAGES.length; i++) {
-        cards.appendChild(Card(branch, "card-" + i, {
-            title: PAGES[i].title,
-            text:  PAGES[i].text,
-            badge: PAGES[i].badge,
-            link:  { to: PAGES[i].link }
-        }));
-    }
-    el.appendChild(cards);
-    return { root: el, dispose: function () {} };
+    dispose() {}
 }
 
 function appMain(el, params) {
-    el.appendChild(construct(domOpsParty.createBranch("welcome"), params).root);
+    el.appendChild(new WelcomeWidget(domOpsParty.createBranch("welcome"), params).root);
 }

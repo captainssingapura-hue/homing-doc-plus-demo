@@ -26,8 +26,8 @@ public record CounterApp() implements AppModule<CounterApp.Params, CounterApp> {
     public record Params(int start) implements AppModule._Param {}
 
     record appMain() implements AppModule._AppMain<Params, CounterApp> {}
-    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
-    public record construct() implements Exportable._Constant<CounterApp> {}
+    /** The app as a widget by the base's contract: {@code new CounterWidget(branch, params)}; appMain delegates to it. */
+    public record CounterWidget() implements Exportable._Constant<CounterApp> {}
 
     public static final ParamCodec<Params> CODEC = new ParamCodec<>() {
         @Override public Decoded<Params> from(Map<String, List<String>> query) {
@@ -63,6 +63,6 @@ public record CounterApp() implements AppModule<CounterApp.Params, CounterApp> {
 
     @Override
     public ExportsOf<CounterApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new CounterWidget()));
     }
 }

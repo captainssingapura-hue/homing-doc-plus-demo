@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.SelfContent;
 import hue.captains.singapura.js.homing.core.StampedParams;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesApp;
-import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget;
+import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidgetModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * The gallery's demos, stamped into one JS module for the shell: each demo
  * by its slug, with its label, its summary, its explanation and the widget
- * that shows it — a demo app's {@code construct}, by served address — plus
+ * that shows it — a demo app's widget class, by served address — plus
  * the rigid tree and the labels the navigator is built from. The shell
  * imports a demo's module only when the demo is first chosen.
  *
@@ -26,8 +26,8 @@ import java.util.Map;
  *     label:  "Gallery",
  *     tree:   { segment: "gallery", children: [ { segment: "<slug>" } … ] },
  *     labels: { "gallery/<slug>": "<label>" … },
- *     navigator: { module, export: "construct" },
- *     demos:  { "gallery/<slug>": { label, summary, explanation, page, widget: { module, export: "construct", params } } }
+ *     navigator: { module, export: "PreferencesTreeWidget" },
+ *     demos:  { "gallery/<slug>": { label, summary, explanation, page, widget: { module, export: "<WidgetClass>", params } } }
  *   }
  * </pre>
  */
@@ -37,47 +37,47 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
 
     public static final GalleryDemos INSTANCE = new GalleryDemos();
 
-    /** One demo: its slug, what the navigator and the explanation say, the page it also is, and the app that shows it. */
+    /** One demo: its slug, what the navigator and the explanation say, the page it also is, the app and the class in it that shows it. */
     public record Demo(String slug, String label, String summary, String explanation, String page,
-                       EsModule<?> app, Map<String, String> params) {}
+                       EsModule<?> app, String widget, Map<String, String> params) {}
 
     public static final List<Demo> DEMOS = List.of(
             new Demo("welcome", "Welcome", "The gallery's cards.",
                     "The pages of this gallery as cards, each a link to the page it names. This is the page the gallery opened on "
                     + "before it was a shell: the same module, now a widget in the demo pane, constructed on a branch the shell "
                     + "handed it and disposed when another demo is chosen.",
-                    "/welcome", WelcomeApp.INSTANCE, Map.of()),
+                    "/welcome", WelcomeApp.INSTANCE, "WelcomeWidget", Map.of()),
             new Demo("counter", "Counter", "A JS app with typed params.",
                     "A counter that starts where its params say. As a page, the router binds the start off the path and the server "
                     + "stamps it in through the app's own codec; as a widget here, the shell hands the same params to construct. "
                     + "One module, two hosts, no branch of its own to mint: the branch comes in.",
-                    "/counter/7", CounterApp.INSTANCE, Map.of("start", "7")),
+                    "/counter/7", CounterApp.INSTANCE, "CounterWidget", Map.of("start", "7")),
             new Demo("grid", "Grid", "The relation grid, from its own repo.",
                     "The relation grid over twelve books. Titles and ratings edit; the status line under it counts the cells minted "
                     + "and follows the cursor. The grid is a layer-2 component on core and design-core alone; the page hands it a "
                     + "branch and a relation and nothing else.",
-                    "/grid", GridApp.INSTANCE, Map.of()),
+                    "/grid", GridApp.INSTANCE, "GridWidget", Map.of()),
             new Demo("tree", "Tree", "The same books as shelf → book.",
                     "The relation tree over the same store: shelves that fold and unfold, each unfold a question the relation "
                     + "answers. Arrow keys move the cursor, Enter activates; the status line says what the tree did.",
-                    "/tree", TreeApp.INSTANCE, Map.of()),
+                    "/tree", TreeApp.INSTANCE, "TreeWidget", Map.of()),
             new Demo("dialog", "Dialog", "A frame that owns the screen until dismissed.",
                     "Three ways to open a dialog: modal with actions, non-modal, and modal with a control inside that takes its "
                     + "own keys. Modal: the page behind goes inert, keys are captured, Escape cancels, Enter confirms, and the "
                     + "focus comes back to where it was. The dialog is built on a child of the caller's branch and dissolved with it.",
-                    "/dialog", DialogApp.INSTANCE, Map.of()),
+                    "/dialog", DialogApp.INSTANCE, "DialogWidget", Map.of()),
             new Demo("preferences", "Preferences", "A rigid tree, a widget per node.",
                     "The site's preferences as a master and a detail: a rigid tree on the left from the relation tree, the chosen "
                     + "node's widget on the right, loaded when first chosen and kept after. Every widget writes through the "
                     + "steward and follows it, so a theme picked here is worn by this shell as it is picked. The same view is "
                     + "behind the bar's Preferences button.",
-                    "/preferences", PreferencesApp.INSTANCE, Map.of()),
+                    "/preferences", PreferencesApp.INSTANCE, "PreferencesWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "
                     + "sink, written under the pane as the data it is. The splitter this shell is laid out with is the pane's "
                     + "sibling module.",
-                    "/panes", PanesApp.INSTANCE, Map.of())
+                    "/panes", PanesApp.INSTANCE, "PanesWidget", Map.of())
     );
 
     public static String pathOf(Demo d) { return "gallery/" + d.slug(); }
@@ -109,8 +109,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
         }
         sb.append("]},\"labels\":{\"gallery\":\"Gallery\"");
         for (Demo d : DEMOS) sb.append(',').append(StampedParams.jsString(pathOf(d))).append(':').append(StampedParams.jsString(d.label()));
-        sb.append("},\"navigator\":{\"module\":").append(StampedParams.jsString(resolver.resolve(PreferencesTreeWidget.INSTANCE).basePath()))
-          .append(",\"export\":\"construct\"},\"demos\":{");
+        sb.append("},\"navigator\":{\"module\":").append(StampedParams.jsString(resolver.resolve(PreferencesTreeWidgetModule.INSTANCE).basePath()))
+          .append(",\"export\":\"PreferencesTreeWidget\"},\"demos\":{");
         boolean first = true;
         for (Demo d : DEMOS) {
             if (!first) sb.append(',');
@@ -121,7 +121,7 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
               .append(",\"explanation\":").append(StampedParams.jsString(d.explanation()))
               .append(",\"page\":").append(StampedParams.jsString(d.page()))
               .append(",\"widget\":{\"module\":").append(StampedParams.jsString(resolver.resolve(d.app()).basePath()))
-              .append(",\"export\":\"construct\",\"params\":{");
+              .append(",\"export\":").append(StampedParams.jsString(d.widget())).append(",\"params\":{");
             boolean firstParam = true;
             for (var e : d.params().entrySet()) {
                 if (!firstParam) sb.append(',');

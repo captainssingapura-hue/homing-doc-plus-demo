@@ -26,8 +26,8 @@ public record WelcomeApp() implements AppModule<AppModule._None, WelcomeApp> {
     public static final WelcomeApp INSTANCE = new WelcomeApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, WelcomeApp> {}
-    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
-    public record construct() implements Exportable._Constant<WelcomeApp> {}
+    /** The app as a widget by the base's contract: {@code new WelcomeWidget(branch, params)}; appMain delegates to it. */
+    public record WelcomeWidget() implements Exportable._Constant<WelcomeApp> {}
 
     @Override public String title()      { return "Welcome"; }
     @Override public String simpleName() { return "welcome"; }
@@ -48,6 +48,6 @@ public record WelcomeApp() implements AppModule<AppModule._None, WelcomeApp> {
 
     @Override
     public ExportsOf<WelcomeApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new WelcomeWidget()));
     }
 }

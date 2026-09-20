@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.dialog.Dialog;
+import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
 
 import java.util.List;
@@ -22,8 +22,8 @@ public record DialogApp() implements AppModule<AppModule._None, DialogApp> {
     public static final DialogApp INSTANCE = new DialogApp();
 
     record appMain() implements AppModule._AppMain<AppModule._None, DialogApp> {}
-    /** The app as a widget by the base's contract: construct(branch, params) → { root, dispose }; appMain delegates to it. */
-    public record construct() implements Exportable._Constant<DialogApp> {}
+    /** The app as a widget by the base's contract: {@code new DialogWidget(branch, params)}; appMain delegates to it. */
+    public record DialogWidget() implements Exportable._Constant<DialogApp> {}
 
     @Override public String title()      { return "Dialog"; }
     @Override public String simpleName() { return "dialog"; }
@@ -32,7 +32,7 @@ public record DialogApp() implements AppModule<AppModule._None, DialogApp> {
     public ImportsFor<DialogApp> imports() {
         return ImportsFor.<DialogApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Dialog.openDialog()), Dialog.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Elements.Button(), new Elements.Card()), Elements.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
@@ -47,6 +47,6 @@ public record DialogApp() implements AppModule<AppModule._None, DialogApp> {
 
     @Override
     public ExportsOf<DialogApp> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new construct()));
+        return new ExportsOf<>(INSTANCE, List.of(new appMain(), new DialogWidget()));
     }
 }

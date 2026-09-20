@@ -11,7 +11,7 @@ import hue.captains.singapura.js.homing.reltree.RelTreeCrate;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesApp;
-import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidget;
+import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidgetModule;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
@@ -57,7 +57,7 @@ public final class GalleryCrate implements Crate {
                 // widget that is the site's - the tree master; the theme widget is the MPA's.
                 CrateEntry.of(PreferencesApp.INSTANCE),
                 CrateEntry.of(GalleryPreferences.INSTANCE),
-                CrateEntry.of(PreferencesTreeWidget.INSTANCE),
+                CrateEntry.of(PreferencesTreeWidgetModule.INSTANCE),
                 CrateEntry.of(GalleryRelations.INSTANCE),
                 CrateEntry.of(GalleryStyles.INSTANCE));
     }

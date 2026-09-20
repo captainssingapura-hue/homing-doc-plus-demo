@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
-import hue.captains.singapura.js.homing.component.WidgetSlot;
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.core.js.ServingContextModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.server.HrefManager;
 import hue.captains.singapura.js.homing.site.mpa.MpaStyles;
-import hue.captains.singapura.js.homing.ui.split.SplitPane;
+import hue.captains.singapura.js.homing.ui.split.SplitPaneModule;
 
 import java.util.List;
 import java.util.Map;
@@ -54,8 +54,8 @@ public record GalleryShellApp() implements AppModule<GalleryShellApp.Params, Gal
     public ImportsFor<GalleryShellApp> imports() {
         return ImportsFor.<GalleryShellApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SplitPane.mountSplitPane()), SplitPane.INSTANCE))
-                .add(new ModuleImports<>(List.of(new WidgetSlot.createWidgetSlot()), WidgetSlot.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SplitPaneModule.SplitPane()), SplitPaneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ServingContextModule.withServingContext()), ServingContextModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .add(new ModuleImports<>(List.of(new GalleryDemos.DEMOS()), GalleryDemos.INSTANCE))

@@ -1,14 +1,14 @@
 package hue.captains.singapura.js.homing.site.demo.gallery.prefs;
 
-import hue.captains.singapura.js.homing.preferences.ChoiceWidget;
-import hue.captains.singapura.js.homing.preferences.OverviewWidget;
+import hue.captains.singapura.js.homing.preferences.ChoiceWidgetModule;
+import hue.captains.singapura.js.homing.preferences.OverviewWidgetModule;
 import hue.captains.singapura.js.homing.preferences.PreferenceNode;
 import hue.captains.singapura.js.homing.preferences.PreferenceTree;
 import hue.captains.singapura.js.homing.preferences.PreferencesRegistry;
-import hue.captains.singapura.js.homing.preferences.ScaleWidget;
-import hue.captains.singapura.js.homing.preferences.ToggleWidget;
+import hue.captains.singapura.js.homing.preferences.ScaleWidgetModule;
+import hue.captains.singapura.js.homing.preferences.ToggleWidgetModule;
 import hue.captains.singapura.js.homing.preferences.WidgetProvider;
-import hue.captains.singapura.js.homing.site.mpa.ThemeWidget;
+import hue.captains.singapura.js.homing.site.mpa.ThemeWidgetModule;
 
 import java.util.List;
 import java.util.Map;
@@ -33,13 +33,13 @@ public final class GalleryPreferences extends PreferencesRegistry {
                              setting("theme", "Theme"), setting("locale/language", "Language"),
                              setting("editor/font-size", "Font size"), setting("editor/wrap", "Wrap lines")),
                     PreferenceNode.of("theme", "Theme", "The design this site wears, and the colours it wears it in.",
-                            WidgetProvider.of(ThemeWidget.INSTANCE, Map.of("name", "theme", "label", "Theme",
+                            WidgetProvider.of(ThemeWidgetModule.INSTANCE, Map.of("name", "theme", "label", "Theme",
                                     "summary", "Seven designs, each offered in the colours that suit it. A pick switches every sheet on the page; another tab follows."))),
                     PreferenceNode.of("locale", "Locale", "Language, numbers and dates.",
                             overview("Locale", "How the site would speak to you - once it does. The value is kept and rides on every module address today; nothing reads it yet.",
                                      setting("locale/language", "Language")),
                             PreferenceNode.of("language", "Language", "",
-                                    WidgetProvider.of(ChoiceWidget.INSTANCE, Map.of("name", "locale/language", "label", "Language",
+                                    WidgetProvider.of(ChoiceWidgetModule.INSTANCE, Map.of("name", "locale/language", "label", "Language",
                                             "summary", "Kept by the steward and sent with every module the page loads; the site does not yet vary by it.",
                                             "default", "en",
                                             "options", List.of(option("en", "English", "the site's own"), option("fr", "Français", ""),
@@ -48,23 +48,23 @@ public final class GalleryPreferences extends PreferencesRegistry {
                             overview("Editor", "Two settings that nothing reads yet, here to prove a scale and a toggle end to end.",
                                      setting("editor/font-size", "Font size"), setting("editor/wrap", "Wrap lines")),
                             PreferenceNode.of("font-size", "Font size", "",
-                                    WidgetProvider.of(ScaleWidget.INSTANCE, Map.of("name", "editor/font-size", "label", "Font size",
+                                    WidgetProvider.of(ScaleWidgetModule.INSTANCE, Map.of("name", "editor/font-size", "label", "Font size",
                                             "summary", "In pixels. The default is the site's.",
                                             "min", 12, "max", 24, "step", 1, "unit", "px", "default", 16))),
                             PreferenceNode.of("wrap", "Wrap lines", "",
-                                    WidgetProvider.of(ToggleWidget.INSTANCE, Map.of("name", "editor/wrap", "label", "Wrap lines",
+                                    WidgetProvider.of(ToggleWidgetModule.INSTANCE, Map.of("name", "editor/wrap", "label", "Wrap lines",
                                             "summary", "Whether long lines fold at the edge or run off it.",
                                             "default", "true", "on", "Lines wrap", "off", "Lines run off the edge"))))));
 
     private static WidgetProvider overview(String label, String summary, Map<String, String>... settings) {
-        return WidgetProvider.of(OverviewWidget.INSTANCE, Map.of("label", label, "summary", summary, "settings", List.of(settings)));
+        return WidgetProvider.of(OverviewWidgetModule.INSTANCE, Map.of("label", label, "summary", summary, "settings", List.of(settings)));
     }
 
     // Declared after the tree it is built from: a static initialiser runs in order.
     public static final GalleryPreferences INSTANCE = new GalleryPreferences();
 
     private GalleryPreferences() {
-        super(TREE, WidgetProvider.of(PreferencesTreeWidget.INSTANCE, Map.of("folder", true)));
+        super(TREE, WidgetProvider.of(PreferencesTreeWidgetModule.INSTANCE, Map.of("folder", true)));
     }
 
     private static Map<String, String> setting(String name, String label) { return Map.of("name", name, "label", label); }

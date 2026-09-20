@@ -6,67 +6,72 @@
 
 const _owner = Object.freeze({ toString: () => "treePage" });
 
-function construct(branch, params) {
-    branch.activate(_owner);
-    var el = branch.createElement("root", "div");
+class TreeWidget {
+    constructor(branch, params) {
+        branch.activate(_owner);
+        var el = branch.createElement("root", "div");
 
-    var kicker = branch.createElement("kicker", "div");
-    css.addClass(kicker, ga_kicker);
-    kicker.textContent = "homing-rel-grid · rel-tree";
-    el.appendChild(kicker);
+        var kicker = branch.createElement("kicker", "div");
+        css.addClass(kicker, ga_kicker);
+        kicker.textContent = "homing-rel-grid · rel-tree";
+        el.appendChild(kicker);
 
-    var title = branch.createElement("title", "h1");
-    css.addClass(title, ga_title);
-    title.textContent = "Tree";
-    el.appendChild(title);
+        var title = branch.createElement("title", "h1");
+        css.addClass(title, ga_title);
+        title.textContent = "Tree";
+        el.appendChild(title);
 
-    var lede = branch.createElement("lede", "p");
-    css.addClass(lede, ga_lede);
-    lede.textContent = "The same twelve books as shelf → book in the relation tree. The shelves start closed; "
-        + "→ or Space unfolds, ← folds, ↑↓ move, Enter activates. An unfold is a question on "
-        + "the ask channel, answered by the relation with the whole view; the tree owns the rows, the "
-        + "carets and the cursor, and the relation owns every cell and its fold state.";
-    el.appendChild(lede);
+        var lede = branch.createElement("lede", "p");
+        css.addClass(lede, ga_lede);
+        lede.textContent = "The same twelve books as shelf → book in the relation tree. The shelves start closed; "
+            + "→ or Space unfolds, ← folds, ↑↓ move, Enter activates. An unfold is a question on "
+            + "the ask channel, answered by the relation with the whole view; the tree owns the rows, the "
+            + "carets and the cursor, and the relation owns every cell and its fold state.";
+        el.appendChild(lede);
 
-    var host = branch.createElement("host", "div");
-    css.addClass(host, ga_host);
-    el.appendChild(host);
+        var host = branch.createElement("host", "div");
+        css.addClass(host, ga_host);
+        el.appendChild(host);
 
-    var status = branch.createElement("status", "div");
-    css.addClass(status, ga_status);
-    el.appendChild(status);
+        var status = branch.createElement("status", "div");
+        css.addClass(status, ga_status);
+        el.appendChild(status);
 
-    var treeB = branch.createBranch("tree");
-    var domainB = branch.createBranch("domain");
-    domainB.activate(_owner);
-    var cellsB = domainB.createBranch("cells");
+        var treeB = branch.createBranch("tree");
+        var domainB = branch.createBranch("domain");
+        domainB.activate(_owner);
+        var cellsB = domainB.createBranch("cells");
 
-    var store = createBooksStore();
-    var relation = createShelfTreeRelation(store, { branch: cellsB });
-    var activated = null;
-    var tree = null;   // onArranged fires during construction, before this is assigned
-    tree = new RelTree({
-        container: host,
-        branch: treeB,
-        relation: relation,
-        label: "Shelves",
-        folder: true,
-        ask: function (question, mask) { var out = relation.answer(question, mask); setTimeout(report, 0); return out; },
-        onArranged: report,
-        onCursorMoved: report,
-        onActivated: function (key) { activated = key; report(); }
-    });
+        var store = new BooksStore();
+        var relation = new ShelfTreeRelation(store, { branch: cellsB });
+        var activated = null;
+        var tree = null;   // onArranged fires during construction, before this is assigned
+        tree = new RelTree({
+            container: host,
+            branch: treeB,
+            relation: relation,
+            label: "Shelves",
+            folder: true,
+            ask: function (question, mask) { var out = relation.answer(question, mask); setTimeout(report, 0); return out; },
+            onArranged: report,
+            onCursorMoved: report,
+            onActivated: function (key) { activated = key; report(); }
+        });
 
-    function report() {
-        var c = tree ? tree.cursor() : null;
-        status.textContent = relation.cellCount() + " cells minted"
-            + (c === null ? "" : " · cursor at " + c)
-            + (activated === null ? "" : " · activated " + activated);
+        function report() {
+            var c = tree ? tree.cursor() : null;
+            status.textContent = relation.cellCount() + " cells minted"
+                + (c === null ? "" : " · cursor at " + c)
+                + (activated === null ? "" : " · activated " + activated);
+        }
+        report();
+        this.root = el;
+        this._tree = tree; this._relation = relation;
     }
-    report();
-    return { root: el, dispose: function () { if (tree) tree.destroy(); relation.dispose(); } };
+
+    dispose() { if (this._tree) this._tree.destroy(); this._relation.dispose(); }
 }
 
 function appMain(el, params) {
-    el.appendChild(construct(domOpsParty.createBranch("treePage"), params).root);
+    el.appendChild(new TreeWidget(domOpsParty.createBranch("treePage"), params).root);
 }

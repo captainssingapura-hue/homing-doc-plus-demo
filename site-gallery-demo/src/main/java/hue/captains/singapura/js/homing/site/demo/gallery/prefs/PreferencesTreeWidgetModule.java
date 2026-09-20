@@ -17,17 +17,18 @@ import java.util.List;
  * {@code select(path)} — and nothing else; the tree's own keys move the
  * cursor, and moving the cursor is choosing.
  */
-public record PreferencesTreeWidget() implements Widget<Widget._None, PreferencesTreeWidget> {
+public record PreferencesTreeWidgetModule() implements Widget<Widget._None, PreferencesTreeWidgetModule> {
 
-    public record construct() implements Widget._Construct<Widget._None, PreferencesTreeWidget> {}
+    /** The class. */
+    public record PreferencesTreeWidget() implements Widget._Class<Widget._None, PreferencesTreeWidgetModule> {}
 
-    public static final PreferencesTreeWidget INSTANCE = new PreferencesTreeWidget();
+    public static final PreferencesTreeWidgetModule INSTANCE = new PreferencesTreeWidgetModule();
 
     @Override public String title() { return "Preferences tree"; }
 
     @Override
-    public ImportsFor<PreferencesTreeWidget> imports() {
-        return ImportsFor.<PreferencesTreeWidget>builder()
+    public ImportsFor<PreferencesTreeWidgetModule> imports() {
+        return ImportsFor.<PreferencesTreeWidgetModule>builder()
                 .add(new ModuleImports<>(List.of(new RelTreeModule.RelTree()), RelTreeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RelTreeStockCellsModule.RelTreeTextCell()), RelTreeStockCellsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
@@ -39,7 +40,7 @@ public record PreferencesTreeWidget() implements Widget<Widget._None, Preference
     }
 
     @Override
-    public ExportsOf<PreferencesTreeWidget> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new construct()));
+    public ExportsOf<PreferencesTreeWidgetModule> exports() {
+        return new ExportsOf<>(INSTANCE, List.of(new PreferencesTreeWidget()));
     }
 }
