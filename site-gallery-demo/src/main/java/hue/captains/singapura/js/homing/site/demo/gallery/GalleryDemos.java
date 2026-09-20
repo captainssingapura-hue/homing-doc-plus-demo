@@ -126,9 +126,11 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "Drag it and it goes where the hand goes — the press is remembered as an offset within the chip, so the chip is "
                     + "placed and the hand never asked where on it the press was — kept within the row and never above its slot; the "
                     + "slot it is nearest is where it will land, and the chips between step aside, live, as it passes them. Let go and "
-                    + "it lands. Pull it down until two thirds of it is off the strip and it leaves, with the grab it was held by — here "
-                    + "to a shelf; in a dock, to a floating pane under the same hand at the same place in it. TabDrag does the "
-                    + "arithmetic, headless: the bar as slots at one pitch, the nearest slot, who steps aside, how much is off.",
+                    + "it lands. Pull it down until two thirds of it is off the strip and it leaves the row — the same chip, now afloat: "
+                    + "free under the hand, left where the hand lets go, the row closed behind it; press it again and bring it back "
+                    + "onto the strip and it is seated. A dock hands the chip off instead, to a floating pane under the same hand at "
+                    + "the same place in it — until the pane is led by the floating tab itself. TabDrag does the arithmetic, headless: "
+                    + "the bar as slots at one pitch, the nearest slot, who steps aside, how much is off.",
                     "/tabstrip", TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "

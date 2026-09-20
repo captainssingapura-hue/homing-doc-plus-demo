@@ -133,7 +133,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
-    /** The box the strip alone sits in: a raised edge, the strip on top, the shelf under it; nothing clipped, so a chip pulled off the strip is seen leaving. */
+    /** The box the strip alone sits in: a raised edge, the strip on top, the floor under it; nothing clipped, so a chip afloat is seen wherever it is. */
     public record ga_strip_box() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return """
@@ -144,7 +144,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
-    /** The shelf under the strip: what the chips pulled off it say, in a caption. */
+    /** The floor under the strip: which chips are afloat, in a caption. */
     public record ga_shelf() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """

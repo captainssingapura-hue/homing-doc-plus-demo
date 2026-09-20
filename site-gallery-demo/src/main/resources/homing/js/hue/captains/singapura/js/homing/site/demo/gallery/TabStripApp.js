@@ -4,10 +4,11 @@
 // where the hand goes, the press remembered as an offset within it, the
 // others stepping aside live as it passes them; let go and it lands on the
 // slot it is nearest. Pull it down until two thirds of it is off the strip
-// and it leaves — here, to a shelf under the strip, with the grab it was
-// held by, from where a button returns it. A slider sets the chips' size,
-// so the arithmetic is seen to hold at any pitch. Every step is a line on
-// the log.
+// and it leaves the row — the same chip, now afloat: free under the hand,
+// left where the hand lets go, the row closed behind it. Press it again and
+// bring it back onto the strip and it is seated; a button seats every chip
+// afloat. A slider sets the chips' size, so the arithmetic is seen to hold
+// at any pitch. Every step is a line on the log.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "tabStripPage" });
@@ -31,7 +32,7 @@ class TabStripWidget {
         css.addClass(lede, ga_lede);
         lede.textContent = "The strip alone. Press a chip: selected. Drag it: it follows your hand, held where you pressed it, and the "
             + "others step aside as it passes; let go and it lands. Pull it down until two thirds of it is off the strip and it "
-            + "leaves, to the shelf; the button returns the shelf.";
+            + "floats — the same chip, free — and stays where you let go; bring it back onto the strip and it is seated again.";
         el.appendChild(lede);
 
         // ── controls ──────────────────────────────────────────────────────
@@ -39,7 +40,7 @@ class TabStripWidget {
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
 
-        // ── the box: the strip on top, the shelf under it ─────────────────
+        // ── the box: the strip on top, the floor under it for chips afloat ─
         var box = branch.createElement("box", "div");
         css.addClass(box, ga_strip_box);
         el.appendChild(box);
@@ -57,28 +58,34 @@ class TabStripWidget {
             log.scrollTop = log.scrollHeight;
         }
 
-        var order = [], names = new Map(), shelved = [];
+        var order = [], names = new Map();
         function nameOf(chip) { return names.get(chip); }
+        function afloat() { return order.filter(function (c) { return self._strip.floating(c); }); }
         function draw() {
             self._strip.arrange(order);
-            self._strip.count(order.length, _NAMES.length, false);
-            shelf.textContent = shelved.length ? "on the shelf: " + shelved.map(nameOf).join(", ") : "the shelf is empty";
+            self._strip.count(order.length - afloat().length, _NAMES.length, false);
+            var f = afloat();
+            shelf.textContent = f.length ? "afloat: " + f.map(nameOf).join(", ") : "nothing afloat";
         }
 
         this._strip = new TabStrip(branch.createBranch("strip"), {
+            floating: true,
+            // dest counts the seated chips: the order is the seated ones, then the ones afloat
             onDrop: function (chip, dest) {
-                var from = order.indexOf(chip);
-                order.splice(from, 1);
-                order.splice(dest, 0, chip);
+                var seated = order.filter(function (c) { return !self._strip.floating(c); });
+                var from = seated.indexOf(chip);
+                seated.splice(from, 1);
+                seated.splice(dest, 0, chip);
+                order = seated.concat(afloat());
                 draw();
                 say("Landed    " + nameOf(chip) + "  " + from + " → " + dest);
             },
-            onDragOut: function (chip, e, grab) {
-                order.splice(order.indexOf(chip), 1);
-                self._strip.remove(chip);
-                shelved.push(chip);
+            onFloat: function (chip, e, grab) {
                 draw();
-                say("Left      " + nameOf(chip) + "  at " + Math.round(e.clientX) + "," + Math.round(e.clientY) + "  held " + Math.round(grab.x) + "," + Math.round(grab.y) + " in");
+                say("Afloat    " + nameOf(chip) + "  held " + Math.round(grab.x) + "," + Math.round(grab.y) + " in");
+            },
+            onLand: function (chip, at) {
+                say("Let go    " + nameOf(chip) + "  at " + Math.round(at.x) + "," + Math.round(at.y) + " in the strip's frame");
             }
         });
         box.appendChild(this._strip.el);
@@ -97,11 +104,11 @@ class TabStripWidget {
         this._strip.select(order, order[0]);
 
         controls.appendChild(this._slider(branch, "size", "the chips' size", -1, 1, 0.1, 0, function (v) { self._strip.size(v); return v.toFixed(1); }));
-        var back = new ButtonBuilder().label("Return the shelf").plain().onClick(function () {
-            if (!shelved.length) { say("Nothing   on the shelf"); return; }
-            shelved.forEach(function (chip) { order.push(chip); });
-            say("Returned  " + shelved.map(nameOf).join(", "));
-            shelved = [];
+        var back = new ButtonBuilder().label("Seat the chips afloat").plain().onClick(function () {
+            var f = afloat();
+            if (!f.length) { say("Nothing   afloat"); return; }
+            f.forEach(function (chip) { self._strip.seat(chip); });
+            say("Seated    " + f.map(nameOf).join(", "));
             draw();
         });
         controls.appendChild(back.build(branch.createElement("back", back.tag)).el);
