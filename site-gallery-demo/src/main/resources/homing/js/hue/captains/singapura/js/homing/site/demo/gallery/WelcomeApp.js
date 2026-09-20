@@ -52,7 +52,7 @@ class WelcomeWidget {
         var cards = branch.createElement("cards", "div");
         css.addClass(cards, ga_cards);
         for (var i = 0; i < PAGES.length; i++) {
-            cards.appendChild(new CardBuilder().title(PAGES[i].title).text(PAGES[i].text).badge(PAGES[i].badge).link(PAGES[i].link)
+            cards.appendChild(new CardBuilder().title(PAGES[i].title).text(PAGES[i].text).badge(PAGES[i].badge).link(PAGES[i].link).aspect(0.6)
                 .build(branch.createBranch("card-" + i)).root);
         }
         el.appendChild(cards);

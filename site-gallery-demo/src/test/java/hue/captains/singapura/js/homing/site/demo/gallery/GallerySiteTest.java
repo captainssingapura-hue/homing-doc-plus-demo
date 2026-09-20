@@ -172,10 +172,10 @@ class GallerySiteTest {
         var worn = Deployment.wornBy(groups);
         assertTrue(worn.size() > 60, "the chrome, the apps, the grid and the tree wear many pairs; found " + worn.size());
         var scaled = Deployment.scaledBy(groups);
-        var sized = Deployment.sizedBy(groups);
+        var grown = Deployment.grownBy(groups);
         for (Theme t : StudioThemeRegistry.INSTANCE.themes()) {
             Design d = (Design) t;
-            var r = Deployment.of(worn, scaled, sized, d).resolve();
+            var r = Deployment.of(worn, scaled, grown, d).resolve();
             assertEquals(List.of(), r.findings(), () -> d.slug() + ": " + r.findings());
         }
     }

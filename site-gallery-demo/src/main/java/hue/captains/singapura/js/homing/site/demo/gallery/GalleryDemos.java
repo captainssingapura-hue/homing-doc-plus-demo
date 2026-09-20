@@ -83,7 +83,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     "/buttons", ButtonsApp.INSTANCE, "ButtonsWidget", Map.of()),
             new Demo("cards", "Cards", "The card, through its builder.",
                     "A card is Container.Card.Base to the design: a raised box whose measure is its own. The design gives it its "
-                    + "measure, grown by its size, and its proportion, and what is inside fits it — the head and the foot are fixed, the body "
+                    + "measure, grown by its size, and its aspect — square at 0, the design's widest at 1, its tallest at −1 — and what is "
+                    + "inside fits it — the head and the foot are fixed, the body "
                     + "scrolls beyond what they leave. It lifts on hover and presses as an enlarged button would, and with an "
                     + "action it is a button to the keyboard too and rings on focus. The size slider grows every length the "
                     + "design gives a card and its parts, each by its own ratio; the proportion holds.",
