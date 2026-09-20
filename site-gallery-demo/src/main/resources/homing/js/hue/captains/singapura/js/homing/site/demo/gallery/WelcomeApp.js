@@ -19,7 +19,8 @@ var PAGES = [
     { title: "Preferences", badge: "PREFERENCES", text: "A rigid tree of preferences on the left, the chosen one's widget on the right, each loaded when first chosen. Theme, locale, editor.", link: "/preferences" },
     { title: "Panes", badge: "UI-PANES", text: "One pane of tabs holding widgets by the base's contract: add from a picker, switch, drag a chip to reorder, close. Every mutation is on the log below it.", link: "/panes" },
     { title: "Buttons", badge: "UI-ELEMENTS", text: "The button through its builder: six colour words under one extent slider, and a danger button whose extent follows the data.", link: "/buttons" },
-    { title: "Cards", badge: "UI-ELEMENTS", text: "The card through its builder: a hard frame the design measures and proportions, grown by its size; one that scrolls, one with its own body, one with an action.", link: "/cards" }
+    { title: "Cards", badge: "UI-ELEMENTS", text: "The card through its builder: a hard frame the design measures and proportions, grown by its size; one that scrolls, one with its own body, one with an action.", link: "/cards" },
+    { title: "Floating panes", badge: "UI-FLOATING", text: "A desk and the panes that float on it: opened with a widget, dragged by the head, sized by the corner, raised by a press, closed by the cross or Escape.", link: "/floating" }
 ];
 
 class WelcomeWidget {

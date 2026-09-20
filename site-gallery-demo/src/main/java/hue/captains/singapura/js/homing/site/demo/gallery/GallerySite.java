@@ -40,6 +40,7 @@ public record GallerySite() implements Site {
     static final AppPage<?, ?> PANES   = MPA.page(PanesApp.INSTANCE);
     static final AppPage<?, ?> BUTTONS = MPA.page(ButtonsApp.INSTANCE);
     static final AppPage<?, ?> CARDS   = MPA.page(CardsApp.INSTANCE);
+    static final AppPage<?, ?> FLOATING = MPA.page(FloatingApp.INSTANCE);
     static final AppPage<?, ?> PREFS   = MPA.page(PreferencesApp.INSTANCE);
 
     static final Navigable PLAIN = q -> new HtmlPageContent("""
@@ -68,6 +69,7 @@ public record GallerySite() implements Site {
             case "panes"   -> path.depth() == 1 ? Optional.of(placed(PANES, "Panes", path)) : Optional.empty();
             case "buttons" -> path.depth() == 1 ? Optional.of(placed(BUTTONS, "Buttons", path)) : Optional.empty();
             case "cards"   -> path.depth() == 1 ? Optional.of(placed(CARDS, "Cards", path)) : Optional.empty();
+            case "floating" -> path.depth() == 1 ? Optional.of(placed(FLOATING, "Floating panes", path)) : Optional.empty();
             case "preferences" -> path.depth() == 1 ? Optional.of(placed(PREFS, "Preferences", path)) : Optional.empty();
             default        -> Optional.empty();
         };

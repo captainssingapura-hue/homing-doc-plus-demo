@@ -89,6 +89,14 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "action it is a button to the keyboard too and rings on focus. The size slider grows every length the "
                     + "design gives a card and its parts, each by its own ratio; the proportion holds.",
                     "/cards", CardsApp.INSTANCE, "CardsWidget", Map.of()),
+            new Demo("floating", "Floating panes", "A desk, and the panes that float on it.",
+                    "A floating pane is Container.Pane.Floating: a container's corner, rule and ring, the overlay's shadow, the "
+                    + "pane's air on its head — a larger, movable card whose place and measure are its user's, not the design's. "
+                    + "The desk owns the stack: open a pane holding a widget by the base's contract, drag it by the head, size it "
+                    + "by the corner, press one to raise it, close with the cross or Escape; the active one is the ring drawn now. "
+                    + "Every mutation is one FloatEvents object on one sink — Opened, Moved, Resized, Raised, Closed — reported "
+                    + "once when it happened, never per pixel.",
+                    "/floating", FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "
