@@ -53,7 +53,7 @@ function construct(branch, params) {
             title: PAGES[i].title,
             text:  PAGES[i].text,
             badge: PAGES[i].badge,
-            link:  { href: PAGES[i].link }
+            link:  { to: PAGES[i].link }
         }));
     }
     el.appendChild(cards);

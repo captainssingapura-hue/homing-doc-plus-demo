@@ -30,7 +30,7 @@ class GallerySiteTest {
         var body = GallerySite.INSTANCE.router().resolve(Path.ROOT).orElseThrow().html(Query.NONE).body();
         assertTrue(body.contains("<title>Gallery · Gallery</title>"), body);
         assertTrue(body.contains("const theme = \"editorial\";"), body);
-        assertTrue(body.contains("brand: Object.freeze({label:\"Gallery\",href:\"\\/\"})"), body);   // jsString escapes the slash
+        assertTrue(body.contains("brand: Object.freeze({label:\"Gallery\",home:\"\\/\"})"), body);   // jsString escapes the slash
         assertTrue(body.contains("crumbs: Object.freeze([])"), body);
         assertTrue(body.contains("preferences: Object.freeze({module:\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences\"})"), body);
         int chrome = body.indexOf("site.mpa.MpaChrome");
@@ -67,8 +67,8 @@ class GallerySiteTest {
         var body = GallerySite.INSTANCE.router().resolve(Path.of("counter", "7")).orElseThrow().html(Query.NONE).body();
         assertTrue(body.contains("<title>Counter · Gallery</title>"), body);
         assertTrue(body.contains("const params = Object.freeze({\"start\":\"7\"});"), body);
-        assertTrue(body.contains("Object.freeze({text:\"Gallery\",href:\"\\/\"})"), body);
-        assertTrue(body.contains("Object.freeze({text:\"Counter\",href:\"\\/counter\\/7\"})"), body);
+        assertTrue(body.contains("Object.freeze({text:\"Gallery\",to:\"\\/\"})"), body);
+        assertTrue(body.contains("Object.freeze({text:\"Counter\",to:\"\\/counter\\/7\"})"), body);
         assertTrue(body.contains("appMain(main, params);"), body);
     }
 
@@ -95,8 +95,8 @@ class GallerySiteTest {
         for (String arm : List.of("grid", "tree", "dialog", "preferences", "panes")) {
             var body = GallerySite.INSTANCE.router().resolve(Path.of(arm)).orElseThrow().html(Query.NONE).body();
             assertTrue(body.contains(Character.toUpperCase(arm.charAt(0)) + arm.substring(1) + "App"), body);
-            assertTrue(body.contains("Object.freeze({text:\"Gallery\",href:\"\\/\"})"), body);
-            assertTrue(body.contains("href:\"\\/" + arm + "\""), body);
+            assertTrue(body.contains("Object.freeze({text:\"Gallery\",to:\"\\/\"})"), body);
+            assertTrue(body.contains("to:\"\\/" + arm + "\""), body);
             assertTrue(GallerySite.INSTANCE.router().resolve(Path.of(arm, "more")).isEmpty());
         }
     }

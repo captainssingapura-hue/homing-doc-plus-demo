@@ -8,8 +8,6 @@
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "galleryShell" });
-var href = HrefManagerInstance;
-
 var _loaded = new Map();   // module url → Promise<construct>
 
 function _load(entry) {
@@ -81,7 +79,7 @@ function appMain(el, params) {
         summary.textContent = d.summary;
         text.textContent = d.explanation;
         link.textContent = "Open as a page →";
-        href.set(link, d.page);
+        HrefManagerInstance.set(link, d.page);
     }
 
     function select(path) {
