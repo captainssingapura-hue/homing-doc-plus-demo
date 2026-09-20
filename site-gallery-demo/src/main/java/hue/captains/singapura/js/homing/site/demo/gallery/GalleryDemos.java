@@ -121,6 +121,15 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "marks that cell current in the grid. A widget switcher in the making: a shortcut raises the mirror, the arrows "
                     + "pick a pane, the owner makes it active.",
                     "/splitgrid", SplitGridApp.INSTANCE, "SplitGridWidget", Map.of()),
+            new Demo("tabstrip", "Tab strip", "The strip alone: the drag that is a browser's.",
+                    "The tab strip without a pane, to see the drag on its own. Press a chip and it is selected, before any release. "
+                    + "Drag it and it goes where the hand goes — the press is remembered as an offset within the chip, so the chip is "
+                    + "placed and the hand never asked where on it the press was — kept within the row and never above its slot; the "
+                    + "slot it is nearest is where it will land, and the chips between step aside, live, as it passes them. Let go and "
+                    + "it lands. Pull it down until two thirds of it is off the strip and it leaves, with the grab it was held by — here "
+                    + "to a shelf; in a dock, to a floating pane under the same hand at the same place in it. TabDrag does the "
+                    + "arithmetic, headless: the bar as slots at one pitch, the nearest slot, who steps aside, how much is off.",
+                    "/tabstrip", TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "

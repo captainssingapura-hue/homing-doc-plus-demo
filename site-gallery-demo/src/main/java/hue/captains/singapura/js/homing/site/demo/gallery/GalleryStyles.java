@@ -133,6 +133,29 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
+    /** The box the strip alone sits in: a raised edge, the strip on top, the shelf under it; nothing clipped, so a chip pulled off the strip is seen leaving. */
+    public record ga_strip_box() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return """
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            """;
+        }
+    }
+
+    /** The shelf under the strip: what the chips pulled off it say, in a caption. */
+    public record ga_shelf() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            display: flex;
+            align-items: flex-end;
+            padding: 12px 16px;
+            """;
+        }
+    }
+
     /** The log under the pane: one line per mutation, newest last, scrolling. */
     public record ga_log() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
@@ -238,7 +261,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
-                       new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_log(), new ga_status(),
+                       new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_box(), new ga_shelf(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_log(), new ga_status(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }

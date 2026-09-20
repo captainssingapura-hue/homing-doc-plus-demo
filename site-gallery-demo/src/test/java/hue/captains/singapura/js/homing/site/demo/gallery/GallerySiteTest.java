@@ -97,9 +97,9 @@ class GallerySiteTest {
 
     @Test
     void theGridAndTheTreeArePagesToldTheirTrail() {
-        for (String arm : List.of("grid", "tree", "dialog", "preferences", "panes", "buttons", "cards", "floating", "docking", "splitgrid")) {
+        for (String arm : List.of("grid", "tree", "dialog", "preferences", "panes", "buttons", "cards", "floating", "docking", "splitgrid", "tabstrip")) {
             var body = GallerySite.INSTANCE.router().resolve(Path.of(arm)).orElseThrow().html(Query.NONE).body();
-            assertTrue(body.contains(arm.equals("splitgrid") ? "SplitGridApp" : Character.toUpperCase(arm.charAt(0)) + arm.substring(1) + "App"), body);
+            assertTrue(body.contains(arm.equals("splitgrid") ? "SplitGridApp" : arm.equals("tabstrip") ? "TabStripApp" : Character.toUpperCase(arm.charAt(0)) + arm.substring(1) + "App"), body);
             assertTrue(body.contains("Object.freeze({text:\"Gallery\",to:\"\\/\"})"), body);
             assertTrue(body.contains("to:\"\\/" + arm + "\""), body);
             assertTrue(GallerySite.INSTANCE.router().resolve(Path.of(arm, "more")).isEmpty());

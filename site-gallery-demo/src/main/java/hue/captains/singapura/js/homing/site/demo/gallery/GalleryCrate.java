@@ -60,6 +60,7 @@ public final class GalleryCrate implements Crate {
                 CrateEntry.of(FloatingApp.INSTANCE),
                 CrateEntry.of(DockingApp.INSTANCE),
                 CrateEntry.of(SplitGridApp.INSTANCE),
+                CrateEntry.of(TabStripApp.INSTANCE),
                 // The preferences: the page, the site's own stamped registry, and the one
                 // widget that is the site's - the tree master; the theme widget is the MPA's.
                 CrateEntry.of(PreferencesApp.INSTANCE),

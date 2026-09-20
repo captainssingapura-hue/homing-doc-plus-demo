@@ -115,7 +115,7 @@ class DockingWidget {
 
         var dock = new MultiTabPane(branch.createBranch("dock"), {
             host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink,
-            onDragOut: function (tab, e) { docking.undock(dock, tab, e); }
+            onDragOut: function (tab, e, grab) { docking.undock(dock, tab, e, grab); }
         });
         this._dock = dock;
         controls.appendChild(this._slider(branch, "size", "the tabs' size", -1, 1, 0.1, 0, function (v) { dock.size(v); return v.toFixed(1); }));
