@@ -19,7 +19,6 @@ import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
 import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
-import hue.captains.singapura.js.homing.ui.split.UiSplitCrate;
 
 import java.util.List;
 
@@ -41,7 +40,7 @@ public final class GalleryCrate implements Crate {
     @Override public String name() { return "homing-site-demo-gallery"; }
 
     @Override public List<Crate> requires() {
-        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiDockingCrate.INSTANCE, UiSplitGridCrate.INSTANCE, UiSplitCrate.INSTANCE,
+        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiDockingCrate.INSTANCE, UiSplitGridCrate.INSTANCE,
                        CoreJsCrate.INSTANCE, DesignCrate.INSTANCE, ServerCrate.INSTANCE,
                        RelGridCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
     }

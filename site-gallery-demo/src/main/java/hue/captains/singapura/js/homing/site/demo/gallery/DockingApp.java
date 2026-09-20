@@ -9,14 +9,13 @@ import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.docking.DockingModule;
 import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
-import hue.captains.singapura.js.homing.ui.split.SplitPaneModule;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
 
 import java.util.List;
 
 /**
- * The docking page: three docks in a split, a desk over them, tabs pulled off to float and floats dropped to dock, with
- * the log of every mutation the desk, the docks and the docking report.
+ * The docking page: one dock and a desk over it, tabs pulled down off the strip to float and floats dropped on the
+ * strip to dock, with the log of every mutation the desk, the dock and the docking report.
  */
 public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
 
@@ -36,7 +35,6 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
                 .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder(), new Elements.CardBuilder()), Elements.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DockingModule.Docking()), DockingModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SplitPaneModule.SplitPane()), SplitPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),

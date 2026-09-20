@@ -120,7 +120,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return ""; }
     }
 
-    /** The box the docks split and the desk lies over: positioned, so the desk can be a layer; a flex column for the splitter. */
+    /** The box the dock fills and the desk lies over: positioned, so the desk can be a layer; a flex column for the pane. */
     public record ga_dock_box() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return """

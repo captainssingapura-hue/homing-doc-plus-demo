@@ -97,13 +97,15 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "Every mutation is one FloatEvents object on one sink — Opened, Moved, Resized, Raised, Closed — reported "
                     + "once when it happened, never per pixel.",
                     "/floating", FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
-            new Demo("docking", "Dock and undock", "Three docks, a desk over them, tabs that float and land.",
-                    "The multi-tab pane is the dock; the split only subdivides; the desk floats over both. A tab is one record — "
-                    + "id, title, widget — with one placement at a time: in a dock's strip, or afloat in a frame of its own. Pull a chip "
-                    + "off a strip and the tab floats under the same hand, widget and all; drag a float over a dock and the dock wears "
-                    + "the drop-target word and marks where the tab would land on the strip; let go there and it is a tab, let go over content and it stays afloat; "
-                    + "let go and it is a tab there. A float stays within the box. Every step is data on one sink: Undocked and Docked "
-                    + "from the docking, Opened, Released and the rest from the desk, TabAttached and the rest from the docks.",
+            new Demo("docking", "Dock and undock", "One dock, a desk over it, tabs that float and land.",
+                    "The multi-tab pane is the dock; the desk floats over it. A tab is one record — id, title, widget — with one "
+                    + "placement at a time: in the dock's strip, or afloat in a frame of its own. A drag along the strip reorders and "
+                    + "only reorders — up or sideways changes nothing; pulled down off the strip, the tab floats under the same hand, "
+                    + "widget and all. Drag a float over the strip and the dock wears the drop-target word and marks where the tab "
+                    + "would land; let go there and it is a tab, let go over content and it stays afloat. Every chip is in the tab "
+                    + "order, and the design draws its hover, its press, the selected one and the focus ring. A float stays within the "
+                    + "box. Every step is data on one sink: Undocked and Docked from the docking, Opened, Released and the rest from "
+                    + "the desk, TabAttached and the rest from the dock.",
                     "/docking", DockingApp.INSTANCE, "DockingWidget", Map.of()),
             new Demo("splitgrid", "Split grid", "Rows and columns of cells, arranged; what is in them, the page's.",
                     "The split grid is a container in the relation grid's sense: the page mints what goes in a cell, the grid arranges "
