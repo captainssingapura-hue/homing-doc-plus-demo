@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -22,7 +22,7 @@ public record TabStripApp() implements AppModule<AppModule._None, TabStripApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, TabStripApp> {}
     /** The app as a widget by the base's contract: {@code new TabStripWidget(branch, params)}; appMain delegates to it. */
-    public record TabStripWidget() implements Exportable._Constant<TabStripApp> {}
+    public record TabStripWidget() implements BranchComponent<TabStripApp> {}
 
     @Override public String title()      { return "Tab strip"; }
     @Override public String simpleName() { return "tabstrip"; }

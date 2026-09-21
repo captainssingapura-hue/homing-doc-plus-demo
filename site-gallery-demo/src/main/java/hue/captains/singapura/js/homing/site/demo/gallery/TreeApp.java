@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -23,7 +23,7 @@ public record TreeApp() implements AppModule<AppModule._None, TreeApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, TreeApp> {}
     /** The app as a widget by the base's contract: {@code new TreeWidget(branch, params)}; appMain delegates to it. */
-    public record TreeWidget() implements Exportable._Constant<TreeApp> {}
+    public record TreeWidget() implements BranchComponent<TreeApp> {}
 
     @Override public String title()      { return "Tree"; }
     @Override public String simpleName() { return "tree"; }

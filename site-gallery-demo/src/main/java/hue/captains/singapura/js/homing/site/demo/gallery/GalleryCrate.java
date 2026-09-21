@@ -1,5 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.C0_Components;
+import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
@@ -32,7 +34,7 @@ import java.util.List;
  * words and its crate leaves the targets to its host, and the crate rule reads
  * direct requires only.
  */
-public final class GalleryCrate implements Crate {
+public final class GalleryCrate implements Crate, ComponentVehicle {
 
     public static final GalleryCrate INSTANCE = new GalleryCrate();
 
@@ -45,6 +47,8 @@ public final class GalleryCrate implements Crate {
                        CoreJsCrate.INSTANCE, DesignCrate.INSTANCE, ServerCrate.INSTANCE,
                        RelGridCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
     }
+
+    @Override public C0_Components<?> components() { return GalleryComponents.INSTANCE; }
 
     @Override public List<CrateEntry> entries() {
         return List.of(

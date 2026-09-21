@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -24,7 +24,7 @@ public record ButtonsApp() implements AppModule<AppModule._None, ButtonsApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, ButtonsApp> {}
     /** The app as a widget by the base's contract: {@code new ButtonsWidget(branch, params)}; appMain delegates to it. */
-    public record ButtonsWidget() implements Exportable._Constant<ButtonsApp> {}
+    public record ButtonsWidget() implements BranchComponent<ButtonsApp> {}
 
     @Override public String title()      { return "Buttons"; }
     @Override public String simpleName() { return "buttons"; }

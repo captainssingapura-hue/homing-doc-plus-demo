@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.ComponentTrees;
 import hue.captains.singapura.js.homing.conformance.rules.CrateDependencyRule;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
@@ -17,6 +18,7 @@ import hue.captains.singapura.js.homing.site.Query;
 import hue.captains.singapura.js.homing.site.SiteGetAction;
 import hue.captains.singapura.js.homing.site.mpa.ThemesGetAction;
 import hue.captains.singapura.js.homing.studio.themes.StudioThemeRegistry;
+import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -178,5 +180,16 @@ class GallerySiteTest {
             var r = Deployment.of(worn, scaled, grown, d).resolve();
             assertEquals(List.of(), r.findings(), () -> d.slug() + ": " + r.findings());
         }
+    }
+
+    /** The gallery is a vehicle: its widgets catalogued, and the page's menus derived from what the catalogued components need. */
+    @Test
+    void theGalleryIsAVehicle_andItsMenusAreDerivedFromItsComponentsNeeds() {
+        assertEquals(List.of(), ComponentTrees.validate(List.of(GalleryCrate.INSTANCE)));
+        var composed = ComponentTrees.compose("gallery", List.of(GalleryCrate.INSTANCE));
+        assertEquals("gallery", composed.root().children().get(0).segment().value(), "the site's own catalogue first in the closure, then the crates it requires");
+        assertEquals(10, composed.root().children().size(), "the gallery and the nine vehicles in its closure: the split crate is not required, docking ships statics only");
+        assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
+        assertEquals(List.of("animal", "swatch", "counter"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names the three; nothing lists them");
     }
 }

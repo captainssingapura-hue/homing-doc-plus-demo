@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -23,7 +23,7 @@ public record GridApp() implements AppModule<AppModule._None, GridApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, GridApp> {}
     /** The app as a widget by the base's contract: {@code new GridWidget(branch, params)}; appMain delegates to it. */
-    public record GridWidget() implements Exportable._Constant<GridApp> {}
+    public record GridWidget() implements BranchComponent<GridApp> {}
 
     @Override public String title()      { return "Grid"; }
     @Override public String simpleName() { return "grid"; }

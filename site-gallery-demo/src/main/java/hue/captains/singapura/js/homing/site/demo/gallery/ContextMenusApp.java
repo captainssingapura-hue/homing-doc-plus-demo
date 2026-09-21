@@ -1,15 +1,18 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuStewardModule;
+import hue.captains.singapura.js.homing.ui.menu.NeedContextMenu;
+import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * The context menus page: one steward with the gallery's kinds, three hypothetical cells each asking for a menu of its
@@ -22,7 +25,10 @@ public record ContextMenusApp() implements AppModule<AppModule._None, ContextMen
 
     record appMain() implements AppModule._AppMain<AppModule._None, ContextMenusApp> {}
     /** The app as a widget by the base's contract: {@code new ContextMenusWidget(branch, params)}; appMain delegates to it. */
-    public record ContextMenusWidget() implements Exportable._Constant<ContextMenusApp> {}
+    public record ContextMenusWidget() implements BranchComponent<ContextMenusApp>, NeedContextMenu {
+        @Override public String summary() { return "Three cells, each opening a menu of its kind; the kinds a specimen each."; }
+        @Override public Set<ContextMenuKind<?>> required() { return Set.of(GalleryMenus.AnimalMenu.INSTANCE, GalleryMenus.SwatchMenu.INSTANCE, GalleryMenus.CounterMenu.INSTANCE); }
+    }
 
     @Override public String title()      { return "Context menus"; }
     @Override public String simpleName() { return "menus"; }

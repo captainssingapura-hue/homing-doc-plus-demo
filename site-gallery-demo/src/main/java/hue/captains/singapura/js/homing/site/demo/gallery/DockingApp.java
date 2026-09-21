@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -24,7 +24,7 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, DockingApp> {}
     /** The app as a widget by the base's contract: {@code new DockingWidget(branch, params)}; appMain delegates to it. */
-    public record DockingWidget() implements Exportable._Constant<DockingApp> {}
+    public record DockingWidget() implements BranchComponent<DockingApp> {}
 
     @Override public String title()      { return "Dock and undock"; }
     @Override public String simpleName() { return "docking"; }

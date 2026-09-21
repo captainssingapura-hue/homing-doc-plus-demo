@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -24,7 +24,7 @@ public record SplitGridApp() implements AppModule<AppModule._None, SplitGridApp>
 
     record appMain() implements AppModule._AppMain<AppModule._None, SplitGridApp> {}
     /** The app as a widget by the base's contract: {@code new SplitGridWidget(branch, params)}; appMain delegates to it. */
-    public record SplitGridWidget() implements Exportable._Constant<SplitGridApp> {}
+    public record SplitGridWidget() implements BranchComponent<SplitGridApp> {}
 
     @Override public String title()      { return "Split grid"; }
     @Override public String simpleName() { return "splitgrid"; }

@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -27,7 +27,7 @@ public record WelcomeApp() implements AppModule<AppModule._None, WelcomeApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, WelcomeApp> {}
     /** The app as a widget by the base's contract: {@code new WelcomeWidget(branch, params)}; appMain delegates to it. */
-    public record WelcomeWidget() implements Exportable._Constant<WelcomeApp> {}
+    public record WelcomeWidget() implements BranchComponent<WelcomeApp> {}
 
     @Override public String title()      { return "Welcome"; }
     @Override public String simpleName() { return "welcome"; }

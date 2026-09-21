@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -22,7 +22,7 @@ public record FloatingApp() implements AppModule<AppModule._None, FloatingApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, FloatingApp> {}
     /** The app as a widget by the base's contract: {@code new FloatingWidget(branch, params)}; appMain delegates to it. */
-    public record FloatingWidget() implements Exportable._Constant<FloatingApp> {}
+    public record FloatingWidget() implements BranchComponent<FloatingApp> {}
 
     @Override public String title()      { return "Floating panes"; }
     @Override public String simpleName() { return "floating"; }

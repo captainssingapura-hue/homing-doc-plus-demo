@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -23,7 +23,7 @@ public record DialogApp() implements AppModule<AppModule._None, DialogApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, DialogApp> {}
     /** The app as a widget by the base's contract: {@code new DialogWidget(branch, params)}; appMain delegates to it. */
-    public record DialogWidget() implements Exportable._Constant<DialogApp> {}
+    public record DialogWidget() implements BranchComponent<DialogApp> {}
 
     @Override public String title()      { return "Dialog"; }
     @Override public String simpleName() { return "dialog"; }

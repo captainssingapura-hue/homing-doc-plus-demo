@@ -17,7 +17,10 @@ import java.util.List;
 /**
  * The gallery's context menus, declared once as typed trees — a class per
  * node, a kind per cell — validated in Java and stamped into one JS module,
- * {@code MENUS}, for the page's steward. What a pick does is the page's
+ * {@code MENUS}, for the page's steward. The kinds live here; which of them
+ * the page holds is not listed but derived: the components the gallery's
+ * catalogue lists say what they need ({@code NeedContextMenu}), and the
+ * registry is their union over the crate closure. What a pick does is the page's
  * handler for the kind; what a row's state is for a given object is asked
  * of that handler at bind. Three kinds for three hypothetical cells, each
  * with a peculiarity: the animal's second level, the swatch's checked colour
@@ -165,7 +168,8 @@ public record GalleryMenus() implements EsModule<GalleryMenus>, SelfContent {
         }
     }
 
-    public static final ContextMenuRegistry REGISTRY = ContextMenuRegistry.of(AnimalMenu.INSTANCE, SwatchMenu.INSTANCE, CounterMenu.INSTANCE);
+    /** Derived: the kinds the gallery's catalogued components need — the context menus widget names all three — not listed here. */
+    public static final ContextMenuRegistry REGISTRY = ContextMenuRegistry.requiredBy(List.of(GalleryCrate.INSTANCE));
 
     @Override public ImportsFor<GalleryMenus> imports() { return ImportsFor.noImports(); }
 

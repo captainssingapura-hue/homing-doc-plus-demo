@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -27,7 +27,7 @@ public record CounterApp() implements AppModule<CounterApp.Params, CounterApp> {
 
     record appMain() implements AppModule._AppMain<Params, CounterApp> {}
     /** The app as a widget by the base's contract: {@code new CounterWidget(branch, params)}; appMain delegates to it. */
-    public record CounterWidget() implements Exportable._Constant<CounterApp> {}
+    public record CounterWidget() implements BranchComponent<CounterApp> {}
 
     public static final ParamCodec<Params> CODEC = new ParamCodec<>() {
         @Override public Decoded<Params> from(Map<String, List<String>> query) {
