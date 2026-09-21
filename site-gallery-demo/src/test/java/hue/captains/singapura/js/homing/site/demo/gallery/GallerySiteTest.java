@@ -190,6 +190,6 @@ class GallerySiteTest {
         assertEquals("gallery", composed.root().children().get(0).segment().value(), "the site's own catalogue first in the closure, then the crates it requires");
         assertEquals(10, composed.root().children().size(), "the gallery and the nine vehicles in its closure: the split crate is not required, docking ships statics only");
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
-        assertEquals(List.of("animal", "swatch", "counter"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names the three; nothing lists them");
+        assertEquals(List.of("animal", "counter", "swatch", "tab"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three, by name; the pane in the panes crate names the tab menu; nothing lists them");
     }
 }

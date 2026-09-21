@@ -4,9 +4,13 @@
 // mark where it would land — and dropped there it is a tab; the cross on a
 // chip closes it. A drag along the strip reorders, on its rail — pulling a
 // tab off to float is being worked out on the tab strip page and comes here
-// after. The Tab key walks the chips. The chips are tabs to the design — a
-// hard frame, wide and low — and two sliders set their size and their aspect.
-// A pane floats only within the box. Every mutation is a line on the log.
+// after. A right-click on a chip, or Shift+F10 on it, opens the tab's menu:
+// Detach floats the tab in a pane of its own with no hand, Close closes it.
+// The menu is the pane's own need — this page declares no kind; it holds a
+// steward and answers the picks. The Tab key walks the chips. The chips are
+// tabs to the design — a hard frame, wide and low — and two sliders set
+// their size and their aspect. A pane floats only within the box. Every
+// mutation is a line on the log.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "dockingPage" });
@@ -112,13 +116,31 @@ class DockingWidget {
             }
         }
 
-        var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink });
+        // the page's steward: the kinds it holds are derived — the pane names the tab menu as its need
+        this._menus = new ContextMenuSteward(branch.createBranch("menus"), { types: MENUS, onEvent: function (ev) {
+            switch (ev.kind) {
+                case "Opened": say("Menu      " + ev.menuKind + "  at " + Math.round(ev.x) + "," + Math.round(ev.y)); break;
+                case "Picked": say("Picked    " + ev.menuKind + " / " + ev.itemId); break;
+                case "Closed": say("Menu      " + ev.menuKind + "  " + ev.reason); break;
+                default:       say(ev.kind);
+            }
+        } });
+        var menus = this._menus;
+        var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink, menus: menus });
         this._dock = dock;
         controls.appendChild(this._slider(branch, "size", "the tabs' size", -1, 1, 0.1, 0, function (v) { dock.size(v); return v.toFixed(1); }));
         controls.appendChild(this._slider(branch, "aspect", "the tabs' aspect", -1, 1, 0.1, 0, function (v) { dock.aspect(v); return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }));
         this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink });
         var docking = this._docking;
         docking.addDock(dock);
+        // the tab menu's picks: detach floats the tab under where its chip was, with no hand; close removes it
+        menus.handle(MultiTabPane.MENU, {
+            pick: function (id, o) {
+                if (id === "detach") { var r = o.anchor.getBoundingClientRect(); docking.undockAt(o.pane, o.tab, { x: r.left + 60, y: r.bottom + 14 }); }
+                else if (id === "close") o.pane.removeTab(o.tab.id);
+            },
+            state: function (id, o) { return { disabled: !!o.tab.pinned || o.tab.closable === false }; }
+        });
 
         // the tabs, each on a branch of the page's own: they travel, the page keeps them
         var n = 0;
@@ -157,7 +179,7 @@ class DockingWidget {
         return wrap;
     }
 
-    dispose() { this._docking.dispose(); this._dock.dispose(); }
+    dispose() { this._menus.dispose(); this._docking.dispose(); this._dock.dispose(); }
 }
 
 function appMain(el, params) {
