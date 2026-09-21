@@ -79,16 +79,15 @@ class CardsWidget {
         el.appendChild(grid);
 
         this._size = 0;
-        var size = this._slider(branch, "size", "size, for the grid", -1, 1, 0.05, 0, function (v) {
-            self._size = v;
-            self._cards.forEach(function (c) { c.size(v); });
-            return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : "");
-        });
+        var size = new SliderBuilder().label("size, for the grid").labelWidth("10em").range(-1, 1, 0.05).detent(0).value(0)
+            .onInput(function (v) { self._size = v; self._cards.forEach(function (c) { c.size(v); }); })
+            .format(function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); })
+            .build(branch.createBranch("size")).root;
         el.appendChild(size);
-        var aspect = this._slider(branch, "aspect", "aspect, for the grid", -1, 1, 0.05, 0.6, function (v) {
-            self._cards.forEach(function (c) { c.aspect(v); });
-            return v.toFixed(2) + (v === 0 ? "  square" : v === 1 ? "  the widest" : v === -1 ? "  the tallest" : "");
-        });
+        var aspect = new SliderBuilder().label("aspect, for the grid").labelWidth("10em").range(-1, 1, 0.05).detent(0).value(0.6)
+            .onInput(function (v) { self._cards.forEach(function (c) { c.aspect(v); }); })
+            .format(function (v) { return v.toFixed(2) + (v === 0 ? "  square" : v === 1 ? "  the widest" : v === -1 ? "  the tallest" : ""); })
+            .build(branch.createBranch("aspect")).root;
         el.appendChild(aspect);
 
         // ── one card across the aspect ────────────────────────────────────
@@ -121,29 +120,6 @@ class CardsWidget {
         el.appendChild(row);
 
         this.root = el;
-    }
-
-    /** A labelled range with a readout; onValue draws the readout and does the work. */
-    _slider(branch, name, label, min, max, step, value, onValue) {
-        var wrap = branch.createElement(name + "-wrap", "div");
-        css.addClass(wrap, ga_control);
-        var lab = branch.createElement(name + "-label", "span");
-        css.addClass(lab, ga_control_label);
-        lab.textContent = label;
-        var range = branch.createElement(name + "-range", "input");
-        range.type = "range";
-        css.addClass(range, pv_range);
-        range.min = min; range.max = max; range.step = step; range.value = value;
-        range.setAttribute("aria-label", label);
-        var out = branch.createElement(name + "-out", "span");
-        css.addClass(out, ga_control_readout);
-        function draw() { out.textContent = onValue(Number(range.value)); }
-        range.addEventListener("input", draw);
-        wrap.appendChild(lab);
-        wrap.appendChild(range);
-        wrap.appendChild(out);
-        draw();
-        return wrap;
     }
 
     dispose() {}

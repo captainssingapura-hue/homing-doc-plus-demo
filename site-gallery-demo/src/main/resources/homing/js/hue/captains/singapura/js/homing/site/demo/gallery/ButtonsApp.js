@@ -60,11 +60,10 @@ class ButtonsWidget {
         el.appendChild(row);
 
         this._extent = 1;
-        var extent = this._slider(branch, "extent", "extent", -1, 1, 0.05, 1, function (v) {
-            self._extent = v;
-            self._buttons.forEach(function (b) { b.extent(v); });
-            return v.toFixed(2) + (v === 1 ? "  the word" : v === 0 ? "  neutral" : v === -1 ? "  the other meaning" : "");
-        });
+        var extent = new SliderBuilder().label("extent").labelWidth("12em").range(-1, 1, 0.05).detent(0).value(1)
+            .onInput(function (v) { self._extent = v; self._buttons.forEach(function (b) { b.extent(v); }); })
+            .format(function (v) { return v.toFixed(2) + (v === 1 ? "  the word" : v === 0 ? "  neutral" : v === -1 ? "  the other meaning" : ""); })
+            .build(branch.createBranch("extent")).root;
         el.appendChild(extent);
 
         // ── one size for all, and one word at five ────────────────────────
@@ -82,12 +81,10 @@ class ButtonsWidget {
         });
         el.appendChild(sizeRow);
         this._size = 0;
-        var size = this._slider(branch, "size", "size, for all of them", -1, 1, 0.05, 0, function (v) {
-            self._size = v;
-            self._buttons.forEach(function (b) { b.size(v); });
-            if (self._delete) self._delete.size(v);
-            return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : "");
-        });
+        var size = new SliderBuilder().label("size, for all of them").labelWidth("12em").range(-1, 1, 0.05).detent(0).value(0)
+            .onInput(function (v) { self._size = v; self._buttons.forEach(function (b) { b.size(v); }); if (self._delete) self._delete.size(v); })
+            .format(function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); })
+            .build(branch.createBranch("size")).root;
         el.appendChild(size);
 
         // ── a live one ────────────────────────────────────────────────────
@@ -103,13 +100,15 @@ class ButtonsWidget {
         el.appendChild(liveRow);
         this._delete.size(this._size);
         this._rows = 0;
-        var rows = this._slider(branch, "rows", "rows the action touches", 0, 100, 1, 0, function (n) {
-            self._rows = n;
-            var t = (n - 50) / 50;                    // none: safe (−1); half: neutral (0); all: danger (1)
-            self._delete.label(n === 0 ? "Nothing to delete" : "Delete " + n + " row" + (n === 1 ? "" : "s"));
-            self._delete.extent(t);
-            return n + "  →  extent " + t.toFixed(2);
-        });
+        var rows = new SliderBuilder().label("rows the action touches").labelWidth("12em").range(0, 100, 1).detent(50).value(0)
+            .onInput(function (n) {
+                self._rows = n;
+                var t = (n - 50) / 50;                    // none: safe (−1); half: neutral (0); all: danger (1)
+                self._delete.label(n === 0 ? "Nothing to delete" : "Delete " + n + " row" + (n === 1 ? "" : "s"));
+                self._delete.extent(t);
+            })
+            .format(function (n) { return n + "  →  extent " + ((n - 50) / 50).toFixed(2); })
+            .build(branch.createBranch("rows")).root;
         el.appendChild(rows);
 
         // ── off ───────────────────────────────────────────────────────────
@@ -128,29 +127,6 @@ class ButtonsWidget {
         el.appendChild(offRow);
 
         this.root = el;
-    }
-
-    /** A labelled range with a readout; onValue draws the readout and does the work. */
-    _slider(branch, name, label, min, max, step, value, onValue) {
-        var wrap = branch.createElement(name + "-wrap", "div");
-        css.addClass(wrap, ga_control);
-        var lab = branch.createElement(name + "-label", "span");
-        css.addClass(lab, ga_control_label);
-        lab.textContent = label;
-        var range = branch.createElement(name + "-range", "input");
-        range.type = "range";
-        css.addClass(range, pv_range);
-        range.min = min; range.max = max; range.step = step; range.value = value;
-        range.setAttribute("aria-label", label);
-        var out = branch.createElement(name + "-out", "span");
-        css.addClass(out, ga_control_readout);
-        function draw() { out.textContent = onValue(Number(range.value)); }
-        range.addEventListener("input", draw);
-        wrap.appendChild(lab);
-        wrap.appendChild(range);
-        wrap.appendChild(out);
-        draw();
-        return wrap;
     }
 
     dispose() {}

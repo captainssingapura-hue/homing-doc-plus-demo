@@ -128,8 +128,9 @@ class DockingWidget {
         var menus = this._menus;
         var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink, menus: menus });
         this._dock = dock;
-        controls.appendChild(this._slider(branch, "size", "the tabs' size", -1, 1, 0.1, 0, function (v) { dock.size(v); return v.toFixed(1); }));
-        controls.appendChild(this._slider(branch, "aspect", "the tabs' aspect", -1, 1, 0.1, 0, function (v) { dock.aspect(v); return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }));
+        controls.appendChild(new SliderBuilder().label("the tabs' size").axis().labelWidth("9em").onInput(function (v) { dock.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
+        controls.appendChild(new SliderBuilder().label("the tabs' aspect").axis().labelWidth("9em").onInput(function (v) { dock.aspect(v); })
+            .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
         this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink });
         var docking = this._docking;
         docking.addDock(dock);
@@ -154,29 +155,6 @@ class DockingWidget {
         docking.desk.open({ id: "afloat", title: "Afloat", widget: tab("afloat", "Afloat", NoteWidget, { text: "Drop me on the strip." }).widget, x: 60, y: 200, w: 260, h: 140 });
 
         this.root = el;
-    }
-
-    /** A labelled range with a readout; onValue draws the readout and does the work. */
-    _slider(branch, name, label, min, max, step, value, onValue) {
-        var wrap = branch.createElement(name + "-wrap", "div");
-        css.addClass(wrap, ga_control);
-        var lab = branch.createElement(name + "-label", "span");
-        css.addClass(lab, ga_control_label);
-        lab.textContent = label;
-        var range = branch.createElement(name + "-range", "input");
-        range.type = "range";
-        css.addClass(range, pv_range);
-        range.min = min; range.max = max; range.step = step; range.value = value;
-        range.setAttribute("aria-label", label);
-        var out = branch.createElement(name + "-out", "span");
-        css.addClass(out, ga_control_readout);
-        function draw() { out.textContent = onValue(Number(range.value)); }
-        range.addEventListener("input", draw);
-        wrap.appendChild(lab);
-        wrap.appendChild(range);
-        wrap.appendChild(out);
-        draw();
-        return wrap;
     }
 
     dispose() { this._menus.dispose(); this._docking.dispose(); this._dock.dispose(); }

@@ -7,10 +7,10 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.preferences.PreferencesStyles;
 import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridMirrorModule;
 import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 
 import java.util.List;
 
@@ -36,15 +36,13 @@ public record SplitGridApp() implements AppModule<AppModule._None, SplitGridApp>
                 .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridMirrorModule.SplitGridMirror()), SplitGridMirrorModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PreferencesStyles.pv_range()), PreferencesStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),
                         new GalleryStyles.ga_lede(),
                         new GalleryStyles.ga_grid_cell(),
                         new GalleryStyles.ga_grid_cell_current(),
-                        new GalleryStyles.ga_control(),
-                        new GalleryStyles.ga_control_label(),
                         new GalleryStyles.ga_control_readout(),
                         new GalleryStyles.ga_pane_host(),
                         new GalleryStyles.ga_log(),

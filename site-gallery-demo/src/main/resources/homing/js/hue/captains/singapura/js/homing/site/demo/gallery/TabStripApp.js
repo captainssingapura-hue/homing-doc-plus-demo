@@ -88,32 +88,9 @@ class TabStripWidget {
         draw();
         this._strip.select(order, order[0]);
 
-        controls.appendChild(this._slider(branch, "size", "the chips' size", -1, 1, 0.1, 0, function (v) { self._strip.size(v); return v.toFixed(1); }));
+        controls.appendChild(new SliderBuilder().label("the chips' size").axis().onInput(function (v) { self._strip.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
         say("five chips, Inbox selected");
         this.root = el;
-    }
-
-    /** A labelled range with a readout; onValue draws the readout and does the work. */
-    _slider(branch, name, label, min, max, step, value, onValue) {
-        var wrap = branch.createElement(name + "-wrap", "div");
-        css.addClass(wrap, ga_control);
-        var lab = branch.createElement(name + "-label", "span");
-        css.addClass(lab, ga_control_label);
-        lab.textContent = label;
-        var range = branch.createElement(name + "-range", "input");
-        range.type = "range";
-        css.addClass(range, pv_range);
-        range.min = min; range.max = max; range.step = step; range.value = value;
-        range.setAttribute("aria-label", label);
-        var out = branch.createElement(name + "-out", "span");
-        css.addClass(out, ga_control_readout);
-        function draw() { out.textContent = onValue(Number(range.value)); }
-        range.addEventListener("input", draw);
-        wrap.appendChild(lab);
-        wrap.appendChild(range);
-        wrap.appendChild(out);
-        draw();
-        return wrap;
     }
 
     dispose() { this._strip.dispose(); }

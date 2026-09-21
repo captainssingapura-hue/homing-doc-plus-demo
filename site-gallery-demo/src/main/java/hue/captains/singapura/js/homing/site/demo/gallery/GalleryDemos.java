@@ -131,6 +131,13 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "next; a dock takes a tab by call meanwhile. TabHand is the hand, TabDrag the arithmetic, headless: the bar as "
                     + "slots at one pitch, the nearest slot, who steps aside.",
                     "/tabstrip", TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
+            new Demo("sliders", "Sliders", "A number set by a knob on a track; every part the design's.",
+                    "The slider the other pages set their size, aspect and extent with, on its own: the track sunk, the fill from "
+                    + "the detent to the value, the knob raised and ringed when it has the focus, the notch where the knob rests — "
+                    + "every part a real element wearing a design word, so no browser's slider shows through. Press anywhere on a "
+                    + "rail and it jumps and grabs, the pointer captured; the knob takes the keys. Two events, live and on release. "
+                    + "The three axes, a plain range with a unit, one that is off, and the slider at its three sizes.",
+                    "/sliders", SlidersApp.INSTANCE, "SlidersWidget", Map.of()),
             new Demo("menus", "Context menus", "One steward, three cells, each with a menu of its kind.",
                     "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "
                     + "steward for the page — lazy, minting a kind's menu at its first open and listening to nothing while none is "

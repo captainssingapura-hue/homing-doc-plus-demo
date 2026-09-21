@@ -7,8 +7,8 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.preferences.PreferencesStyles;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 
 import java.util.List;
 
@@ -34,16 +34,13 @@ public record ButtonsApp() implements AppModule<AppModule._None, ButtonsApp> {
         return ImportsFor.<ButtonsApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PreferencesStyles.pv_range()), PreferencesStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),
                         new GalleryStyles.ga_lede(),
                         new GalleryStyles.ga_buttons(),
-                        new GalleryStyles.ga_status(),
-                        new GalleryStyles.ga_control(),
-                        new GalleryStyles.ga_control_label(),
-                        new GalleryStyles.ga_control_readout()
+                        new GalleryStyles.ga_status()
                 ), GalleryStyles.INSTANCE))
                 .build();
     }

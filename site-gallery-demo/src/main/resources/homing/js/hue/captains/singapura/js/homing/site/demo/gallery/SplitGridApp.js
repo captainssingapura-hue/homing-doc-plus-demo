@@ -105,7 +105,7 @@ class SplitGridWidget {
             say("Cursor     " + ev.cellId + "  by " + ev.by);
             self._widgets.forEach(function (w, id) { w.current(id === ev.cellId); });
         } });
-        var scale = this._slider(branch, "scale", "the mirror's scale", 0.1, 0.5, 0.05, 0.25, function (v) { self._mirror.scale(v); return v.toFixed(2); });
+        var scale = new SliderBuilder().label("the mirror's scale").range(0.1, 0.5, 0.05).value(0.25).onInput(function (v) { self._mirror.scale(v); }).format(function (v) { return v.toFixed(2); }).build(branch.createBranch("scale")).root;
         mirrorRow.appendChild(scale);
         var hint = branch.createElement("hint", "span");
         css.addClass(hint, ga_control_readout);
@@ -125,29 +125,6 @@ class SplitGridWidget {
         window.addEventListener("resize", this._onResize);
         requestAnimationFrame(reflect);
         this.root = el;
-    }
-
-    /** A labelled range with a readout; onValue draws the readout and does the work. */
-    _slider(branch, name, label, min, max, step, value, onValue) {
-        var wrap = branch.createElement(name + "-wrap", "div");
-        css.addClass(wrap, ga_control);
-        var lab = branch.createElement(name + "-label", "span");
-        css.addClass(lab, ga_control_label);
-        lab.textContent = label;
-        var range = branch.createElement(name + "-range", "input");
-        range.type = "range";
-        css.addClass(range, pv_range);
-        range.min = min; range.max = max; range.step = step; range.value = value;
-        range.setAttribute("aria-label", label);
-        var out = branch.createElement(name + "-out", "span");
-        css.addClass(out, ga_control_readout);
-        function draw() { out.textContent = onValue(Number(range.value)); }
-        range.addEventListener("input", draw);
-        wrap.appendChild(lab);
-        wrap.appendChild(range);
-        wrap.appendChild(out);
-        draw();
-        return wrap;
     }
 
     dispose() { window.removeEventListener("resize", this._onResize); this._mirror.dispose(); this._grid.dispose(); }
