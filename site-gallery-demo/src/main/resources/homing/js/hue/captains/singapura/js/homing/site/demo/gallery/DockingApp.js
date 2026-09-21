@@ -1,11 +1,15 @@
 // =============================================================================
-// DockingApp — dock and undock. One dock filling the box and a desk over it:
-// drag a floating pane over the strip and it is offered — the dock lit, the
-// mark where it would land — and dropped there it is a tab; the cross on a
-// chip closes it. A drag along the strip reorders, on its rail — pulling a
-// tab off to float is being worked out on the tab strip page and comes here
-// after. A right-click on a chip, or Shift+F10 on it, opens the tab's menu:
-// Detach floats the tab in a pane of its own with no hand, Close closes it.
+// DockingApp — dock and undock. Two docks side by side in a split grid, the
+// divider between them the grid's, and a desk over both: drag a floating
+// pane over either strip and it is offered — the dock lit, the mark where it
+// would land — and dropped there it is a tab; the cross on a chip closes it.
+// A drag along a strip reorders, on its rail — pulling a tab off to float is
+// being worked out on the tab strip page and comes here after. A right-click
+// on a chip, or Shift+F10 on it, opens the tab's menu: Detach floats the tab
+// in a pane of its own with no hand, to be dropped on the other dock; Close
+// closes it. Two docks, one desk, tabs that travel: the setup the keyboard
+// party is stressed on — a tab's widget keeps its branch while its place
+// changes.
 // The menu is the pane's own need — this page declares no kind; it holds a
 // steward and answers the picks. The Tab key walks the chips. The chips are
 // tabs to the design — a hard frame, wide and low — and two sliders set
@@ -76,9 +80,9 @@ class DockingWidget {
         el.appendChild(title);
         var lede = branch.createElement("lede", "p");
         css.addClass(lede, ga_lede);
-        lede.textContent = "One dock and a desk over it. Drag a chip along the strip: it reorders, on its rail. Drag a float over the "
-            + "strip: the dock lights and marks where the tab would land; let go and it is a tab there. The Tab key walks the chips. "
-            + "A float stays within the box. Pulling a tab off to float comes here once the strip has it.";
+        lede.textContent = "Two docks in a split and a desk over both. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it "
+            + "floats; drag the float over either strip: the dock lights and marks where the tab would land; let go and it is a tab "
+            + "there. Drag a chip along a strip: it reorders, on its rail. The Tab key walks the chips. A float stays within the box.";
         el.appendChild(lede);
 
         // ── the chips' size and aspect ────────────────────────────────────
@@ -86,10 +90,13 @@ class DockingWidget {
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
 
-        // ── the box: the dock filling it, the desk over it ────────────────
+        // ── the box: two docks in a split, the desk over both ─────────────
         var box = branch.createElement("box", "div");
         css.addClass(box, ga_dock_box);
         el.appendChild(box);
+        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, layout: { kind: "split", orientation: "horizontal", children: [
+            { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
+        this._grid = grid;
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
@@ -131,14 +138,17 @@ class DockingWidget {
                 default:       say(ev.kind);
             }
         });
-        var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink, menus: menus, keyboard: kb, keyboardId: "docking/dock" });
-        this._dock = dock;
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { dock.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { dock.aspect(v); })
+        var docks = ["left", "right"].map(function (side) {
+            return new MultiTabPane(branch.createBranch("dock-" + side), { host: grid.cell(side), slotId: side, budget: 8, addable: false, onEvent: sink, menus: menus, keyboard: kb, keyboardId: "docking/" + side });
+        });
+        this._docks = docks;
+        var left = docks[0], right = docks[1];
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { docks.forEach(function (d) { d.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { docks.forEach(function (d) { d.aspect(v); }); })
             .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
         this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink, keyboard: kb, keyboardId: "docking/desk" });
         var docking = this._docking;
-        docking.addDock(dock);
+        docks.forEach(function (d) { docking.addDock(d); });
         // the tab menu's picks: detach floats the tab under where its chip was, with no hand; close removes it
         menus.handle(MultiTabPane.MENU, {
             pick: function (id, o) {
@@ -154,15 +164,15 @@ class DockingWidget {
             var own = branch.createBranch("tab-" + id);
             return { id: id, title: title, widget: new Widget(own, params) };
         }
-        dock.addTab(tab("card", "Card", CardWidget, { title: "A card in a dock", badge: "TAB", text: "It travels with its tab: dock, float, dock again." }));
-        dock.addTab(tab("counter", "Counter", CounterWidget, { start: 0 }));
-        dock.addTab(tab("note", "Note", NoteWidget, { text: _NOTE }));
+        left.addTab(tab("card", "Card", CardWidget, { title: "A card in a dock", badge: "TAB", text: "It travels with its tab: dock, float, dock again." }));
+        left.addTab(tab("counter", "Counter", CounterWidget, { start: 0 }));
+        right.addTab(tab("note", "Note", NoteWidget, { text: _NOTE }));
         docking.desk.open({ id: "afloat", title: "Afloat", widget: tab("afloat", "Afloat", NoteWidget, { text: "Drop me on the strip." }).widget, x: 60, y: 200, w: 260, h: 140 });
 
         this.root = el;
     }
 
-    dispose() { this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose(); this._dock.dispose(); }
+    dispose() { this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose(); this._docks.forEach(function (d) { d.dispose(); }); this._grid.dispose(); }
 }
 
 function appMain(el, params) {

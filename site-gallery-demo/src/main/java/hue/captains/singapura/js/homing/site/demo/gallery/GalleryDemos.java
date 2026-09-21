@@ -97,12 +97,13 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "Every mutation is one FloatEvents object on one sink — Opened, Moved, Resized, Raised, Closed — reported "
                     + "once when it happened, never per pixel.",
                     "/floating", FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
-            new Demo("docking", "Dock and undock", "One dock, a desk over it, tabs that float and land.",
-                    "The multi-tab pane is the dock; the desk floats over it. A tab is one record — id, title, widget — with one "
-                    + "placement at a time: in the dock's strip, or afloat in a frame of its own. A drag along the strip reorders, on "
-                    + "its rail; pulling a tab off to float is being worked out on the tab strip page and comes here after — a holder "
-                    + "may undock by call meanwhile. Drag a float over the strip and the dock wears the drop-target word and marks where "
-                    + "the tab would land; let go there and it is a tab, let go over content and it stays afloat. Every chip is in the tab "
+            new Demo("docking", "Dock and undock", "Two docks in a split, a desk over both, tabs that float and land.",
+                    "The multi-tab pane is the dock; the split grid only subdivides; the desk floats over both. A tab is one record "
+                    + "— id, title, widget — with one placement at a time: in a dock's strip, or afloat in a frame of its own; its "
+                    + "widget keeps its branch wherever it goes. A drag along a strip reorders, on its rail; pulling a tab off to "
+                    + "float is being worked out on the tab strip page and comes here after — the tab's menu detaches meanwhile. "
+                    + "Drag a float over either strip and that dock wears the drop-target word and marks where the tab would land; "
+                    + "let go there and it is a tab, let go over content and it stays afloat. Every chip is in the tab "
                     + "order, and the design draws its hover, its press, the selected one and the focus ring. The chip is Control.Tab "
                     + "to the design — like a button, but a hard frame whose measure is the design's, wide and low as a browser's tab, "
                     + "the label ellipsised within; the sliders set the tabs' size and aspect, 0 the design's. A float stays within the "
