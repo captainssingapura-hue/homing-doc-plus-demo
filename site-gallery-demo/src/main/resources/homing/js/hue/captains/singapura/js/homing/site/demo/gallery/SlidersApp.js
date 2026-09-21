@@ -67,18 +67,18 @@ class SlidersWidget {
 
         section("axes", "the three axes — each rests at nought, on its detent", function (box, own) {
             ["size", "aspect", "extent"].forEach(function (axis) {
-                var s = reporting(new SliderBuilder().label(axis).axis().labelWidth("5em").value(axis === "extent" ? 1 : 0)
+                var s = reporting(new SliderBuilder().label(axis).axis().icon(axis).labelWidth("5em").value(axis === "extent" ? 1 : 0)
                     .format(function (v) { return v.toFixed(1) + "  " + words[axis](v); }), axis).build(own.createBranch(axis));
                 self._sliders.push(s);
                 box.appendChild(s.root);
             });
         });
         section("plain", "a plain range — 0 to 100 by 5, a unit in the readout, no detent", function (box, own) {
-            var s = reporting(new SliderBuilder().label("volume").range(0, 100, 5).value(40).format(function (v) { return v + " %"; }), "volume").build(own.createBranch("volume"));
+            var s = reporting(new SliderBuilder().label("volume").range(0, 100, 5).icon("level").value(40).format(function (v) { return v + " %"; }), "volume").build(own.createBranch("volume"));
             self._sliders.push(s);
             box.appendChild(s.root);
         });
-        section("off", "off — inert, and says so", function (box, own) {
+        section("off", "off — inert, and says so; its knob keeps the grip", function (box, own) {
             var s = new SliderBuilder().label("gain").range(-12, 12, 1).detent(0).value(3).format(function (v) { return (v > 0 ? "+" : "") + v + " dB"; }).build(own.createBranch("gain"));
             s.setOn(false);
             self._sliders.push(s);
@@ -86,7 +86,7 @@ class SlidersWidget {
         });
         section("sizes", "the slider at its three sizes: the track, the knob and the notch grow by the design's ratio", function (box, own) {
             [[-1, "the smallest"], [0, "the design's"], [1, "the biggest"]].forEach(function (pair) {
-                var s = reporting(new SliderBuilder().label(pair[1]).axis().labelWidth("8em").size(pair[0]).format(function (v) { return v.toFixed(1); }), "size " + pair[0]).build(own.createBranch("size" + (pair[0] + 1)));
+                var s = reporting(new SliderBuilder().label(pair[1]).axis().icon("size").labelWidth("8em").size(pair[0]).format(function (v) { return v.toFixed(1); }), "size " + pair[0]).build(own.createBranch("size" + (pair[0] + 1)));
                 self._sliders.push(s);
                 box.appendChild(s.root);
             });

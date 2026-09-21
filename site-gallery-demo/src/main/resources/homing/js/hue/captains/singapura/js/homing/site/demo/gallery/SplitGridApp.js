@@ -105,7 +105,7 @@ class SplitGridWidget {
             say("Cursor     " + ev.cellId + "  by " + ev.by);
             self._widgets.forEach(function (w, id) { w.current(id === ev.cellId); });
         } });
-        var scale = new SliderBuilder().label("the mirror's scale").range(0.1, 0.5, 0.05).value(0.25).onInput(function (v) { self._mirror.scale(v); }).format(function (v) { return v.toFixed(2); }).build(branch.createBranch("scale")).root;
+        var scale = new SliderBuilder().label("the mirror's scale").icon("size").range(0.1, 0.5, 0.05).value(0.25).onInput(function (v) { self._mirror.scale(v); }).format(function (v) { return v.toFixed(2); }).build(branch.createBranch("scale")).root;
         mirrorRow.appendChild(scale);
         var hint = branch.createElement("hint", "span");
         css.addClass(hint, ga_control_readout);

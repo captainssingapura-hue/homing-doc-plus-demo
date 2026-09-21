@@ -60,7 +60,7 @@ class ButtonsWidget {
         el.appendChild(row);
 
         this._extent = 1;
-        var extent = new SliderBuilder().label("extent").labelWidth("12em").range(-1, 1, 0.05).detent(0).value(1)
+        var extent = new SliderBuilder().label("extent").icon("extent").labelWidth("12em").range(-1, 1, 0.05).detent(0).value(1)
             .onInput(function (v) { self._extent = v; self._buttons.forEach(function (b) { b.extent(v); }); })
             .format(function (v) { return v.toFixed(2) + (v === 1 ? "  the word" : v === 0 ? "  neutral" : v === -1 ? "  the other meaning" : ""); })
             .build(branch.createBranch("extent")).root;
@@ -81,7 +81,7 @@ class ButtonsWidget {
         });
         el.appendChild(sizeRow);
         this._size = 0;
-        var size = new SliderBuilder().label("size, for all of them").labelWidth("12em").range(-1, 1, 0.05).detent(0).value(0)
+        var size = new SliderBuilder().label("size, for all of them").icon("size").labelWidth("12em").range(-1, 1, 0.05).detent(0).value(0)
             .onInput(function (v) { self._size = v; self._buttons.forEach(function (b) { b.size(v); }); if (self._delete) self._delete.size(v); })
             .format(function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); })
             .build(branch.createBranch("size")).root;
@@ -100,7 +100,7 @@ class ButtonsWidget {
         el.appendChild(liveRow);
         this._delete.size(this._size);
         this._rows = 0;
-        var rows = new SliderBuilder().label("rows the action touches").labelWidth("12em").range(0, 100, 1).detent(50).value(0)
+        var rows = new SliderBuilder().label("rows the action touches").icon("level").labelWidth("12em").range(0, 100, 1).detent(50).value(0)
             .onInput(function (n) {
                 self._rows = n;
                 var t = (n - 50) / 50;                    // none: safe (−1); half: neutral (0); all: danger (1)

@@ -128,8 +128,8 @@ class DockingWidget {
         var menus = this._menus;
         var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink, menus: menus });
         this._dock = dock;
-        controls.appendChild(new SliderBuilder().label("the tabs' size").axis().labelWidth("9em").onInput(function (v) { dock.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
-        controls.appendChild(new SliderBuilder().label("the tabs' aspect").axis().labelWidth("9em").onInput(function (v) { dock.aspect(v); })
+        controls.appendChild(new SliderBuilder().label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { dock.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
+        controls.appendChild(new SliderBuilder().label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { dock.aspect(v); })
             .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
         this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink });
         var docking = this._docking;
