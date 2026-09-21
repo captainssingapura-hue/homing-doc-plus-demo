@@ -42,10 +42,10 @@ class SplitGridWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
-        // the keys, through the party: the shell's steward when handed one, else the page's own
-        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
-        // the members' ids, qualified by the page: the shell's one party has every page's sliders in it
-        this._ownKb = params && params.keyboard ? null : kb;
+        // the keys, through the party: the page's steward, made by the chrome and handed in the params;
+        // the members' ids qualified by the page, since the shell's one party has every page's members in it
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -104,7 +104,7 @@ class SplitGridWidget {
         this._widgets = new Map();
         var n = 0;
 
-        this._mirror = new SplitGridMirror(branch.createBranch("mirror"), { host: mirrorHost, scale: 0.25, onEvent: function (ev) {
+        this._mirror = new SplitGridMirror(branch.createBranch("mirror"), { host: mirrorHost, scale: 0.25, keyboard: kb, keyboardId: "split-grid/mirror", onEvent: function (ev) {
             if (ev.kind !== "CursorMoved") return;
             say("Cursor     " + ev.cellId + "  by " + ev.by);
             self._widgets.forEach(function (w, id) { w.current(id === ev.cellId); });
@@ -131,7 +131,7 @@ class SplitGridWidget {
         this.root = el;
     }
 
-    dispose() { window.removeEventListener("resize", this._onResize); this._mirror.dispose(); this._grid.dispose(); if (this._ownKb) this._ownKb.dispose(); }
+    dispose() { window.removeEventListener("resize", this._onResize); this._mirror.dispose(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {

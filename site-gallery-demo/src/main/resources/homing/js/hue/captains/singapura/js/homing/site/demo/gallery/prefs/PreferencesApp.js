@@ -31,11 +31,17 @@ class PreferencesWidget {
         var host = branch.createElement("host", "div");
         el.appendChild(host);
         var view = new PreferencesView(branch.createBranch("view"), host, PREFERENCES);
+        // the keys, through the party: the page holds them for the view — a press or the focus arriving in it claims — and the view hands them on
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
+        this._kb = kb;
+        this._kbId = kb.join("preferences/view", { keyDown: function (ev) { return view.key(ev); } });
+        this._offKeys = Keys.claimOn(host, kb, this._kbId);
         this.root = el;
         this._view = view;
     }
 
-    dispose() { this._view.dispose(); }
+    dispose() { this._offKeys(); this._kb.leave(this._kbId); this._view.dispose(); }
 }
 
 function appMain(el, params) {

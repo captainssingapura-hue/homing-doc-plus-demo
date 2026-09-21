@@ -17,10 +17,10 @@ class TabStripWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
-        // the keys, through the party: the shell's steward when handed one, else the page's own
-        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
-        // the members' ids, qualified by the page: the shell's one party has every page's sliders in it
-        this._ownKb = params && params.keyboard ? null : kb;
+        // the keys, through the party: the page's steward, made by the chrome and handed in the params;
+        // the members' ids qualified by the page, since the shell's one party has every page's members in it
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -69,6 +69,7 @@ class TabStripWidget {
         }
 
         this._strip = new TabStrip(branch.createBranch("strip"), {
+            keyboard: kb, keyboardId: "tab-strip/strip",
             onDrop: function (chip, dest) {
                 var from = order.indexOf(chip);
                 order.splice(from, 1);
@@ -97,7 +98,7 @@ class TabStripWidget {
         this.root = el;
     }
 
-    dispose() { this._strip.dispose(); if (this._ownKb) this._ownKb.dispose(); }
+    dispose() { this._strip.dispose(); }
 }
 
 function appMain(el, params) {

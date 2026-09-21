@@ -6,8 +6,8 @@
 // demo is the demo app's widget class, imported through the serving context
 // when first chosen and kept in a slot after; the explanation is what DEMOS
 // says, with a link to the page the demo also is. The address follows. The
-// shell is one document, so it makes the one keyboard steward and hands it
-// to every demo in its params: a demo standing alone as a page makes its own.
+// shell is one document under the chrome, which made the one keyboard steward
+// and handed it in the params; the shell hands it on to every demo in theirs.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "galleryShell" });
@@ -72,7 +72,10 @@ function appMain(el, params) {
     explain.appendChild(text);
     explain.appendChild(link);
 
-    var keyboard = new KeyboardSteward(branch.createBranch("keyboard"), {});
+    var keyboard = params && params.keyboard;
+    if (!keyboard) throw new Error("[galleryShell] the page's keyboard steward is required: params.keyboard");
+    // one document, one menu steward: the kinds are the site's, derived from every page's needs; the demos take it in their params
+    var menus = new ContextMenuSteward(branch.createBranch("menus"), { types: MENUS, keyboard: keyboard, keyboardId: "shell/menus" });
     var navSlot  = new WidgetSlot({ branch: branch, host: navHost });
     var demoSlot = new WidgetSlot({ branch: branch, host: demoHost });
     var wanted = null;
@@ -95,7 +98,7 @@ function appMain(el, params) {
         try { history.replaceState(null, "", "?demo=" + encodeURIComponent(slug)); } catch (e) {}
         if (demoSlot.has(path)) { demoSlot.show(path); return; }
         _load(d.widget).then(function (Widget) {
-            if (wanted === path) demoSlot.show(path, Widget, Object.assign({}, d.widget.params || {}, { keyboard: keyboard }));
+            if (wanted === path) demoSlot.show(path, Widget, Object.assign({}, d.widget.params || {}, { keyboard: keyboard, menus: menus }));
         }).catch(function (e) { console.error("[galleryShell] demo '" + path + "' failed", e); });
     }
 

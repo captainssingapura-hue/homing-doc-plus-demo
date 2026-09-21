@@ -68,6 +68,9 @@ class PanesWidget {
         branch.activate(_owner);
         var dialogs = 0;   // each picker is a branch of its own
         var el = branch.createElement("root", "div");
+        // the keys, through the party: the page's steward, made by the chrome and handed in the params
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -117,7 +120,7 @@ class PanesWidget {
         }
 
         pane = new MultiTabPane(branch.createBranch("pane"), {
-            host: host, slotId: "main", budget: 8,
+            host: host, slotId: "main", budget: 8, keyboard: kb, keyboardId: "panes/pane",
             onEvent: function (ev) {
                 say(line(ev));
                 switch (ev.kind) {
@@ -156,7 +159,7 @@ class PanesWidget {
         // The plus: a picker in the dialog. Enter is the first kind's.
         function pick() {
             new Dialog(branch.createBranch("dialog" + (++dialogs)), {
-                title: "Add a tab",
+                title: "Add a tab", keyboard: kb, keyboardId: "panes/picker",
                 size: { w: 420, h: 220 },
                 content: function (b, body) {
                     var p = b.createElement("text", "p");

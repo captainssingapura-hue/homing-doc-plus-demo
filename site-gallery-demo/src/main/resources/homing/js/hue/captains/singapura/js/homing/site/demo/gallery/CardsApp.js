@@ -20,10 +20,10 @@ class CardsWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
-        // the keys, through the party: the shell's steward when handed one, else the page's own
-        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
-        // the members' ids, qualified by the page: the shell's one party has every page's sliders in it
-        this._ownKb = params && params.keyboard ? null : kb;
+        // the keys, through the party: the page's steward, made by the chrome and handed in the params;
+        // the members' ids qualified by the page, since the shell's one party has every page's members in it
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -76,7 +76,7 @@ class CardsWidget {
         this._cards.push(own);
 
         var action = new CardBuilder().title("A card with an action").badge("PRESS").text("Click it, or Tab to it and press Enter or Space. It has a role and a ring; the plain ones do not.")
-            .onClick(function () { say("the action card was pressed"); }).aspect(0.6)
+            .onClick(function () { say("the action card was pressed"); }).aspect(0.6).keyboard(kb, "cards/action")
             .build(branch.createBranch("action"));
         grid.appendChild(action.root);
         this._cards.push(action);
@@ -126,7 +126,7 @@ class CardsWidget {
         this.root = el;
     }
 
-    dispose() { if (this._ownKb) this._ownKb.dispose(); }
+    dispose() {}
 }
 
 function appMain(el, params) {

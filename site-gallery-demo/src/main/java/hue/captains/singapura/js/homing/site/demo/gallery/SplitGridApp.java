@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
-import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -38,7 +37,6 @@ public record SplitGridApp() implements AppModule<AppModule._None, SplitGridApp>
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridMirrorModule.SplitGridMirror()), SplitGridMirrorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardSteward()), KeyboardStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),

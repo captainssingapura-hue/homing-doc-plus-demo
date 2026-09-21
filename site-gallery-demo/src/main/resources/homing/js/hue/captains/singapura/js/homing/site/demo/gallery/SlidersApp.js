@@ -44,9 +44,9 @@ class SlidersWidget {
             log.textContent += (lines > 1 ? "\n" : "") + lines + "  " + line;
             log.scrollTop = log.scrollHeight;
         }
-        // the keyboard party: the shell's steward when handed one, else the page's own; who holds the keys, on the log
-        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
-        this._ownKb = params && params.keyboard ? null : kb;
+        // the keyboard party: the page's steward, made by the chrome and handed in the params; who holds the keys, on the log
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
         this._offKb = kb.on(function (ev) {
             say(ev.kind === "Granted" ? "keys  →  " + ev.id : ev.kind === "Taken" ? "keys  " + ev.id + "  →  " + ev.by : "keys  " + ev.id + "  released");
         });
@@ -115,7 +115,7 @@ class SlidersWidget {
         this.root = el;
     }
 
-    dispose() { this._sliders.forEach(function (s) { s.dispose(); }); this._group.dispose(); this._offKb(); if (this._ownKb) this._ownKb.dispose(); }
+    dispose() { this._sliders.forEach(function (s) { s.dispose(); }); this._group.dispose(); this._offKb(); }
 }
 
 function appMain(el, params) {

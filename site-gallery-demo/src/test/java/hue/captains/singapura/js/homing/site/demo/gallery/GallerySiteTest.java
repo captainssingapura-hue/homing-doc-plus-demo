@@ -54,7 +54,7 @@ class GallerySiteTest {
     void theWelcomePageStaysUnderItsOwnArm() {
         var body = GallerySite.INSTANCE.router().resolve(Path.of("welcome")).orElseThrow().html(Query.NONE).body();
         assertTrue(body.contains("<title>Welcome · Gallery</title>"), body);
-        assertTrue(body.contains("appMain(main);"), body);   // paramless: nothing stamped
+        assertTrue(body.contains("appMain(page.main, Object.freeze(Object.assign({}, {}, { keyboard: page.keyboard })));"), body);   // paramless: nothing stamped, the page's keyboard steward alone
     }
 
     @Test
@@ -77,7 +77,7 @@ class GallerySiteTest {
         assertTrue(body.contains("const params = Object.freeze({\"start\":\"7\"});"), body);
         assertTrue(body.contains("Object.freeze({text:\"Gallery\",to:\"\\/\"})"), body);
         assertTrue(body.contains("Object.freeze({text:\"Counter\",to:\"\\/counter\\/7\"})"), body);
-        assertTrue(body.contains("appMain(main, params);"), body);
+        assertTrue(body.contains("appMain(page.main, Object.freeze(Object.assign({}, params, { keyboard: page.keyboard })));"), body);   // the page adds its keyboard steward
     }
 
     @Test
@@ -193,7 +193,10 @@ class GallerySiteTest {
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of("animal", "counter", "swatch", "tab"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three, by name; the pane in the panes crate names the tab menu; nothing lists them");
         // the keys likewise: the slider and its group declare theirs; the page's map is derived, and no declared component listens for itself
-        assertEquals(List.of(), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
-        assertEquals(List.of("Slider", "SliderGroup"), KeyboardRegistry.requiredBy(List.of(GalleryCrate.INSTANCE)).byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList());
+        // one capture left in the closure: the grid's header drag cancels on Escape; the grid migrates with the tree renderer, not before
+        assertEquals(List.of("homing-rel-grid: RelGridHeaderDragModule captures keys on the document; only the steward does"), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
+        assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(List.of(GalleryCrate.INSTANCE)).stream().filter(m -> !m.startsWith("RelGrid") && !m.startsWith("RelTree") && !m.startsWith("Tree")).toList(), "the gallery's own widgets and the components it serves: every key through the party");
+        assertEquals(List.of("Card", "ContextMenuSteward", "ContextMenusWidget", "Desk", "Dialog", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup", "SplitGridMirror", "TabStrip"),
+                KeyboardRegistry.requiredBy(List.of(GalleryCrate.INSTANCE)).byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList());
     }
 }

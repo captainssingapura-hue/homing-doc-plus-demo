@@ -61,10 +61,10 @@ class DockingWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
-        // the keys, through the party: the shell's steward when handed one, else the page's own
-        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
-        // the members' ids, qualified by the page: the shell's one party has every page's sliders in it
-        this._ownKb = params && params.keyboard ? null : kb;
+        // the keys, through the party: the page's steward, made by the chrome and handed in the params;
+        // the members' ids qualified by the page, since the shell's one party has every page's members in it
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -120,22 +120,23 @@ class DockingWidget {
             }
         }
 
-        // the page's steward: the kinds it holds are derived — the pane names the tab menu as its need
-        this._menus = new ContextMenuSteward(branch.createBranch("menus"), { types: MENUS, onEvent: function (ev) {
+        // the menu steward: the shell's when handed one (one per document), else the page's own; the kinds it holds are derived — the pane names the tab menu as its need
+        var menus = params && params.menus ? params.menus : new ContextMenuSteward(branch.createBranch("menus"), { types: MENUS, keyboard: kb, keyboardId: "docking/menus" });
+        this._ownMenus = params && params.menus ? null : menus;
+        this._offMenus = menus.on(function (ev) {
             switch (ev.kind) {
                 case "Opened": say("Menu      " + ev.menuKind + "  at " + Math.round(ev.x) + "," + Math.round(ev.y)); break;
                 case "Picked": say("Picked    " + ev.menuKind + " / " + ev.itemId); break;
                 case "Closed": say("Menu      " + ev.menuKind + "  " + ev.reason); break;
                 default:       say(ev.kind);
             }
-        } });
-        var menus = this._menus;
-        var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink, menus: menus });
+        });
+        var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink, menus: menus, keyboard: kb, keyboardId: "docking/dock" });
         this._dock = dock;
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { dock.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { dock.aspect(v); })
             .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
-        this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink });
+        this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink, keyboard: kb, keyboardId: "docking/desk" });
         var docking = this._docking;
         docking.addDock(dock);
         // the tab menu's picks: detach floats the tab under where its chip was, with no hand; close removes it
@@ -161,7 +162,7 @@ class DockingWidget {
         this.root = el;
     }
 
-    dispose() { this._menus.dispose(); this._docking.dispose(); this._dock.dispose(); if (this._ownKb) this._ownKb.dispose(); }
+    dispose() { this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose(); this._dock.dispose(); }
 }
 
 function appMain(el, params) {

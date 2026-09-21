@@ -57,6 +57,9 @@ class FloatingWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
+        // the keys, through the party: the page's steward, made by the chrome and handed in the params
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -100,7 +103,7 @@ class FloatingWidget {
             log.scrollTop = log.scrollHeight;
         }
 
-        this._desk = new Desk(branch.createBranch("desk"), { host: host, onEvent: function (ev) {
+        this._desk = new Desk(branch.createBranch("desk"), { host: host, keyboard: kb, keyboardId: "floating/desk", onEvent: function (ev) {
             switch (ev.kind) {
                 case "Opened":  say("Opened   " + ev.id + "  \"" + ev.title + "\"  at " + ev.x + "," + ev.y + "  " + ev.w + "×" + ev.h); break;
                 case "Moved":   say("Moved    " + ev.id + "  to " + ev.x + "," + ev.y); break;

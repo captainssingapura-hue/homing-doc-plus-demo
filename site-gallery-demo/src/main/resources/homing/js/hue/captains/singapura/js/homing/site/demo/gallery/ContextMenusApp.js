@@ -16,13 +16,14 @@ const _owner = Object.freeze({ toString: () => "contextMenusPage" });
 var _ANIMALS = { cat: "🐱", dog: "🐶", owl: "🦉", fox: "🦊" };
 var _COLOURS = ["primary", "success", "warning", "danger"];
 
-/** A cell: a focusable box with a face and a caption; a right-click or Shift+F10 asks the steward for its kind. */
+/** A cell: a focusable box with a face and a caption; a right-click asks the steward for its kind, and so does the ContextMenu key or Shift+F10 by key(ev), from the page that holds the keys. */
 class Cell {
     constructor(branch, name, kind, menus, say) {
         var self = this;
         branch.activate(_owner);
         this.kind = kind;
         this.say = say;
+        this.menus = menus;
         var root = branch.createElement(name, "div");
         css.addClass(root, ga_cell);
         root.setAttribute("tabindex", "0");
@@ -35,13 +36,14 @@ class Cell {
         root.addEventListener("contextmenu", function (e) {
             if (menus.open(kind, self, { x: e.clientX, y: e.clientY }, { anchor: root })) e.preventDefault();
         });
-        root.addEventListener("keydown", function (e) {
-            if (e.key === "ContextMenu" || (e.shiftKey && e.key === "F10")) {
-                var r = root.getBoundingClientRect();
-                if (menus.open(kind, self, { x: r.left + 24, y: r.top + 24 }, { keyboard: true, anchor: root })) e.preventDefault();
-            }
-        });
         this.root = root;
+    }
+
+    /** A keydown from the page: the ContextMenu key or Shift+F10 on the cell asks for its menu; true when taken. */
+    key(e) {
+        if (e.target !== this.root || !(e.key === "ContextMenu" || (e.shiftKey && e.key === "F10"))) return false;
+        var r = this.root.getBoundingClientRect();
+        return !!this.menus.open(this.kind, this, { x: r.left + 24, y: r.top + 24 }, { keyboard: true, anchor: this.root });
     }
 }
 
@@ -124,6 +126,9 @@ class ContextMenusWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
+        // the keys, through the party: the page's steward, made by the chrome and handed in the params
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -160,15 +165,18 @@ class ContextMenusWidget {
             log.scrollTop = log.scrollHeight;
         }
 
-        this._menus = new ContextMenuSteward(branch.createBranch("menus"), { types: MENUS, onEvent: function (ev) {
+        // the menu steward: the shell's when handed one (one per document), else the page's own
+        var menus = params && params.menus ? params.menus : new ContextMenuSteward(branch.createBranch("menus"), { types: MENUS, keyboard: kb, keyboardId: "context-menus/menus" });
+        this._ownMenus = params && params.menus ? null : menus;
+        this._menus = menus;
+        this._offMenus = menus.on(function (ev) {
             switch (ev.kind) {
                 case "Opened": say("Opened    " + ev.menuKind + "  at " + Math.round(ev.x) + "," + Math.round(ev.y)); break;
                 case "Picked": say("Picked    " + ev.menuKind + " / " + ev.itemId); break;
                 case "Closed": say("Closed    " + ev.menuKind + "  " + ev.reason); break;
                 default:       say(ev.kind);
             }
-        } });
-        var menus = this._menus;
+        });
         // the handlers: each kind's pick and state are the bound cell's own
         ["animal", "swatch", "counter"].forEach(function (kind) {
             menus.handle(kind, { pick: function (id, cell) { cell.pick(id); }, state: function (id, cell) { return cell.state(id); } });
@@ -192,11 +200,16 @@ class ContextMenusWidget {
             var pick = c.pick;
             c.pick = function (id) { pick.call(c, id); specimensOf.forEach(function (s) { if (s.cell === c) s.menu.bind(c, function (i) { return c.state(i); }); }); };
         });
-        say("three cells; right-click one");
+        // the page holds the keys for its cells: a press or the focus arriving in a cell claims, and the key goes to the cell it is on
+        var cellsOf = this._cells;
+        this._kbId = kb.join("context-menus/cells", { keyDown: function (ev) { for (var i = 0; i < cellsOf.length; i++) if (cellsOf[i].key(ev)) return true; return false; } });
+        this._offKeys = Keys.claimOn(cells, kb, this._kbId);
+        this._kb = kb;
+        say("three cells; right-click one, or focus one and press the menu key");
         this.root = el;
     }
 
-    dispose() { this._menus.dispose(); }
+    dispose() { this._offKeys(); this._kb.leave(this._kbId); this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); }   // the specimens are the steward's to dispose
 }
 
 function appMain(el, params) {

@@ -11,6 +11,9 @@ class DialogWidget {
         branch.activate(_owner);
         var dialogs = 0;   // each open is a branch of its own
         var el = branch.createElement("root", "div");
+        // the keys, through the party: the page's steward, made by the chrome and handed in the params
+        var kb = params && params.keyboard;
+        if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -43,7 +46,7 @@ class DialogWidget {
         // 1. Modal, with actions. OK is primary; Enter anywhere but a form control fires it.
         row.appendChild(new Button(branch.createElement("openModal", Button.TAG), { label: "Open a modal", onClick: function () {
             new Dialog(branch.createBranch("dialog" + (++dialogs)), {
-                title: "A modal dialog",
+                title: "A modal dialog", keyboard: kb, keyboardId: "dialog/modal",
                 content: function (b, body) {
                     var p = b.createElement("text", "p");
                     css.addClass(p, ga_lede);
@@ -62,7 +65,7 @@ class DialogWidget {
         // 2. Non-modal: the page stays live, keys reach the dialog only while focus is inside.
         row.appendChild(new Button(branch.createElement("openLoose", Button.TAG), { label: "Open a non-modal", kind: "plain", onClick: function () {
             new Dialog(branch.createBranch("dialog" + (++dialogs)), {
-                title: "A non-modal dialog",
+                title: "A non-modal dialog", keyboard: kb, keyboardId: "dialog/loose-" + dialogs,
                 modal: false,
                 size: { w: 380, h: 200 },
                 content: function (b, body) {
@@ -81,7 +84,7 @@ class DialogWidget {
         row.appendChild(new Button(branch.createElement("openKeys", Button.TAG), { label: "Open one with keys inside", kind: "plain", onClick: function () {
             var n = 0, dlg;
             dlg = new Dialog(branch.createBranch("dialog" + (++dialogs)), {
-                title: "The content is asked first",
+                title: "The content is asked first", keyboard: kb, keyboardId: "dialog/keys",
                 size: { w: 460, h: 240 },
                 content: function (b, body) {
                     var p = b.createElement("text", "p");

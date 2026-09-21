@@ -1,6 +1,11 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.keyboard.Key;
+import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
+import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
+import hue.captains.singapura.js.homing.component.keyboard.Modifier;
+import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -25,7 +30,9 @@ public record ContextMenusApp() implements AppModule<AppModule._None, ContextMen
 
     record appMain() implements AppModule._AppMain<AppModule._None, ContextMenusApp> {}
     /** The app as a widget by the base's contract: {@code new ContextMenusWidget(branch, params)}; appMain delegates to it. */
-    public record ContextMenusWidget() implements BranchComponent<ContextMenusApp>, NeedContextMenu {
+    public record ContextMenusWidget() implements BranchComponent<ContextMenusApp>, NeedContextMenu, NeedKeyboard {
+        /** The page holds the keys for its cells: the menu key on the cell the focus is on. */
+        @Override public List<KeyBinding> keys() { return List.of(KeyBinding.of(Key.CONTEXT_MENU, "the cell's menu"), KeyBinding.of(Key.F10, Modifier.SHIFT, "the cell's menu")); }
         @Override public String summary() { return "Three cells, each opening a menu of its kind; the kinds a specimen each."; }
         @Override public Set<ContextMenuKind<?>> required() { return Set.of(GalleryMenus.AnimalMenu.INSTANCE, GalleryMenus.SwatchMenu.INSTANCE, GalleryMenus.CounterMenu.INSTANCE); }
     }
@@ -38,6 +45,7 @@ public record ContextMenusApp() implements AppModule<AppModule._None, ContextMen
         return ImportsFor.<ContextMenusApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ContextMenuStewardModule.ContextMenuSteward()), ContextMenuStewardModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new GalleryMenus.MENUS()), GalleryMenus.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
