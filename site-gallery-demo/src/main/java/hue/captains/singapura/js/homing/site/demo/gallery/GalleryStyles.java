@@ -20,6 +20,7 @@ import static hue.captains.singapura.js.homing.design.Layer.Inverted;
 import static hue.captains.singapura.js.homing.design.Interaction.Current;
 import static hue.captains.singapura.js.homing.design.Interaction.Focus;
 import static hue.captains.singapura.js.homing.design.Layer.Raised;
+import static hue.captains.singapura.js.homing.design.Layer.Recessed;
 import static hue.captains.singapura.js.homing.design.Target.Color;
 import static hue.captains.singapura.js.homing.design.Target.Motion;
 import static hue.captains.singapura.js.homing.design.Target.Shape;
@@ -359,11 +360,72 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return "margin-top: 10px;"; }
     }
 
+    // ── The keyboard page ─────────────────────────────────────────────────────
+
+    /** The strip that shows who has the keys: one chip per member of the page's party, in a row. */
+    public record ga_holders() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+            """;
+        }
+    }
+
+    /** A member's chip: a control at rest, in a code face. */
+    public record ga_holder() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() {
+            return List.of(of(Raised.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class),
+                           of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class), of(Interactive.class, Motion.Ease.class));
+        }
+        @Override public String body() { return "padding: 4px 10px; white-space: nowrap;"; }
+    }
+
+    /** The chip of the one that holds the keys: the current surface, the ring drawn now. */
+    public record ga_holder_on() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Current.class, Color.Surface.class), of(Current.class, Color.Edge.class), of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class), of(Body.class, Color.Ink.class)); }
+        @Override public String body() { return ""; }
+    }
+
+    /** The platformer's stage: a sunk box the animal runs in; a press in it claims the keys. */
+    public record ga_stage() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class)); }
+        @Override public String body() { return """
+            position: relative;
+            inline-size: 100%;
+            max-inline-size: 560px;
+            block-size: 160px;
+            overflow: hidden;
+            outline: none;
+            """;
+        }
+    }
+
+    /** The animal on the stage: placed by the two runtime variables the game sets, facing where it last ran. */
+    public record ga_sprite() implements CssClass<GalleryStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--ga-x"), new CssVar("--ga-y"), new CssVar("--ga-face")); }
+        @Override public List<? extends Wearable> wears() { return List.of(of(Numeral.class, Type.Face.class), of(Display.class, Color.Ink.class)); }
+        @Override public String body() { return """
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            font-size: 40px;
+            line-height: 1;
+            user-select: none;
+            translate: var(--ga-x, 0px) calc(-1 * var(--ga-y, 0px));
+            scale: var(--ga-face, 1) 1;
+            """;
+        }
+    }
+
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
                        new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_box(), new ga_shelf(), new ga_menu_cells(), new ga_cell(), new ga_cell_face(), new ga_cell_caption(),
                        new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_specimens(), new ga_specimen_name(), new ga_log(), new ga_status(),
+                       new ga_holders(), new ga_holder(), new ga_holder_on(), new ga_stage(), new ga_sprite(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }

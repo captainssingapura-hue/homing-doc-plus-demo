@@ -138,6 +138,16 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "rail and it jumps and grabs, the pointer captured; the knob takes the keys. Two events, live and on release. "
                     + "The three axes, a plain range with a unit, one that is off, and the slider at its three sizes.",
                     "/sliders", SlidersApp.INSTANCE, "SlidersWidget", Map.of()),
+            new Demo("keyboard", "Keyboard", "Who has the keys: one party per page, one holder or none.",
+                    "The keyboard party on view. Every component that takes keys is a member of the page's party; a press in it, "
+                    + "or the focus arriving, claims the keys — and a claim evicts whoever held, who is told by whom. One steward, "
+                    + "the page's, captures keys on the document only while someone holds and asks the holder first: a key it "
+                    + "takes stops there, a key it leaves travels on as it would. Five members: a group of sliders, a card, a "
+                    + "strip of tabs, a dialog that claims by call on open and gives the keys back on close, and a platformer that "
+                    + "holds keys down, so keyup travels through the party as keydown does. The strip shows the holder live; the "
+                    + "log says who took the keys from whom. One button shows the bug the design names: the platformer claiming by "
+                    + "call from behind a modal — the party is blind, so it holds, and the dialog stops hearing Escape.",
+                    "/keyboard", KeyboardApp.INSTANCE, "KeyboardWidget", Map.of()),
             new Demo("menus", "Context menus", "One steward, three cells, each with a menu of its kind.",
                     "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "
                     + "steward for the page — lazy, minting a kind's menu at its first open and listening to nothing while none is "

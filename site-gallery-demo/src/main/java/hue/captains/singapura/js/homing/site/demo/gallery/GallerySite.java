@@ -46,6 +46,7 @@ public record GallerySite() implements Site {
     static final AppPage<?, ?> TABSTRIP = MPA.page(TabStripApp.INSTANCE);
     static final AppPage<?, ?> MENUS   = MPA.page(ContextMenusApp.INSTANCE);
     static final AppPage<?, ?> SLIDERS = MPA.page(SlidersApp.INSTANCE);
+    static final AppPage<?, ?> KEYBOARD = MPA.page(KeyboardApp.INSTANCE);
     static final AppPage<?, ?> PREFS   = MPA.page(PreferencesApp.INSTANCE);
 
     static final Navigable PLAIN = q -> new HtmlPageContent("""
@@ -80,6 +81,7 @@ public record GallerySite() implements Site {
             case "tabstrip" -> path.depth() == 1 ? Optional.of(placed(TABSTRIP, "Tab strip", path)) : Optional.empty();
             case "menus"   -> path.depth() == 1 ? Optional.of(placed(MENUS, "Context menus", path)) : Optional.empty();
             case "sliders" -> path.depth() == 1 ? Optional.of(placed(SLIDERS, "Sliders", path)) : Optional.empty();
+            case "keyboard" -> path.depth() == 1 ? Optional.of(placed(KEYBOARD, "Keyboard", path)) : Optional.empty();
             case "preferences" -> path.depth() == 1 ? Optional.of(placed(PREFS, "Preferences", path)) : Optional.empty();
             default        -> Optional.empty();
         };

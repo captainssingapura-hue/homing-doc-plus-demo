@@ -68,6 +68,7 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(TabStripApp.INSTANCE),
                 CrateEntry.of(ContextMenusApp.INSTANCE),
                 CrateEntry.of(SlidersApp.INSTANCE),
+                CrateEntry.of(KeyboardApp.INSTANCE),
                 CrateEntry.of(GalleryMenus.INSTANCE),
                 // The preferences: the page, the site's own stamped registry, and the one
                 // widget that is the site's - the tree master; the theme widget is the MPA's.
