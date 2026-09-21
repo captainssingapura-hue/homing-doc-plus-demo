@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.component.ComponentTrees;
+import hue.captains.singapura.js.homing.component.keyboard.KeyboardRegistry;
 import hue.captains.singapura.js.homing.conformance.rules.CrateDependencyRule;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
@@ -188,8 +189,11 @@ class GallerySiteTest {
         assertEquals(List.of(), ComponentTrees.validate(List.of(GalleryCrate.INSTANCE)));
         var composed = ComponentTrees.compose("gallery", List.of(GalleryCrate.INSTANCE));
         assertEquals("gallery", composed.root().children().get(0).segment().value(), "the site's own catalogue first in the closure, then the crates it requires");
-        assertEquals(10, composed.root().children().size(), "the gallery and the nine vehicles in its closure: the split crate is not required, docking ships statics only");
+        assertEquals(11, composed.root().children().size(), "the gallery and the ten vehicles in its closure, the base (the keyboard steward) among them: the split crate is not required, docking ships statics only");
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of("animal", "counter", "swatch", "tab"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three, by name; the pane in the panes crate names the tab menu; nothing lists them");
+        // the keys likewise: the slider and its group declare theirs; the page's map is derived, and no declared component listens for itself
+        assertEquals(List.of(), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
+        assertEquals(List.of("Slider", "SliderGroup"), KeyboardRegistry.requiredBy(List.of(GalleryCrate.INSTANCE)).byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList());
     }
 }

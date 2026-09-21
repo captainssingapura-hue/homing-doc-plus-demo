@@ -1,12 +1,14 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
+import hue.captains.singapura.js.homing.ui.elements.SliderGroupModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 
 import java.util.List;
@@ -15,7 +17,9 @@ import java.util.List;
  * The sliders page: the slider as the gallery's own control, on view — the
  * three axes the demos set (size, aspect, extent), a plain range with a
  * unit, one that is off, and the slider at its three sizes; every value on
- * the log, live and on release, so the two events are seen apart.
+ * the log, live and on release, so the two events are seen apart; the mixer
+ * as a slider group, and the keys through the page's keyboard party, the
+ * holder on the log.
  */
 public record SlidersApp() implements AppModule<AppModule._None, SlidersApp> {
 
@@ -33,13 +37,14 @@ public record SlidersApp() implements AppModule<AppModule._None, SlidersApp> {
         return ImportsFor.<SlidersApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderGroupModule.SliderGroupBuilder()), SliderGroupModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardSteward()), KeyboardStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),
                         new GalleryStyles.ga_lede(),
                         new GalleryStyles.ga_specimens(),
                         new GalleryStyles.ga_specimen_name(),
-                        new GalleryStyles.ga_mixer(),
                         new GalleryStyles.ga_log()
                 ), GalleryStyles.INSTANCE))
                 .build();

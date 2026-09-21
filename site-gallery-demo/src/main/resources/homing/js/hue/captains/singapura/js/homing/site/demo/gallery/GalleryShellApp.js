@@ -5,7 +5,9 @@
 // drag, nothing subdivides or goes. The navigator is the relation tree over DEMOS; the
 // demo is the demo app's widget class, imported through the serving context
 // when first chosen and kept in a slot after; the explanation is what DEMOS
-// says, with a link to the page the demo also is. The address follows.
+// says, with a link to the page the demo also is. The address follows. The
+// shell is one document, so it makes the one keyboard steward and hands it
+// to every demo in its params: a demo standing alone as a page makes its own.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "galleryShell" });
@@ -70,6 +72,7 @@ function appMain(el, params) {
     explain.appendChild(text);
     explain.appendChild(link);
 
+    var keyboard = new KeyboardSteward(branch.createBranch("keyboard"), {});
     var navSlot  = new WidgetSlot({ branch: branch, host: navHost });
     var demoSlot = new WidgetSlot({ branch: branch, host: demoHost });
     var wanted = null;
@@ -92,7 +95,7 @@ function appMain(el, params) {
         try { history.replaceState(null, "", "?demo=" + encodeURIComponent(slug)); } catch (e) {}
         if (demoSlot.has(path)) { demoSlot.show(path); return; }
         _load(d.widget).then(function (Widget) {
-            if (wanted === path) demoSlot.show(path, Widget, d.widget.params);
+            if (wanted === path) demoSlot.show(path, Widget, Object.assign({}, d.widget.params || {}, { keyboard: keyboard }));
         }).catch(function (e) { console.error("[galleryShell] demo '" + path + "' failed", e); });
     }
 

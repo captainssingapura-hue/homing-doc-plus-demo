@@ -17,6 +17,10 @@ class TabStripWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
+        // the keys, through the party: the shell's steward when handed one, else the page's own
+        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
+        // the members' ids, qualified by the page: the shell's one party has every page's sliders in it
+        this._ownKb = params && params.keyboard ? null : kb;
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -88,12 +92,12 @@ class TabStripWidget {
         draw();
         this._strip.select(order, order[0]);
 
-        controls.appendChild(new SliderBuilder().label("the chips' size").axis().icon("size").onInput(function (v) { self._strip.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
+        controls.appendChild(new SliderBuilder().keyboard(kb, "tab-strip/size").label("the chips' size").axis().icon("size").onInput(function (v) { self._strip.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
         say("five chips, Inbox selected");
         this.root = el;
     }
 
-    dispose() { this._strip.dispose(); }
+    dispose() { this._strip.dispose(); if (this._ownKb) this._ownKb.dispose(); }
 }
 
 function appMain(el, params) {

@@ -61,6 +61,10 @@ class DockingWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
+        // the keys, through the party: the shell's steward when handed one, else the page's own
+        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
+        // the members' ids, qualified by the page: the shell's one party has every page's sliders in it
+        this._ownKb = params && params.keyboard ? null : kb;
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -128,8 +132,8 @@ class DockingWidget {
         var menus = this._menus;
         var dock = new MultiTabPane(branch.createBranch("dock"), { host: box, slotId: "dock", budget: 8, addable: false, onEvent: sink, menus: menus });
         this._dock = dock;
-        controls.appendChild(new SliderBuilder().label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { dock.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
-        controls.appendChild(new SliderBuilder().label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { dock.aspect(v); })
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { dock.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { dock.aspect(v); })
             .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
         this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink });
         var docking = this._docking;
@@ -157,7 +161,7 @@ class DockingWidget {
         this.root = el;
     }
 
-    dispose() { this._menus.dispose(); this._docking.dispose(); this._dock.dispose(); }
+    dispose() { this._menus.dispose(); this._docking.dispose(); this._dock.dispose(); if (this._ownKb) this._ownKb.dispose(); }
 }
 
 function appMain(el, params) {

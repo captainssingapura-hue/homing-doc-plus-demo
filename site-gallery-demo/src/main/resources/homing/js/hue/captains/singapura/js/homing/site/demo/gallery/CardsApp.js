@@ -20,6 +20,10 @@ class CardsWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
+        // the keys, through the party: the shell's steward when handed one, else the page's own
+        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
+        // the members' ids, qualified by the page: the shell's one party has every page's sliders in it
+        this._ownKb = params && params.keyboard ? null : kb;
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -79,12 +83,12 @@ class CardsWidget {
         el.appendChild(grid);
 
         this._size = 0;
-        var size = new SliderBuilder().label("size, for the grid").icon("size").labelWidth("10em").range(-1, 1, 0.05).detent(0).value(0)
+        var size = new SliderBuilder().keyboard(kb, "cards/size").label("size, for the grid").icon("size").labelWidth("10em").range(-1, 1, 0.05).detent(0).value(0)
             .onInput(function (v) { self._size = v; self._cards.forEach(function (c) { c.size(v); }); })
             .format(function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); })
             .build(branch.createBranch("size")).root;
         el.appendChild(size);
-        var aspect = new SliderBuilder().label("aspect, for the grid").icon("aspect").labelWidth("10em").range(-1, 1, 0.05).detent(0).value(0.6)
+        var aspect = new SliderBuilder().keyboard(kb, "cards/aspect").label("aspect, for the grid").icon("aspect").labelWidth("10em").range(-1, 1, 0.05).detent(0).value(0.6)
             .onInput(function (v) { self._cards.forEach(function (c) { c.aspect(v); }); })
             .format(function (v) { return v.toFixed(2) + (v === 0 ? "  square" : v === 1 ? "  the widest" : v === -1 ? "  the tallest" : ""); })
             .build(branch.createBranch("aspect")).root;
@@ -122,7 +126,7 @@ class CardsWidget {
         this.root = el;
     }
 
-    dispose() {}
+    dispose() { if (this._ownKb) this._ownKb.dispose(); }
 }
 
 function appMain(el, params) {

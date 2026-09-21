@@ -42,6 +42,10 @@ class SplitGridWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
+        // the keys, through the party: the shell's steward when handed one, else the page's own
+        var kb = params && params.keyboard ? params.keyboard : new KeyboardSteward(branch.createBranch("keyboard"), {});
+        // the members' ids, qualified by the page: the shell's one party has every page's sliders in it
+        this._ownKb = params && params.keyboard ? null : kb;
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
@@ -105,7 +109,7 @@ class SplitGridWidget {
             say("Cursor     " + ev.cellId + "  by " + ev.by);
             self._widgets.forEach(function (w, id) { w.current(id === ev.cellId); });
         } });
-        var scale = new SliderBuilder().label("the mirror's scale").icon("size").range(0.1, 0.5, 0.05).value(0.25).onInput(function (v) { self._mirror.scale(v); }).format(function (v) { return v.toFixed(2); }).build(branch.createBranch("scale")).root;
+        var scale = new SliderBuilder().keyboard(kb, "split-grid/scale").label("the mirror's scale").icon("size").range(0.1, 0.5, 0.05).value(0.25).onInput(function (v) { self._mirror.scale(v); }).format(function (v) { return v.toFixed(2); }).build(branch.createBranch("scale")).root;
         mirrorRow.appendChild(scale);
         var hint = branch.createElement("hint", "span");
         css.addClass(hint, ga_control_readout);
@@ -127,7 +131,7 @@ class SplitGridWidget {
         this.root = el;
     }
 
-    dispose() { window.removeEventListener("resize", this._onResize); this._mirror.dispose(); this._grid.dispose(); }
+    dispose() { window.removeEventListener("resize", this._onResize); this._mirror.dispose(); this._grid.dispose(); if (this._ownKb) this._ownKb.dispose(); }
 }
 
 function appMain(el, params) {
