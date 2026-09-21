@@ -39,6 +39,7 @@ public record SlidersApp() implements AppModule<AppModule._None, SlidersApp> {
                         new GalleryStyles.ga_lede(),
                         new GalleryStyles.ga_specimens(),
                         new GalleryStyles.ga_specimen_name(),
+                        new GalleryStyles.ga_mixer(),
                         new GalleryStyles.ga_log()
                 ), GalleryStyles.INSTANCE))
                 .build();

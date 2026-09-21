@@ -91,7 +91,19 @@ class SlidersWidget {
                 box.appendChild(s.root);
             });
         });
-        say("eight sliders; press a rail, or focus a knob and use the arrows");
+        section("mixer", "stood up, as a mixer's faders: -60 to +10 dB by one, unity on the detent, a scale beside each track", function (box, own) {
+            var strip = own.createElement("strip", "div");
+            css.addClass(strip, ga_mixer);
+            var scale = [{ at: 10, label: "+10" }, { at: 5, label: "+5" }, { at: 0, label: "0" }, { at: -5, label: "-5" }, { at: -10, label: "-10" }, { at: -20, label: "-20" }, { at: -30, label: "-30" }, { at: -40, label: "-40" }, { at: -60, label: "-∞" }];
+            function dB(v) { return v <= -60 ? "-∞ dB" : (v > 0 ? "+" : "") + v + " dB"; }
+            [["vocals", 0], ["bass", -6], ["drums", -3], ["keys", -12]].forEach(function (ch) {
+                var s = reporting(new SliderBuilder().label(ch[0]).vertical().range(-60, 10, 1).detent(0).value(ch[1]).icon("level").ticks(scale).format(dB), ch[0]).build(own.createBranch(ch[0]));
+                self._sliders.push(s);
+                strip.appendChild(s.root);
+            });
+            box.appendChild(strip);
+        });
+        say("twelve sliders; press a rail, or focus a knob and use the arrows");
         this.root = el;
     }
 
