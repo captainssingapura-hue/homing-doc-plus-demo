@@ -2,12 +2,21 @@ package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
+import hue.captains.singapura.js.homing.core.CssVar;
 import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
+import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
+import static hue.captains.singapura.js.homing.design.Box.Control;
 import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
+import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
+import static hue.captains.singapura.js.homing.design.Feedback.Danger;
+import static hue.captains.singapura.js.homing.design.Feedback.Success;
+import static hue.captains.singapura.js.homing.design.Feedback.Warning;
+import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
+import static hue.captains.singapura.js.homing.design.Layer.Inverted;
 import static hue.captains.singapura.js.homing.design.Interaction.Current;
 import static hue.captains.singapura.js.homing.design.Interaction.Focus;
 import static hue.captains.singapura.js.homing.design.Layer.Raised;
@@ -131,6 +140,81 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
             overflow: hidden;
             """;
         }
+    }
+
+    /** The row of cells on the context menus page: wrapping, with air between. */
+    public record ga_menu_cells() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 8px 0 16px;
+            """;
+        }
+    }
+
+    /** A cell: a raised box with a control's rule and ring, focusable, its face in the middle and its caption under. */
+    public record ga_cell() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class)); }
+        @Override public String body() { return """
+            inline-size: 200px;
+            block-size: 168px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-sizing: border-box;
+            user-select: none;
+            """;
+        }
+    }
+
+    /** The cell's face: an emoji, a number or a swatch, turned and mirrored by the cell's own numbers, eased as the design eases a thing that moves. */
+    public record ga_cell_face() implements CssClass<GalleryStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--ga-rotate"), new CssVar("--ga-flip")); }
+        @Override public List<? extends Wearable> wears() { return List.of(of(Interactive.class, Motion.Ease.class), of(Numeral.class, Type.Face.class), of(Numeral.class, Type.Weight.class), of(Display.class, Color.Ink.class)); }
+        @Override public String body() { return """
+            inline-size: 88px;
+            block-size: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            line-height: 1;
+            border-radius: 12px;
+            transform: rotate(var(--ga-rotate, 0deg)) scaleX(var(--ga-flip, 1));
+            """;
+        }
+    }
+
+    /** What the cell says of itself, in a muted caption. */
+    public record ga_cell_caption() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
+        @Override public String body() { return ""; }
+    }
+
+    /** The swatch's colours: the words, on the face. */
+    public record ga_swatch_primary() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class)); }
+        @Override public String body() { return ""; }
+    }
+    public record ga_swatch_success() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Success.class, Color.Surface.class)); }
+        @Override public String body() { return ""; }
+    }
+    public record ga_swatch_warning() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Warning.class, Color.Surface.class)); }
+        @Override public String body() { return ""; }
+    }
+    public record ga_swatch_danger() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Danger.class, Color.Surface.class)); }
+        @Override public String body() { return ""; }
+    }
+    /** The swatch inverted: the design's inverted surface, over whatever colour it wore. Last of the swatches, so it wins. */
+    public record ga_swatch_inverted() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Inverted.class, Color.Surface.class)); }
+        @Override public String body() { return ""; }
     }
 
     /** The box the strip alone sits in: a raised edge, the strip on top, the floor under it; nothing clipped, so the lifted chip's shadow is seen whole. */
@@ -261,7 +345,8 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
-                       new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_box(), new ga_shelf(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_log(), new ga_status(),
+                       new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_box(), new ga_shelf(), new ga_menu_cells(), new ga_cell(), new ga_cell_face(), new ga_cell_caption(),
+                       new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_log(), new ga_status(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }

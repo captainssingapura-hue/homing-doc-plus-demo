@@ -23,7 +23,8 @@ var PAGES = [
     { title: "Floating panes", badge: "UI-FLOATING", text: "A desk and the panes that float on it: opened with a widget, dragged by the head, sized by the corner, raised by a press, closed by the cross or Escape.", link: "/floating" },
     { title: "Dock and undock", badge: "UI-DOCKING", text: "One dock and a desk over it: drag a chip along the strip to reorder; drop a float on the strip and it lands where the mark says.", link: "/docking" },
     { title: "Split grid", badge: "UI-SPLITGRID", text: "Rows and columns of cells that share their space: split beside a cell, remove one, drag the dividers; the grid arranges, the page fills.", link: "/splitgrid" },
-    { title: "Tab strip", badge: "UI-PANES", text: "The strip alone: press a chip and drag it along the row — it follows your hand on its rail, the others step aside live, and it settles where you let go.", link: "/tabstrip" }
+    { title: "Tab strip", badge: "UI-PANES", text: "The strip alone: press a chip and drag it along the row — it follows your hand on its rail, the others step aside live, and it settles where you let go.", link: "/tabstrip" },
+    { title: "Context menus", badge: "UI-MENU", text: "One steward for the page, kinds declared in Java: right-click a cell — an animal that rotates and changes through a second level, a swatch, a counter.", link: "/menus" }
 ];
 
 class WelcomeWidget {

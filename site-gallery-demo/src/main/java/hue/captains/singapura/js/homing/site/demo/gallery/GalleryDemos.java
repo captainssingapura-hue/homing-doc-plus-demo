@@ -131,6 +131,16 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "next; a dock takes a tab by call meanwhile. TabHand is the hand, TabDrag the arithmetic, headless: the bar as "
                     + "slots at one pitch, the nearest slot, who steps aside.",
                     "/tabstrip", TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
+            new Demo("menus", "Context menus", "One steward, three cells, each with a menu of its kind.",
+                    "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "
+                    + "steward for the page — lazy, minting a kind's menu at its first open and listening to nothing while none is "
+                    + "open. A cell asks for its kind on a right-click or Shift+F10 and is bound to the menu while it is open; the "
+                    + "page's handler for the kind gives each row its state for that cell and acts on the pick. The animal cell "
+                    + "rotates, flips and changes animal through a second level; the swatch picks its colour through one and "
+                    + "toggles its inverted surface, both checked; the counter adds a step, resets — disabled at nought — and picks "
+                    + "its step. A press outside closes the menu and is swallowed; Escape closes; arrows, Right, Left and Enter "
+                    + "do what a menu's keys do. At most one menu is ever open.",
+                    "/menus", ContextMenusApp.INSTANCE, "ContextMenusWidget", Map.of()),
             new Demo("panes", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "

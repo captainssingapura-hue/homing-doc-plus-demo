@@ -44,6 +44,7 @@ public record GallerySite() implements Site {
     static final AppPage<?, ?> DOCKING  = MPA.page(DockingApp.INSTANCE);
     static final AppPage<?, ?> SPLITGRID = MPA.page(SplitGridApp.INSTANCE);
     static final AppPage<?, ?> TABSTRIP = MPA.page(TabStripApp.INSTANCE);
+    static final AppPage<?, ?> MENUS   = MPA.page(ContextMenusApp.INSTANCE);
     static final AppPage<?, ?> PREFS   = MPA.page(PreferencesApp.INSTANCE);
 
     static final Navigable PLAIN = q -> new HtmlPageContent("""
@@ -76,6 +77,7 @@ public record GallerySite() implements Site {
             case "docking"  -> path.depth() == 1 ? Optional.of(placed(DOCKING, "Dock and undock", path)) : Optional.empty();
             case "splitgrid" -> path.depth() == 1 ? Optional.of(placed(SPLITGRID, "Split grid", path)) : Optional.empty();
             case "tabstrip" -> path.depth() == 1 ? Optional.of(placed(TABSTRIP, "Tab strip", path)) : Optional.empty();
+            case "menus"   -> path.depth() == 1 ? Optional.of(placed(MENUS, "Context menus", path)) : Optional.empty();
             case "preferences" -> path.depth() == 1 ? Optional.of(placed(PREFS, "Preferences", path)) : Optional.empty();
             default        -> Optional.empty();
         };
