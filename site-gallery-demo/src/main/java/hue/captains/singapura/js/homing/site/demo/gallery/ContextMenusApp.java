@@ -46,6 +46,8 @@ public record ContextMenusApp() implements AppModule<AppModule._None, ContextMen
                         new GalleryStyles.ga_swatch_warning(),
                         new GalleryStyles.ga_swatch_danger(),
                         new GalleryStyles.ga_swatch_inverted(),
+                        new GalleryStyles.ga_specimens(),
+                        new GalleryStyles.ga_specimen_name(),
                         new GalleryStyles.ga_log()
                 ), GalleryStyles.INSTANCE))
                 .build();

@@ -6,7 +6,10 @@
 // second level; the swatch cell picks its colour through one and toggles
 // its inverted surface, both checked; the counter cell adds a step, resets
 // — disabled at nought — and picks its step, checked. Every open, pick and
-// close is a line on the log, and so is what each pick did.
+// close is a line on the log, and so is what each pick did. Under the cells,
+// a SPECIMEN of each kind: the whole tree open at once, every level beside
+// its row, bound to its cell and rebound on every pick — the design of the
+// menus on view without opening one.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "contextMenusPage" });
@@ -134,12 +137,17 @@ class ContextMenusWidget {
         css.addClass(lede, ga_lede);
         lede.textContent = "Right-click a cell, or focus it and press Shift+F10. One steward holds the page's menus, declared once in "
             + "Java; a cell asks for its kind and is bound to the menu while it is open. Arrows move, Right opens a second level, "
-            + "Enter picks, Escape closes; a press outside closes and is swallowed.";
+            + "Enter picks, Escape closes; a press outside closes and is swallowed. Each kind is a typed tree in Java, a class per row, "
+            + "its marks icon words the design draws; under the cells, each kind as a specimen with every level open.";
         el.appendChild(lede);
 
         var cells = branch.createElement("cells", "div");
         css.addClass(cells, ga_menu_cells);
         el.appendChild(cells);
+
+        var specimens = branch.createElement("specimens", "div");
+        css.addClass(specimens, ga_specimens);
+        el.appendChild(specimens);
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
@@ -167,6 +175,23 @@ class ContextMenusWidget {
         });
         this._cells = [new AnimalCell(branch.createBranch("animal"), menus, say), new SwatchCell(branch.createBranch("swatch"), menus, say), new CounterCell(branch.createBranch("counter"), menus, say)];
         this._cells.forEach(function (c) { cells.appendChild(c.root); });
+        // the specimens: each kind's tree, open, bound to its cell; rebound on a pick so the checks follow
+        this._specimens = this._cells.map(function (c) {
+            var box = branch.createElement("specimen-" + c.kind, "div");
+            var name = branch.createElement("specimen-" + c.kind + "-name", "div");
+            css.addClass(name, ga_specimen_name);
+            name.textContent = c.kind + " — every level open";
+            box.appendChild(name);
+            var host = branch.createElement("specimen-" + c.kind + "-host", "div");
+            box.appendChild(host);
+            specimens.appendChild(box);
+            return { cell: c, menu: menus.specimen(c.kind, host, c) };
+        });
+        var specimensOf = this._specimens;
+        this._cells.forEach(function (c) {
+            var pick = c.pick;
+            c.pick = function (id) { pick.call(c, id); specimensOf.forEach(function (s) { if (s.cell === c) s.menu.bind(c, function (i) { return c.state(i); }); }); };
+        });
         say("three cells; right-click one");
         this.root = el;
     }

@@ -240,6 +240,23 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
+    /** The specimens on the context menus page: one per kind, stacked, each the whole tree open beside its rows. */
+    public record ga_specimens() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 24px 0 16px;
+            """;
+        }
+    }
+
+    /** A specimen's name over it: the kind, in a caption. */
+    public record ga_specimen_name() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
+        @Override public String body() { return "margin-bottom: 6px;"; }
+    }
+
     /** The log under the pane: one line per mutation, newest last, scrolling. */
     public record ga_log() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
@@ -346,7 +363,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
                        new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_box(), new ga_shelf(), new ga_menu_cells(), new ga_cell(), new ga_cell_face(), new ga_cell_caption(),
-                       new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_log(), new ga_status(),
+                       new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_specimens(), new ga_specimen_name(), new ga_log(), new ga_status(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }
