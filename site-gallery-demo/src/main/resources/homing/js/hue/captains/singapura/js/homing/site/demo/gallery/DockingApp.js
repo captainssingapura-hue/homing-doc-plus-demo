@@ -1,5 +1,7 @@
 // =============================================================================
-// DockingApp — dock and undock. Two docks side by side in a split grid, the
+// DockingApp — dock and undock. Two docks side by side in a split grid, each
+// mounted in a PANEL - the named region that frames it, its head saying which
+// dock it is and the dock filling its body, as the workspace will mount them. The
 // divider between them the grid's, and a desk over both: drag a floating
 // pane over either strip and it is offered — the dock lit, the mark where it
 // would land — and dropped there it is a tab; the cross on a chip closes it.
@@ -186,8 +188,14 @@ class DockingWidget {
                 default:       say(ev.kind);
             }
         });
-        var docks = ["left", "right"].map(function (side) {
-            return new MultiTabPane(branch.createBranch("dock-" + side), { host: grid.cell(side), slotId: side, budget: 8, addable: false, onEvent: sink, menus: menus, focusName: "dock-" + side });
+        // each dock is mounted in a panel: the panel names the region and gives it its frame, and the dock fills its body
+        var panels = ["left", "right"].map(function (side) {
+            return new PanelBuilder().title(side === "left" ? "Dock A" : "Dock B").fills().host(grid.cell(side)).build(branch.createBranch("panel-" + side));
+        });
+        this._panels = panels;
+        var docks = panels.map(function (panel, i) {
+            var side = i === 0 ? "left" : "right";
+            return new MultiTabPane(branch.createBranch("dock-" + side), { host: panel.body, slotId: side, budget: 8, addable: false, onEvent: sink, menus: menus, focusName: "dock-" + side });
         });
         this._docks = docks;
         var left = docks[0], right = docks[1];
@@ -222,7 +230,7 @@ class DockingWidget {
         this.root = el;
     }
 
-    dispose() { this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose(); this._docks.forEach(function (d) { d.dispose(); }); this._afloat.owner.leave(); this._grid.dispose(); }
+    dispose() { this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose(); this._docks.forEach(function (d) { d.dispose(); }); this._panels.forEach(function (p) { p.dispose(); }); this._afloat.owner.leave(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {
