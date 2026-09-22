@@ -70,6 +70,7 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(ContextMenusApp.INSTANCE),
                 CrateEntry.of(SlidersApp.INSTANCE),
                 CrateEntry.of(KeyboardApp.INSTANCE),
+                CrateEntry.of(FocusSceneModule.INSTANCE),
                 CrateEntry.of(FocusApp.INSTANCE),
                 CrateEntry.of(GalleryMenus.INSTANCE),
                 // The preferences: the page, the site's own stamped registry, and the one
