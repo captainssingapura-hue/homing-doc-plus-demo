@@ -22,10 +22,10 @@ import java.util.List;
  * The focus page: who is in focus, in two worlds. Three panels holding a
  * branch each, leaves in them, a loose leaf — the logical world, members of
  * the focus party — and panel C's list and leaves, the native world; the
- * monitors beside them: the tree with the steward by state, and the
- * steward's activeness with where every key went. Claims by a press, Tab
- * over the tree, yields up it to the first ancestor that would hold; more
- * of the native world outside and inside the containers to stress the line.
+ * monitors beside them: the tree with the holder marked, and the steward's
+ * activeness as one lamp. Claims by a press, yields up the tree to the first
+ * ancestor that would hold; more of the native world outside and inside the
+ * containers to stress the line. Tab is not bound to the tree for now.
  */
 public record FocusApp() implements AppModule<AppModule._None, FocusApp> {
 
@@ -37,7 +37,7 @@ public record FocusApp() implements AppModule<AppModule._None, FocusApp> {
         @Override public String summary() { return "Who is in focus, in two worlds: the logical-focus tree and its monitor; panels and leaves as members, panel C's list and leaves native; claims by a press, Tab over the tree, yields up it."; }
         /** The page's own: Tab, the steward's over the tree, kept by the notes field; the scene's components declare theirs. */
         @Override public List<KeyBinding> keys() {
-            return List.of(KeyBinding.of(Key.TAB, "the steward's: the next member of the tree, Shift+Tab the previous, and round; in the notes field, a tab character - the field keeps it"),
+            return List.of(KeyBinding.of(Key.TAB, "in the notes field, a tab character - the field keeps it; elsewhere the browser's, among the native controls: not bound to the tree for now"),
                            KeyBinding.of(Key.ENTER, "on the reset button: the browser's"), KeyBinding.of(Key.SPACE, "on the reset button: the browser's"));
         }
     }

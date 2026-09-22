@@ -3,10 +3,11 @@
 // container holding a branch of the focus party (FocusScene has the parts);
 // the monitors beside them: the tree with the holder of the keys and the
 // steward by state, and the steward's activeness with where every key went.
-// A press claims for the innermost member under it and nothing above it; Tab
-// is the steward's and walks the members in the tree's order, A, a1, a2, B,
-// b1, C, d, and round; Escape yields up the tree to the first ancestor that
-// would hold — panel A catches, panel B lets pass, the root holds nothing.
+// A press claims for the innermost member under it and nothing above it;
+// Escape yields up the tree to the first ancestor that would hold — panel A
+// catches, panel B lets pass, the root holds nothing. Tab is not bound: the
+// native Tab walks the native controls, and the logical world is reached by
+// a press — a candidate Tab would move without claiming is still to come.
 // Panel C's list and leaves are the native world, wired by the panel: Enter
 // in the list focuses the picked leaf, Escape returns to the list, Escape in
 // the list yields the panel, and a panel that comes to hold puts the focus
@@ -39,7 +40,7 @@ class FocusWidget {
         lede.textContent = "The logical-focus tree, as the focus party keeps it and the monitor shows it, in two worlds. The panels, "
             + "panel A's and B's leaves and the loose leaf are logical: never natively focused, a press claims for the innermost, "
             + "the arrows go to whoever holds and a leaf counts them, Escape yields up the tree — panel A catches, panel B lets "
-            + "pass to no one — and Tab is the steward's, walking the members in the tree's order and round. Panel C's list "
+            + "pass to no one. Tab is not bound for now: the native Tab walks the native controls, a press reaches a member. Panel C's list "
             + "and leaves are native: the browser's focus, their own keys, the steward dormant while one of them is focused; "
             + "the panel wires them itself — Enter in the list focuses the picked leaf, Escape returns to the list, Escape in "
             + "the list yields the panel, and a panel that comes to hold puts the focus in its list. More of the native world "
@@ -130,7 +131,7 @@ class FocusWidget {
             else if (ev.kind === "Taken") say("Taken     " + nameOf(ev.id) + "  by " + nameOf(ev.by));
             else say("Released  " + nameOf(ev.id));
         });
-        say("three panels, six leaves in them, one loose, and the native world around them; press one, or Tab; then Escape");
+        say("three panels, six leaves in them, one loose, and the native world around them; press one; then Escape");
         this.root = el;
     }
 
