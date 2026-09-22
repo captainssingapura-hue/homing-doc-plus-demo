@@ -4,14 +4,14 @@
 // natively focused, their ring drawn from granted, their keys from the
 // steward while nothing on the page is natively focused; a press claims for
 // the innermost member under it; a panel holds a branch and answers
-// wouldHold. The NATIVE world: NativeLeaf, and the controls a panel puts
-// inside itself — a text field wired to let go on Escape, a button wired to
-// nothing, a checkbox inside a logical leaf — are natively focusable, the
-// browser's focus and ring, their own keys on their own element; while one
-// is focused the steward is dormant, whoever holds. ListPanel is a container
-// of the logical world whose contents are the native world, wired by a
-// listener on its own root. The framework wires none of it. No component
-// here knows the steward: they join a branch and call Keys.
+// wouldHold. The NATIVE world: the controls a panel puts inside itself — a
+// text field wired to let go on Escape, a button wired to nothing, a
+// checkbox inside a logical leaf, ListPanel's select — are natively
+// focusable, the browser's focus and ring, their own keys on their own
+// element; while one is focused the steward is dormant, whoever holds.
+// ListPanel picks which of its logical leaves holds with a native select,
+// wired by a listener on its own root. The framework wires none of it. No
+// component here knows the steward: they join a branch and call Keys.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "focusScene" });
@@ -67,38 +67,6 @@ class Leaf {
     granted() { css.addClass(this.root, ga_holds); if (this._onHold) this._onHold(this); }
     taken() { css.removeClass(this.root, ga_holds); }
     dispose() { this._off(); this.focus.leave(); }
-}
-
-/** A leaf of the native world: natively focusable, the browser's ring, its own arrows on its own element; not a member. Escape it lets through to whoever contains it. */
-class NativeLeaf {
-    constructor(branch, host, name) {
-        branch.activate(_owner);
-        var self = this;
-        var root = branch.createElement("leaf", "div");
-        css.addClass(root, ga_leaf, ga_leaf_native);
-        root.setAttribute("tabindex", "0");
-        root.setAttribute("role", "button");
-        root.setAttribute("aria-label", name);
-        var label = branch.createElement("label", "span");
-        label.textContent = name;
-        var count = branch.createElement("count", "span");
-        css.addClass(count, ga_leaf_count);
-        count.textContent = "0";
-        root.appendChild(label);
-        root.appendChild(count);
-        host.appendChild(root);
-        this.root = root; this.name = name; this._count = count; this._n = 0;
-        root.addEventListener("keydown", function (ev) {
-            if (ev.key === "ArrowUp") { self._n++; } else if (ev.key === "ArrowDown") { self._n--; } else return;
-            self._count.textContent = String(self._n);
-            ev.preventDefault();
-            ev.stopPropagation();
-        });
-    }
-    /** Told to activate by its container: what a press on it does — the native focus taken. */
-    activate() { try { this.root.focus({ preventScroll: true }); } catch (e) {} }
-    reset() { this._n = 0; this._count.textContent = "0"; }
-    dispose() {}
 }
 
 /** A panel: a container that holds a branch; a press on its header claims for the panel; a yield from below it catches or lets pass, as built. Never natively focused. */
@@ -165,11 +133,12 @@ class Panel {
 }
 
 /**
- * Panel C: a container of the logical world whose contents are the native world — a select and three native leaves.
- * While one of them is focused the steward is dormant and their keys are their own; the panel hears them by a listener
- * on its own root, bubbled: Enter in the list blurs it and tells the picked leaf to focus itself; Escape in the list
- * blurs it and yields the panel; Escape on a leaf puts the focus back in the list. When the panel comes to hold — a
- * press on its header, a Tab arrival, a leaf's yield — it puts the focus in its list. App-layer wiring, all of it.
+ * Panel C: a container of the logical world with a native select that picks which of its leaves — members of its
+ * branch, like any panel's — holds the keys. While the list is focused the steward is dormant and the arrows walk it
+ * natively; the panel hears its keys by a listener on its own root, bubbled: Enter blurs the list and tells the picked
+ * leaf to activate itself — a claim, what a press on it does; Escape blurs the list and yields the panel. A leaf's own
+ * Escape yields up the tree, the panel catches, and on granted — a press on its header, a leaf's yield — it puts the
+ * focus back in its list, so the pick is made by keys again. App-layer wiring, all of it.
  */
 class ListPanel extends Panel {
     constructor(branch, host, focusBranch, name) {
@@ -186,26 +155,18 @@ class ListPanel extends Panel {
         // default — the native focus to the body — would take it back out, so here it is stopped
         this._header.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
         this.root.addEventListener("keydown", function (ev) {
-            var leaf = self._leafAt(ev.target);
-            if (ev.target === list) {
-                if (ev.key === "Enter") { list.blur(); var l = self._byName[list.value]; if (l) l.activate(); }
-                else if (ev.key === "Escape") { list.blur(); Keys.yield(self.focus.owner); }
-                else return;
-            } else if (leaf && ev.key === "Escape") { list.value = leaf.name; list.focus(); }
+            if (ev.target !== list) return;
+            if (ev.key === "Enter") { list.blur(); var l = self._byName[list.value]; if (l) l.activate(); }
+            else if (ev.key === "Escape") { list.blur(); Keys.yield(self.focus.owner); }
             else return;
             ev.preventDefault();
             ev.stopPropagation();
         });
     }
-    /** The native leaf whose element contains `el`, or null. */
-    _leafAt(el) {
-        for (var i = 0; i < this._leaves.length; i++) if (this._leaves[i].root.contains(el)) return this._leaves[i];
-        return null;
-    }
-    /** A native leaf inside, and an option for it. */
+    /** A leaf inside, a member of the panel's branch, and an option for it; a leaf that comes to hold by any way is shown in the list. */
     leaf(branch, name) {
-        var l = new NativeLeaf(branch, this.root, name);
-        this._leaves.push(l);
+        var self = this;
+        var l = super.leaf(branch, name, function (held) { self._list.value = held.focus.name; });
         var option = branch.createElement("option-" + name, "option");
         option.value = name;
         option.textContent = name;

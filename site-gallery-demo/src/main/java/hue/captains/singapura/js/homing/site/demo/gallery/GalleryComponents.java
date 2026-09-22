@@ -50,7 +50,6 @@ public record GalleryComponents() implements C0_Components<GalleryComponents> {
                     ComponentEntry.of(this, new KeyboardApp.KeyboardWidget()),
                     ComponentEntry.of(this, new FocusApp.FocusWidget()),
                     ComponentEntry.of(this, new FocusSceneModule.Leaf()),
-                    ComponentEntry.of(this, new FocusSceneModule.NativeLeaf()),
                     ComponentEntry.of(this, new FocusSceneModule.Panel()),
                     ComponentEntry.of(this, new FocusSceneModule.ListPanel()));
         }

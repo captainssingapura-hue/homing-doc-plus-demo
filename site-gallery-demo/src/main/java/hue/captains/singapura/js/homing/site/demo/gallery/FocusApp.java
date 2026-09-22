@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * The focus page: who is in focus, in two worlds. Three panels holding a
  * branch each, leaves in them, a loose leaf — the logical world, members of
- * the focus party — and panel C's list and leaves, the native world; the
+ * the focus party — and the native controls among them, panel C's list first; the
  * monitors beside them: the tree with the holder marked, and the steward's
  * activeness as one lamp. Claims by a press, yields up the tree to the first
  * ancestor that would hold; more of the native world outside and inside the
