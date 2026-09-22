@@ -101,6 +101,8 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return """
             height: 360px;
+            flex: 1 1 auto;
+            min-width: 0;
             display: flex;
             flex-direction: column;
             overflow: hidden;

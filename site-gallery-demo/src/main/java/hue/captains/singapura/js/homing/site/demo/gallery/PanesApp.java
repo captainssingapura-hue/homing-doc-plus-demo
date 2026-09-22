@@ -4,7 +4,10 @@ import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
+import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
+import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
@@ -36,6 +39,9 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
         return ImportsFor.<PanesApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Elements.Button(), new Elements.CardBuilder()), Elements.INSTANCE))
                 .add(new ModuleImports<>(List.of(
@@ -44,6 +50,9 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
                         new GalleryStyles.ga_lede(),
                         new GalleryStyles.ga_buttons(),
                         new GalleryStyles.ga_pane_host(),
+                        new GalleryStyles.ga_focus(),
+                        new GalleryStyles.ga_focus_monitor(),
+                        new GalleryStyles.ga_holds(),
                         new GalleryStyles.ga_log(),
                         new GalleryStyles.ga_status(),
                         new GalleryStyles.ga_count()
