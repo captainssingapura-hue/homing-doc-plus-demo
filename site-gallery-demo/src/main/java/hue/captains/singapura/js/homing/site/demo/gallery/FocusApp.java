@@ -35,7 +35,8 @@ public record FocusApp() implements AppModule<AppModule._None, FocusApp> {
         /** The leaves' and the panels': the arrows, counted by a leaf that holds, taken and dropped by a panel. */
         @Override public List<KeyBinding> keys() {
             return List.of(KeyBinding.of(Key.ARROW_UP, "counted by the leaf that holds; taken and dropped by a panel"), KeyBinding.of(Key.ARROW_DOWN, "counted by the leaf that holds; taken and dropped by a panel"),
-                           KeyBinding.of(Key.ESCAPE, "the holder yields: the keys go up to the first ancestor that would hold them"));
+                           KeyBinding.of(Key.ESCAPE, "the holder yields: the keys go up to the first ancestor that would hold them"),
+                           KeyBinding.of(Key.ENTER, "in panel C's list: the pick confirmed, the leaf told to activate itself"));
         }
     }
 

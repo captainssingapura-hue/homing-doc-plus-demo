@@ -9,9 +9,11 @@
 // leaf's Escape, or its button: the keys go up the tree to the first ancestor
 // that would hold them — panel A catches, panel B lets them pass and the page
 // above it does too, so from b1 or from the loose leaf they go to no one.
-// Panel C picks which of its leaves holds with a native list: the list has
-// the physical focus, the leaf the logical one, side by side — the list keeps
-// its arrows, as a field does; a chord and Escape reach the leaf. A leaf that
+// Panel C picks which of its leaves holds with a native list: while the list
+// has the physical focus the panel holds the logical one and the list keeps
+// its arrows, as a field does; the pick is confirmed by Enter, on which the
+// panel tells the leaf to activate itself, and the leaf takes the focus as a
+// press on it would — the list's released first, then the claim. A leaf that
 // holds counts the arrows it takes. The log says who took the keys from whom.
 // No component here knows the steward: a panel and a leaf join a branch and
 // call Keys; the page, which is not a component, listens for the log.
@@ -53,6 +55,8 @@ class Leaf {
         this._count.textContent = String(this._n);
         return true;
     }
+    /** Told to activate by its container: what a press on it does — the physical focus taken, and the convention claims for it. */
+    activate() { try { this.root.focus({ preventScroll: true }); } catch (e) {} }
     granted() { css.addClass(this.root, ga_holds); if (this._onHold) this._onHold(this); }
     taken() { css.removeClass(this.root, ga_holds); }
     dispose() { this._off(); this.focus.leave(); }
@@ -95,20 +99,28 @@ class Panel {
     dispose() { this._leaves.forEach(function (l) { l.dispose(); }); this._off(); this.focus.owner.leave(); }
 }
 
-/** Panel C: a panel with a native list that picks which of its leaves holds the keys — the list physically focused, the leaf logically. */
+/**
+ * Panel C: a panel with a native list that picks which of its leaves holds the keys. While the list has the physical
+ * focus the panel holds the logical one (the convention), and the list's own keys — arrows, Home, End — walk its
+ * options natively and reach no member; the pick is a proposal until Enter confirms it. On Enter, forwarded to the
+ * panel since a select's Enter is the holder's, the panel tells the picked leaf to activate itself, and the leaf does
+ * what a press on it does: takes the physical focus, which releases the list's, and the convention claims for it.
+ */
 class ListPanel extends Panel {
     constructor(branch, host, focusBranch, name) {
         super(branch, host, focusBranch, name, true);
-        var self = this;
         var list = branch.createElement("list", "select");
         css.addClass(list, ga_panel_list);
         list.setAttribute("size", "3");
-        list.setAttribute("aria-label", "which leaf holds the keys");
+        list.setAttribute("aria-label", "which leaf holds the keys; Enter confirms");
         this.root.appendChild(list);
         this._list = list;
         this._byName = {};
-        // a pick in the list claims for that leaf: the list keeps the physical focus, the leaf takes the logical one
-        list.addEventListener("change", function () { var l = self._byName[list.value]; if (l) Keys.claim(l.focus); });
+    }
+    /** Enter while the panel holds and the list is picked in: the picked leaf is told to activate itself. */
+    keyDown(ev) {
+        if (ev.key === "Enter") { var l = this._byName[this._list.value]; if (l) l.activate(); return true; }
+        return super.keyDown(ev);
     }
     /** A leaf inside, and an option for it; a leaf that comes to hold by any other way is shown in the list. */
     leaf(branch, name) {
@@ -142,8 +154,8 @@ class FocusWidget {
         lede.textContent = "The logical-focus tree, as the focus party keeps it and the monitor shows it. Press a leaf and it holds the keys; "
             + "press a panel's header and the panel holds; the arrows go to whoever holds, and a leaf counts them. Escape, or a leaf's "
             + "button, yields: the keys go up to the first ancestor that would hold them — panel A catches, panel B lets them pass "
-            + "to no one. Panel C picks its leaf with a native list: the list keeps the physical focus and its arrows, the leaf "
-            + "takes the logical focus and a chord.";
+            + "to no one. Panel C picks its leaf with a native list: the arrows walk the list, Enter confirms — the panel tells the "
+            + "leaf to activate itself, and it takes the focus the way a press on it would.";
         el.appendChild(lede);
 
         var row = branch.createElement("row", "div");
@@ -159,17 +171,17 @@ class FocusWidget {
         // the scene: three panels holding branches under the page's own branch, and a loose leaf beside them
         var page = focusParty.root.createBranch("focus-page", this);
         this.focus = page;
-        var a = new Panel(branch.createBranch("panel-a"), scene, page, "panel A", true);
-        a.leaf(branch.createBranch("a1"), "a1");
-        a.leaf(branch.createBranch("a2"), "a2");
-        var b = new Panel(branch.createBranch("panel-b"), scene, page, "panel B", false);
-        b.leaf(branch.createBranch("b1"), "b1");
-        var c = new ListPanel(branch.createBranch("panel-c"), scene, page, "panel C");
-        c.leaf(branch.createBranch("c1"), "c1");
-        c.leaf(branch.createBranch("c2"), "c2");
-        c.leaf(branch.createBranch("c3"), "c3");
-        var d = new Leaf(branch.createBranch("d"), scene, page, "d");
-        this._parts = [a, b, c, d];
+        var panelA = new Panel(branch.createBranch("panel-a"), scene, page, "panel A", true);
+        panelA.leaf(branch.createBranch("a1"), "a1");
+        panelA.leaf(branch.createBranch("a2"), "a2");
+        var panelB = new Panel(branch.createBranch("panel-b"), scene, page, "panel B", false);
+        panelB.leaf(branch.createBranch("b1"), "b1");
+        var panelC = new ListPanel(branch.createBranch("panel-c"), scene, page, "panel C");
+        panelC.leaf(branch.createBranch("c1"), "c1");
+        panelC.leaf(branch.createBranch("c2"), "c2");
+        panelC.leaf(branch.createBranch("c3"), "c3");
+        var loose = new Leaf(branch.createBranch("d"), scene, page, "d");
+        this._parts = [panelA, panelB, panelC, loose];
 
         this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
 
