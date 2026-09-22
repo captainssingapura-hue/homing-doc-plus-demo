@@ -1,5 +1,10 @@
 // =============================================================================
-// FocusScene — the scene's components for the focus page, in two worlds. The
+// FocusScene — the scene's components for the focus page, in two worlds. A
+// leaf is a card and a panel is a pane, in the design's vocabulary, and each
+// says where the keys are with one attribute — data-keys="held", or "lent"
+// while a control of its own has the native focus; the design answers it on
+// the word, so a card and a pane are marked as that design marks a card and
+// a pane. The
 // LOGICAL world: Leaf and Panel are members of the focus party — never
 // natively focused, their ring drawn from granted, their keys from the
 // steward while nothing on the page is natively focused; a press claims for
@@ -64,8 +69,8 @@ class Leaf {
         return box;
     }
     reset() { this._n = 0; this._count.textContent = "0"; }
-    granted() { css.addClass(this.root, ga_holds); if (this._onHold) this._onHold(this); }
-    taken() { css.removeClass(this.root, ga_holds); }
+    granted() { this.root.setAttribute("data-keys", "held"); if (this._onHold) this._onHold(this); }
+    taken() { this.root.removeAttribute("data-keys"); }
     dispose() { this._off(); this.focus.leave(); }
 }
 
@@ -90,6 +95,9 @@ class Panel {
         this.focus = focusBranch.createBranch(name, this);
         this._off = Keys.claimOn(root, this.focus.owner);
         this._leaves = [];
+        var self0 = this;   // held or lent follows the native focus inside the panel
+        root.addEventListener("focusin", function () { if (self0.root.getAttribute("data-keys")) self0._mark(); });
+        root.addEventListener("focusout", function () { setTimeout(function () { if (self0.root.getAttribute("data-keys")) self0._mark(); }, 0); });
         // a press on the header claims, and moves the native focus itself: one outside the panel is let go, and the
         // press's own default — the focus to the body — is stopped, so what granted put in a control of the panel's
         // own (panel C's list, a wrapped grid's host) stays there
@@ -129,8 +137,13 @@ class Panel {
         if (ev.key === "Escape") { Keys.yield(this.focus.owner); return true; }
         return ev.key === "ArrowUp" || ev.key === "ArrowDown";
     }
-    granted() { css.addClass(this.root, ga_holds); }
-    taken() { css.removeClass(this.root, ga_holds); }
+    /** Held; or lent, while a control of this panel's own has the native focus — the keys are the panel's and it is not listening. */
+    granted() { this._mark(); }
+    taken() { this.root.removeAttribute("data-keys"); }
+    _mark() {
+        var a = typeof document === "undefined" ? null : document.activeElement;
+        this.root.setAttribute("data-keys", a && a !== document.body && this.root.contains(a) ? "lent" : "held");
+    }
     dispose() { this._leaves.forEach(function (l) { l.dispose(); }); this._off(); this.focus.owner.leave(); }
 }
 

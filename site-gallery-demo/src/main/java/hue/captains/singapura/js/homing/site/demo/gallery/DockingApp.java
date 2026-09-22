@@ -52,7 +52,6 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
                         new GalleryStyles.ga_title(),
                         new GalleryStyles.ga_lede(),
                         new GalleryStyles.ga_count(),
-                        new GalleryStyles.ga_holds(),
                         new GalleryStyles.ga_dock_box(),
                         new GalleryStyles.ga_log(),
                         new GalleryStyles.ga_buttons()

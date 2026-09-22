@@ -34,8 +34,8 @@ class CardWidget {
     }
     activate() { Keys.claim(this.focus); }
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
-    granted() { css.addClass(this.root, ga_holds); }
-    taken() { css.removeClass(this.root, ga_holds); }
+    granted() { this.root.setAttribute("data-keys", "held"); }
+    taken() { this.root.removeAttribute("data-keys"); }
     dispose() { _leave(this); }
 }
 
@@ -66,8 +66,8 @@ class CounterWidget {
         this._draw();
         return true;
     }
-    granted() { css.addClass(this.root, ga_holds); }
-    taken() { css.removeClass(this.root, ga_holds); }
+    granted() { this.root.setAttribute("data-keys", "held"); }
+    taken() { this.root.removeAttribute("data-keys"); }
     dispose() { _leave(this); }
 }
 
@@ -82,8 +82,8 @@ class NoteWidget {
     }
     activate() { Keys.claim(this.focus); }
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
-    granted() { css.addClass(this.root, ga_holds); }
-    taken() { css.removeClass(this.root, ga_holds); }
+    granted() { this.root.setAttribute("data-keys", "held"); }
+    taken() { this.root.removeAttribute("data-keys"); }
     dispose() { _leave(this); }
 }
 

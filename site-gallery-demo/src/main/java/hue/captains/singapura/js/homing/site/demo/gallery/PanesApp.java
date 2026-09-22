@@ -52,7 +52,6 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
                         new GalleryStyles.ga_pane_host(),
                         new GalleryStyles.ga_focus(),
                         new GalleryStyles.ga_focus_monitor(),
-                        new GalleryStyles.ga_holds(),
                         new GalleryStyles.ga_log(),
                         new GalleryStyles.ga_status(),
                         new GalleryStyles.ga_count()

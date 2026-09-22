@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
+import static hue.captains.singapura.js.homing.design.Box.Container;
 import static hue.captains.singapura.js.homing.design.Box.Control;
 import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
 import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
@@ -438,7 +439,8 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     /** A panel: a container that holds a focus branch; a press on its header claims for it. */
     public record ga_panel() implements CssClass<GalleryStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class), of(Interactive.class, Motion.Ease.class)); }
+        /** A pane: so a design says what a pane looks like while the keys are on it, and data-keys says which state it is in. */
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Container.Pane.class, Shape.Rule.class), of(Container.Pane.class, Shape.Corner.class), of(Container.Pane.class, Color.Edge.class), of(Interactive.class, Motion.Ease.class)); }
         @Override public String body() { return """
             display: flex;
             flex-direction: column;
@@ -458,7 +460,8 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     /** A leaf: a focusable box that claims on a press and counts the arrows it takes. */
     public record ga_leaf() implements CssClass<GalleryStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class), of(Body.class, Color.Ink.class), of(Interactive.class, Motion.Ease.class), of(Interactive.class, Affordance.Cursor.class)); }
+        /** A card: a bounded thing on a surface, marked by the design when the keys are on it. */
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Container.Card.Base.class, Shape.Rule.class), of(Container.Card.Base.class, Shape.Corner.class), of(Container.Card.Base.class, Color.Edge.class), of(Body.class, Color.Ink.class), of(Interactive.class, Motion.Ease.class), of(Interactive.class, Affordance.Cursor.class)); }
         @Override public String body() { return """
             display: flex;
             align-items: baseline;
@@ -468,12 +471,6 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
             outline: none;
             """;
         }
-    }
-
-    /** The member that holds the keys: the ring drawn now, on a panel or a leaf. */
-    public record ga_holds() implements CssClass<GalleryStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
-        @Override public String body() { return ""; }
     }
 
     /** The count a leaf keeps: the arrows it took. */
@@ -566,7 +563,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_box(), new ga_shelf(), new ga_menu_cells(), new ga_cell(), new ga_cell_face(), new ga_cell_caption(),
                        new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_specimens(), new ga_specimen_name(), new ga_log(), new ga_status(),
                        new ga_holders(), new ga_holder(), new ga_holder_on(), new ga_stage(), new ga_sprite(),
-                       new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_holds(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
+                       new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }

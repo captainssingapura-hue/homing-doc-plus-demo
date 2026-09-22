@@ -63,7 +63,6 @@ public record FocusSceneModule() implements DomModule<FocusSceneModule> {
                         new GalleryStyles.ga_leaf(),
                         new GalleryStyles.ga_leaf_count(),
                         new GalleryStyles.ga_leaf_yield(),
-                        new GalleryStyles.ga_holds(),
                         new GalleryStyles.ga_field(),
                         new GalleryStyles.ga_button()
                 ), GalleryStyles.INSTANCE))

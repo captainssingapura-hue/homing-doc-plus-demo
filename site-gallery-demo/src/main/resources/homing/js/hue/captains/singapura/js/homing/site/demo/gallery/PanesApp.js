@@ -31,8 +31,8 @@ class CardTab {
     }
     activate() { Keys.claim(this.focus); }
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
-    granted() { css.addClass(this.root, ga_holds); }
-    taken() { css.removeClass(this.root, ga_holds); }
+    granted() { this.root.setAttribute("data-keys", "held"); }
+    taken() { this.root.removeAttribute("data-keys"); }
     setActive(on) { this.root.setAttribute("data-active", on ? "true" : "false"); }
     dispose() { _leave(this); }
 }
@@ -65,8 +65,8 @@ class CounterTab {
         this._draw();
         return true;
     }
-    granted() { css.addClass(this.root, ga_holds); }
-    taken() { css.removeClass(this.root, ga_holds); }
+    granted() { this.root.setAttribute("data-keys", "held"); }
+    taken() { this.root.removeAttribute("data-keys"); }
     setActive(on) { this.root.setAttribute("data-active", on ? "true" : "false"); }
     dispose() { _leave(this); this._value = null; }
 }
@@ -81,8 +81,8 @@ class NoteTab {
     }
     activate() { Keys.claim(this.focus); }
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
-    granted() { css.addClass(this.root, ga_holds); }
-    taken() { css.removeClass(this.root, ga_holds); }
+    granted() { this.root.setAttribute("data-keys", "held"); }
+    taken() { this.root.removeAttribute("data-keys"); }
     dispose() { _leave(this); }
 }
 
