@@ -14,14 +14,25 @@
 // the logical one and the list keeps its arrows, as a field does; the pick is
 // confirmed by Enter, on which the panel tells the leaf to activate itself,
 // and the leaf takes the focus as a press on it would — the list's released
-// first, then the claim; and when the panel comes to hold it puts the focus
-// in its list, so it works by keys alone. A leaf that holds counts the arrows
-// it takes. The log says who took the keys from whom.
+// first, then the claim. Holder and physical focus agree after every yield:
+// a panel that comes to hold puts the focus where its keys are — its root,
+// panel C its list, so panel C works by keys alone — and a yielder no one
+// catches lets the focus go, after the yield, so nothing is left in control
+// that does not hold. A leaf that holds counts the arrows it takes. The log
+// says who took the keys from whom.
 // No component here knows the steward: a panel and a leaf join a branch and
 // call Keys; the page, which is not a component, listens for the log.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "focusPage" });
+
+/**
+ * The physical focus let go when it is still in `root`: the yielder's half of a yield, so that what holds and what is
+ * focused agree — a catcher puts the focus where its keys are; no catcher, and the yielder lets go. After the yield,
+ * not before: the focus leaving a root is a release by the convention, and a release first would leave the yield no
+ * holder to send up the tree.
+ */
+function _letGo(root) { var a = document.activeElement; if (a && root.contains(a)) { try { a.blur(); } catch (e) {} } }
 
 /** A leaf: a box that claims on a press, takes the arrows while it holds, and yields on Escape or its button. */
 class Leaf {
@@ -49,10 +60,10 @@ class Leaf {
         this.root = root; this._count = count; this._n = 0; this._onHold = onHold || null;
         this.focus = focusBranch.join(name, this);
         this._off = Keys.claimOn(root, this.focus);
-        yieldBtn.addEventListener("click", function () { Keys.yield(self.focus); });   // the press claimed by the convention first; the click gives up
+        yieldBtn.addEventListener("click", function () { Keys.yield(self.focus); _letGo(root); });   // the press claimed by the convention first; the click gives up
     }
     keyDown(ev) {
-        if (ev.key === "Escape") { Keys.yield(this.focus); return true; }
+        if (ev.key === "Escape") { Keys.yield(this.focus); _letGo(this.root); return true; }
         if (ev.key === "ArrowUp") { this._n++; } else if (ev.key === "ArrowDown") { this._n--; } else return false;
         this._count.textContent = String(this._n);
         return true;
@@ -91,12 +102,14 @@ class Panel {
     leaf(branch, name, onHold) { var l = new Leaf(branch, this.root, this.focus, name, onHold); this._leaves.push(l); return l; }
     /** Asked when a descendant yields: a catching panel holds, the other lets the keys go on up. */
     wouldHold(from) { return this._catches; }
-    /** The arrows taken and dropped, so a leaf's count shows who holds; Escape yields on up. */
+    /** The arrows taken and dropped, so a leaf's count shows who holds; Escape yields on up, and the panel lets the physical focus go if no one caught. */
     keyDown(ev) {
-        if (ev.key === "Escape") { Keys.yield(this.focus.owner); return true; }
+        if (ev.key === "Escape") { Keys.yield(this.focus.owner); _letGo(this.root); return true; }
         return ev.key === "ArrowUp" || ev.key === "ArrowDown";
     }
-    granted() { css.addClass(this.root, ga_holds); }
+    /** Where the physical focus rests while the panel holds: its root — a list panel's list. Put there whenever the panel comes to hold, so the ring and the Tab order continue from the holder. A claim it raises for the panel is nothing — the panel holds. */
+    rest() { try { this.root.focus({ preventScroll: true }); } catch (e) {} }
+    granted() { css.addClass(this.root, ga_holds); this.rest(); }
     taken() { css.removeClass(this.root, ga_holds); }
     dispose() { this._leaves.forEach(function (l) { l.dispose(); }); this._off(); this.focus.owner.leave(); }
 }
@@ -129,8 +142,8 @@ class ListPanel extends Panel {
         if (ev.key === "Enter") { var l = this._byName[this._list.value]; if (l) l.activate(); return true; }
         return super.keyDown(ev);
     }
-    /** Granted, however: the list takes the physical focus, so the next pick can be made by keys. A claim it raises for the panel is nothing — the panel holds. */
-    granted(by) { super.granted(by); try { this._list.focus({ preventScroll: true }); } catch (e) {} }
+    /** The list: where the physical focus rests while the panel holds, so the next pick can be made by keys. */
+    rest() { try { this._list.focus({ preventScroll: true }); } catch (e) {} }
     /** A leaf inside, and an option for it; a leaf that comes to hold by any other way is shown in the list. */
     leaf(branch, name) {
         var self = this;
@@ -165,7 +178,8 @@ class FocusWidget {
             + "button, yields: the keys go up to the first ancestor that would hold them — panel A catches, panel B lets them pass "
             + "to no one. Panel C picks its leaf with a native list: the arrows walk the list, Enter confirms — the panel tells the "
             + "leaf to activate itself, and it takes the focus the way a press on it would; and when the panel comes to hold, by "
-            + "a press or a leaf's Escape, it puts the focus in its list, so panel C works by keys alone.";
+            + "a press or a leaf's Escape, it puts the focus in its list, so panel C works by keys alone; a yielder no one catches "
+            + "lets the focus go, so nothing stays in control that does not hold.";
         el.appendChild(lede);
 
         var row = branch.createElement("row", "div");
