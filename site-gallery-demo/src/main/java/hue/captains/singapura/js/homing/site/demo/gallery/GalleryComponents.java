@@ -50,7 +50,11 @@ public record GalleryComponents() implements C0_Components<GalleryComponents> {
                     ComponentEntry.of(this, new RelFocusApp.RelFocusWidget()),
                     ComponentEntry.of(this, new FocusSceneModule.Leaf()),
                     ComponentEntry.of(this, new FocusSceneModule.Panel()),
-                    ComponentEntry.of(this, new FocusSceneModule.ListPanel()));
+                    ComponentEntry.of(this, new FocusSceneModule.ListPanel()),
+                    ComponentEntry.of(this, new DockingSceneModule.BooksTab()),
+                    ComponentEntry.of(this, new DockingSceneModule.ShelvesTab()),
+                    ComponentEntry.of(this, new DockingSceneModule.PictureTab()),
+                    ComponentEntry.of(this, new DockingSceneModule.NoteTab()));
         }
     }
 }

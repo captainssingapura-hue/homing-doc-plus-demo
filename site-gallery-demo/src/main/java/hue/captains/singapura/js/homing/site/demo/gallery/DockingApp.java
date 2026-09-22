@@ -46,7 +46,13 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
     public ImportsFor<DockingApp> imports() {
         return ImportsFor.<DockingApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder(), new Elements.CardBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(
+                        new DockingSceneModule.BooksTab(),
+                        new DockingSceneModule.ShelvesTab(),
+                        new DockingSceneModule.PictureTab(),
+                        new DockingSceneModule.NoteTab()
+                ), DockingSceneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new GalleryRelations.BooksStore()), GalleryRelations.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DockingModule.Docking()), DockingModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))

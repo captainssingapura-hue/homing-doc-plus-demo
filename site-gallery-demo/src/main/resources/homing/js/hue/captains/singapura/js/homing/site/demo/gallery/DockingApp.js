@@ -25,86 +25,13 @@
 
 const _owner = Object.freeze({ toString: () => "dockingPage" });
 
-// The kinds of widget that travel, each a class by the base's contract and the law (§15.1): a member of the focus
-// branch handed in as params.focus - the dock's, or a branch of the page's for one that opens afloat - with activate(),
-// a claim; its Escape yields back to whatever holds the branch it is in. A dock adopts the membership when the tab
-// lands on it, so a widget's place in the tree follows its tab.
-function _join(w, branch, params) { w.focus = params.focus.join(branch.name, w); w._off = Keys.claimOn(w.root, w.focus); }
-function _leave(w) { w._off(); if (w.focus.in) w.focus.leave(); }
-
-class CardWidget {
-    constructor(branch, params) {
-        branch.activate(_owner);
-        this.root = new CardBuilder().title(params.title).badge(params.badge).text(params.text).aspect(0.6).build(branch.createBranch("card")).root;
-        _join(this, branch, params);
-    }
-    activate() { Keys.claim(this.focus); }
-    keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
-    granted() { this.root.setAttribute("data-keys", "held"); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
-    dispose() { _leave(this); }
-}
-
-class CounterWidget {
-    constructor(branch, params) {
-        var self = this;
-        this._value = params.start || 0;
-        branch.activate(_owner);
-        var root = branch.createElement("counter", "div");
-        css.addClass(root, ga_buttons);
-        var count = branch.createElement("count", "div");
-        css.addClass(count, ga_count);
-        var b = new ButtonBuilder().label("Count").onClick(function () { self._value++; self._draw(); });
-        var btn = b.build(branch.createElement("btn", b.tag));
-        this._count = count;
-        this._draw();
-        root.appendChild(count);
-        root.appendChild(btn.el);
-        this.root = root;
-        _join(this, branch, params);
-    }
-    _draw() { this._count.textContent = String(this._value); }
-    activate() { Keys.claim(this.focus); }
-    /** While the counter holds: ↑ counts, ↓ counts down, Escape yields. */
-    keyDown(ev) {
-        if (ev.key === "Escape") { Keys.yield(this.focus); return true; }
-        if (ev.key === "ArrowUp") { this._value++; } else if (ev.key === "ArrowDown") { this._value--; } else return false;
-        this._draw();
-        return true;
-    }
-    granted() { this.root.setAttribute("data-keys", "held"); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
-    dispose() { _leave(this); }
-}
-
-class NoteWidget {
-    constructor(branch, params) {
-        branch.activate(_owner);
-        var root = branch.createElement("note", "p");
-        css.addClass(root, ga_lede);
-        root.textContent = params.text;
-        this.root = root;
-        _join(this, branch, params);
-    }
-    activate() { Keys.claim(this.focus); }
-    keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
-    granted() { this.root.setAttribute("data-keys", "held"); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
-    dispose() { _leave(this); }
-}
+// What the tabs hold is DockingScene's: the books as a relation grid, the shelves as a tree, a picture, a note. Each is
+// a member of the focus branch handed in as params.focus - the dock's, or the page's own afloat branch - and a dock
+// adopts the membership when the tab lands on it, so a widget's place in the tree follows its tab.
 
 var _NOTE = "A tab is one record — id, title, widget — and has one placement at a time: in a dock's strip, or afloat in "
-    + "a frame of its own. The dock is the multi-tab pane; the desk floats over it. "
-    + "Drop the float on the strip and it lands where the mark says; let go over content and it stays afloat.";
+    + "a frame of its own. The dock is the multi-tab pane; the desk floats over it. Drop the float on a strip and it lands where "
+    + "the mark says; let go over content and it stays afloat. Right-click the ground of a strip to part the room.";
 
 class DockingWidget {
     constructor(branch, params) {
@@ -126,9 +53,11 @@ class DockingWidget {
         el.appendChild(title);
         var lede = branch.createElement("lede", "p");
         css.addClass(lede, ga_lede);
-        lede.textContent = "Docks in a split grid and a desk over them. Right-click the empty ground of a tab bar to part the room — beside or below — or to close a region, whose tabs go to its neighbour. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it "
-            + "floats; drag the float over either strip: the dock lights and marks where the tab would land; let go and it is a tab "
-            + "there. Drag a chip along a strip: it reorders, on its rail. The Tab key walks the chips. A float stays within the box.";
+        lede.textContent = "Docks in a split grid and a desk over them, holding what a workspace holds: the books as a relation grid, the shelves as a "
+            + "relation tree, a picture zoomed by its own keys. Right-click the empty ground of a tab bar to part the room — beside or below — or to "
+            + "close a region, whose tabs go to its neighbour. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it floats; drag the "
+            + "float over any strip: the dock lights and marks where the tab would land; let go and it is a tab there. Drag a chip along a strip: it "
+            + "reorders, on its rail. The Tab key walks the chips, and the region you are working in is the lit one.";
         el.appendChild(lede);
 
         // ── the chips' size and aspect ────────────────────────────────────
@@ -202,8 +131,8 @@ class DockingWidget {
         var regions = [], named = 0;
         this._regions = regions;
         function region(id) {
-            var name = "Dock " + String.fromCharCode(65 + (named++ % 26));
-            var panel = new PanelBuilder().title(name).fills().host(grid.cell(id)).build(branch.createBranch("panel-" + id));
+            var name = "region " + (++named);   // for the log alone: the panel shows no name, the chips say what is in it
+            var panel = new PanelBuilder().fills().host(grid.cell(id)).build(branch.createBranch("panel-" + id));
             var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: panel.body, slotId: id, budget: 8, addable: false,
                                                                             onEvent: sink, menus: menus, stripMenu: "split", focusName: "dock-" + id });
             panel.watch(dock);
@@ -263,10 +192,14 @@ class DockingWidget {
             var own = branch.createBranch("tab-" + id);
             return { id: id, title: title, widget: new Widget(own, Object.assign({}, params, { focus: into })) };
         }
-        left.addTab(tab("card", "Card", CardWidget, { title: "A card in a dock", badge: "TAB", text: "It travels with its tab: dock, float, dock again." }, left.focus));
-        left.addTab(tab("counter", "Counter", CounterWidget, { start: 0 }, left.focus));
-        right.addTab(tab("note", "Note", NoteWidget, { text: _NOTE }, right.focus));
-        docking.desk.open({ id: "afloat", title: "Afloat", widget: tab("afloat", "Afloat", NoteWidget, { text: "Drop me on the strip." }, afloat).widget, x: 60, y: 200, w: 260, h: 140 });
+        var store = new BooksStore();
+        var domain = branch.createBranch("domain");
+        domain.activate(_owner);
+        left.addTab(tab("books", "Books", BooksTab, { store: store, domain: domain }, left.focus));
+        left.addTab(tab("shelves", "Shelves", ShelvesTab, { store: store, domain: domain }, left.focus));
+        right.addTab(tab("plate", "Plate", PictureTab, { title: "A plate" }, right.focus));
+        right.addTab(tab("notes", "Notes", NoteTab, { text: _NOTE }, right.focus));
+        docking.desk.open({ id: "afloat", title: "Afloat", widget: tab("afloat", "Afloat", PictureTab, { title: "A plate afloat" }, afloat).widget, x: 60, y: 210, w: 280, h: 190 });
 
         this.root = el;
     }

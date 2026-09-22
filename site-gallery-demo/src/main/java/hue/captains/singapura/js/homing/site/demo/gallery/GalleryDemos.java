@@ -104,8 +104,13 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "Every mutation is one FloatEvents object on one sink — Opened, Moved, Resized, Raised, Closed — reported "
                     + "once when it happened, never per pixel.",
                     "/floating", FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
-            new Demo("docking", "layout", "Dock and undock", "Two docks in a split, a desk over both, tabs that float and land.",
-                    "The multi-tab pane is the dock; the split grid only subdivides; the desk floats over both. A tab is one record "
+            new Demo("docking", "layout", "Dock and undock", "Regions in a split, a desk over them, tabs that float and land.",
+                    "A small workspace: every region is a cell of the split grid, a dock in it, and a panel around the dock that draws "
+                    + "the frame and lights while the keys are anywhere inside it. RIGHT-CLICK THE EMPTY GROUND OF A TAB BAR — the room "
+                    + "the chips leave — and the page offers the split menu: part the region beside or below, each new one a dock of its "
+                    + "own on the desk, or close this one, whose tabs go to the region the grid gives its room to. What the tabs hold is "
+                    + "what a workspace holds: the books as a relation grid, the shelves as a relation tree, a picture the design draws "
+                    + "and the keys zoom. The multi-tab pane is the dock; the desk floats over them. A tab is one record "
                     + "— id, title, widget — with one placement at a time: in a dock's strip, or afloat in a frame of its own; its "
                     + "widget keeps its branch wherever it goes. A drag along a strip reorders, on its rail; pulling a tab off to "
                     + "float is being worked out on the tab strip page and comes here after — the tab's menu detaches meanwhile. "

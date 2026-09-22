@@ -13,6 +13,7 @@ import static hue.captains.singapura.js.homing.design.Box.Container;
 import static hue.captains.singapura.js.homing.design.Box.Control;
 import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
 import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
+import static hue.captains.singapura.js.homing.design.Emphasis.Secondary;
 import static hue.captains.singapura.js.homing.design.Feedback.Danger;
 import static hue.captains.singapura.js.homing.design.Feedback.Success;
 import static hue.captains.singapura.js.homing.design.Feedback.Warning;
@@ -270,6 +271,134 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
             max-height: 160px;
             overflow: auto;
             white-space: pre;
+            """;
+        }
+    }
+
+    // ── What a dock's tab holds ───────────────────────────────────────────
+
+    /** A tab's widget, filling the panel it is shown in: the pane gives it the room, the widget takes all of it. */
+    public record ga_tab_fill() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            box-sizing: border-box;
+            """;
+        }
+    }
+
+    /** The box a relation widget is mounted in: what the tab leaves, and it scrolls on its own. */
+    public record ga_tab_host() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            min-width: 0;
+            min-height: 0;
+            overflow: auto;
+            """;
+        }
+    }
+
+    /** The picture's box: the picture centred in what the tab leaves, and nothing spilling out of it. */
+    public record ga_picture() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class)); }
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            min-width: 0;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            """;
+        }
+    }
+
+    /**
+     * The picture: a plate the page draws with the design's own words — an
+     * inverted sky, a sun in the primary surface, two hills and the ground —
+     * so it is themed like everything else and carries no colour of its own.
+     * The zoom the keys set scales it from the middle.
+     */
+    public record ga_plate() implements CssClass<GalleryStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--ga-zoom")); }
+        @Override public List<? extends Wearable> wears() { return List.of(of(Inverted.class, Color.Surface.class), of(Container.class, Shape.Corner.class)); }
+        @Override public String body() { return """
+            position: relative;
+            flex: none;
+            inline-size: min(100%, 420px);
+            aspect-ratio: 8 / 5;
+            overflow: hidden;
+            transform: scale(var(--ga-zoom, 1));
+            transform-origin: center;
+            """;
+        }
+    }
+
+    /** The sun on the plate: a disc in the primary surface, high and to the end. */
+    public record ga_plate_sun() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class)); }
+        @Override public String body() { return """
+            position: absolute;
+            inset-inline-end: 18%;
+            inset-block-start: 12%;
+            inline-size: 15%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            """;
+        }
+    }
+
+    /** The far hill: a recessed triangle behind the near one, so the near one reads over it. */
+    public record ga_plate_far() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class)); }
+        @Override public String body() { return """
+            position: absolute;
+            inset-block-end: 24%;
+            inset-inline-end: 6%;
+            inline-size: 58%;
+            block-size: 52%;
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+            """;
+        }
+    }
+
+    /** The near hill: the secondary surface, lower and toward the start, so the two overlap. */
+    public record ga_plate_near() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Secondary.class, Color.Surface.class)); }
+        @Override public String body() { return """
+            position: absolute;
+            inset-block-end: 24%;
+            inset-inline-start: 2%;
+            inline-size: 46%;
+            block-size: 38%;
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+            """;
+        }
+    }
+
+    /** The ground under them: a raised band across the plate, the light the hills stand on. */
+    public record ga_plate_ground() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class)); }
+        @Override public String body() { return """
+            position: absolute;
+            inset-inline: 0;
+            inset-block-end: 0;
+            block-size: 24%;
+            """;
+        }
+    }
+
+    /** The line under a picture: what it is, and how far it is zoomed. */
+    public record ga_picture_note() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class), of(Body.class, Type.Face.class)); }
+        @Override public String body() { return """
+            flex: none;
+            margin: 0;
+            padding: 6px 10px;
             """;
         }
     }
@@ -564,6 +693,8 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_specimens(), new ga_specimen_name(), new ga_log(), new ga_status(),
                        new ga_holders(), new ga_holder(), new ga_holder_on(), new ga_stage(), new ga_sprite(),
                        new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
+                       new ga_tab_fill(), new ga_tab_host(), new ga_picture(), new ga_picture_note(),
+                       new ga_plate(), new ga_plate_sun(), new ga_plate_far(), new ga_plate_near(), new ga_plate_ground(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }
