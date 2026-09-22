@@ -1,7 +1,8 @@
 // =============================================================================
 // DockingApp — dock and undock. Two docks side by side in a split grid, each
 // mounted in a PANEL - the named region that frames it, its head saying which
-// dock it is and the dock filling its body, as the workspace will mount them. The
+// dock it is and the dock filling its body, as the workspace will mount them;
+// each panel follows its dock and lights while the keys are in it. The
 // divider between them the grid's, and a desk over both: drag a floating
 // pane over either strip and it is offered — the dock lit, the mark where it
 // would land — and dropped there it is a tab; the cross on a chip closes it.
@@ -198,6 +199,8 @@ class DockingWidget {
             return new MultiTabPane(branch.createBranch("dock-" + side), { host: panel.body, slotId: side, budget: 8, addable: false, onEvent: sink, menus: menus, focusName: "dock-" + side });
         });
         this._docks = docks;
+        // each panel follows its dock: while the keys are in it the panel is the active region, which is the whole point of framing a dock in one
+        panels.forEach(function (panel, i) { panel.watch(docks[i]); });
         var left = docks[0], right = docks[1];
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { docks.forEach(function (d) { d.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { docks.forEach(function (d) { d.aspect(v); }); })
