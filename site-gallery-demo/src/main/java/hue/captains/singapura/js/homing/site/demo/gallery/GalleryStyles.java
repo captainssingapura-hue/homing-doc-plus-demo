@@ -21,6 +21,7 @@ import static hue.captains.singapura.js.homing.design.Interaction.Current;
 import static hue.captains.singapura.js.homing.design.Interaction.Focus;
 import static hue.captains.singapura.js.homing.design.Layer.Raised;
 import static hue.captains.singapura.js.homing.design.Layer.Recessed;
+import static hue.captains.singapura.js.homing.design.Target.Affordance;
 import static hue.captains.singapura.js.homing.design.Target.Color;
 import static hue.captains.singapura.js.homing.design.Target.Motion;
 import static hue.captains.singapura.js.homing.design.Target.Shape;
@@ -360,6 +361,89 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return "margin-top: 10px;"; }
     }
 
+    // ── The focus page ────────────────────────────────────────────────────────
+
+    /** The scene and the monitor side by side: the scene takes the room, the monitor its own column. */
+    public record ga_focus() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            margin: 16px 0;
+            """;
+        }
+    }
+
+    /** The scene: the panels and the loose leaf, wrapping. */
+    public record ga_focus_scene() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 16px;
+            """;
+        }
+    }
+
+    /** The monitor's column: raised, its own box. */
+    public record ga_focus_monitor() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return """
+            flex: 0 0 300px;
+            min-width: 0;
+            padding: 10px 6px;
+            """;
+        }
+    }
+
+    /** A panel: a container that holds a focus branch; a press on its header claims for it. */
+    public record ga_panel() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class), of(Interactive.class, Motion.Ease.class)); }
+        @Override public String body() { return """
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            min-width: 220px;
+            outline: none;
+            """;
+        }
+    }
+
+    /** The panel's header: the name; a press claims for the panel. */
+    public record ga_panel_header() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Muted.class, Color.Ink.class), of(Interactive.class, Affordance.Cursor.class)); }
+        @Override public String body() { return "user-select: none;"; }
+    }
+
+    /** A leaf: a focusable box that claims on a press and counts the arrows it takes. */
+    public record ga_leaf() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class), of(Body.class, Color.Ink.class), of(Interactive.class, Motion.Ease.class), of(Interactive.class, Affordance.Cursor.class)); }
+        @Override public String body() { return """
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 8px 12px;
+            min-width: 160px;
+            outline: none;
+            """;
+        }
+    }
+
+    /** The member that holds the keys: the ring drawn now, on a panel or a leaf. */
+    public record ga_holds() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
+        @Override public String body() { return ""; }
+    }
+
+    /** The count a leaf keeps: the arrows it took. */
+    public record ga_leaf_count() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Numeral.class, Type.Face.class), of(Numeral.class, Type.Weight.class)); }
+        @Override public String body() { return "margin-inline-start: auto;"; }
+    }
+
     // ── The keyboard page ─────────────────────────────────────────────────────
 
     /** The strip that shows who has the keys: one chip per member of the page's party, in a row. */
@@ -426,6 +510,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_box(), new ga_shelf(), new ga_menu_cells(), new ga_cell(), new ga_cell_face(), new ga_cell_caption(),
                        new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_specimens(), new ga_specimen_name(), new ga_log(), new ga_status(),
                        new ga_holders(), new ga_holder(), new ga_holder_on(), new ga_stage(), new ga_sprite(),
+                       new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_holds(), new ga_leaf_count(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }

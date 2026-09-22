@@ -149,6 +149,16 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "log says who took the keys from whom. One button shows the bug the design names: the platformer claiming by "
                     + "call from behind a modal — the party is blind, so it holds, and the dialog stops hearing Escape.",
                     "/keyboard", KeyboardApp.INSTANCE, "KeyboardWidget", Map.of()),
+            new Demo("focus", "Focus", "Who is in focus: the logical-focus tree, and its monitor.",
+                    "The focus party keeps the logical-focus tree and nothing else: a container holds a branch, a leaf joins one, "
+                    + "and the steward reads the tree and never writes it. The monitor beside the scene shows the tree as it is and "
+                    + "the holder of the keys lit, redrawn on every notice of the party and every event of the steward. Two panels "
+                    + "hold a branch each with leaves inside; one leaf sits loose at the root. Press a leaf and it holds; press a "
+                    + "panel's header and the panel holds - the convention runs in the capture phase, so a press on a leaf claims "
+                    + "the panel first and then the leaf, and the leaf holds. The arrows go to whoever holds: a leaf counts them, a "
+                    + "panel takes and drops them. The keys move only by a claim here, no yield yet, and leave the scene with the "
+                    + "focus. No component here knows the steward.",
+                    "/focus", FocusApp.INSTANCE, "FocusWidget", Map.of()),
             new Demo("menus", "Context menus", "One steward, three cells, each with a menu of its kind.",
                     "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "
                     + "steward for the page — lazy, minting a kind's menu at its first open and listening to nothing while none is "

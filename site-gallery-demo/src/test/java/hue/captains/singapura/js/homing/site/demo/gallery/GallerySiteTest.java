@@ -189,14 +189,14 @@ class GallerySiteTest {
         assertEquals(List.of(), ComponentTrees.validate(List.of(GalleryCrate.INSTANCE)));
         var composed = ComponentTrees.compose("gallery", List.of(GalleryCrate.INSTANCE));
         assertEquals("gallery", composed.root().children().get(0).segment().value(), "the site's own catalogue first in the closure, then the crates it requires");
-        assertEquals(11, composed.root().children().size(), "the gallery and the ten vehicles in its closure, the base (the keyboard steward) among them: the split crate is not required, docking ships statics only");
+        assertEquals(12, composed.root().children().size(), "the gallery and the eleven vehicles in its closure, the base (the keyboard steward) and the focus monitor among them: the split crate is not required, docking ships statics only");
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of("animal", "counter", "swatch", "tab"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three, by name; the pane in the panes crate names the tab menu; nothing lists them");
         // the keys likewise: the slider and its group declare theirs; the page's map is derived, and no declared component listens for itself
         // one capture left in the closure: the grid's header drag cancels on Escape; the grid migrates with the tree renderer, not before
         assertEquals(List.of("homing-rel-grid: RelGridHeaderDragModule captures keys on the document; only the steward does"), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(List.of(GalleryCrate.INSTANCE)).stream().filter(m -> !m.startsWith("RelGrid") && !m.startsWith("RelTree") && !m.startsWith("Tree")).toList(), "the gallery's own widgets and the components it serves: every key through the party");
-        assertEquals(List.of("Card", "ContextMenuSteward", "ContextMenusWidget", "Desk", "Dialog", "KeyboardWidget", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup", "SplitGridMirror", "TabStrip"),
+        assertEquals(List.of("Card", "ContextMenuSteward", "ContextMenusWidget", "Desk", "Dialog", "FocusWidget", "KeyboardWidget", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup", "SplitGridMirror", "TabStrip"),
                 KeyboardRegistry.requiredBy(List.of(GalleryCrate.INSTANCE)).byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList());
     }
 }
