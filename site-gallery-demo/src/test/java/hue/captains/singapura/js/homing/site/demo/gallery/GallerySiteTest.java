@@ -61,10 +61,16 @@ class GallerySiteTest {
     void theDemosNameEveryAppByItsServedAddressAndTheNavigator() {
         var resolver = new hue.captains.singapura.js.homing.server.QueryParamResolver("/module");
         String json = GalleryDemos.INSTANCE.json(resolver);
-        assertTrue(json.startsWith("{\"label\":\"Gallery\",\"tree\":{\"segment\":\"gallery\",\"children\":[{\"segment\":\"welcome\""), json);
+        assertTrue(json.startsWith("{\"label\":\"Gallery\",\"tree\":{\"segment\":\"gallery\",\"children\":[{\"segment\":\"basics\",\"children\":[{\"segment\":\"welcome\""), json);
+        assertTrue(json.contains("\"gallery\\/basics\":\"Basics\""), json);
+        assertTrue(json.contains("\"groups\":{\"gallery\\/basics\":{\"label\":\"Basics\",\"summary\":"), json);
+        assertTrue(json.contains("\"demos\":[\"gallery\\/basics\\/welcome\",\"gallery\\/basics\\/counter\"]}"), json);
+        assertEquals(List.of("basics", "controls", "relations", "layout", "dialogs", "focus"), GalleryDemos.GROUPS.stream().map(GalleryDemos.Group::slug).toList());
+        assertEquals(GalleryDemos.DEMOS.size(), GalleryDemos.GROUPS.stream().mapToInt(g -> GalleryDemos.demosOf(g).size()).sum(), "every demo in exactly one group");
+        assertEquals(GalleryDemos.DEMOS.size(), GalleryDemos.DEMOS.stream().map(GalleryDemos.Demo::slug).distinct().count(), "slugs unique across groups: ?demo=<slug> finds one");
         // jsString escapes the slash, which JSON allows
         assertTrue(json.contains("\"navigator\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidgetModule\""), json);
-        assertTrue(json.contains("\"gallery\\/counter\":{\"label\":\"Counter\""), json);
+        assertTrue(json.contains("\"gallery\\/basics\\/counter\":{\"label\":\"Counter\""), json);
         assertTrue(json.contains("\"widget\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.CounterApp\",\"export\":\"CounterWidget\",\"params\":{\"start\":\"7\"}}"), json);
         assertTrue(json.contains("\"page\":\"\\/panes\""), json);
         for (var d : GalleryDemos.DEMOS) assertTrue(GallerySite.INSTANCE.router().resolve(Path.parse(d.page())).isPresent(), d.page() + " is a page");

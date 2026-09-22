@@ -2,10 +2,12 @@
 // GalleryShellApp — the gallery as a shell. A split grid of three cells,
 // arranged once and never re-arranged, fills the slot: the navigator on the
 // left, the chosen demo top right, its explanation under it — the dividers
-// drag, nothing subdivides or goes. The navigator is the relation tree over DEMOS; the
+// drag, nothing subdivides or goes. The navigator is the relation tree over DEMOS —
+// the demos in their groups, the sub-catalogues, folders open from the start; the
 // demo is the demo app's widget class, imported through the serving context
 // when first chosen and kept in a slot after; the explanation is what DEMOS
-// says, with a link to the page the demo also is. The address follows. The
+// says, with a link to the page the demo also is; a group chosen is described
+// and shows its first demo. The address follows. The
 // shell is one document under the chrome, which made the one keyboard steward
 // and handed it in the params; the shell hands it on to every demo in theirs.
 // =============================================================================
@@ -89,11 +91,18 @@ function appMain(el, params) {
         HrefManagerInstance.set(link, d.page);
     }
 
-    function select(path) {
-        var d = DEMOS.demos[path];
-        if (!d || wanted === path) return;
+    function describeGroup(path, g) {
+        kicker.textContent = path;
+        title.textContent = g.label;
+        summary.textContent = g.summary;
+        text.textContent = g.demos.map(function (p) { return DEMOS.demos[p].label + " — " + DEMOS.demos[p].summary; }).join("\n");
+        link.textContent = "Open " + DEMOS.demos[g.demos[0]].label + " as a page →";
+        HrefManagerInstance.set(link, DEMOS.demos[g.demos[0]].page);
+    }
+
+    function show(path, d) {
+        if (wanted === path) return;
         wanted = path;
-        describe(path, d);
         var slug = path.slice(path.lastIndexOf("/") + 1);
         try { history.replaceState(null, "", "?demo=" + encodeURIComponent(slug)); } catch (e) {}
         if (demoSlot.has(path)) { demoSlot.show(path); return; }
@@ -102,9 +111,19 @@ function appMain(el, params) {
         }).catch(function (e) { console.error("[galleryShell] demo '" + path + "' failed", e); });
     }
 
-    var first = Object.keys(DEMOS.demos)[0];
-    var asked = params && params.demo ? "gallery/" + params.demo : null;
-    var initial = asked && DEMOS.demos[asked] ? asked : first;
+    // a demo chosen: described and shown; a group chosen: described, its first demo shown
+    function select(path) {
+        var d = DEMOS.demos[path];
+        if (d) { describe(path, d); show(path, d); return; }
+        var g = DEMOS.groups[path];
+        if (!g || !g.demos.length) return;
+        describeGroup(path, g);
+        show(g.demos[0], DEMOS.demos[g.demos[0]]);
+    }
+
+    var paths = Object.keys(DEMOS.demos), first = paths[0];
+    var asked = params && params.demo ? paths.filter(function (p) { return p.slice(p.lastIndexOf("/") + 1) === params.demo; })[0] : null;
+    var initial = asked || first;
 
     _load(DEMOS.navigator).then(function (Navigator) {
         var nav = navSlot.show("navigator", Navigator, { tree: DEMOS.tree, labels: DEMOS.labels, label: DEMOS.label });
