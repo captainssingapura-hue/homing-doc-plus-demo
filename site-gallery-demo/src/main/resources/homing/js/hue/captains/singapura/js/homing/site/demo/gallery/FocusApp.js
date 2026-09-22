@@ -13,8 +13,9 @@
 // has the physical focus the panel holds the logical one and the list keeps
 // its arrows, as a field does; the pick is confirmed by Enter, on which the
 // panel tells the leaf to activate itself, and the leaf takes the focus as a
-// press on it would — the list's released first, then the claim. A leaf that
-// holds counts the arrows it takes. The log says who took the keys from whom.
+// press on it would — the list's released first, then the claim; and when
+// the panel comes to hold it puts the focus in its list, so it works by keys
+// alone. A leaf that holds counts the arrows it takes. The log says who took the keys from whom.
 // No component here knows the steward: a panel and a leaf join a branch and
 // call Keys; the page, which is not a component, listens for the log.
 // =============================================================================
@@ -80,7 +81,7 @@ class Panel {
         header.appendChild(note);
         root.appendChild(header);
         host.appendChild(root);
-        this.root = root; this._catches = !!catches;
+        this.root = root; this._header = header; this._catches = !!catches;
         this.focus = focusBranch.createBranch(name, this);
         this._off = Keys.claimOn(root, this.focus.owner);
         this._leaves = [];
@@ -105,6 +106,8 @@ class Panel {
  * options natively and reach no member; the pick is a proposal until Enter confirms it. On Enter, forwarded to the
  * panel since a select's Enter is the holder's, the panel tells the picked leaf to activate itself, and the leaf does
  * what a press on it does: takes the physical focus, which releases the list's, and the convention claims for it.
+ * And whenever the panel comes to hold — a press on its header, the focus arriving, a leaf's yield — it puts the
+ * physical focus in its list, so from a leaf's Escape to the next leaf's arrows the panel works by keys alone.
  */
 class ListPanel extends Panel {
     constructor(branch, host, focusBranch, name) {
@@ -116,12 +119,17 @@ class ListPanel extends Panel {
         this.root.appendChild(list);
         this._list = list;
         this._byName = {};
+        // a press on the header claimed for the panel already (pointerdown, capture), and granted put the focus in the
+        // list; the press's own default — the focus to the panel's root — would take it back out, so it is stopped
+        this._header.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
     }
     /** Enter while the panel holds and the list is picked in: the picked leaf is told to activate itself. */
     keyDown(ev) {
         if (ev.key === "Enter") { var l = this._byName[this._list.value]; if (l) l.activate(); return true; }
         return super.keyDown(ev);
     }
+    /** Granted, however: the list takes the physical focus, so the next pick can be made by keys. A claim it raises for the panel is nothing — the panel holds. */
+    granted(by) { super.granted(by); try { this._list.focus({ preventScroll: true }); } catch (e) {} }
     /** A leaf inside, and an option for it; a leaf that comes to hold by any other way is shown in the list. */
     leaf(branch, name) {
         var self = this;
@@ -155,7 +163,8 @@ class FocusWidget {
             + "press a panel's header and the panel holds; the arrows go to whoever holds, and a leaf counts them. Escape, or a leaf's "
             + "button, yields: the keys go up to the first ancestor that would hold them — panel A catches, panel B lets them pass "
             + "to no one. Panel C picks its leaf with a native list: the arrows walk the list, Enter confirms — the panel tells the "
-            + "leaf to activate itself, and it takes the focus the way a press on it would.";
+            + "leaf to activate itself, and it takes the focus the way a press on it would; and when the panel comes to hold, by "
+            + "a press or a leaf's Escape, it puts the focus in its list, so panel C works by keys alone.";
         el.appendChild(lede);
 
         var row = branch.createElement("row", "div");
