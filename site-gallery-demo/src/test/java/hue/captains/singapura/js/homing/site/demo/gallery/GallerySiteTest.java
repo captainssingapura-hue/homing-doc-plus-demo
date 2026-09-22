@@ -47,13 +47,12 @@ class GallerySiteTest {
         assertTrue(body.contains("const params = Object.freeze({});"), body);   // no demo asked for: the first
         var asked = GallerySite.INSTANCE.router().resolve(Path.ROOT).orElseThrow().html(Query.of("demo", "grid")).body();
         assertTrue(asked.contains("const params = Object.freeze({\"demo\":\"grid\"});"), asked);
-        assertFalse(body.contains("WelcomeApp"), "the welcome page is not on the shell");
     }
 
     @Test
-    void theWelcomePageStaysUnderItsOwnArm() {
-        var body = GallerySite.INSTANCE.router().resolve(Path.of("welcome")).orElseThrow().html(Query.NONE).body();
-        assertTrue(body.contains("<title>Welcome · Gallery</title>"), body);
+    void aDemoPageIsToldNothingButItsKeyboardSteward() {
+        var body = GallerySite.INSTANCE.router().resolve(Path.of("buttons")).orElseThrow().html(Query.NONE).body();
+        assertTrue(body.contains("<title>Buttons · Gallery</title>"), body);
         assertTrue(body.contains("appMain(page.main, Object.freeze(Object.assign({}, {}, { keyboard: page.keyboard })));"), body);   // paramless: nothing stamped, the page's keyboard steward alone
     }
 
@@ -61,46 +60,27 @@ class GallerySiteTest {
     void theDemosNameEveryAppByItsServedAddressAndTheNavigator() {
         var resolver = new hue.captains.singapura.js.homing.server.QueryParamResolver("/module");
         String json = GalleryDemos.INSTANCE.json(resolver);
-        assertTrue(json.startsWith("{\"label\":\"Gallery\",\"tree\":{\"segment\":\"gallery\",\"children\":[{\"segment\":\"basics\",\"children\":[{\"segment\":\"welcome\""), json);
-        assertTrue(json.contains("\"gallery\\/basics\":\"Basics\""), json);
-        assertTrue(json.contains("\"groups\":{\"gallery\\/basics\":{\"label\":\"Basics\",\"summary\":"), json);
-        assertTrue(json.contains("\"demos\":[\"gallery\\/basics\\/welcome\",\"gallery\\/basics\\/counter\"]}"), json);
-        assertEquals(List.of("basics", "controls", "relations", "layout", "dialogs", "focus"), GalleryDemos.GROUPS.stream().map(GalleryDemos.Group::slug).toList());
+        assertTrue(json.startsWith("{\"label\":\"Gallery\",\"tree\":{\"segment\":\"gallery\",\"children\":[{\"segment\":\"controls\",\"children\":[{\"segment\":\"buttons\""), json);
+        assertTrue(json.contains("\"gallery\\/controls\":\"Controls\""), json);
+        assertTrue(json.contains("\"groups\":{\"gallery\\/controls\":{\"label\":\"Controls\",\"summary\":"), json);
+        assertTrue(json.contains("\"demos\":[\"gallery\\/controls\\/buttons\",\"gallery\\/controls\\/cards\",\"gallery\\/controls\\/sliders\"]}"), json);
+        assertEquals(List.of("controls", "relations", "layout", "dialogs", "focus"), GalleryDemos.GROUPS.stream().map(GalleryDemos.Group::slug).toList());
         assertEquals(GalleryDemos.DEMOS.size(), GalleryDemos.GROUPS.stream().mapToInt(g -> GalleryDemos.demosOf(g).size()).sum(), "every demo in exactly one group");
         assertEquals(GalleryDemos.DEMOS.size(), GalleryDemos.DEMOS.stream().map(GalleryDemos.Demo::slug).distinct().count(), "slugs unique across groups: ?demo=<slug> finds one");
         // jsString escapes the slash, which JSON allows
         assertTrue(json.contains("\"navigator\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidgetModule\""), json);
-        assertTrue(json.contains("\"gallery\\/basics\\/counter\":{\"label\":\"Counter\""), json);
-        assertTrue(json.contains("\"widget\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.CounterApp\",\"export\":\"CounterWidget\",\"params\":{\"start\":\"7\"}}"), json);
+        assertTrue(json.contains("\"gallery\\/layout\\/panes\":{\"label\":\"Panes\""), json);
+        assertTrue(json.contains("\"widget\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.PanesApp\",\"export\":\"PanesWidget\",\"params\":{}}"), json);
         assertTrue(json.contains("\"page\":\"\\/panes\""), json);
         for (var d : GalleryDemos.DEMOS) assertTrue(GallerySite.INSTANCE.router().resolve(Path.parse(d.page())).isPresent(), d.page() + " is a page");
-    }
-
-    @Test
-    void theCounterIsBoundOffThePathAndToldItsTrail() {
-        var body = GallerySite.INSTANCE.router().resolve(Path.of("counter", "7")).orElseThrow().html(Query.NONE).body();
-        assertTrue(body.contains("<title>Counter · Gallery</title>"), body);
-        assertTrue(body.contains("const params = Object.freeze({\"start\":\"7\"});"), body);
-        assertTrue(body.contains("Object.freeze({text:\"Gallery\",to:\"\\/\"})"), body);
-        assertTrue(body.contains("Object.freeze({text:\"Counter\",to:\"\\/counter\\/7\"})"), body);
-        assertTrue(body.contains("appMain(page.main, Object.freeze(Object.assign({}, params, { keyboard: page.keyboard })));"), body);   // the page adds its keyboard steward
-    }
-
-    @Test
-    void theBindingWinsOverTheQuery() {
-        var body = GallerySite.INSTANCE.router().resolve(Path.of("counter", "7")).orElseThrow()
-                .html(Query.of("start", "99")).body();
-        assertTrue(body.contains("\"7\""), body);
-        assertFalse(body.contains("99"), body);
     }
 
     @Test
     void theArms() {
         var r = GallerySite.INSTANCE.router();
         assertSame(GallerySite.PLAIN, r.resolve(Path.of("plain")).orElseThrow());
-        assertTrue(r.resolve(Path.of("counter")).isPresent());
-        assertTrue(r.resolve(Path.of("counter", "x")).isEmpty());
-        assertTrue(r.resolve(Path.of("counter", "1", "2")).isEmpty());
+        assertTrue(r.resolve(Path.of("panes")).isPresent());
+        assertTrue(r.resolve(Path.of("panes", "x")).isEmpty(), "a demo is one below the root, and no deeper");
         assertTrue(r.resolve(Path.of("nowhere")).isEmpty());
     }
 

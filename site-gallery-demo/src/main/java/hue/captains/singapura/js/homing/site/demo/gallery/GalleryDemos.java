@@ -52,7 +52,6 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
 
     /** The sub-catalogues, in the order the navigator shows them. */
     public static final List<Group> GROUPS = List.of(
-            new Group("basics", "Basics", "The shell's own pages: a page as a widget, and params bound off the path."),
             new Group("controls", "Controls", "Small components through their builders: buttons, cards, sliders — the native world, each with its own keys."),
             new Group("relations", "Relations", "The relation grid and the relation tree, from their own repo, over one book store."),
             new Group("layout", "Layout", "Cells, panes, docks and the desk: where a widget sits, and how it moves."),
@@ -60,16 +59,6 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
             new Group("focus", "Keyboard & focus", "Who has the keys: the party, the steward, the logical-focus tree, and the native world beside it."));
 
     public static final List<Demo> DEMOS = List.of(
-            new Demo("welcome", "basics", "Welcome", "The gallery's cards.",
-                    "The pages of this gallery as cards, each a link to the page it names. This is the page the gallery opened on "
-                    + "before it was a shell: the same module, now a widget in the demo pane, constructed on a branch the shell "
-                    + "handed it and disposed when another demo is chosen.",
-                    "/welcome", WelcomeApp.INSTANCE, "WelcomeWidget", Map.of()),
-            new Demo("counter", "basics", "Counter", "A JS app with typed params.",
-                    "A counter that starts where its params say. As a page, the router binds the start off the path and the server "
-                    + "stamps it in through the app's own codec; as a widget here, the shell hands the same params to construct. "
-                    + "One module, two hosts, no branch of its own to mint: the branch comes in.",
-                    "/counter/7", CounterApp.INSTANCE, "CounterWidget", Map.of("start", "7")),
             new Demo("grid", "relations", "Grid", "The relation grid, from its own repo.",
                     "The relation grid over twelve books. Titles and ratings edit; the status line under it counts the cells minted "
                     + "and follows the cursor. The grid is a layer-2 component on core and design-core alone; the page hands it a "

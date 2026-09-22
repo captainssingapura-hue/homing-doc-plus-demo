@@ -55,8 +55,6 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
         return List.of(
                 CrateEntry.of(GalleryShellApp.INSTANCE),
                 CrateEntry.of(GalleryDemos.INSTANCE),
-                CrateEntry.of(WelcomeApp.INSTANCE),
-                CrateEntry.of(CounterApp.INSTANCE),
                 CrateEntry.of(GridApp.INSTANCE),
                 CrateEntry.of(TreeApp.INSTANCE),
                 CrateEntry.of(DialogApp.INSTANCE),

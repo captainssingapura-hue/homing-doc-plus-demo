@@ -19,11 +19,11 @@ import java.util.Optional;
  * The gallery: a hand-written router over two JS pages and one plain one,
  * with the standard MPA wearing the seven studio designs.
  *
- * <p>No catalogue anywhere. {@code /counter/7} shows what a router does for
- * a placed page: it reads the start off the path, binds it, and tells the
- * page its trail — {@code Gallery / Counter} — which the chrome draws. The
- * MPA never learns where the trail came from. {@code /grid} and {@code /tree}
- * are the relation grid and its tree, from their own repo, as pages.</p>
+ * <p>No catalogue anywhere. Every demo is a page one below the root, told
+ * the two-crumb trail the router knows — {@code Gallery / Panes} — which the
+ * chrome draws; the MPA never learns where the trail came from. {@code /grid}
+ * and {@code /tree} are the relation grid and its tree, from their own repo,
+ * as pages.</p>
  */
 public record GallerySite() implements Site {
 
@@ -33,7 +33,6 @@ public record GallerySite() implements Site {
             Brand.of("Gallery"), StudioThemeRegistry.INSTANCE, GalleryPreferences.INSTANCE, GalleryCrate.INSTANCE);
 
     static final AppPage<?, ?> SHELL   = MPA.page(GalleryShellApp.INSTANCE, new GalleryShellApp.Params(""));
-    static final AppPage<?, ?> WELCOME = MPA.page(WelcomeApp.INSTANCE);
     static final AppPage<?, ?> GRID    = MPA.page(GridApp.INSTANCE);
     static final AppPage<?, ?> TREE    = MPA.page(TreeApp.INSTANCE);
     static final AppPage<?, ?> DIALOG  = MPA.page(DialogApp.INSTANCE);
@@ -68,9 +67,7 @@ public record GallerySite() implements Site {
     public Router router() {
         return path -> switch (path.head().orElse("")) {
             case ""        -> path.isRoot() ? Optional.of(SHELL) : Optional.empty();
-            case "welcome" -> path.depth() == 1 ? Optional.of(placed(WELCOME, "Welcome", path)) : Optional.empty();
             case "plain"   -> path.depth() == 1 ? Optional.of(PLAIN) : Optional.empty();
-            case "counter" -> counter(path);
             case "grid"    -> path.depth() == 1 ? Optional.of(placed(GRID, "Grid", path)) : Optional.empty();
             case "tree"    -> path.depth() == 1 ? Optional.of(placed(TREE, "Tree", path)) : Optional.empty();
             case "dialog"  -> path.depth() == 1 ? Optional.of(placed(DIALOG, "Dialog", path)) : Optional.empty();
@@ -95,21 +92,5 @@ public record GallerySite() implements Site {
     private static Navigable placed(AppPage<?, ?> page, String name, Path path) {
         var trail = Trail.NONE.then("Gallery", "/").then(name, path.toString());
         return q -> page.html(trail, q);
-    }
-
-    /** {@code /counter} starts at 0; {@code /counter/<n>} binds n off the path. Either is told its trail. */
-    private static Optional<Navigable> counter(Path path) {
-        int start;
-        switch (path.depth()) {
-            case 1 -> start = 0;
-            case 2 -> {
-                try { start = Integer.parseInt(path.segments().get(1)); }
-                catch (NumberFormatException notANumber) { return Optional.empty(); }
-            }
-            default -> { return Optional.empty(); }
-        }
-        var page  = MPA.page(CounterApp.INSTANCE, new CounterApp.Params(start));
-        var trail = Trail.NONE.then("Gallery", "/").then("Counter", path.toString());
-        return Optional.of(q -> page.html(trail, q));
     }
 }

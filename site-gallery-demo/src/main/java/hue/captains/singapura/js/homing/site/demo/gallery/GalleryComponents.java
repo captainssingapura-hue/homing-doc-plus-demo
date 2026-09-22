@@ -33,8 +33,6 @@ public record GalleryComponents() implements C0_Components<GalleryComponents> {
         @Override public String summary() { return "One widget per demo page."; }
         @Override public List<ComponentEntry<DemosComponents>> leaves() {
             return List.of(
-                    ComponentEntry.of(this, new WelcomeApp.WelcomeWidget()),
-                    ComponentEntry.of(this, new CounterApp.CounterWidget()),
                     ComponentEntry.of(this, new GridApp.GridWidget()),
                     ComponentEntry.of(this, new TreeApp.TreeWidget()),
                     ComponentEntry.of(this, new DialogApp.DialogWidget()),
