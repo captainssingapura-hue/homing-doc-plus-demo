@@ -20,8 +20,9 @@ import java.util.List;
 
 /**
  * The focus page: who is in focus. The logical-focus tree in its simplest
- * form — two panels holding a branch each, leaves in them, a loose leaf —
- * with the monitor beside it, every claim by the mouse, no yield yet.
+ * form — three panels holding a branch each, leaves in them, a loose leaf —
+ * with the monitor beside it: claims by the mouse, yields up the tree to the
+ * first ancestor that would hold, and a native list beside a logical holder.
  */
 public record FocusApp() implements AppModule<AppModule._None, FocusApp> {
 
@@ -30,9 +31,12 @@ public record FocusApp() implements AppModule<AppModule._None, FocusApp> {
     record appMain() implements AppModule._AppMain<AppModule._None, FocusApp> {}
     /** The app as a widget by the base's contract: {@code new FocusWidget(branch, params)}; appMain delegates to it. The leaves and panels in it are the page's own members. */
     public record FocusWidget() implements BranchComponent<FocusApp>, NeedKeyboard {
-        @Override public String summary() { return "Who is in focus: the logical-focus tree and its monitor; two panels, four leaves, claims by the mouse."; }
+        @Override public String summary() { return "Who is in focus: the logical-focus tree and its monitor; three panels, seven leaves, claims by the mouse and yields up the tree."; }
         /** The leaves' and the panels': the arrows, counted by a leaf that holds, taken and dropped by a panel. */
-        @Override public List<KeyBinding> keys() { return KeyBinding.each("counted by the leaf that holds; taken and dropped by a panel that holds", Key.ARROW_UP, Key.ARROW_DOWN); }
+        @Override public List<KeyBinding> keys() {
+            return List.of(KeyBinding.of(Key.ARROW_UP, "counted by the leaf that holds; taken and dropped by a panel"), KeyBinding.of(Key.ARROW_DOWN, "counted by the leaf that holds; taken and dropped by a panel"),
+                           KeyBinding.of(Key.ESCAPE, "the holder yields: the keys go up to the first ancestor that would hold them"));
+        }
     }
 
     @Override public String title()      { return "Focus"; }
@@ -58,6 +62,9 @@ public record FocusApp() implements AppModule<AppModule._None, FocusApp> {
                         new GalleryStyles.ga_leaf(),
                         new GalleryStyles.ga_holds(),
                         new GalleryStyles.ga_leaf_count(),
+                        new GalleryStyles.ga_leaf_yield(),
+                        new GalleryStyles.ga_panel_note(),
+                        new GalleryStyles.ga_panel_list(),
                         new GalleryStyles.ga_log()
                 ), GalleryStyles.INSTANCE))
                 .build();
