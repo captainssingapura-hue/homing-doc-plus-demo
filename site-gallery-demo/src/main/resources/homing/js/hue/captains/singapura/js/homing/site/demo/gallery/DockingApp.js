@@ -36,6 +36,9 @@ class CardWidget {
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
     granted() { this.root.setAttribute("data-keys", "held"); }
     taken() { this.root.removeAttribute("data-keys"); }
+    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
+    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
+    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
     dispose() { _leave(this); }
 }
 
@@ -68,6 +71,9 @@ class CounterWidget {
     }
     granted() { this.root.setAttribute("data-keys", "held"); }
     taken() { this.root.removeAttribute("data-keys"); }
+    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
+    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
+    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
     dispose() { _leave(this); }
 }
 
@@ -84,6 +90,9 @@ class NoteWidget {
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
     granted() { this.root.setAttribute("data-keys", "held"); }
     taken() { this.root.removeAttribute("data-keys"); }
+    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
+    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
+    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
     dispose() { _leave(this); }
 }
 

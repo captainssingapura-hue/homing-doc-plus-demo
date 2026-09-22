@@ -1,7 +1,8 @@
 // =============================================================================
 // FocusScene — the scene's components for the focus page, in two worlds. A
 // leaf is a card and a panel is a pane, in the design's vocabulary, and each
-// says where the keys are with one attribute — data-keys="held", or "lent"
+// says where the keys are with one attribute — data-keys="held", "candidate"
+// while the walk rests on it, or "lent"
 // while a control of its own has the native focus; the design answers it on
 // the word, so a card and a pane are marked as that design marks a card and
 // a pane. The
@@ -71,6 +72,9 @@ class Leaf {
     reset() { this._n = 0; this._count.textContent = "0"; }
     granted() { this.root.setAttribute("data-keys", "held"); if (this._onHold) this._onHold(this); }
     taken() { this.root.removeAttribute("data-keys"); }
+    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
+    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
+    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
     dispose() { this._off(); this.focus.leave(); }
 }
 
@@ -140,6 +144,9 @@ class Panel {
     /** Held; or lent, while a control of this panel's own has the native focus — the keys are the panel's and it is not listening. */
     granted() { this._mark(); }
     taken() { this.root.removeAttribute("data-keys"); }
+    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
+    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
+    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
     _mark() {
         var a = typeof document === "undefined" ? null : document.activeElement;
         this.root.setAttribute("data-keys", a && a !== document.body && this.root.contains(a) ? "lent" : "held");
