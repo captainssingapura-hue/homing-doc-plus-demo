@@ -16,9 +16,12 @@ import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
 import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
 import hue.captains.singapura.js.homing.ui.elements.PanelModule;
+import hue.captains.singapura.js.homing.ui.menu.NeedContextMenu;
+import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * The docking page: two docks side by side in a split grid and a desk over both; a tab detached by its menu floats,
@@ -30,7 +33,11 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
 
     record appMain() implements AppModule._AppMain<AppModule._None, DockingApp> {}
     /** The app as a widget by the base's contract: {@code new DockingWidget(branch, params)}; appMain delegates to it. */
-    public record DockingWidget() implements BranchComponent<DockingApp> {}
+    public record DockingWidget() implements BranchComponent<DockingApp>, NeedContextMenu {
+        @Override public String summary() { return "Docks in a split grid over a desk: tabs travel between them, and a tab bar's own ground parts the room or closes a region."; }
+        /** The page's own kind: what a right-click on a dock's tab bar offers is about the room the dock sits in, which the page arranged. The tab menu is the pane's own need. */
+        @Override public Set<ContextMenuKind<?>> required() { return Set.of(GalleryMenus.SplitMenu.INSTANCE); }
+    }
 
     @Override public String title()      { return "Dock and undock"; }
     @Override public String simpleName() { return "docking"; }

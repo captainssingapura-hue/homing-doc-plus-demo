@@ -1,8 +1,11 @@
 // =============================================================================
-// DockingApp — dock and undock. Two docks side by side in a split grid, each
-// mounted in a PANEL - the named region that frames it, its head saying which
-// dock it is and the dock filling its body, as the workspace will mount them;
-// each panel follows its dock and lights while the keys are in it. The
+// DockingApp — dock and undock, and the room the docks sit in. Regions in a
+// split grid, each a dock in a PANEL - the panel is visual only: it names the
+// region and lights while the keys are in the dock, and nothing functional
+// goes through it. RIGHT-CLICK A TAB BAR'S OWN GROUND - the room the chips
+// leave - and the page offers the split menu: part the region beside or
+// below, each new one a dock of its own on the desk, or close this one and
+// its tabs go to the neighbour. The
 // divider between them the grid's, and a desk over both: drag a floating
 // pane over either strip and it is offered — the dock lit, the mark where it
 // would land — and dropped there it is a tab; the cross on a chip closes it.
@@ -123,7 +126,7 @@ class DockingWidget {
         el.appendChild(title);
         var lede = branch.createElement("lede", "p");
         css.addClass(lede, ga_lede);
-        lede.textContent = "Two docks in a split and a desk over both. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it "
+        lede.textContent = "Docks in a split grid and a desk over them. Right-click the empty ground of a tab bar to part the room — beside or below — or to close a region, whose tabs go to its neighbour. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it "
             + "floats; drag the float over either strip: the dock lights and marks where the tab would land; let go and it is a tab "
             + "there. Drag a chip along a strip: it reorders, on its rail. The Tab key walks the chips. A float stays within the box.";
         el.appendChild(lede);
@@ -166,7 +169,8 @@ class DockingWidget {
                 case "TabMoved":     say("Moved tab " + ev.tab.id + "  " + ev.srcIndex + " → " + ev.destIndex + " in " + ev.srcSlotId); break;
                 case "DetachRequested": {   // Shift+Down on a dock that holds the keys: the active tab floats under where its chip is, as the menu's detach does
                     say("Detach?   " + ev.tabId + "  from " + ev.slotId);
-                    var d = docks.filter(function (x) { return x.slotId === ev.slotId; })[0], i = d ? d.tabIndexOf(ev.tabId) : -1;
+                    var d = null; for (var k = 0; k < regions.length; k++) if (regions[k].id === ev.slotId) d = regions[k].dock;
+                    var i = d ? d.tabIndexOf(ev.tabId) : -1;
                     if (i < 0) break;
                     var r = d.el.children[0].children[i].getBoundingClientRect();
                     docking.undockAt(d, { id: ev.tabId, title: d.getState().tabs[i].title }, { x: r.left + 60, y: r.bottom + 14 });
@@ -189,25 +193,59 @@ class DockingWidget {
                 default:       say(ev.kind);
             }
         });
-        // each dock is mounted in a panel: the panel names the region and gives it its frame, and the dock fills its body
-        var panels = ["left", "right"].map(function (side) {
-            return new PanelBuilder().title(side === "left" ? "Dock A" : "Dock B").fills().host(grid.cell(side)).build(branch.createBranch("panel-" + side));
-        });
-        this._panels = panels;
-        var docks = panels.map(function (panel, i) {
-            var side = i === 0 ? "left" : "right";
-            return new MultiTabPane(branch.createBranch("dock-" + side), { host: panel.body, slotId: side, budget: 8, addable: false, onEvent: sink, menus: menus, focusName: "dock-" + side });
-        });
-        this._docks = docks;
-        // each panel follows its dock: while the keys are in it the panel is the active region, which is the whole point of framing a dock in one
-        panels.forEach(function (panel, i) { panel.watch(docks[i]); });
-        var left = docks[0], right = docks[1];
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { docks.forEach(function (d) { d.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { docks.forEach(function (d) { d.aspect(v); }); })
-            .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
+        // ── the desk, then the regions on the grid ───────────────────────
         this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink, keyboard: kb, keyboardId: "docking/desk" });
         var docking = this._docking;
-        docks.forEach(function (d) { docking.addDock(d); });
+        // A region is a cell of the grid, a dock in it, and a panel around the dock. The PANEL IS VISUAL ONLY: it
+        // names the region and lights while the keys are in the dock. Nothing functional goes through it - the dock
+        // is the region's identity, and the menu that parts the room is the dock's own tab bar's.
+        var regions = [], named = 0;
+        this._regions = regions;
+        function region(id) {
+            var name = "Dock " + String.fromCharCode(65 + (named++ % 26));
+            var panel = new PanelBuilder().title(name).fills().host(grid.cell(id)).build(branch.createBranch("panel-" + id));
+            var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: panel.body, slotId: id, budget: 8, addable: false,
+                                                                            onEvent: sink, menus: menus, stripMenu: "split", focusName: "dock-" + id });
+            panel.watch(dock);
+            docking.addDock(dock);
+            var r = { id: id, name: name, panel: panel, dock: dock };
+            regions.push(r);
+            return r;
+        }
+        function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
+        function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); }
+        // the neighbour is the grid's, not the list's: the room goes to the cell beside it, so the tabs go the same way
+        function neighbourOf(r) {
+            var ids = grid.cells(), at = ids.indexOf(r.id), id = ids[at > 0 ? at - 1 : 1];
+            for (var k = 0; k < regions.length; k++) if (regions[k].id === id) return regions[k];
+            return null;
+        }
+        function closeRegion(r) {
+            var i = regions.indexOf(r), to = i < 0 ? null : neighbourOf(r);
+            if (regions.length < 2 || !to) { say("Refused   the last region stays"); return; }
+            r.dock.tabs().forEach(function (id) { to.dock.attachTab(r.dock.detachTab(id), to.dock.count()); });
+            docking.removeDock(r.dock);
+            r.dock.dispose();
+            r.panel.dispose();
+            grid.remove(r.id);
+            regions.splice(i, 1);
+            say("Closed    " + r.name + " - its tabs went to " + to.name);
+        }
+        var left = region("left").dock, right = region("right").dock;
+        // the tab bar's own ground, right-clicked: the page's menu about the room the dock sits in
+        menus.handle("split", {
+            pick: function (id, o) {
+                var r = regionOf(o.pane);
+                if (!r) return;
+                if (id === "beside") part(r, "right");
+                else if (id === "below") part(r, "bottom");
+                else if (id === "close") closeRegion(r);
+            },
+            state: function (id) { return { disabled: id === "close" && regions.length < 2 }; }
+        });
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { regions.forEach(function (r) { r.dock.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { regions.forEach(function (r) { r.dock.aspect(v); }); })
+            .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
         // the tab menu's picks: detach floats the tab under where its chip was, with no hand; close removes it
         menus.handle(MultiTabPane.MENU, {
             pick: function (id, o) {
@@ -233,7 +271,8 @@ class DockingWidget {
         this.root = el;
     }
 
-    dispose() { this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose(); this._docks.forEach(function (d) { d.dispose(); }); this._panels.forEach(function (p) { p.dispose(); }); this._afloat.owner.leave(); this._grid.dispose(); }
+    dispose() { this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose();
+                this._regions.forEach(function (r) { r.dock.dispose(); r.panel.dispose(); }); this._afloat.owner.leave(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {

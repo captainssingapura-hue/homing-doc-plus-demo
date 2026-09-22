@@ -24,7 +24,9 @@ import java.util.List;
  * handler for the kind; what a row's state is for a given object is asked
  * of that handler at bind. Three kinds for three hypothetical cells, each
  * with a peculiarity: the animal's second level, the swatch's checked colour
- * and toggle, the counter's disabled reset and checked step. A row's icon is
+ * and toggle, the counter's disabled reset and checked step; and a fourth,
+ * the split menu a dock's tab bar opens, whose rows are about the room the
+ * dock sits in. A row's icon is
  * a word of the design's vocabulary; the design draws it.
  */
 public record GalleryMenus() implements EsModule<GalleryMenus>, SelfContent {
@@ -121,6 +123,42 @@ public record GalleryMenus() implements EsModule<GalleryMenus>, SelfContent {
             @Override public String label() { return "Inverted"; }
             @Override public String hint() { return "the design's inverted surface"; }
             @Override public int section() { return 1; }
+        }
+    }
+
+    // ── split: where a dock sits — part the room, or give it back ────────
+    /**
+     * The menu a right-click on a dock's tab bar opens, on the ground the
+     * chips leave. What it offers is about the room the dock sits in, not
+     * about the dock: the page placed it, so the page says this. The object
+     * bound is {@code { pane }} — the dock the strip belongs to; the page
+     * finds the region it is in and parts or closes that.
+     */
+    public record SplitMenu() implements ContextMenuKind<SplitMenu> {
+        public static final SplitMenu INSTANCE = new SplitMenu();
+        @Override public List<? extends M1_Node<SplitMenu, ?>> children() { return List.of(Beside.INSTANCE, Below.INSTANCE, Close.INSTANCE); }
+
+        public record Beside() implements M1_Node<SplitMenu, Beside> {
+            public static final Beside INSTANCE = new Beside();
+            @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
+            @Override public String label() { return "Split beside"; }
+            @Override public Class<? extends Icon> icon() { return Icon.Column.class; }
+            @Override public String hint() { return "a region of its own, to the right"; }
+        }
+        public record Below() implements M1_Node<SplitMenu, Below> {
+            public static final Below INSTANCE = new Below();
+            @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
+            @Override public String label() { return "Split below"; }
+            @Override public Class<? extends Icon> icon() { return Icon.Row.class; }
+            @Override public String hint() { return "a region of its own, underneath"; }
+        }
+        public record Close() implements M1_Node<SplitMenu, Close> {
+            public static final Close INSTANCE = new Close();
+            @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
+            @Override public String label() { return "Close this region"; }
+            @Override public Class<? extends Icon> icon() { return Icon.Close.class; }
+            @Override public int section() { return 1; }
+            @Override public String hint() { return "its tabs go to the neighbour"; }
         }
     }
 
