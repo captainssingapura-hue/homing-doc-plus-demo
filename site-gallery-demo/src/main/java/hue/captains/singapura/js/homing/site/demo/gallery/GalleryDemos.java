@@ -149,16 +149,27 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "log says who took the keys from whom. One button shows the bug the design names: the platformer claiming by "
                     + "call from behind a modal — the party is blind, so it holds, and the dialog stops hearing Escape.",
                     "/keyboard", KeyboardApp.INSTANCE, "KeyboardWidget", Map.of()),
-            new Demo("focus", "Focus", "Who is in focus: the logical-focus tree, and its monitor.",
+            new Demo("focus", "Focus", "Who is in focus: the logical-focus tree, in two worlds, and its monitors.",
                     "The focus party keeps the logical-focus tree and nothing else: a container holds a branch, a leaf joins one, "
-                    + "and the steward reads the tree and never writes it. The monitor beside the scene shows the tree as it is and "
-                    + "the holder of the keys lit, redrawn on every notice of the party and every event of the steward. Two panels "
-                    + "hold a branch each with leaves inside; one leaf sits loose at the root. Press a leaf and it holds; press a "
-                    + "panel's header and the panel holds - the convention runs in the capture phase, so a press on a leaf claims "
-                    + "the panel first and then the leaf, and the leaf holds. The arrows go to whoever holds: a leaf counts them, a "
-                    + "panel takes and drops them. The keys move only by a claim here, no yield yet, and leave the scene with the "
-                    + "focus. No component here knows the steward.",
+                    + "and the steward reads the tree and never writes it; it routes by state - the holder's keys while nothing is "
+                    + "natively focused, nothing while a native control is. Three panels hold a branch each with leaves inside; "
+                    + "one leaf sits loose at the root; none of them takes native focus. A press claims for the innermost member "
+                    + "under it and nothing above; Escape yields up the tree to the first ancestor that would hold - panel A "
+                    + "catches, panel B lets pass. Panel C picks its leaf with a native list, wired by the panel: Enter claims the "
+                    + "pick, Escape yields. Native controls outside and inside the panels stress the line: a search field, a notes "
+                    + "field that keeps its Tab, a field in panel A that lets go on Escape, a button, a checkbox inside a leaf. The "
+                    + "monitors: the tree with the holder lit, and the steward's lamp. No component here knows the steward.",
                     "/focus", FocusApp.INSTANCE, "FocusWidget", Map.of()),
+            new Demo("relfocus", "Relations in focus", "The relation tree and grid, wrapped and unwrapped, under the focus model.",
+                    "The relation grid and the relation tree are the native world - a focusable host, their own keys, worked hard "
+                    + "for the keyboard - and nothing in them joins the party. Unwrapped, straight on the page: a press claims "
+                    + "nothing, the steward goes dormant on the host, the keys are theirs, and whoever held resumes when the host "
+                    + "lets go. Wrapped in a panel of the logical world: a press claims the panel, the innermost member; the panel "
+                    + "is dormant while the host has the focus; an Escape the grid did not want blurs the host and the panel has "
+                    + "the keys; the next Escape yields. The leaf holds the keys when nothing is focused, so the arrows show where "
+                    + "they go. Arrows, Enter on a cell, Escape in the editor, a header drag, Ctrl+C: every one of them the grid's, "
+                    + "none of them moving the holder - the conflicts to look for are the ones that would show here.",
+                    "/relfocus", RelFocusApp.INSTANCE, "RelFocusWidget", Map.of()),
             new Demo("menus", "Context menus", "One steward, three cells, each with a menu of its kind.",
                     "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "
                     + "steward for the page — lazy, minting a kind's menu at its first open and listening to nothing while none is "

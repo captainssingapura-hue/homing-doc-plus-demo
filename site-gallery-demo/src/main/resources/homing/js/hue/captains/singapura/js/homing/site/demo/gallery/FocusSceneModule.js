@@ -90,10 +90,12 @@ class Panel {
         this.focus = focusBranch.createBranch(name, this);
         this._off = Keys.claimOn(root, this.focus.owner);
         this._leaves = [];
-        // a press on the header claims; a native focus elsewhere on the page is let go, since the browser will not
-        // do it for a press on unselectable text (a control of this panel's own keeps it: panel C's list)
+        // a press on the header claims, and moves the native focus itself: one outside the panel is let go, and the
+        // press's own default — the focus to the body — is stopped, so what granted put in a control of the panel's
+        // own (panel C's list, a wrapped grid's host) stays there
         var self = this;
         header.addEventListener("pointerdown", function () { var a = document.activeElement; if (a && a !== document.body && !self.root.contains(a)) a.blur(); });
+        header.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
     }
     /** A leaf inside: it joins the panel's branch. */
     leaf(branch, name, onHold) { var l = new Leaf(branch, this.root, this.focus, name, onHold); this._leaves.push(l); return l; }
@@ -151,9 +153,6 @@ class ListPanel extends Panel {
         this.root.appendChild(list);
         this._list = list;
         this._byName = {};
-        // a press on the header claimed for the panel already, and granted put the focus in the list; the press's own
-        // default — the native focus to the body — would take it back out, so here it is stopped
-        this._header.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
         this.root.addEventListener("keydown", function (ev) {
             if (ev.target !== list) return;
             if (ev.key === "Enter") { list.blur(); var l = self._byName[list.value]; if (l) l.activate(); }

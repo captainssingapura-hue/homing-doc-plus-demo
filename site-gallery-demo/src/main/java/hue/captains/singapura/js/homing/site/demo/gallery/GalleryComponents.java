@@ -49,6 +49,7 @@ public record GalleryComponents() implements C0_Components<GalleryComponents> {
                     ComponentEntry.of(this, new SlidersApp.SlidersWidget()),
                     ComponentEntry.of(this, new KeyboardApp.KeyboardWidget()),
                     ComponentEntry.of(this, new FocusApp.FocusWidget()),
+                    ComponentEntry.of(this, new RelFocusApp.RelFocusWidget()),
                     ComponentEntry.of(this, new FocusSceneModule.Leaf()),
                     ComponentEntry.of(this, new FocusSceneModule.Panel()),
                     ComponentEntry.of(this, new FocusSceneModule.ListPanel()));

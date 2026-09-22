@@ -48,6 +48,7 @@ public record GallerySite() implements Site {
     static final AppPage<?, ?> SLIDERS = MPA.page(SlidersApp.INSTANCE);
     static final AppPage<?, ?> KEYBOARD = MPA.page(KeyboardApp.INSTANCE);
     static final AppPage<?, ?> FOCUS = MPA.page(FocusApp.INSTANCE);
+    static final AppPage<?, ?> RELFOCUS = MPA.page(RelFocusApp.INSTANCE);
     static final AppPage<?, ?> PREFS   = MPA.page(PreferencesApp.INSTANCE);
 
     static final Navigable PLAIN = q -> new HtmlPageContent("""
@@ -84,6 +85,7 @@ public record GallerySite() implements Site {
             case "sliders" -> path.depth() == 1 ? Optional.of(placed(SLIDERS, "Sliders", path)) : Optional.empty();
             case "keyboard" -> path.depth() == 1 ? Optional.of(placed(KEYBOARD, "Keyboard", path)) : Optional.empty();
             case "focus" -> path.depth() == 1 ? Optional.of(placed(FOCUS, "Focus", path)) : Optional.empty();
+            case "relfocus" -> path.depth() == 1 ? Optional.of(placed(RELFOCUS, "Relations in focus", path)) : Optional.empty();
             case "preferences" -> path.depth() == 1 ? Optional.of(placed(PREFS, "Preferences", path)) : Optional.empty();
             default        -> Optional.empty();
         };

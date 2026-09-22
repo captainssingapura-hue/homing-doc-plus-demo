@@ -423,6 +423,17 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return "font: inherit; padding: 4px 10px; align-self: flex-start;"; }
     }
 
+    /** The relations page: the unwrapped tree and grid, grouped under a header, outside every container. */
+    public record ga_rel_group() implements CssClass<GalleryStyles> {
+        @Override public String body() { return "flex: 1 1 100%; min-width: 0; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start;"; }
+    }
+
+    /** A host for a grid or a tree, in the unwrapped group or inside a panel: a box the widget fills, scrolling within. */
+    public record ga_rel_host() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return "flex: 1 1 300px; min-width: 0; min-height: 160px; max-height: 40vh; overflow: auto;"; }
+    }
+
     /** A panel: a container that holds a focus branch; a press on its header claims for it. */
     public record ga_panel() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class), of(Interactive.class, Motion.Ease.class)); }
@@ -553,7 +564,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_box(), new ga_shelf(), new ga_menu_cells(), new ga_cell(), new ga_cell_face(), new ga_cell_caption(),
                        new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_specimens(), new ga_specimen_name(), new ga_log(), new ga_status(),
                        new ga_holders(), new ga_holder(), new ga_holder_on(), new ga_stage(), new ga_sprite(),
-                       new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_holds(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
+                       new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_holds(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());
     }
