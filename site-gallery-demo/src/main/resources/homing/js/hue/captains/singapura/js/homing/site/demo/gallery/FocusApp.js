@@ -4,18 +4,19 @@
 // inside; one loose leaf at the root; and the monitor beside them showing the
 // tree as it is and the holder of the keys as it changes. A claim is by the
 // mouse: a press on a leaf claims for the leaf, a press on a panel's header
-// for the panel — the convention, in the capture phase, so a press on a leaf
-// claims the panel first and then the leaf, and the leaf holds. A yield is a
-// leaf's Escape, or its button: the keys go up the tree to the first ancestor
-// that would hold them — panel A catches, panel B lets them pass and the page
-// above it does too, so from b1 or from the loose leaf they go to no one.
-// Panel C picks which of its leaves holds with a native list: while the list
-// has the physical focus the panel holds the logical one and the list keeps
-// its arrows, as a field does; the pick is confirmed by Enter, on which the
-// panel tells the leaf to activate itself, and the leaf takes the focus as a
-// press on it would — the list's released first, then the claim; and when
-// the panel comes to hold it puts the focus in its list, so it works by keys
-// alone. A leaf that holds counts the arrows it takes. The log says who took the keys from whom.
+// for the panel — the convention, which claims for the innermost root the
+// press lands in and for no one above it, so a panel is never granted for a
+// press on its leaf. A yield is a leaf's Escape, or its button: the keys go
+// up the tree to the first ancestor that would hold them — panel A catches,
+// panel B lets them pass and the page above it does too, so from b1 or from
+// the loose leaf they go to no one. Panel C picks which of its leaves holds
+// with a native list: while the list has the physical focus the panel holds
+// the logical one and the list keeps its arrows, as a field does; the pick is
+// confirmed by Enter, on which the panel tells the leaf to activate itself,
+// and the leaf takes the focus as a press on it would — the list's released
+// first, then the claim; and when the panel comes to hold it puts the focus
+// in its list, so it works by keys alone. A leaf that holds counts the arrows
+// it takes. The log says who took the keys from whom.
 // No component here knows the steward: a panel and a leaf join a branch and
 // call Keys; the page, which is not a component, listens for the log.
 // =============================================================================
