@@ -407,6 +407,15 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
+    /**
+      * The page's own floor: what the instruments float over. Positioned only,
+      * so a desk may lie across the whole section — the title, the controls and
+      * the workspace alike — rather than within the workspace's box.
+      */
+    public record ga_floor() implements CssClass<GalleryStyles> {
+        @Override public String body() { return "position: relative;"; }
+    }
+
     /** A monitor in a tab of the instruments' dock: it fills the tab and scrolls on its own. */
     public record ga_monitor() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Container.Pane.class, Size.Inset.class)); }
@@ -773,7 +782,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
                        new ga_tab_fill(), new ga_tab_host(), new ga_picture(), new ga_picture_note(),
                        new ga_switch_list(), new ga_switch_row(), new ga_switch_row_at(), new ga_switch_hint(),
-                       new ga_monitor(), new ga_domops_row(), new ga_domops_count(),
+                       new ga_monitor(), new ga_domops_row(), new ga_domops_count(), new ga_floor(),
                        new ga_plate(), new ga_plate_sun(), new ga_plate_far(), new ga_plate_near(), new ga_plate_ground(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());

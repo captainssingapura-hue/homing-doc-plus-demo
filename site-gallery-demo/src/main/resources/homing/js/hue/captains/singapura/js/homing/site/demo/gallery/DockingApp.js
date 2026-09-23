@@ -8,7 +8,9 @@
 // across a splitter of this one's own - or close it, which is the merge with
 // nobody named. THE INSTRUMENTS - the focus tree, the steward's
 // lamp, the DomOps party, the page's own log - are a dock like any other, in a
-// pane that floats over the work. F6 ASKS FOR THE SWITCHER, a modal that is the
+// pane that floats over the work ON A DESK OF ITS OWN: they watch the workspace
+// and are not part of it, so no dock offers to take them and the box does not
+// pen them in. F6 ASKS FOR THE SWITCHER, a modal that is the
 // only way the keys move between docks: inside one, Escape comes back to the
 // tab bar and stops there. The
 // divider between them the grid's, and a desk over both: drag a floating
@@ -43,6 +45,7 @@ class DockingWidget {
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
+        css.addClass(el, ga_floor);   // the instruments' desk lies over the whole section, not over the workspace's box
         // the keys, through the party: the page's steward, made by the chrome and handed in the params;
         // the members' ids qualified by the page, since the shell's one party has every page's members in it
         var kb = params && params.keyboard;
@@ -268,8 +271,13 @@ class DockingWidget {
         waiting.forEach(function (line) { events.say(line); });
         this._monitors = monitors;
         var domops = monitors.widgetOf("domops");
-        docking.desk.open({ id: "instruments", title: "Instruments", widget: { root: monHost, dispose: function () {} },
-                            x: 26, y: 26, w: 380, h: 300 });
+        // A DESK OF THEIR OWN, and the page's whole section for a floor. The instruments watch the workspace; they are
+        // not part of it - no dock will ever offer to take them, because docking's protocol is between ITS desk and its
+        // docks, and this is not that desk - and they are not penned into the box the workspace lives in.
+        this._stage = new Desk(branch.createBranch("instruments-desk"), { host: el, layer: true, onEvent: sink,
+                                                                         keyboard: kb, keyboardId: "docking/instruments" });
+        this._stage.open({ id: "instruments", title: "Instruments", widget: { root: monHost, dispose: function () {} },
+                           x: 26, y: 26, w: 420, h: 320 });
 
         var store = new BooksStore();
         var domain = branch.createBranch("domain");
@@ -284,7 +292,7 @@ class DockingWidget {
     }
 
     dispose() { this._offMenus(); this._offF6(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose();
-                this._regions.forEach(function (r) { r.dock.dispose(); r.panel.dispose(); }); this._monitors.dispose(); this._afloat.owner.leave(); this._grid.dispose(); }
+                this._regions.forEach(function (r) { r.dock.dispose(); r.panel.dispose(); }); this._stage.dispose(); this._monitors.dispose(); this._afloat.owner.leave(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {
