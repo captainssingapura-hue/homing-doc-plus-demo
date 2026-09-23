@@ -89,7 +89,7 @@ class SplitGridWidget {
         function reflect() { self._mirror.reflect(self._grid.layout(), self._grid.box()); }
 
         this._grid = new SplitGrid(branch.createBranch("grid"), {
-            host: box, minCellPx: 90, layout: { kind: "cell", id: "a" },
+            host: box, minCellPx: 90, layout: { kind: "cell", id: "a" }, seam: true,
             onEvent: function (ev) {
                 switch (ev.kind) {
                     case "TracksChanged": say("Tracks     " + (ev.path || "root") + "  " + ev.ratios.map(function (r) { return r.toFixed(2); }).join(" : ")); break;
@@ -111,6 +111,19 @@ class SplitGridWidget {
         } });
         var scale = new SliderBuilder().keyboard(kb, "split-grid/scale").label("the mirror's scale").icon("size").range(0.1, 0.5, 0.05).value(0.25).onInput(function (v) { self._mirror.scale(v); }).format(function (v) { return v.toFixed(2); }).build(branch.createBranch("scale")).root;
         mirrorRow.appendChild(scale);
+        // the seam: a splitter has no presence of its own, but a grid whose cells bring no edges needs the line -
+        // so it is the owner's to ask for, and here you can see it both ways
+        var seamOn = true;
+        var seamButton = new ButtonBuilder().label("the seam at rest").size(-1).onClick(function () {
+            seamOn = !seamOn;
+            grid.seam(seamOn);
+            seamButton.colour(seamOn ? "primary" : "plain");
+            say("Seam       the splitters " + (seamOn ? "keep the design's line at rest" : "have no presence at rest"));
+        });
+        var seamEl = branch.createElement("seam", seamButton.tag);
+        seamButton = seamButton.build(seamEl);
+        mirrorRow.appendChild(seamEl);
+
         var hint = branch.createElement("hint", "span");
         css.addClass(hint, ga_control_readout);
         hint.textContent = "click the mirror, then the arrows move the cursor";
