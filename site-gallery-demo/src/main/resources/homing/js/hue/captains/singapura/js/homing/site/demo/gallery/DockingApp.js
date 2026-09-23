@@ -226,8 +226,8 @@ class DockingWidget {
             // cannot take the tabs is offered and refused, so the reason can be read rather than guessed at
             state: function (id, o) {
                 var r = regionOf(o.pane), to;
-                if (id === "close" || id === "merge-into") return { hidden: id === "merge-into" && !r, disabled: regions.length < 2 };
-                if (id.indexOf("merge-") !== 0) return {};
+                if (id === "close" || id === "merge-into") return { hidden: id === "merge-into" && !r, disabled: !r || regions.length < 2 };
+                if (id.indexOf("merge-") !== 0) return { disabled: !r };   // every row here is about a region, and a dock afloat is not one
                 to = r && towards(r, id.slice(6));
                 return { hidden: !to, disabled: !!to && !PaneMerge.plan(r.dock.tabs(), to.dock.tabs(), to.dock.budget()).ok };
             }
