@@ -66,9 +66,9 @@ class DockingWidget {
             + "merge one away: its tabs go to the region you name and its room to the pane across a splitter of its own. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it floats; drag the "
             + "float over any strip: the dock lights and marks where the tab would land; let go and it is a tab there. Drag a chip along a strip: it "
             + "reorders, on its rail. Inside a dock, Escape comes back to the tab bar and stops there; F6 asks for the switcher, and picking a "
-            + "region is how the keys move between them. The region you are working in is said the way the buttons above say it - lifted, pressed or simply marked: "
-            + "the panel offers a depth and a colour and links neither to anything, and this page picks which one a focused region wears. "
-            + "A design that has no idiom for depth, sketchy among them, declines the two depth modes outright and answers the colour one. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
+            + "region is how the keys move between them. THE WORKSPACE IS FLAT: the region you are working in is said by its border alone, lit while the keys "
+            + "are anywhere inside it. The panel offers a depth as well and this page does not use it - a room full of rooms should not lift one of them - "
+            + "and the sheets page is where the registers are shown. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
             + "party, the log — so the page watches itself with the same parts it is made of. The Tab key walks the chips, and the region you are working in is the lit one.";
         el.appendChild(lede);
 
@@ -150,16 +150,13 @@ class DockingWidget {
         }
         function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
         function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); }
-        // HOW THE REGION BEING WORKED IN IS SAID, which is the PAGE'S to decide. The panel offers a register and a
-        // mark and links neither to anything: a depth the design answers in whatever plane it uses for depth, and a
-        // colour that says current. They are separate here as they are there - a slider for where the region sits,
-        // a toggle for whether it is marked - so any of the six readings can be had, and changed while the workspace
-        // runs. In a design that declines depth - sketchy, where ink casts no shadow - the slider does nothing at
-        // all, and the mark still reads.
-        var SITS = [null, "sunken", "elevated"];   // by the sign of the slider
-        var sits = "elevated", marked = false;
-        function says(r, within) { r.panel.elevation(within ? sits : null).highlight(within && marked); }
-        function saysAgain() { regions.forEach(function (r) { says(r, r.panel.isWithin()); }); }
+        // HOW THE REGION BEING WORKED IN IS SAID, which is the PAGE'S to decide - and this workspace decides to keep
+        // FLAT and say it in the border alone. The panel offers two axes and joins neither to anything: a depth the
+        // design answers in whatever plane it uses for depth, and a colour that says current. A workspace is a room
+        // full of rooms, and lifting one of them says the wrong thing about the others; an illuminated border says
+        // WHERE YOU ARE without moving a pixel, and reads the same however many regions there are. The depth axis is
+        // simply not used here. Sheets demo the registers; a workspace does not need them.
+        function says(r, within) { r.panel.highlight(within); }
 
         function regionById(id) { for (var k = 0; k < regions.length; k++) if (regions[k].id === id) return regions[k]; return null; }
         // The panes this region's room can go to WHOLE: those across a splitter of its own - a whole divider with this
@@ -249,16 +246,6 @@ class DockingWidget {
                 return { hidden: !to, disabled: !!to && !PaneMerge.plan(r.dock.tabs(), to.dock.tabs(), to.dock.budget()).ok };
             }
         });
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/sits").label("the region you are in").range(-1, 1, 1).detent(-1, 0, 1).value(1).icon("level")
-            .format(function (v) { return v < 0 ? "sunken" : v > 0 ? "elevated" : "flat"; })
-            .onInput(function (v) { sits = SITS[Math.abs(v) + (v > 0 ? 1 : 0)]; saysAgain(); say("Sits      the region you are in is " + (sits || "flat")); })
-            .labelWidth("9em").build(branch.createBranch("sits")).root);
-        var markButton = new ButtonBuilder().label("marked").size(-0.4).colour("plain")
-            .onClick(function () { marked = !marked; markButton.colour(marked ? "primary" : "plain"); saysAgain();
-                                   say("Marked    the region you are in is " + (marked ? "marked as well" : "not marked")); });
-        var markEl = branch.createElement("mark", markButton.tag);
-        markButton = markButton.build(markEl);
-        controls.appendChild(markEl);
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { regions.forEach(function (r) { r.dock.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { regions.forEach(function (r) { r.dock.aspect(v); }); })
             .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
@@ -300,8 +287,10 @@ class DockingWidget {
         // docks, and this is not that desk - and they are not penned into the box the workspace lives in.
         this._stage = new Desk(branch.createBranch("instruments-desk"), { host: el, layer: true, onEvent: sink,
                                                                          keyboard: kb, keyboardId: "docking/instruments" });
+        // over the work rather than over the heading: it is free to go anywhere on the section, but it should not open
+        // on top of what the page says about itself
         this._stage.open({ id: "instruments", title: "Instruments", widget: { root: monHost, dispose: function () {} },
-                           x: 26, y: 26, w: 420, h: 320 });
+                           x: 34, y: 430, w: 420, h: 300 });
 
         var store = new BooksStore();
         var domain = branch.createBranch("domain");
