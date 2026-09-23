@@ -13,6 +13,7 @@ import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.docking.DockingModule;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuStewardModule;
 import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
+import hue.captains.singapura.js.homing.ui.panes.PaneMergeModule;
 import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
@@ -64,6 +65,7 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
                 .add(new ModuleImports<>(List.of(new DockingModule.Docking()), DockingModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneMergeModule.PaneMerge()), PaneMergeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ContextMenuStewardModule.ContextMenuSteward()), ContextMenuStewardModule.INSTANCE))

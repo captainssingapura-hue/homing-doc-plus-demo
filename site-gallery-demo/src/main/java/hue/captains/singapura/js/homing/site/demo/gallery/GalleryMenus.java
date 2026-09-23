@@ -132,11 +132,22 @@ public record GalleryMenus() implements EsModule<GalleryMenus>, SelfContent {
      * chips leave. What it offers is about the room the dock sits in, not
      * about the dock: the page placed it, so the page says this. The object
      * bound is {@code { pane }} — the dock the strip belongs to; the page
-     * finds the region it is in and parts or closes that.
+     * finds the region it is in and parts, merges or closes that.
+     *
+     * <p>The four directions are one row each and the page hides the ones
+     * that have nowhere to go: a region can be merged only into a pane
+     * across a splitter of its own, and it has at most two of those. A
+     * region further off is named instead, through {@code Merge into…},
+     * which asks with the same list the switcher uses — the menu's rows are
+     * fixed at build, so a list of regions cannot be rows.</p>
      */
     public record SplitMenu() implements ContextMenuKind<SplitMenu> {
         public static final SplitMenu INSTANCE = new SplitMenu();
-        @Override public List<? extends M1_Node<SplitMenu, ?>> children() { return List.of(Beside.INSTANCE, Below.INSTANCE, Close.INSTANCE); }
+        @Override public List<? extends M1_Node<SplitMenu, ?>> children() {
+            return List.of(Beside.INSTANCE, Below.INSTANCE,
+                           MergeLeft.INSTANCE, MergeRight.INSTANCE, MergeUp.INSTANCE, MergeDown.INSTANCE, MergeInto.INSTANCE,
+                           Close.INSTANCE);
+        }
 
         public record Beside() implements M1_Node<SplitMenu, Beside> {
             public static final Beside INSTANCE = new Beside();
@@ -152,13 +163,55 @@ public record GalleryMenus() implements EsModule<GalleryMenus>, SelfContent {
             @Override public Class<? extends Icon> icon() { return Icon.Row.class; }
             @Override public String hint() { return "a region of its own, underneath"; }
         }
+        /** The four ways a region can be merged: the page hides the ones with no pane across a splitter of their own. */
+        public record MergeLeft() implements M1_Node<SplitMenu, MergeLeft> {
+            public static final MergeLeft INSTANCE = new MergeLeft();
+            @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
+            @Override public String label() { return "Merge left"; }
+            @Override public Class<? extends Icon> icon() { return Icon.Merge.class; }
+            @Override public int section() { return 1; }
+            @Override public String hint() { return "its tabs and its room to the pane beside it"; }
+        }
+        public record MergeRight() implements M1_Node<SplitMenu, MergeRight> {
+            public static final MergeRight INSTANCE = new MergeRight();
+            @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
+            @Override public String label() { return "Merge right"; }
+            @Override public Class<? extends Icon> icon() { return Icon.Merge.class; }
+            @Override public int section() { return 1; }
+            @Override public String hint() { return "its tabs and its room to the pane beside it"; }
+        }
+        public record MergeUp() implements M1_Node<SplitMenu, MergeUp> {
+            public static final MergeUp INSTANCE = new MergeUp();
+            @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
+            @Override public String label() { return "Merge up"; }
+            @Override public Class<? extends Icon> icon() { return Icon.Merge.class; }
+            @Override public int section() { return 1; }
+            @Override public String hint() { return "its tabs and its room to the pane above it"; }
+        }
+        public record MergeDown() implements M1_Node<SplitMenu, MergeDown> {
+            public static final MergeDown INSTANCE = new MergeDown();
+            @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
+            @Override public String label() { return "Merge down"; }
+            @Override public Class<? extends Icon> icon() { return Icon.Merge.class; }
+            @Override public int section() { return 1; }
+            @Override public String hint() { return "its tabs and its room to the pane under it"; }
+        }
+        /** A region further off, named from the same list the switcher uses: its tabs go there, its room to the neighbour. */
+        public record MergeInto() implements M1_Node<SplitMenu, MergeInto> {
+            public static final MergeInto INSTANCE = new MergeInto();
+            @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
+            @Override public String label() { return "Merge into…"; }
+            @Override public Class<? extends Icon> icon() { return Icon.Merge.class; }
+            @Override public int section() { return 1; }
+            @Override public String hint() { return "choose the region its tabs go to"; }
+        }
         public record Close() implements M1_Node<SplitMenu, Close> {
             public static final Close INSTANCE = new Close();
             @Override public SplitMenu parent() { return SplitMenu.INSTANCE; }
             @Override public String label() { return "Close this region"; }
             @Override public Class<? extends Icon> icon() { return Icon.Close.class; }
-            @Override public int section() { return 1; }
-            @Override public String hint() { return "its tabs go to the neighbour"; }
+            @Override public int section() { return 2; }
+            @Override public String hint() { return "its tabs go where its room goes"; }
         }
     }
 
