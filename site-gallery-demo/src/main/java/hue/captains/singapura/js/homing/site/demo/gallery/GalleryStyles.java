@@ -18,6 +18,7 @@ import static hue.captains.singapura.js.homing.design.Feedback.Danger;
 import static hue.captains.singapura.js.homing.design.Feedback.Success;
 import static hue.captains.singapura.js.homing.design.Feedback.Warning;
 import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
+import static hue.captains.singapura.js.homing.design.Interaction.Selectable;
 import static hue.captains.singapura.js.homing.design.Layer.Inverted;
 import static hue.captains.singapura.js.homing.design.Interaction.Current;
 import static hue.captains.singapura.js.homing.design.Interaction.Focus;
@@ -27,6 +28,7 @@ import static hue.captains.singapura.js.homing.design.Target.Affordance;
 import static hue.captains.singapura.js.homing.design.Target.Color;
 import static hue.captains.singapura.js.homing.design.Target.Motion;
 import static hue.captains.singapura.js.homing.design.Target.Shape;
+import static hue.captains.singapura.js.homing.design.Target.Size;
 import static hue.captains.singapura.js.homing.design.Target.Type;
 import static hue.captains.singapura.js.homing.design.Text.Body;
 import static hue.captains.singapura.js.homing.design.Text.Caption;
@@ -403,6 +405,46 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
+    // ── The switcher: the regions, as a list to pick from ───────────
+
+    /** The rows, in a column with the design air between them. */
+    public record ga_switch_list() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Container.Menu.class, Size.Gap.class)); }
+        @Override public String body() { return """
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: auto;
+            """;
+        }
+    }
+
+    /** A region to go to: an option, as a menu row is. */
+    public record ga_switch_row() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Control.Option.class, Size.Inset.class), of(Control.Option.class, Size.Gap.class), of(Control.Option.class, Shape.Corner.class),
+                                                                           of(Selectable.class, Color.Surface.class), of(Selectable.class, Color.Ink.class), of(Selectable.class, Affordance.Cursor.class), of(Body.class, Type.Face.class)); }
+        @Override public List<? extends Wearable> sizes() { return List.of(of(Control.Option.class, Size.Inset.class), of(Control.Option.class, Size.Gap.class)); }
+        @Override public String body() { return """
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            box-sizing: border-box;
+            """;
+        }
+    }
+
+    /** The row the cursor is on: chosen, as the design draws a chosen row. */
+    public record ga_switch_row_at() implements CssClass<GalleryStyles> {
+        @Override public String body() { return ""; }
+    }
+
+    /** What the region holds, beside its name: quieter than the name. */
+    public record ga_switch_hint() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
+        @Override public List<? extends Wearable> sizes() { return List.of(of(Caption.class, Type.Scale.class)); }
+        @Override public String body() { return "margin-inline-start: 12px;"; }
+    }
+
     // ── The shell ─────────────────────────────────────────────────────────────
 
     /** The shell: fills the full-bleed slot; the splitter fills it. */
@@ -694,6 +736,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_holders(), new ga_holder(), new ga_holder_on(), new ga_stage(), new ga_sprite(),
                        new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
                        new ga_tab_fill(), new ga_tab_host(), new ga_picture(), new ga_picture_note(),
+                       new ga_switch_list(), new ga_switch_row(), new ga_switch_row_at(), new ga_switch_hint(),
                        new ga_plate(), new ga_plate_sun(), new ga_plate_far(), new ga_plate_near(), new ga_plate_ground(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());

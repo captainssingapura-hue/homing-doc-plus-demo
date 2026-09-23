@@ -8,6 +8,7 @@
 //   new BooksTab(branch, { focus, store, domain })      the relation grid
 //   new ShelvesTab(branch, { focus, store, domain })    the relation tree
 //   new PictureTab(branch, { focus, title? })           a picture, zoomed by keys
+//   new RegionList(branch, host, regions, at, onPick)   the switcher's rows
 //     .root .focus .activate() .keyDown(ev) .granted() .taken() .dispose()
 //
 // The two relation widgets are the NATIVE world inside a logical member: the
@@ -148,6 +149,61 @@ class PictureTab {
         return false;
     }
     dispose() { _leave(this); }
+}
+
+/**
+ * The switcher's list: one row per region, the cursor on one of them. The
+ * dialog around it is the page's; this is what it shows. Arrows walk the
+ * rows, Enter picks, and the dialog's own Escape cancels. The rows are
+ * options to the design, so the cursor is drawn as a chosen row is drawn.
+ */
+class RegionList {
+    constructor(branch, host, regions, at, onPick) {
+        branch.activate(_sceneOwner);
+        var self = this;
+        this._rows = [];
+        this._at = Math.max(0, Math.min(regions.length - 1, at | 0));
+        this._onPick = onPick;
+        var list = branch.createElement("list", "div");
+        css.addClass(list, ga_switch_list);
+        list.setAttribute("role", "listbox");
+        list.setAttribute("aria-label", "The regions");
+        regions.forEach(function (r, i) {
+            var row = branch.createElement("row-" + i, "div");
+            css.addClass(row, ga_switch_row);
+            row.setAttribute("role", "option");
+            row.textContent = r.label;
+            var hint = branch.createElement("hint-" + i, "span");
+            css.addClass(hint, ga_switch_hint);
+            hint.textContent = r.hint;
+            row.appendChild(hint);
+            row.addEventListener("click", function () { self._at = i; self.pick(); });
+            list.appendChild(row);
+            self._rows.push(row);
+        });
+        host.appendChild(list);
+        this.root = list;
+        this._draw();
+    }
+    _draw() {
+        for (var i = 0; i < this._rows.length; i++) {
+            var on = i === this._at;
+            css.toggleClass(this._rows[i], ga_switch_row_at, on);
+            this._rows[i].setAttribute("aria-selected", on ? "true" : "false");
+        }
+    }
+    /** The keys the dialog hands on: the arrows walk the rows, Enter picks the one the cursor is on. */
+    keyDown(ev) {
+        if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+            var n = this._rows.length;
+            this._at = (this._at + (ev.key === "ArrowDown" ? 1 : -1) + n) % n;
+            this._draw();
+            return true;
+        }
+        if (ev.key === "Enter") { this.pick(); return true; }
+        return false;
+    }
+    pick() { var at = this._at; if (typeof this._onPick === "function") this._onPick(at); }
 }
 
 /** A note in a tab: a paragraph that says what to try, for the one that floats. */

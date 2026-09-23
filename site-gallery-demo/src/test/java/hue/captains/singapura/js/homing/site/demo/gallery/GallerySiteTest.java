@@ -182,7 +182,7 @@ class GallerySiteTest {
         // one capture left in the closure: the grid's header drag cancels on Escape; the grid migrates with the tree renderer, not before
         assertEquals(List.of("homing-rel-grid: RelGridHeaderDragModule captures keys on the document; only the steward does"), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(List.of(GalleryCrate.INSTANCE)).stream().filter(m -> !m.startsWith("RelGrid") && !m.startsWith("RelTree") && !m.startsWith("Tree")).toList(), "the gallery's own widgets and the components it serves: every key through the party");
-        assertEquals(List.of("BooksTab", "Card", "ContextMenuSteward", "ContextMenusWidget", "Desk", "Dialog", "FocusWidget", "KeyboardWidget", "Leaf", "ListMasterWidget", "ListPanel", "MultiTabPane", "NoteTab", "Panel", "PictureTab", "PreferencesView", "RelFocusWidget", "ShelvesTab", "Slider", "SliderGroup", "SplitGridMirror"),
+        assertEquals(List.of("BooksTab", "Card", "ContextMenuSteward", "ContextMenusWidget", "Desk", "Dialog", "FocusWidget", "KeyboardWidget", "Leaf", "ListMasterWidget", "ListPanel", "MultiTabPane", "NoteTab", "Panel", "PictureTab", "PreferencesView", "RegionList", "RelFocusWidget", "ShelvesTab", "Slider", "SliderGroup", "SplitGridMirror"),
                 KeyboardRegistry.requiredBy(List.of(GalleryCrate.INSTANCE)).byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList());
     }
 }

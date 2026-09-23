@@ -54,6 +54,14 @@ public record DockingSceneModule() implements DomModule<DockingSceneModule> {
         @Override public List<KeyBinding> keys() { return List.of(KeyBinding.of(Key.ESCAPE, "the keys go back to whoever holds the branch")); }
     }
 
+    /** The switcher's rows: {@code new RegionList(branch, host, regions, at, onPick)}; the arrows walk them, Enter picks. */
+    public record RegionList() implements BranchComponent<DockingSceneModule>, NeedKeyboard {
+        @Override public String summary() { return "One row per region, in the switcher: the arrows walk them and Enter picks the one the cursor is on."; }
+        @Override public List<KeyBinding> keys() {
+            return List.of(KeyBinding.of(Key.ARROW_DOWN, "the next region"), KeyBinding.of(Key.ARROW_UP, "the one before"), KeyBinding.of(Key.ENTER, "go to it"));
+        }
+    }
+
     /** What every tab here answers: the keys are the widget's while it holds them, and Escape hands them back. */
     static final List<KeyBinding> TAB_KEYS = List.of(
             KeyBinding.of(Key.ESCAPE, "in the host: the host lets go, and the keys are the tab's; again, the tab yields to the dock"));
@@ -80,13 +88,17 @@ public record DockingSceneModule() implements DomModule<DockingSceneModule> {
                         new GalleryStyles.ga_plate_near(),
                         new GalleryStyles.ga_plate_ground(),
                         new GalleryStyles.ga_picture_note(),
-                        new GalleryStyles.ga_lede()
+                        new GalleryStyles.ga_lede(),
+                        new GalleryStyles.ga_switch_list(),
+                        new GalleryStyles.ga_switch_row(),
+                        new GalleryStyles.ga_switch_row_at(),
+                        new GalleryStyles.ga_switch_hint()
                 ), GalleryStyles.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<DockingSceneModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new BooksTab(), new ShelvesTab(), new PictureTab(), new NoteTab()));
+        return new ExportsOf<>(INSTANCE, List.of(new BooksTab(), new ShelvesTab(), new PictureTab(), new NoteTab(), new RegionList()));
     }
 }

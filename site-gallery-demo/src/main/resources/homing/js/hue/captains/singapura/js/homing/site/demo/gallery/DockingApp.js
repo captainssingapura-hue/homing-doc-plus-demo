@@ -5,7 +5,9 @@
 // goes through it. RIGHT-CLICK A TAB BAR'S OWN GROUND - the room the chips
 // leave - and the page offers the split menu: part the region beside or
 // below, each new one a dock of its own on the desk, or close this one and
-// its tabs go to the neighbour. The
+// its tabs go to the neighbour. F6 ASKS FOR THE SWITCHER, a modal that is the
+// only way the keys move between docks: inside one, Escape comes back to the
+// tab bar and stops there. The
 // divider between them the grid's, and a desk over both: drag a floating
 // pane over either strip and it is offered — the dock lit, the mark where it
 // would land — and dropped there it is a tab; the cross on a chip closes it.
@@ -57,7 +59,8 @@ class DockingWidget {
             + "relation tree, a picture zoomed by its own keys. Right-click the empty ground of a tab bar to part the room — beside or below — or to "
             + "close a region, whose tabs go to its neighbour. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it floats; drag the "
             + "float over any strip: the dock lights and marks where the tab would land; let go and it is a tab there. Drag a chip along a strip: it "
-            + "reorders, on its rail. The Tab key walks the chips, and the region you are working in is the lit one.";
+            + "reorders, on its rail. Inside a dock, Escape comes back to the tab bar and stops there; F6 asks for the switcher, and picking a "
+            + "region is how the keys move between them. The Tab key walks the chips, and the region you are working in is the lit one.";
         el.appendChild(lede);
 
         // ── the chips' size and aspect ────────────────────────────────────
@@ -161,6 +164,38 @@ class DockingWidget {
             say("Closed    " + r.name + " - its tabs went to " + to.name);
         }
         var left = region("left").dock, right = region("right").dock;
+
+        // ── moving BETWEEN regions is its own gesture ─────────────────────
+        // Inside a dock, Escape comes back to the bar and stops there: nothing overshoots out of the room. To go to
+        // another region you ask for the switcher - F6, a key of the page's, which the steward offers before anyone,
+        // so it works wherever the hand is - and pick one. Inter-pane movement and intra-pane work never share a key.
+        var switcher = null;
+        this._offF6 = kb.shortcut(function (ev) {
+            if (ev.key !== "F6" || ev.ctrlKey || ev.altKey || ev.metaKey) return false;
+            if (switcher) { switcher.close(); return true; }
+            openSwitcher();
+            return true;
+        });
+        function openSwitcher() {
+            var holder = kb.holder(), at = 0;
+            regions.forEach(function (r, i) { if (r.dock.focus.owner.id === holder || (r.dock.focus.owner.holds && r.dock.focus.owner.holds(focusParty.find(holder) || {}))) at = i; });
+            var rows = regions.map(function (r) {
+                var active = r.dock.activeTab(), state = r.dock.getState();
+                var title = null;
+                state.tabs.forEach(function (t) { if (t.id === active) title = t.title; });
+                return { label: r.name, hint: r.dock.count() + (r.dock.count() === 1 ? " tab" : " tabs") + (title ? "  \u2014  " + title : "") };
+            });
+            var list = null;
+            switcher = new Dialog(branch.createBranch("switcher-" + (++switches)), {
+                title: "Go to a region", keyboard: kb, keyboardId: "docking/switcher", size: { w: 360, h: 260 },
+                content: function (b, body) {
+                    list = new RegionList(b.createBranch("regions"), body, rows, at, function (i) { var r = regions[i]; switcher.close(); Keys.claim(r.dock.focus.owner); say("Went to   " + r.name); });
+                    return { onKeydown: function (ev) { return list.keyDown(ev); } };
+                },
+                onClose: function () { switcher = null; }
+            });
+        }
+        var switches = 0;
         // the tab bar's own ground, right-clicked: the page's menu about the room the dock sits in
         menus.handle("split", {
             pick: function (id, o) {
@@ -204,7 +239,7 @@ class DockingWidget {
         this.root = el;
     }
 
-    dispose() { this._offMenus(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose();
+    dispose() { this._offMenus(); this._offF6(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose();
                 this._regions.forEach(function (r) { r.dock.dispose(); r.panel.dispose(); }); this._afloat.owner.leave(); this._grid.dispose(); }
 }
 
