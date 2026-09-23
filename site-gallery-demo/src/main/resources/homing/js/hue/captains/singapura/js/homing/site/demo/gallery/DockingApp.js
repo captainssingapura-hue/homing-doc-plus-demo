@@ -66,7 +66,9 @@ class DockingWidget {
             + "merge one away: its tabs go to the region you name and its room to the pane across a splitter of its own. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it floats; drag the "
             + "float over any strip: the dock lights and marks where the tab would land; let go and it is a tab there. Drag a chip along a strip: it "
             + "reorders, on its rail. Inside a dock, Escape comes back to the tab bar and stops there; F6 asks for the switcher, and picking a "
-            + "region is how the keys move between them. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
+            + "region is how the keys move between them. The region you are working in is said the way the buttons above say it - lifted, pressed or simply marked: "
+            + "the panel offers a depth and a colour and links neither to anything, and this page picks which one a focused region wears. "
+            + "A design that has no idiom for depth, sketchy among them, declines the two depth modes outright and answers the colour one. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
             + "party, the log — so the page watches itself with the same parts it is made of. The Tab key walks the chips, and the region you are working in is the lit one.";
         el.appendChild(lede);
 
@@ -139,14 +141,38 @@ class DockingWidget {
             var panel = new PanelBuilder().fills().host(grid.cell(id)).build(branch.createBranch("panel-" + id));
             var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: panel.body, slotId: id, budget: 8, addable: false,
                                                                             onEvent: sink, menus: menus, stripMenu: "split", focusName: "dock-" + id });
-            panel.watch(dock);
             docking.addDock(dock);
             var r = { id: id, name: name, panel: panel, dock: dock };
+            panel.watch(dock, function (on) { says(r, on); });   // the panel reports; the page decides what it means
             regions.push(r);
             return r;
         }
         function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
         function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); }
+        // HOW THE REGION BEING WORKED IN IS SAID, which is the PAGE'S to decide. A panel offers two axes and links
+        // neither to anything: a depth the design answers in whatever plane it uses for depth, and a colour that says
+        // current. Which of them a region wears while the keys are in it is this app's choice, made here in code -
+        // and the buttons let you change your mind while the workspace runs. In a design that declines depth -
+        // sketchy, where ink casts no shadow - the two depth modes do nothing, and the colour one still reads.
+        var MODES = [{ id: "elevated", label: "Elevated", sits: "elevated", mark: false },
+                     { id: "sunken", label: "Sunken", sits: "sunken", mark: false },
+                     { id: "highlighted", label: "Highlighted", sits: null, mark: true }];
+        var mode = MODES[0], modeButtons = [];
+        function says(r, within) { r.panel.elevation(within ? mode.sits : null).highlight(within && mode.mark); }
+        function saysAgain() { regions.forEach(function (r) { says(r, r.panel.isWithin()); }); }
+        function pickMode(m) {
+            mode = m;
+            modeButtons.forEach(function (x) { x.button.colour(x.mode === m ? "primary" : "plain"); });
+            saysAgain();
+            say("Mode      the region being worked in is " + m.label.toLowerCase());
+        }
+        MODES.forEach(function (m) {
+            var b = new ButtonBuilder().label(m.label).size(-0.4).onClick(function () { pickMode(m); });
+            var el2 = branch.createElement("mode-" + m.id, b.tag);
+            modeButtons.push({ mode: m, button: b.build(el2) });
+            controls.appendChild(el2);
+        });
+
         function regionById(id) { for (var k = 0; k < regions.length; k++) if (regions[k].id === id) return regions[k]; return null; }
         // The panes this region's room can go to WHOLE: those across a splitter of its own - a whole divider with this
         // region alone on one side and that pane alone on the other. At most two, and the grid says which.
