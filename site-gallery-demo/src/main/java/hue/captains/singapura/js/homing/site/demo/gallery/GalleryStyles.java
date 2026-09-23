@@ -412,6 +412,49 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
       * so a desk may lie across the whole section — the title, the controls and
       * the workspace alike — rather than within the workspace's box.
       */
+    /** The sheets page's ground: a sunk table for sheets to lie on, with air around them so a cast has somewhere to fall. */
+    public record ga_sheet_ground() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Recessed.class, Shape.Corner.class)); }
+        @Override public String body() { return """
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px;
+            padding: 22px;
+            align-items: stretch;
+            margin-block-end: 26px;
+            """;
+        }
+    }
+
+    /** One sheet's room on that ground: the sheet, and a caption under it. */
+    public record ga_sheet_slot() implements CssClass<GalleryStyles> {
+        @Override public String body() { return """
+            flex: 1 1 210px;
+            min-inline-size: 190px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            """;
+        }
+    }
+
+    /** What a sheet is, said under it, quietly. */
+    public record ga_sheet_note() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class), of(Code.class, Type.Face.class)); }
+        @Override public String body() { return "padding-inline: 2px;"; }
+    }
+
+    /** What a sheet holds here: a couple of quiet lines, so that it is a sheet OF something. */
+    public record ga_sheet_lines() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
+        @Override public String body() { return """
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            """;
+        }
+    }
+
     /**
       * A region's room on the grid: air around the sheet laid in it, so a panel
       * that rises has somewhere to cast and one that sinks has an edge to sink
@@ -793,6 +836,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_tab_fill(), new ga_tab_host(), new ga_picture(), new ga_picture_note(),
                        new ga_switch_list(), new ga_switch_row(), new ga_switch_row_at(), new ga_switch_hint(),
                        new ga_monitor(), new ga_domops_row(), new ga_domops_count(), new ga_floor(), new ga_region(),
+                       new ga_sheet_ground(), new ga_sheet_slot(), new ga_sheet_note(), new ga_sheet_lines(),
                        new ga_plate(), new ga_plate_sun(), new ga_plate_far(), new ga_plate_near(), new ga_plate_ground(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());

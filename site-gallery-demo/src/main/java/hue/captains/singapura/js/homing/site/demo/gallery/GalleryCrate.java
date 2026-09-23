@@ -63,6 +63,7 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(CardsApp.INSTANCE),
                 CrateEntry.of(FloatingApp.INSTANCE),
                 CrateEntry.of(DockingApp.INSTANCE),
+                CrateEntry.of(SheetsApp.INSTANCE),
                 CrateEntry.of(SplitGridApp.INSTANCE),
                 CrateEntry.of(TabStripApp.INSTANCE),
                 CrateEntry.of(ContextMenusApp.INSTANCE),

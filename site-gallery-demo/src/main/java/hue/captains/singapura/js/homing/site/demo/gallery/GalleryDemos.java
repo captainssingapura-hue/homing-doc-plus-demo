@@ -104,6 +104,18 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "Every mutation is one FloatEvents object on one sink — Opened, Moved, Resized, Raised, Closed — reported "
                     + "once when it happened, never per pixel.",
                     "/floating", FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
+            new Demo("sheets", "layout", "Sheets", "A panel is a sheet, and a sheet sits somewhere: sunken, flat or lifted.",
+                    "The three registers, read against each other on one ground, because a register only means anything beside the "
+                    + "others. A panel offers two axes and links neither to anything: where it SITS — sunken, flat, elevated, said "
+                    + "on one attribute the design answers as a state — and whether it is MARKED as the current one, which is colour "
+                    + "and moves nothing. What either stands for is the app's, in the app's own code; this page sets them because it "
+                    + "is a page about registers, and the fourth sheet is on the two controls. A design answers the registers in "
+                    + "whatever plane it honestly uses for depth: flat-morphism casts a hard offset with no blur for the lifted one "
+                    + "and takes a darker face for the sunk one — two registers, two planes — neumorphism moulds the clay out or "
+                    + "presses it in, and sketchy declines both outright, because ink casts no shadow and a design should not express "
+                    + "depth in a plane it does not otherwise use. Beneath them a sheet lies on a sheet: the same word, a different "
+                    + "colour beneath it, and nothing had to be told which.",
+                    "/sheets", SheetsApp.INSTANCE, "SheetsWidget", Map.of()),
             new Demo("docking", "layout", "Dock and undock", "Regions in a split, a desk over them, tabs that float and land.",
                     "A small workspace: every region is a cell of the split grid, a dock in it, and a panel around the dock that draws "
                     + "the frame and lights while the keys are anywhere inside it. RIGHT-CLICK THE EMPTY GROUND OF A TAB BAR — the room "

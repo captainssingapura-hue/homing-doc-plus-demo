@@ -41,6 +41,7 @@ public record GalleryComponents() implements C0_Components<GalleryComponents> {
                     ComponentEntry.of(this, new CardsApp.CardsWidget()),
                     ComponentEntry.of(this, new FloatingApp.FloatingWidget()),
                     ComponentEntry.of(this, new DockingApp.DockingWidget()),
+                    ComponentEntry.of(this, new SheetsApp.SheetsWidget()),
                     ComponentEntry.of(this, new SplitGridApp.SplitGridWidget()),
                     ComponentEntry.of(this, new TabStripApp.TabStripWidget()),
                     ComponentEntry.of(this, new ContextMenusApp.ContextMenusWidget()),
