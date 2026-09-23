@@ -81,7 +81,9 @@ class DockingWidget {
         var box = branch.createElement("box", "div");
         css.addClass(box, ga_dock_box);
         el.appendChild(box);
-        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, layout: { kind: "split", orientation: "horizontal", children: [
+        // the seam: the workspace is flat, and flat is not the same as featureless - a hairline says where one region
+        // ends and the next begins, which the panels' own edges are too pale to do against the ground
+        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, seam: true, layout: { kind: "split", orientation: "horizontal", children: [
             { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
         this._grid = grid;
 
