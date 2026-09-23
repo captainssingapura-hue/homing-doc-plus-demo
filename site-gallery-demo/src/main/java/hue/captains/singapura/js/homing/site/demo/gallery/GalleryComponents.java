@@ -55,7 +55,11 @@ public record GalleryComponents() implements C0_Components<GalleryComponents> {
                     ComponentEntry.of(this, new DockingSceneModule.ShelvesTab()),
                     ComponentEntry.of(this, new DockingSceneModule.PictureTab()),
                     ComponentEntry.of(this, new DockingSceneModule.NoteTab()),
-                    ComponentEntry.of(this, new DockingSceneModule.RegionList()));
+                    ComponentEntry.of(this, new DockingSceneModule.RegionList()),
+                    ComponentEntry.of(this, new DockingMonitorsModule.FocusTab()),
+                    ComponentEntry.of(this, new DockingMonitorsModule.StewardTab()),
+                    ComponentEntry.of(this, new DockingMonitorsModule.DomOpsTab()),
+                    ComponentEntry.of(this, new DockingMonitorsModule.EventsTab()));
         }
     }
 }

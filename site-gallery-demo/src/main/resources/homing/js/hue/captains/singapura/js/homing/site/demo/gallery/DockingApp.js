@@ -5,7 +5,9 @@
 // goes through it. RIGHT-CLICK A TAB BAR'S OWN GROUND - the room the chips
 // leave - and the page offers the split menu: part the region beside or
 // below, each new one a dock of its own on the desk, or close this one and
-// its tabs go to the neighbour. F6 ASKS FOR THE SWITCHER, a modal that is the
+// its tabs go to the neighbour. THE INSTRUMENTS - the focus tree, the steward's
+// lamp, the DomOps party, the page's own log - are a dock like any other, in a
+// pane that floats over the work. F6 ASKS FOR THE SWITCHER, a modal that is the
 // only way the keys move between docks: inside one, Escape comes back to the
 // tab bar and stops there. The
 // divider between them the grid's, and a desk over both: drag a floating
@@ -60,7 +62,8 @@ class DockingWidget {
             + "close a region, whose tabs go to its neighbour. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it floats; drag the "
             + "float over any strip: the dock lights and marks where the tab would land; let go and it is a tab there. Drag a chip along a strip: it "
             + "reorders, on its rail. Inside a dock, Escape comes back to the tab bar and stops there; F6 asks for the switcher, and picking a "
-            + "region is how the keys move between them. The Tab key walks the chips, and the region you are working in is the lit one.";
+            + "region is how the keys move between them. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
+            + "party, the log — so the page watches itself with the same parts it is made of. The Tab key walks the chips, and the region you are working in is the lit one.";
         el.appendChild(lede);
 
         // ── the chips' size and aspect ────────────────────────────────────
@@ -76,17 +79,11 @@ class DockingWidget {
             { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
         this._grid = grid;
 
-        var log = branch.createElement("log", "div");
-        css.addClass(log, ga_log);
-        log.setAttribute("aria-live", "polite");
-        el.appendChild(log);
-        var lines = 0;
-        function say(line) {
-            lines++;
-            log.textContent += (lines > 1 ? "\n" : "") + lines + "  " + line;
-            log.scrollTop = log.scrollHeight;
-        }
+        // what the page reports goes to the instruments' Events tab, which is built below and floats with the rest
+        var events = null, waiting = [];
+        function say(line) { if (events) events.say(line); else waiting.push(line); }
         function sink(ev) {
+            if (domopsOf()) domopsOf().refresh();   // the party changes with every one of these
             switch (ev.kind) {
                 case "Undocked":     say("Undocked  " + ev.tabId + "  from " + ev.slotId); break;
                 case "Docked":       say("Docked    " + ev.tabId + "  into " + ev.slotId + " at " + ev.index); break;
@@ -196,6 +193,7 @@ class DockingWidget {
             });
         }
         var switches = 0;
+        function domopsOf() { return monitors && monitors.has("domops") ? monitors.widgetOf("domops") : null; }
         // the tab bar's own ground, right-clicked: the page's menu about the room the dock sits in
         menus.handle("split", {
             pick: function (id, o) {
@@ -227,6 +225,25 @@ class DockingWidget {
             var own = branch.createBranch("tab-" + id);
             return { id: id, title: title, widget: new Widget(own, Object.assign({}, params, { focus: into })) };
         }
+        // ── the instruments ───────────────────────────────────────────────
+        // A dock like any other, in a pane that floats: the focus tree, the steward's lamp, the DomOps party and the
+        // page's own log, one to a tab. They watch the page from inside it and obey the law the other widgets obey.
+        var monHost = branch.createElement("instruments", "div");   // the float's widget: a box the dock fills
+        css.addClass(monHost, ga_tab_fill);
+        var monitors = new MultiTabPane(branch.createBranch("monitors"), { host: monHost, slotId: "monitors", budget: 6, addable: false,
+                                                                          menus: menus, stripMenu: "split", focusName: "monitors" });
+        function instrument(id, title, Widget) { return { id: id, title: title, widget: new Widget(branch.createBranch("mon-" + id), { focus: monitors.focus }) }; }
+        monitors.addTab(instrument("events", "Events", EventsTab));
+        monitors.addTab(instrument("focus", "Focus", FocusTab));
+        monitors.addTab(instrument("steward", "Steward", StewardTab));
+        monitors.addTab(instrument("domops", "DomOps", DomOpsTab));
+        events = monitors.widgetOf("events");
+        waiting.forEach(function (line) { events.say(line); });
+        this._monitors = monitors;
+        var domops = monitors.widgetOf("domops");
+        docking.desk.open({ id: "instruments", title: "Instruments", widget: { root: monHost, dispose: function () {} },
+                            x: 26, y: 26, w: 380, h: 300 });
+
         var store = new BooksStore();
         var domain = branch.createBranch("domain");
         domain.activate(_owner);
@@ -240,7 +257,7 @@ class DockingWidget {
     }
 
     dispose() { this._offMenus(); this._offF6(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose();
-                this._regions.forEach(function (r) { r.dock.dispose(); r.panel.dispose(); }); this._afloat.owner.leave(); this._grid.dispose(); }
+                this._regions.forEach(function (r) { r.dock.dispose(); r.panel.dispose(); }); this._monitors.dispose(); this._afloat.owner.leave(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {

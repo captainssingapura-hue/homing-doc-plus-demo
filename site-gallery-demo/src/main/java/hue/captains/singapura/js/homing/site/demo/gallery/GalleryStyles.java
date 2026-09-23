@@ -142,7 +142,9 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return """
             position: relative;
-            height: 480px;
+            flex: 1 1 auto;
+            block-size: min(72vh, 760px);
+            min-height: 360px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -403,6 +405,40 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
             padding: 6px 10px;
             """;
         }
+    }
+
+    /** A monitor in a tab of the instruments' dock: it fills the tab and scrolls on its own. */
+    public record ga_monitor() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Container.Pane.class, Size.Inset.class)); }
+        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Pane.class, Size.Inset.class)); }
+        @Override public String body() { return """
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: auto;
+            box-sizing: border-box;
+            """;
+        }
+    }
+
+    /** The DomOps party as a tree: one row per branch, indented by its depth. */
+    public record ga_domops_row() implements CssClass<GalleryStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--ga-depth")); }
+        @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class)); }
+        @Override public List<? extends Wearable> sizes() { return List.of(of(Caption.class, Type.Scale.class)); }
+        @Override public String body() { return """
+            white-space: pre;
+            padding-inline-start: calc(var(--ga-depth, 0) * 14px);
+            """;
+        }
+    }
+
+    /** What a branch holds, after its name: quieter than the name. */
+    public record ga_domops_count() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class)); }
+        @Override public String body() { return "margin-inline-start: 8px;"; }
     }
 
     // ── The switcher: the regions, as a list to pick from ───────────
@@ -737,6 +773,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
                        new ga_tab_fill(), new ga_tab_host(), new ga_picture(), new ga_picture_note(),
                        new ga_switch_list(), new ga_switch_row(), new ga_switch_row_at(), new ga_switch_hint(),
+                       new ga_monitor(), new ga_domops_row(), new ga_domops_count(),
                        new ga_plate(), new ga_plate_sun(), new ga_plate_far(), new ga_plate_near(), new ga_plate_ground(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());

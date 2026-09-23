@@ -54,6 +54,12 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
                         new DockingSceneModule.NoteTab(),
                         new DockingSceneModule.RegionList()
                 ), DockingSceneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(
+                        new DockingMonitorsModule.FocusTab(),
+                        new DockingMonitorsModule.StewardTab(),
+                        new DockingMonitorsModule.DomOpsTab(),
+                        new DockingMonitorsModule.EventsTab()
+                ), DockingMonitorsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new GalleryRelations.BooksStore()), GalleryRelations.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DockingModule.Docking()), DockingModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
@@ -71,6 +77,7 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
                         new GalleryStyles.ga_lede(),
                         new GalleryStyles.ga_count(),
                         new GalleryStyles.ga_dock_box(),
+                        new GalleryStyles.ga_tab_fill(),
                         new GalleryStyles.ga_log(),
                         new GalleryStyles.ga_buttons()
                 ), GalleryStyles.INSTANCE))
