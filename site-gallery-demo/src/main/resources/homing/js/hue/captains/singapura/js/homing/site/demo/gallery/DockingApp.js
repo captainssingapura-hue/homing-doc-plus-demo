@@ -68,7 +68,8 @@ class DockingWidget {
             + "reorders, on its rail. Inside a dock, Escape comes back to the tab bar and stops there; F6 asks for the switcher, and picking a "
             + "region is how the keys move between them. THE WORKSPACE IS FLAT, and the grid owns every line in it: the splitter IS the line between two rooms, "
             + "one line shared by both and as thick as the slider says, with the hand reaching past it either way so a hairline is still something you can take "
-            + "hold of. Nothing else draws a line - the panels are bare, the dock draws no frame, the outer border is the workspace's own - and the room you are "
+            + "hold of, and the grid's own outer edge is that same line, so every side of every room is alike whether a neighbour lies beyond it or the end of "
+            + "the workspace. Nothing else draws a line - the panels are bare, the dock draws no frame, the box holding the grid draws none - and the room you are "
             + "working in is said on its tab bar, lit a shade, because a second outline would say what the lines already say. The panel offers a depth as well "
             + "and this page does not use it; the sheets page is where the registers are shown. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
             + "party, the log — so the page watches itself with the same parts it is made of. The Tab key walks the chips, and the region you are working in is the lit one.";
@@ -153,9 +154,9 @@ class DockingWidget {
         }
         function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
         function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); }
-        // ONE OWNER FOR THE LINES, AND THE HINT IS NOT A LINE. The grid draws every division between its rooms and
-        // nothing else draws any: the panels are bare, the dock never drew a frame, and the outer border is the
-        // workspace's own. The splitter IS the line - one of them shared by two rooms, flush on both sides, with the
+        // ONE OWNER FOR THE LINES, AND THE HINT IS NOT A LINE. The grid draws every line in the workspace and nothing
+        // else draws any: the panels are bare, the dock never drew a frame, and the box that holds the grid stopped
+        // drawing one, because the grid draws its OWN outer edge in the same line as the rest. The splitter IS the line - one of them shared by two rooms, flush on both sides, with the
         // hand reaching 3px past it either way - so there is no gutter to notice. And the room being worked in is
         // said on its TAB BAR, lit a shade: a second set of lines around one room would say what the grid's lines
         // already say. Flat throughout; the chips keep their lift, which is theirs.

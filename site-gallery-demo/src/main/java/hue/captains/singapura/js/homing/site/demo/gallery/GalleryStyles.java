@@ -139,7 +139,15 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     /** The box the dock fills and the desk lies over: positioned, so the desk can be a layer; a flex column for the pane. */
     public record ga_dock_box() implements CssClass<GalleryStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        /**
+         * NO FRAME OF ITS OWN. The grid inside draws its own outer line, in the
+         * same width and the same colour as the lines between its rooms, so
+         * that no room can tell which of its sides has a neighbour beyond it
+         * and which has the end of the workspace. A frame here would be that
+         * line drawn twice, at the design's width rather than the one being
+         * dialled, and a room at the edge would wear a border unlike its own.
+         */
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class)); }
         @Override public String body() { return """
             position: relative;
             flex: 1 1 auto;
