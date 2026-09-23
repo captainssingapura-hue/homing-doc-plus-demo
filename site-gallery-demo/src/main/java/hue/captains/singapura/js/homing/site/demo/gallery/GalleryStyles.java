@@ -139,7 +139,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     /** The box the dock fills and the desk lies over: positioned, so the desk can be a layer; a flex column for the pane. */
     public record ga_dock_box() implements CssClass<GalleryStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return """
             position: relative;
             flex: 1 1 auto;
@@ -412,6 +412,16 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
       * so a desk may lie across the whole section — the title, the controls and
       * the workspace alike — rather than within the workspace's box.
       */
+    /**
+      * A region's room on the grid: air around the sheet laid in it, so a panel
+      * that rises has somewhere to cast and one that sinks has an edge to sink
+      * behind. Nothing of the panel's: the room is the page's, and it is the
+      * same at every register — the depth must never move the furniture.
+      */
+    public record ga_region() implements CssClass<GalleryStyles> {
+        @Override public String body() { return "padding: 10px;"; }
+    }
+
     public record ga_floor() implements CssClass<GalleryStyles> {
         @Override public String body() { return "position: relative;"; }
     }
@@ -782,7 +792,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
                        new ga_tab_fill(), new ga_tab_host(), new ga_picture(), new ga_picture_note(),
                        new ga_switch_list(), new ga_switch_row(), new ga_switch_row_at(), new ga_switch_hint(),
-                       new ga_monitor(), new ga_domops_row(), new ga_domops_count(), new ga_floor(),
+                       new ga_monitor(), new ga_domops_row(), new ga_domops_count(), new ga_floor(), new ga_region(),
                        new ga_plate(), new ga_plate_sun(), new ga_plate_far(), new ga_plate_near(), new ga_plate_ground(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
                        new ga_control(), new ga_control_label(), new ga_control_readout());

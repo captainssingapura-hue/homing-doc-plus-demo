@@ -138,6 +138,7 @@ class DockingWidget {
         this._regions = regions;
         function region(id) {
             var name = "region " + (++named);   // for the log alone: the panel shows no name, the chips say what is in it
+            css.addClass(grid.cell(id), ga_region);   // the sheet is laid in the room with air around it, at every register
             var panel = new PanelBuilder().fills().host(grid.cell(id)).build(branch.createBranch("panel-" + id));
             var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: panel.body, slotId: id, budget: 8, addable: false,
                                                                             onEvent: sink, menus: menus, stripMenu: "split", focusName: "dock-" + id });
@@ -149,29 +150,16 @@ class DockingWidget {
         }
         function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
         function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); }
-        // HOW THE REGION BEING WORKED IN IS SAID, which is the PAGE'S to decide. A panel offers two axes and links
-        // neither to anything: a depth the design answers in whatever plane it uses for depth, and a colour that says
-        // current. Which of them a region wears while the keys are in it is this app's choice, made here in code -
-        // and the buttons let you change your mind while the workspace runs. In a design that declines depth -
-        // sketchy, where ink casts no shadow - the two depth modes do nothing, and the colour one still reads.
-        var MODES = [{ id: "elevated", label: "Elevated", sits: "elevated", mark: false },
-                     { id: "sunken", label: "Sunken", sits: "sunken", mark: false },
-                     { id: "highlighted", label: "Highlighted", sits: null, mark: true }];
-        var mode = MODES[0], modeButtons = [];
-        function says(r, within) { r.panel.elevation(within ? mode.sits : null).highlight(within && mode.mark); }
+        // HOW THE REGION BEING WORKED IN IS SAID, which is the PAGE'S to decide. The panel offers a register and a
+        // mark and links neither to anything: a depth the design answers in whatever plane it uses for depth, and a
+        // colour that says current. They are separate here as they are there - a slider for where the region sits,
+        // a toggle for whether it is marked - so any of the six readings can be had, and changed while the workspace
+        // runs. In a design that declines depth - sketchy, where ink casts no shadow - the slider does nothing at
+        // all, and the mark still reads.
+        var SITS = [null, "sunken", "elevated"];   // by the sign of the slider
+        var sits = "elevated", marked = false;
+        function says(r, within) { r.panel.elevation(within ? sits : null).highlight(within && marked); }
         function saysAgain() { regions.forEach(function (r) { says(r, r.panel.isWithin()); }); }
-        function pickMode(m) {
-            mode = m;
-            modeButtons.forEach(function (x) { x.button.colour(x.mode === m ? "primary" : "plain"); });
-            saysAgain();
-            say("Mode      the region being worked in is " + m.label.toLowerCase());
-        }
-        MODES.forEach(function (m) {
-            var b = new ButtonBuilder().label(m.label).size(-0.4).onClick(function () { pickMode(m); });
-            var el2 = branch.createElement("mode-" + m.id, b.tag);
-            modeButtons.push({ mode: m, button: b.build(el2) });
-            controls.appendChild(el2);
-        });
 
         function regionById(id) { for (var k = 0; k < regions.length; k++) if (regions[k].id === id) return regions[k]; return null; }
         // The panes this region's room can go to WHOLE: those across a splitter of its own - a whole divider with this
@@ -261,6 +249,16 @@ class DockingWidget {
                 return { hidden: !to, disabled: !!to && !PaneMerge.plan(r.dock.tabs(), to.dock.tabs(), to.dock.budget()).ok };
             }
         });
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/sits").label("the region you are in").range(-1, 1, 1).detent(-1, 0, 1).value(1).icon("level")
+            .format(function (v) { return v < 0 ? "sunken" : v > 0 ? "elevated" : "flat"; })
+            .onInput(function (v) { sits = SITS[Math.abs(v) + (v > 0 ? 1 : 0)]; saysAgain(); say("Sits      the region you are in is " + (sits || "flat")); })
+            .labelWidth("9em").build(branch.createBranch("sits")).root);
+        var markButton = new ButtonBuilder().label("marked").size(-0.4).colour("plain")
+            .onClick(function () { marked = !marked; markButton.colour(marked ? "primary" : "plain"); saysAgain();
+                                   say("Marked    the region you are in is " + (marked ? "marked as well" : "not marked")); });
+        var markEl = branch.createElement("mark", markButton.tag);
+        markButton = markButton.build(markEl);
+        controls.appendChild(markEl);
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { regions.forEach(function (r) { r.dock.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { regions.forEach(function (r) { r.dock.aspect(v); }); })
             .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
