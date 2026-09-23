@@ -66,9 +66,10 @@ class DockingWidget {
             + "merge one away: its tabs go to the region you name and its room to the pane across a splitter of its own. Detach a tab by its menu — right-click a chip, or Shift+F10 — and it floats; drag the "
             + "float over any strip: the dock lights and marks where the tab would land; let go and it is a tab there. Drag a chip along a strip: it "
             + "reorders, on its rail. Inside a dock, Escape comes back to the tab bar and stops there; F6 asks for the switcher, and picking a "
-            + "region is how the keys move between them. THE WORKSPACE IS FLAT: the region you are working in is said by its border alone, lit while the keys "
-            + "are anywhere inside it. The panel offers a depth as well and this page does not use it - a room full of rooms should not lift one of them - "
-            + "and the sheets page is where the registers are shown. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
+            + "region is how the keys move between them. THE WORKSPACE IS FLAT, and the grid owns every line in it: the seams between the rooms, and the "
+            + "boundary of the room you are working in, lit while the keys are anywhere inside it. What a room holds draws no frame of its own, so nothing "
+            + "is outlined twice. The panel offers a depth as well and this page does not use it - a room full of rooms should not lift one of them - and "
+            + "the sheets page is where the registers are shown. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
             + "party, the log — so the page watches itself with the same parts it is made of. The Tab key walks the chips, and the region you are working in is the lit one.";
         el.appendChild(lede);
 
@@ -140,8 +141,7 @@ class DockingWidget {
         this._regions = regions;
         function region(id) {
             var name = "region " + (++named);   // for the log alone: the panel shows no name, the chips say what is in it
-            css.addClass(grid.cell(id), ga_region);   // the sheet is laid in the room with air around it, at every register
-            var panel = new PanelBuilder().fills().host(grid.cell(id)).build(branch.createBranch("panel-" + id));
+            var panel = new PanelBuilder().fills().bare().host(grid.cell(id)).build(branch.createBranch("panel-" + id));
             var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: panel.body, slotId: id, budget: 8, addable: false,
                                                                             onEvent: sink, menus: menus, stripMenu: "split", focusName: "dock-" + id });
             docking.addDock(dock);
@@ -152,13 +152,13 @@ class DockingWidget {
         }
         function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
         function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); }
-        // HOW THE REGION BEING WORKED IN IS SAID, which is the PAGE'S to decide - and this workspace decides to keep
-        // FLAT and say it in the border alone. The panel offers two axes and joins neither to anything: a depth the
-        // design answers in whatever plane it uses for depth, and a colour that says current. A workspace is a room
-        // full of rooms, and lifting one of them says the wrong thing about the others; an illuminated border says
-        // WHERE YOU ARE without moving a pixel, and reads the same however many regions there are. The depth axis is
-        // simply not used here. Sheets demo the registers; a workspace does not need them.
-        function says(r, within) { r.panel.highlight(within); }
+        // ONE OWNER FOR THE LINES. The grid draws the seams between its rooms, so it draws the boundary of the room
+        // being worked in as well: grid.lit(id), an outline set inward, which costs no layout and moves nothing. What
+        // a room HOLDS draws no frame - the panels are bare and the dock never drew one - so a region is outlined once
+        // and by the thing that owns the divisions. Flat throughout: no room is lifted, because a workspace is a room
+        // full of rooms and lifting one says the wrong thing about the others. The panel's depth axis is simply not
+        // used here; the sheets page is where the registers are shown. The chips keep their lift, which is theirs.
+        function says(r, within) { if (within) grid.lit(r.id); else if (grid.lit() === r.id) grid.lit(null); }
 
         function regionById(id) { for (var k = 0; k < regions.length; k++) if (regions[k].id === id) return regions[k]; return null; }
         // The panes this region's room can go to WHOLE: those across a splitter of its own - a whole divider with this
