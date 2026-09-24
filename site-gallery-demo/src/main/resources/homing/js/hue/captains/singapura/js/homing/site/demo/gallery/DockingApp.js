@@ -1,7 +1,7 @@
 // =============================================================================
 // DockingApp — dock and undock, and the room the docks sit in. Regions in a
-// split grid, each a dock in a PANEL - the panel is visual only: it names the
-// region and lights while the keys are in the dock, and nothing functional
+// split grid, each a dock in a cell of it and nothing in between - no panel,
+// no frame, nothing functional
 // goes through it. RIGHT-CLICK A TAB BAR'S OWN GROUND - the room the chips
 // leave - and the page offers the split menu: part the region beside or
 // below, MERGE IT AWAY - the tabs to the region named, the room to the pane
@@ -69,9 +69,9 @@ class DockingWidget {
             + "region is how the keys move between them. THE WORKSPACE IS FLAT, and the grid owns every line in it: the splitter IS the line between two rooms, "
             + "one line shared by both and as thick as the slider says, with the hand reaching past it either way so a hairline is still something you can take "
             + "hold of, and the grid's own outer edge is that same line, so every side of every room is alike whether a neighbour lies beyond it or the end of "
-            + "the workspace. Nothing else draws a line - the panels are bare, the dock draws no frame, the box holding the grid draws none - and the room you are "
-            + "working in is said on its tab bar, lit a shade, because a second outline would say what the lines already say. The panel offers a depth as well "
-            + "and this page does not use it; the sheets page is where the registers are shown. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
+            + "the workspace. Nothing else draws a line - there is nothing round a dock at all, the dock draws no frame, the box holding the grid draws none - and the room "
+            + "you are working in is said on its tab bar, lit a shade by the dock itself, because a second outline would say what the lines already say. The panel's "
+            + "depth registers are shown on the sheets page instead; a workspace is a room full of rooms and lifting one says the wrong thing about the others. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
             + "party, the log — so the page watches itself with the same parts it is made of. The Tab key walks the chips, and the region you are working in is the lit one.";
         el.appendChild(lede);
 
@@ -136,31 +136,31 @@ class DockingWidget {
         // ── the desk, then the regions on the grid ───────────────────────
         this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink, keyboard: kb, keyboardId: "docking/desk" });
         var docking = this._docking;
-        // A region is a cell of the grid, a dock in it, and a panel around the dock. The PANEL IS VISUAL ONLY: it
-        // names the region and lights while the keys are in the dock. Nothing functional goes through it - the dock
-        // is the region's identity, and the menu that parts the room is the dock's own tab bar's.
+        // A REGION IS A CELL OF THE GRID AND A DOCK IN IT. Nothing sits between them: a panel round a dock would be
+        // a box that draws no line, takes no keys and holds nothing the cell does not already hold - and the one job
+        // it had left was watching the dock for where the keys are and telling the dock about itself, a loop through
+        // a third object for a fact the pane is handed directly. The cell is already a flex column that fills its
+        // room; the dock stretches into it.
         var regions = [], named = 0;
         this._regions = regions;
         function region(id) {
-            var name = "region " + (++named);   // for the log alone: the panel shows no name, the chips say what is in it
-            var panel = new PanelBuilder().fills().bare().host(grid.cell(id)).build(branch.createBranch("panel-" + id));
-            var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: panel.body, slotId: id, budget: 8, addable: false,
+            var name = "region " + (++named);   // for the log alone: nothing shows a name, the chips say what is in it
+            var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: grid.cell(id), slotId: id, budget: 8, addable: false,
                                                                             onEvent: sink, menus: menus, stripMenu: "split", focusName: "dock-" + id });
             docking.addDock(dock);
-            var r = { id: id, name: name, panel: panel, dock: dock };
-            panel.watch(dock, function (on) { says(r, on); });   // the panel reports; the page decides what it means
+            var r = { id: id, name: name, dock: dock };
             regions.push(r);
             return r;
         }
         function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
         function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); }
         // ONE OWNER FOR THE LINES, AND THE HINT IS NOT A LINE. The grid draws every line in the workspace and nothing
-        // else draws any: the panels are bare, the dock never drew a frame, and the box that holds the grid stopped
-        // drawing one, because the grid draws its OWN outer edge in the same line as the rest. The splitter IS the line - one of them shared by two rooms, flush on both sides, with the
-        // hand reaching 3px past it either way - so there is no gutter to notice. And the room being worked in is
-        // said on its TAB BAR, lit a shade: a second set of lines around one room would say what the grid's lines
+        // else draws any: there is nothing round a dock to draw one, the dock never drew a frame, and the box that
+        // holds the grid stopped drawing one, because the grid draws its OWN outer edge in the same line as the rest.
+        // The splitter IS the line - one of them shared by two rooms, flush on both sides, with the hand reaching 3px
+        // past it either way - so there is no gutter to notice. And the room being worked in is said on its TAB BAR,
+        // lit a shade, by the dock itself: a second set of lines around one room would say what the grid's lines
         // already say. Flat throughout; the chips keep their lift, which is theirs.
-        function says(r, within) { r.dock.current(within); }
 
         function regionById(id) { for (var k = 0; k < regions.length; k++) if (regions[k].id === id) return regions[k]; return null; }
         // The panes this region's room can go to WHOLE: those across a splitter of its own - a whole divider with this
@@ -186,7 +186,6 @@ class DockingWidget {
             plan.ids.forEach(function (id) { to.dock.attachTab(r.dock.detachTab(id), to.dock.count()); });
             docking.removeDock(r.dock);
             r.dock.dispose();
-            r.panel.dispose();
             grid.remove(r.id, to.id);
             regions.splice(regions.indexOf(r), 1);
             say("Merged    " + r.name + " into " + to.name + (whole ? " - its room went with them" : " - its room went to the neighbour"));
@@ -313,7 +312,7 @@ class DockingWidget {
     }
 
     dispose() { this._offMenus(); this._offF6(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose();
-                this._regions.forEach(function (r) { r.dock.dispose(); r.panel.dispose(); }); this._stage.dispose(); this._monitors.dispose(); this._afloat.owner.leave(); this._grid.dispose(); }
+                this._regions.forEach(function (r) { r.dock.dispose(); }); this._stage.dispose(); this._monitors.dispose(); this._afloat.owner.leave(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {
