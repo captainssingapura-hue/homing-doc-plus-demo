@@ -14,7 +14,9 @@ import hue.captains.singapura.js.homing.ui.docking.DockingModule;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuStewardModule;
 import hue.captains.singapura.js.homing.ui.floating.DeskModule;
 import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
+import hue.captains.singapura.js.homing.ui.panes.AddTabModule;
 import hue.captains.singapura.js.homing.ui.panes.PaneMergeModule;
+import hue.captains.singapura.js.homing.ui.panes.TabSourceModule;
 import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
 import hue.captains.singapura.js.homing.ui.menu.NeedContextMenu;
@@ -72,6 +74,8 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
                 .add(new ModuleImports<>(List.of(new GalleryMenus.MENUS()), GalleryMenus.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabSourceModule.TabSource()), TabSourceModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new AddTabModule.AddTab()), AddTabModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),

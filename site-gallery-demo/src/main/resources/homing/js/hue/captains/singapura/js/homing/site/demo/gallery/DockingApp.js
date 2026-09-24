@@ -72,13 +72,21 @@ class DockingWidget {
             + "the workspace. Nothing else draws a line - there is nothing round a dock at all, the dock draws no frame, the box holding the grid draws none - and the room "
             + "you are working in is said on its tab bar, lit a shade by the dock itself, because a second outline would say what the lines already say. The panel's "
             + "depth registers are shown on the sheets page instead; a workspace is a room full of rooms and lifting one says the wrong thing about the others. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
-            + "party, the log — so the page watches itself with the same parts it is made of. The Tab key walks the chips, and the region you are working in is the lit one.";
+            + "party, the log — so the page watches itself with the same parts it is made of. A NEW TAB is asked for above: the little picture is the "
+            + "workspace at the size it really is, so you point at the room you mean, the list says what to mount, and the button is the same call the "
+            + "strip's own plus will make. A room that is full dims rather than disappearing, because where it is belongs to the picture. The Tab key walks the chips, "
+            + "and the region you are working in is the lit one.";
         el.appendChild(lede);
 
         // ── the chips' size and aspect ────────────────────────────────────
         var controls = branch.createElement("controls", "div");
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
+        // the new-tab control's own row, above the workspace it points at: its picture of the panes is the same
+        // arrangement you are looking at, so it wants to be read next to it rather than tucked among the sliders
+        var newRow = branch.createElement("new-row", "div");
+        css.addClass(newRow, ga_buttons);
+        el.appendChild(newRow);
 
         // ── the box: two docks in a split, the desk over both ─────────────
         var box = branch.createElement("box", "div");
@@ -86,15 +94,19 @@ class DockingWidget {
         el.appendChild(box);
         // the seam: the workspace is flat, and flat is not the same as featureless - a hairline says where one region
         // ends and the next begins, which the panels' own edges are too pale to do against the ground
-        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, seam: true, thickness: 1, layout: { kind: "split", orientation: "horizontal", children: [
+        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, seam: true, thickness: 1,
+            onEvent: function () { if (adder) adder.refresh(); },   // a splitter moved, a room was parted: the picture is of where the panes ARE
+            layout: { kind: "split", orientation: "horizontal", children: [
             { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
         this._grid = grid;
+        var adder = null;   // built once the scene is up; the grid and the sink both nudge it
 
         // what the page reports goes to the instruments' Events tab, which is built below and floats with the rest
         var events = null, waiting = [];
         function say(line) { if (events) events.say(line); else waiting.push(line); }
         function sink(ev) {
             if (domopsOf()) domopsOf().refresh();   // the party changes with every one of these
+            if (adder) adder.refresh();             // and so does how full each dock is, which is what the new-tab control shows
             switch (ev.kind) {
                 case "Undocked":     say("Undocked  " + ev.tabId + "  from " + ev.slotId); break;
                 case "Docked":       say("Docked    " + ev.tabId + "  into " + ev.slotId + " at " + ev.index); break;
@@ -116,7 +128,9 @@ class DockingWidget {
                     docking.undockAt(d, { id: ev.tabId, title: d.getState().tabs[i].title }, { x: r.left + 60, y: r.bottom + 14 });
                     break;
                 }
-                case "TabRemoved":   say("Removed   " + ev.tab.id + "  from " + ev.slotId); break;
+                // REMOVED, not detached: the tab is gone for good, so the source dissolves the branch it was built
+                // on - the only thing that frees the name for the party, and the reason a source hands names out
+                case "TabRemoved":   say("Removed   " + ev.tab.id + "  from " + ev.slotId); if (source) source.release(ev.tab.id); break;
                 case "TabAdded":     say("Added     " + ev.tab.id + "  to " + ev.slotId); break;
                 default:             say(ev.kind);
             }
@@ -153,7 +167,7 @@ class DockingWidget {
             return r;
         }
         function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
-        function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); }
+        function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); if (adder) adder.refresh(); }
         // ONE OWNER FOR THE LINES, AND THE HINT IS NOT A LINE. The grid draws every line in the workspace and nothing
         // else draws any: there is nothing round a dock to draw one, the dock never drew a frame, and the box that
         // holds the grid stopped drawing one, because the grid draws its OWN outer edge in the same line as the rest.
@@ -186,6 +200,7 @@ class DockingWidget {
             plan.ids.forEach(function (id) { to.dock.attachTab(r.dock.detachTab(id), to.dock.count()); });
             docking.removeDock(r.dock);
             r.dock.dispose();
+            if (adder) adder.refresh();
             grid.remove(r.id, to.id);
             regions.splice(regions.indexOf(r), 1);
             say("Merged    " + r.name + " into " + to.name + (whole ? " - its room went with them" : " - its room went to the neighbour"));
@@ -302,17 +317,40 @@ class DockingWidget {
         var store = new BooksStore();
         var domain = branch.createBranch("domain");
         domain.activate(_owner);
-        left.addTab(tab("books", "Books", BooksTab, { store: store, domain: domain }, left.focus));
-        left.addTab(tab("shelves", "Shelves", ShelvesTab, { store: store, domain: domain }, left.focus));
-        right.addTab(tab("plate", "Plate", PictureTab, { title: "A plate" }, right.focus));
-        right.addTab(tab("notes", "Notes", NoteTab, { text: _NOTE }, right.focus));
+        // ── where a NEW tab comes from, and the control that puts one somewhere ────────────────────────────────
+        // The source is the page's answer to "what can be mounted": four kinds, each closing over whatever IT needs
+        // - a store, a domain branch, a line of text - so that the only thing handed to it at mint time is the
+        // branch to build on and the dock's focus branch. Which pane is never its business; the control asks.
+        //
+        // EVERY TAB ON THIS PAGE COMES THROUGH IT, the four it opens with as much as the ones added later. One
+        // counter, so no two tabs are ever the same name; and the page does not keep a second way of making a tab
+        // that would drift from this one.
+        var source = new TabSource(branch.createBranch("source"), { kinds: [
+            { id: "note",    label: "A note",      title: "Notes",   make: function (b, p) { return new NoteTab(b, { focus: p.focus, text: _NOTE }); } },
+            { id: "plate",   label: "A picture",   title: "Plate",   make: function (b, p) { return new PictureTab(b, { focus: p.focus, title: "A plate" }); } },
+            { id: "books",   label: "The books",   title: "Books",   make: function (b, p) { return new BooksTab(b, { focus: p.focus, store: store, domain: domain }); } },
+            { id: "shelves", label: "The shelves", title: "Shelves", make: function (b, p) { return new ShelvesTab(b, { focus: p.focus, store: store, domain: domain }); } } ] });
+        this._source = source;
+        source.addTo(left, "books");
+        source.addTo(left, "shelves");
+        source.addTo(right, "plate");
+        source.addTo(right, "note");
         docking.desk.open({ id: "afloat", title: "Afloat", widget: tab("afloat", "Afloat", PictureTab, { title: "A plate afloat" }, afloat).widget, x: 60, y: 210, w: 280, h: 190 });
+
+        // The control: a picture of the panes to say WHERE, a list to say WHAT. It is handed the docks of the
+        // workspace and nothing about the grid - it measures where they are - so a region minted by a split is in
+        // the picture the moment it exists, and the instruments' float, which is not of this workspace, is not.
+        adder = new AddTab(branch.createBranch("adder"), { host: newRow, source: source, width: "148px",
+            panes: function () { return regions.map(function (r) { return r.dock; }); },
+            onAdded: function (pane, tab) { var r = regionOf(pane); say("Added     " + tab.id + "  to " + (r ? r.name : pane.slotId)); } });
+        this._adder = adder;
 
         this.root = el;
     }
 
-    dispose() { this._offMenus(); this._offF6(); if (this._ownMenus) this._ownMenus.dispose(); this._docking.dispose();
-                this._regions.forEach(function (r) { r.dock.dispose(); }); this._stage.dispose(); this._monitors.dispose(); this._afloat.owner.leave(); this._grid.dispose(); }
+    dispose() { this._offMenus(); this._offF6(); if (this._ownMenus) this._ownMenus.dispose(); this._adder.dispose(); this._docking.dispose();
+                this._regions.forEach(function (r) { r.dock.dispose(); }); this._stage.dispose(); this._monitors.dispose(); this._afloat.owner.leave();
+                this._source.dispose(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {
