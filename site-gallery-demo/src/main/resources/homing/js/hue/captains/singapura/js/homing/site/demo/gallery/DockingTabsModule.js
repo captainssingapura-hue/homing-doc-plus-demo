@@ -1,0 +1,73 @@
+// =============================================================================
+// DockingTabs — where the docking page's tabs come from, and the control that
+// puts one somewhere. One object for the whole business, so the page that runs
+// a workspace is about the workspace.
+//
+//   new DockingTabs(branch, { host, panes, store, domain, note, onAdded? })
+//     host:   where the new-tab control goes
+//     panes:  () → [pane], asked afresh: the workspace is split and merged
+//     store, domain, note: what the KINDS need — each closes over its own, so
+//             the source hands a maker only the branch and the dock's branch
+//
+//   tabs.addTo(pane, kindId)   a tab of that kind, there: the four the page
+//                              opens with are asked for exactly this way
+//   tabs.opener(pane)          a tab holding the CHOOSER: what the strip's plus
+//                              asks for, since a plus that guesses is worse
+//                              than one that asks
+//   tabs.release(tabId)        a tab gone for good frees its branch
+//   tabs.refresh()             the control says again what can be done
+//   tabs.dispose()
+//
+// EVERY TAB ON THE PAGE COMES THROUGH THE ONE SOURCE — the four it opens with,
+// the ones the control adds, the ones the opener becomes. One counter, so no
+// two tabs are ever the same name; and the page keeps no second way of making
+// a tab that could drift from this one. The first shape of this page had one,
+// and the ids collided the day a second "books" was asked for.
+// =============================================================================
+
+const _dockingTabsOwner = Object.freeze({ toString: () => "dockingTabs" });
+
+class DockingTabs {
+    constructor(branch, opts) {
+        if (!branch) throw new Error("[DockingTabs] a branch of its own is required");
+        var o = opts || {};
+        branch.activate(_dockingTabsOwner);
+        this.branch = branch;
+        var store = o.store, domain = o.domain, note = o.note == null ? "" : String(o.note);
+        // The page's answer to "what can be mounted". Each kind closes over whatever IT needs, so the only things
+        // handed to a maker are the branch to build on, the dock's focus branch, and the pane it is going into.
+        var source = new TabSource(branch.createBranch("source"), { kinds: [
+            { id: "note",    label: "A note",      title: "Notes",   make: function (b, p) { return new NoteTab(b, { focus: p.focus, text: note }); } },
+            { id: "plate",   label: "A picture",   title: "Plate",   make: function (b, p) { return new PictureTab(b, { focus: p.focus, title: "A plate" }); } },
+            { id: "books",   label: "The books",   title: "Books",   make: function (b, p) { return new BooksTab(b, { focus: p.focus, store: store, domain: domain }); } },
+            { id: "shelves", label: "The shelves", title: "Shelves", make: function (b, p) { return new ShelvesTab(b, { focus: p.focus, store: store, domain: domain }); } },
+            // LISTED:FALSE — it is what the plus opens, never one of the things you open with it. It is handed the
+            // pane and its own tab id because it gives that tab up to whatever is chosen in it.
+            { id: "opener",  label: "Open…",      title: "Open",    listed: false,
+              make: function (b, p) { return new TabOpener(b, { focus: p.focus, pane: p.pane, tabId: p.id, source: source }); } } ] });
+        this.source = source;
+        // The control: a picture of the panes to say WHERE, a list to say WHAT. It is handed the docks and nothing
+        // about the grid — it measures where they are — so a region minted by a split is in the picture at once, and
+        // the instruments' float, which is not of this workspace, is not.
+        this.adder = new AddTab(branch.createBranch("adder"), { host: o.host, source: source, width: o.width == null ? "148px" : o.width,
+                                                                panes: o.panes, onAdded: o.onAdded });
+    }
+
+    /** A tab of that kind in that pane: the index it landed at, or −1 if the pane had no room. */
+    addTo(pane, kindId) { return this.source.addTo(pane, kindId); }
+
+    /** A tab holding the chooser: the strip's plus, and anything else that wants to ask rather than decide. */
+    opener(pane) { return this.source.addTo(pane, "opener"); }
+
+    /** Removed for good, not detached: its branch dissolves, which is the only thing that frees the name. */
+    release(tabId) { this.source.release(tabId); return this; }
+
+    /** How full each dock is, and where the panes are, said again. */
+    refresh() { this.adder.refresh(); return this; }
+
+    dispose() {
+        this.adder.dispose();
+        this.source.dispose();
+        try { this.branch.dissolve(); } catch (e) {}
+    }
+}
