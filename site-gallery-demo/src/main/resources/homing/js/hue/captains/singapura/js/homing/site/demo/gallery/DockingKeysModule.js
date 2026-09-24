@@ -75,7 +75,8 @@ class KeysPicker {
         if (!way) return this;
         this._pick.value = way.id;
         this._panes().forEach(function (p) { p.keys(way.schemes); });
-        this._says.textContent = way.id === "arrows" ? "← →  Home  End" : way.id === "browser" ? "Ctrl+Tab   (and Ctrl+Shift+← →)" : "both at once";
+        this._says.textContent = way.id === "arrows" ? "← →  Home  End   — the bar holds the keys"
+                                                     : "Ctrl+Shift+← →   (Ctrl+Tab where a browser will give it up)   — the tab holds the keys";
         if (this._onPick) this._onPick(way.id);
         return this;
     }
