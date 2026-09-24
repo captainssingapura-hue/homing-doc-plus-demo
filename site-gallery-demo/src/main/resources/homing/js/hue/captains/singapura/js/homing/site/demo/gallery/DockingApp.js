@@ -74,7 +74,8 @@ class DockingWidget {
             + "depth registers are shown on the sheets page instead; a workspace is a room full of rooms and lifting one says the wrong thing about the others. The instruments float in a dock of their own — the focus tree, the steward's lamp, the DomOps "
             + "party, the log — so the page watches itself with the same parts it is made of. A NEW TAB is asked for above: the little picture is the "
             + "workspace at the size it really is, so you point at the room you mean, the list says what to mount, and the button is the same call the "
-            + "strip's own plus makes. A room that is full dims rather than disappearing, because where it is belongs to the picture. THE PLUS ON A STRIP asks the "
+            + "strip's own plus makes, and the third list says HOW the tab arrives - quietly, in front, or in front with the keys - so every way it can go is here "
+            + "to try. A room that is full dims rather than disappearing, because where it is belongs to the picture. THE PLUS ON A STRIP asks the "
             + "same question the other way about: it opens a tab with the chooser in it, and what you pick becomes that very tab, in the place you made it. The Tab key walks the chips, "
             + "and the region you are working in is the lit one.";
         el.appendChild(lede);

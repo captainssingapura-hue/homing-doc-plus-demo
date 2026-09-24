@@ -53,8 +53,11 @@ class DockingTabs {
         // The control: a picture of the panes to say WHERE, a list to say WHAT. It is handed the docks and nothing
         // about the grid — it measures where they are — so a region minted by a split is in the picture at once, and
         // the instruments' float, which is not of this workspace, is not.
+        // MODES ON: this page exists to be tried, so every way a tab can arrive is reachable without an edit and a
+        // rebuild - quietly, in front, or in front with the keys. An app that had already made up its mind would
+        // leave them off and name one.
         this.adder = new AddTab(branch.createBranch("adder"), { host: o.host, source: source, width: o.width == null ? "148px" : o.width,
-                                                                panes: o.panes, onAdded: o.onAdded });
+                                                                panes: o.panes, onAdded: o.onAdded, modes: true });
     }
 
     /** A tab of that kind in that pane: the index it landed at, or −1 if the pane had no room. */
