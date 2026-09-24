@@ -333,10 +333,13 @@ class DockingWidget {
             panes: function () { return regions.map(function (r) { return r.dock; }); },
             onAdded: function (pane, tab) { var r = regionOf(pane); say("Added     " + tab.id + "  to " + (r ? r.name : pane.slotId)); } });
         this._tabs = tabs;
-        tabs.addTo(left, "books");
-        tabs.addTo(left, "shelves");
-        tabs.addTo(right, "plate");
-        tabs.addTo(right, "note");
+        // QUIET: a page seeding its own workspace is not answering anybody, so nothing is brought forward and
+        // nothing takes the keys - the pane's own rule leaves the first of each pair showing, which is all that is
+        // wanted. The plus and the control say otherwise, each in its own way.
+        tabs.addTo(left, "books", "quiet");
+        tabs.addTo(left, "shelves", "quiet");
+        tabs.addTo(right, "plate", "quiet");
+        tabs.addTo(right, "note", "quiet");
         docking.desk.open({ id: "afloat", title: "Afloat", widget: tab("afloat", "Afloat", PictureTab, { title: "A plate afloat" }, afloat).widget, x: 60, y: 210, w: 280, h: 190 });
 
         this.root = el;

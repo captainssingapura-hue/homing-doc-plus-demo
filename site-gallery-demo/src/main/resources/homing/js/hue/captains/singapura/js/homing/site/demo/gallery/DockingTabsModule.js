@@ -9,11 +9,15 @@
 //     store, domain, note: what the KINDS need — each closes over its own, so
 //             the source hands a maker only the branch and the dock's branch
 //
-//   tabs.addTo(pane, kindId)   a tab of that kind, there: the four the page
-//                              opens with are asked for exactly this way
-//   tabs.opener(pane)          a tab holding the CHOOSER: what the strip's plus
-//                              asks for, since a plus that guesses is worse
-//                              than one that asks
+//   tabs.addTo(pane, kindId, how?)  a tab of that kind, there, arriving the way
+//                              the caller says — the four the page opens with are
+//                              asked for exactly this way, and "quiet", so the
+//                              pane's own rule leaves the first of them showing
+//   tabs.opener(pane)          a tab holding the CHOOSER, WITH THE KEYS: what the
+//                              strip's plus asks for. The asking happened in the
+//                              strip, so the answering may take the keys; a plus
+//                              that opens a chooser you then have to go and find
+//                              has asked you a question and walked off
 //   tabs.release(tabId)        a tab gone for good frees its branch
 //   tabs.refresh()             the control says again what can be done
 //   tabs.dispose()
@@ -54,10 +58,10 @@ class DockingTabs {
     }
 
     /** A tab of that kind in that pane: the index it landed at, or −1 if the pane had no room. */
-    addTo(pane, kindId) { return this.source.addTo(pane, kindId); }
+    addTo(pane, kindId, how) { return this.source.addTo(pane, kindId, how); }
 
-    /** A tab holding the chooser: the strip's plus, and anything else that wants to ask rather than decide. */
-    opener(pane) { return this.source.addTo(pane, "opener"); }
+    /** A tab holding the chooser, holding the keys: the strip's plus, and anything else that asks in the strip. */
+    opener(pane) { return this.source.addTo(pane, "opener", "focus"); }
 
     /** Removed for good, not detached: its branch dissolves, which is the only thing that frees the name. */
     release(tabId) { this.source.release(tabId); return this; }
