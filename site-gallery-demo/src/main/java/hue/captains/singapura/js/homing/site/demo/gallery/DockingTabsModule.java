@@ -36,6 +36,7 @@ public record DockingTabsModule() implements DomModule<DockingTabsModule> {
                 .add(new ModuleImports<>(List.of(new TabSourceModule.TabSource()), TabSourceModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new AddTabModule.AddTab()), AddTabModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabOpenerModule.TabOpener()), TabOpenerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DockingKeysModule.KeysPicker()), DockingKeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new DockingSceneModule.BooksTab(),
                         new DockingSceneModule.ShelvesTab(),

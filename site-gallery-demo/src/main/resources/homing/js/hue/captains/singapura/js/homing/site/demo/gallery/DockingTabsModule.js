@@ -18,6 +18,7 @@
 //                              strip, so the answering may take the keys; a plus
 //                              that opens a chooser you then have to go and find
 //                              has asked you a question and walked off
+//   tabs.keys                  KeysPicker: which scheme the docks answer, swapped live
 //   tabs.release(tabId)        a tab gone for good frees its branch
 //   tabs.refresh()             the control says again what can be done
 //   tabs.dispose()
@@ -58,6 +59,9 @@ class DockingTabs {
         // leave them off and name one.
         this.adder = new AddTab(branch.createBranch("adder"), { host: o.host, source: source, width: o.width == null ? "148px" : o.width,
                                                                 panes: o.panes, onAdded: o.onAdded, modes: true });
+        // WHICH KEYS THE DOCKS ANSWER, swapped while you stand in the workspace: a pane's schemes are a list it is
+        // given, so changing them is one call per dock and nothing else at all.
+        this.keys = new KeysPicker(branch.createBranch("keys"), { host: o.host, panes: o.panes });
     }
 
     /** A tab of that kind in that pane: the index it landed at, or −1 if the pane had no room. */
@@ -69,10 +73,11 @@ class DockingTabs {
     /** Removed for good, not detached: its branch dissolves, which is the only thing that frees the name. */
     release(tabId) { this.source.release(tabId); return this; }
 
-    /** How full each dock is, and where the panes are, said again. */
-    refresh() { this.adder.refresh(); return this; }
+    /** How full each dock is, where the panes are, and what a dock minted since answers: said again. */
+    refresh() { this.adder.refresh(); this.keys.refresh(); return this; }
 
     dispose() {
+        this.keys.dispose();
         this.adder.dispose();
         this.source.dispose();
         try { this.branch.dissolve(); } catch (e) {}

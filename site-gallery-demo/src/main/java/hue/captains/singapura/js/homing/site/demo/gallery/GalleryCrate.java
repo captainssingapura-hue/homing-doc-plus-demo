@@ -72,6 +72,7 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(FocusSceneModule.INSTANCE),
                 CrateEntry.of(DockingSceneModule.INSTANCE),
                 CrateEntry.of(DockingTabsModule.INSTANCE),
+                CrateEntry.of(DockingKeysModule.INSTANCE),
                 CrateEntry.of(DockingMonitorsModule.INSTANCE),
                 CrateEntry.of(FocusApp.INSTANCE),
                 CrateEntry.of(RelFocusApp.INSTANCE),
