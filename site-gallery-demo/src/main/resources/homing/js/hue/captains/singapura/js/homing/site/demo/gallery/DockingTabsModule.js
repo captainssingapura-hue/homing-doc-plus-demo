@@ -49,10 +49,10 @@ class DockingTabs {
             { id: "plate",   label: "A picture",   title: "Plate",   make: function (b, p) { return new PictureTab(b, { focus: p.focus, title: "A plate" }); } },
             { id: "books",   label: "The books",   title: "Books",   make: function (b, p) { return new BooksTab(b, { focus: p.focus, store: store, domain: domain }); } },
             { id: "shelves", label: "The shelves", title: "Shelves", make: function (b, p) { return new ShelvesTab(b, { focus: p.focus, store: store, domain: domain }); } },
-            // LISTED:FALSE — it is what the plus opens, never one of the things you open with it. It is handed the
-            // pane and its own tab id because it gives that tab up to whatever is chosen in it.
+            // LISTED:FALSE — it is what the plus opens, never one of the things you open with it. It is handed its
+            // own tab, which becomes whatever is chosen in it: the same tab, holding something else.
             { id: "opener",  label: "Open…",      title: "Open",    listed: false,
-              make: function (b, p) { return new TabOpener(b, { focus: p.focus, pane: p.pane, tabId: p.id, source: source }); } } ] });
+              make: function (b, p) { return new TabOpener(b, { focus: p.focus, pane: p.pane, tab: p.tab, source: source }); } } ] });
         this.source = source;
         // The control: a picture of the panes to say WHERE, a list to say WHAT. It is handed the docks and nothing
         // about the grid — it measures where they are — so a region minted by a split is in the picture at once, and

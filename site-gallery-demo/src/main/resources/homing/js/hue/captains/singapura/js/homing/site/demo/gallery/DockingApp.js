@@ -116,6 +116,7 @@ class DockingWidget {
         // what the page reports goes to the instruments' Events tab, which is built below and floats with the rest
         var events = null, waiting = [];
         function say(line) { if (events) events.say(line); else waiting.push(line); }
+        function labelOf(tab) { return tab.id + (typeof tab.title === "function" ? " \u201c" + tab.title() + "\u201d" : ""); }   // which tab, and what it says it is
         function sink(ev) {
             if (domopsOf()) domopsOf().refresh();   // the party changes with every one of these
             if (tabs) tabs.refresh();             // and so does how full each dock is, which is what the new-tab control shows
@@ -130,7 +131,7 @@ class DockingWidget {
                 case "Closed":       say("Closed    " + ev.id); break;
                 case "TabAttached":  say("Attached  " + ev.tab.id + "  to " + ev.slotId + " at " + ev.atIndex); break;
                 case "TabActivated": say("Active    " + ev.slotId + " : " + ev.tabId); break;
-                case "TabMoved":     say("Moved tab " + ev.tab.id + "  " + (ev.srcSlotId === ev.destSlotId ? ev.srcIndex + " → " + ev.destIndex + " in " + ev.srcSlotId
+                case "TabMoved":     say("Moved tab " + labelOf(ev.tab) + "  " + (ev.srcSlotId === ev.destSlotId ? ev.srcIndex + " → " + ev.destIndex + " in " + ev.srcSlotId
                                                                                   : ev.srcSlotId + " → " + ev.destSlotId + " at " + ev.destIndex)); break;
                 case "DetachRequested": {   // Shift+Down on a dock that holds the keys: the active tab floats under where its chip is, as the menu's detach does
                     say("Detach?   " + ev.tabId + "  from " + ev.slotId);
@@ -139,8 +140,8 @@ class DockingWidget {
                     break;
                 }
                 // REMOVED: the tab-pane closed itself - its widget, its branch, its name - so there is nothing to release
-                case "TabRemoved":   say("Removed   " + ev.tab.id + "  from " + ev.slotId); break;
-                case "TabAdded":     say("Added     " + ev.tab.id + "  to " + ev.slotId); break;
+                case "TabRemoved":   say("Removed   " + labelOf(ev.tab) + "  from " + ev.slotId); break;
+                case "TabAdded":     say("Added     " + labelOf(ev.tab) + "  to " + ev.slotId); break;
                 // THE PLUS CANNOT KNOW WHICH KIND YOU MEANT, and a plus that guesses one is worse than a plus that
                 // asks. So it opens a tab holding the OPENER, and picking in there turns that same tab into what was
                 // picked - the chip stays where it was made. The page says nothing about which kinds; the opener
