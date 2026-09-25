@@ -122,17 +122,18 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "the chips leave — and the page offers the split menu: part the region beside or below, each new one a dock of its "
                     + "own on the desk, or close this one, whose tabs go to the region the grid gives its room to. What the tabs hold is "
                     + "what a workspace holds: the books as a relation grid, the shelves as a relation tree, a picture the design draws "
-                    + "and the keys zoom. The multi-tab pane is the dock; the desk floats over them. A tab is one record "
-                    + "— id, title, widget — with one placement at a time: in a dock's strip, or afloat in a frame of its own; its "
-                    + "widget keeps its branch wherever it goes. A drag along a strip reorders, on its rail; pulling a tab off to "
-                    + "float is being worked out on the tab strip page and comes here after — the tab's menu detaches meanwhile. "
-                    + "Drag a float over either strip and that dock wears the drop-target word and marks where the tab would land; "
-                    + "let go there and it is a tab, let go over content and it stays afloat. Every chip is in the tab "
+                    + "and the keys zoom. The multi-tab pane is the dock; the desk owns every tab and floats over the docks. A tab "
+                    + "is a tab-pane — its chip and its pane, one whole — with one placement at a time: in a dock's strip, or afloat "
+                    + "in a float of its own, the same chip on the float's one bar. A drag along a strip reorders, on its rail; "
+                    + "pulling a tab off to float is being worked out on the tab strip page and comes here after — the tab's menu "
+                    + "and Shift+Down detach meanwhile. Drag a float of one over either strip and that dock wears the drop-target "
+                    + "word and marks where the tab would land; let go there and it is that dock's tab, shown, let go over content "
+                    + "and it stays afloat. Every chip is in the tab "
                     + "order, and the design draws its hover, its press, the selected one and the focus ring. The chip is Control.Tab "
                     + "to the design — like a button, but a hard frame whose measure is the design's, wide and low as a browser's tab, "
                     + "the label ellipsised within; the sliders set the tabs' size and aspect, 0 the design's. A float stays within the "
-                    + "box. Every step is data on one sink: Undocked and Docked from the docking, Opened, Released and the rest from "
-                    + "the desk, TabAttached and the rest from the dock.",
+                    + "box. Every step is data on one sink: TabAdded and TabMoved from the desk, Opened, Moved and the rest from "
+                    + "the float layer, TabActivated and the rest from the dock.",
                     "/docking", DockingApp.INSTANCE, "DockingWidget", Map.of()),
             new Demo("splitgrid", "layout", "Split grid", "Rows and columns of cells, arranged; what is in them, the page's.",
                     "The split grid is a container in the relation grid's sense: the page mints what goes in a cell, the grid arranges "

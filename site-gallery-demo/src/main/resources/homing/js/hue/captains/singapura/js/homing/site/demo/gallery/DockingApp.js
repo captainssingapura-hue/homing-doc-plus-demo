@@ -121,15 +121,12 @@ class DockingWidget {
             if (domopsOf()) domopsOf().refresh();   // the party changes with every one of these
             if (tabs) tabs.refresh();             // and so does how full each dock is, which is what the new-tab control shows
             switch (ev.kind) {
-                case "Undocked":     say("Undocked  " + ev.tabId + "  from " + ev.slotId); break;
-                case "Docked":       say("Docked    " + ev.tabId + "  into " + ev.slotId + " at " + ev.index); break;
                 case "Opened":       say("Opened    " + ev.id + "  at " + ev.x + "," + ev.y); break;
                 case "Released":     say("Released  " + ev.id + "  (left the desk for a dock)"); break;
                 case "Moved":        say("Moved     " + ev.id + "  to " + ev.x + "," + ev.y); break;
                 case "Resized":      say("Resized   " + ev.id + "  to " + ev.w + "×" + ev.h); break;
                 case "Raised":       say("Raised    " + ev.id); break;
                 case "Closed":       say("Closed    " + ev.id); break;
-                case "TabAttached":  say("Attached  " + ev.tab.id + "  to " + ev.slotId + " at " + ev.atIndex); break;
                 case "TabActivated": say("Active    " + ev.slotId + " : " + ev.tabId); break;
                 case "TabMoved":     say("Moved tab " + labelOf(ev.tab) + "  " + (ev.srcSlotId === ev.destSlotId ? ev.srcIndex + " → " + ev.destIndex + " in " + ev.srcSlotId
                                                                                   : ev.srcSlotId + " → " + ev.destSlotId + " at " + ev.destIndex)); break;

@@ -22,7 +22,6 @@
 //                              that opens a chooser you then have to go and find
 //                              has asked you a question and walked off
 //   tabs.keys                  KeysPicker: which scheme the docks answer, swapped live
-//   tabs.release(tabId)        a tab gone for good frees its branch
 //   tabs.refresh()             the control says again what can be done
 //   tabs.dispose()
 //
@@ -52,7 +51,7 @@ class DockingTabs {
             // LISTED:FALSE — it is what the plus opens, never one of the things you open with it. It is handed its
             // own tab, which becomes whatever is chosen in it: the same tab, holding something else.
             { id: "opener",  label: "Open…",      title: "Open",    listed: false,
-              make: function (b, p) { return new TabOpener(b, { focus: p.focus, pane: p.pane, tab: p.tab, source: source }); } } ] });
+              make: function (b, p) { return new TabOpener(b, { focus: p.focus, tab: p.tab, source: source }); } } ] });
         this.source = source;
         // The control: a picture of the panes to say WHERE, a list to say WHAT. It is handed the docks and nothing
         // about the grid — it measures where they are — so a region minted by a split is in the picture at once, and
@@ -72,9 +71,6 @@ class DockingTabs {
 
     /** A tab holding the chooser, holding the keys: the strip's plus, and anything else that asks in the strip. */
     opener(pane) { return this.source.addTo(pane, "opener", "focus"); }
-
-    /** Removed for good, not detached: its branch dissolves, which is the only thing that frees the name. */
-    release(tabId) { this.source.release(tabId); return this; }
 
     /** How full each dock is, where the panes are, and what a dock minted since answers: said again. */
     refresh() { this.adder.refresh(); this.keys.refresh(); return this; }
