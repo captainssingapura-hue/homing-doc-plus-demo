@@ -85,9 +85,10 @@
             <artifactId>homing-component-base</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <!-- The designs the gallery wears: the framework's, nothing legacy (HomingDesigns.REGISTRY). -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-studio-themes</artifactId>
+            <artifactId>homing-designs</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <!-- The relation grid and its tree, from their own repo: layer-2 components

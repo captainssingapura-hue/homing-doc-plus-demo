@@ -11,7 +11,7 @@ import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesApp;
 import hue.captains.singapura.js.homing.site.mpa.AppPage;
 import hue.captains.singapura.js.homing.site.mpa.Brand;
 import hue.captains.singapura.js.homing.site.mpa.StandardMpa;
-import hue.captains.singapura.js.homing.studio.themes.StudioThemeRegistry;
+import hue.captains.singapura.js.homing.designs.HomingDesigns;
 
 import java.util.Optional;
 
@@ -30,7 +30,7 @@ public record GallerySite() implements Site {
     public static final GallerySite INSTANCE = new GallerySite();
 
     public static final StandardMpa MPA = StandardMpa.of(
-            Brand.of("Gallery"), StudioThemeRegistry.INSTANCE, GalleryPreferences.INSTANCE, GalleryCrate.INSTANCE);
+            Brand.of("Gallery"), HomingDesigns.REGISTRY, GalleryPreferences.INSTANCE, GalleryCrate.INSTANCE);
 
     static final AppPage<?, ?> SHELL   = MPA.page(GalleryShellApp.INSTANCE, new GalleryShellApp.Params(""));
     static final AppPage<?, ?> GRID    = MPA.page(GridApp.INSTANCE);

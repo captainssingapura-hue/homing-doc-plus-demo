@@ -18,7 +18,7 @@ import hue.captains.singapura.js.homing.site.Path;
 import hue.captains.singapura.js.homing.site.Query;
 import hue.captains.singapura.js.homing.site.SiteGetAction;
 import hue.captains.singapura.js.homing.site.mpa.ThemesGetAction;
-import hue.captains.singapura.js.homing.studio.themes.StudioThemeRegistry;
+import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import org.junit.jupiter.api.Test;
 
@@ -140,7 +140,7 @@ class GallerySiteTest {
 
     @Test
     void themesListsSevenDesignsWithTheirOffers() {
-        String json = new ThemesGetAction(StudioThemeRegistry.INSTANCE).serialize();
+        String json = new ThemesGetAction(HomingDesigns.REGISTRY).serialize();
         assertTrue(json.startsWith("{\"default\":\"editorial\""), json.substring(0, 60));
         assertTrue(json.contains("\"slug\":\"neo-brutalism\",\"label\":"), json);
         assertTrue(json.contains("{\"palette\":\"forest\",\"slug\":\"editorial_forest\",\"fits\":true}"), json);
@@ -162,7 +162,7 @@ class GallerySiteTest {
         assertTrue(worn.size() > 60, "the chrome, the apps, the grid and the tree wear many pairs; found " + worn.size());
         var scaled = Deployment.scaledBy(groups);
         var grown = Deployment.grownBy(groups);
-        for (Theme t : StudioThemeRegistry.INSTANCE.themes()) {
+        for (Theme t : HomingDesigns.REGISTRY.themes()) {
             Design d = (Design) t;
             var r = Deployment.of(worn, scaled, grown, d).resolve();
             assertEquals(List.of(), r.findings(), () -> d.slug() + ": " + r.findings());
