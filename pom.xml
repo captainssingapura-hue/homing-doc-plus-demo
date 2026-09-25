@@ -26,6 +26,10 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <homing.core.version>LOCAL-SNAPSHOT</homing.core.version>
+        <!-- The ui-components (and the MPA's standard implementation), from the
+             homing-ssjs-ui-components repo: moved out of core, same coordinates,
+             their own version. -->
+        <homing.components.version>LOCAL-SNAPSHOT</homing.components.version>
         <homing.relgrid.version>LOCAL-SNAPSHOT</homing.relgrid.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.14</jacoco.version>
