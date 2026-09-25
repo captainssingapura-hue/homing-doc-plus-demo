@@ -5,7 +5,10 @@ import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
+import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.core.DomModule;
+import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -13,6 +16,9 @@ import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
 import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
+import hue.captains.singapura.js.homing.ui.docking.FloaterModule;
+import hue.captains.singapura.js.homing.ui.floating.DeskModule;
+import hue.captains.singapura.js.homing.ui.panes.TabRegisterModule;
 
 import java.util.List;
 
@@ -48,6 +54,8 @@ public record DockingMonitorsModule() implements DomModule<DockingMonitorsModule
         @Override public List<KeyBinding> keys() { return ESCAPE; }
     }
 
+    /** The four together: a float of their own on a desk and in a register of their own — {@code new Instruments(branch, { host, keyboard, onEvent })}. */
+    public record Instruments() implements Exportable._Class<DockingMonitorsModule> {}
     /** What every instrument answers: the keys go back to the bar. */
     static final List<KeyBinding> ESCAPE = List.of(KeyBinding.of(Key.ESCAPE, "the keys go back to the dock's bar"));
 
@@ -60,6 +68,10 @@ public record DockingMonitorsModule() implements DomModule<DockingMonitorsModule
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FloaterModule.Floater()), FloaterModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabRegisterModule.TabRegister()), TabRegisterModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_monitor(),
                         new GalleryStyles.ga_domops_row(),
@@ -71,6 +83,6 @@ public record DockingMonitorsModule() implements DomModule<DockingMonitorsModule
 
     @Override
     public ExportsOf<DockingMonitorsModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new FocusTab(), new StewardTab(), new DomOpsTab(), new EventsTab()));
+        return new ExportsOf<>(INSTANCE, List.of(new FocusTab(), new StewardTab(), new DomOpsTab(), new EventsTab(), new Instruments()));
     }
 }

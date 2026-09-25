@@ -23,6 +23,13 @@
 // closes it. Two docks, one desk, tabs that travel: the setup the keyboard
 // party is stressed on — a tab's widget keeps its branch while its place
 // changes.
+// EVERY TAB IS A TAB-PANE (RFC 0066 E3, appendix "tab-panes"): its chip and
+// its pane minted once on a branch of its own under the page's desk register,
+// and carried whole from dock to float and back - the same chip in every strip.
+// Detach puts it in a float of its own; a float holding one tab is that tab in
+// the hand, and let go over a strip it lands there; a float of many moves as a
+// window. The plus's chooser becomes what you pick IN PLACE. The instruments
+// are tab-panes too, on a desk and in a register of their own.
 // The menu is the pane's own need — this page declares no kind; it holds a
 // steward and answers the picks. The Tab key walks the chips. The chips are
 // tabs to the design — a hard frame, wide and low — and two sliders set
@@ -123,27 +130,24 @@ class DockingWidget {
                 case "Closed":       say("Closed    " + ev.id); break;
                 case "TabAttached":  say("Attached  " + ev.tab.id + "  to " + ev.slotId + " at " + ev.atIndex); break;
                 case "TabActivated": say("Active    " + ev.slotId + " : " + ev.tabId); break;
-                case "TabMoved":     say("Moved tab " + ev.tab.id + "  " + ev.srcIndex + " → " + ev.destIndex + " in " + ev.srcSlotId); break;
+                case "TabMoved":     say("Moved tab " + ev.tab.id + "  " + (ev.srcSlotId === ev.destSlotId ? ev.srcIndex + " → " + ev.destIndex + " in " + ev.srcSlotId
+                                                                                  : ev.srcSlotId + " → " + ev.destSlotId + " at " + ev.destIndex)); break;
                 case "DetachRequested": {   // Shift+Down on a dock that holds the keys: the active tab floats under where its chip is, as the menu's detach does
                     say("Detach?   " + ev.tabId + "  from " + ev.slotId);
-                    var d = null; for (var k = 0; k < regions.length; k++) if (regions[k].id === ev.slotId) d = regions[k].dock;
-                    var i = d ? d.tabIndexOf(ev.tabId) : -1;
-                    if (i < 0) break;
-                    var r = d.el.children[0].children[i].getBoundingClientRect();
-                    docking.undockAt(d, { id: ev.tabId, title: d.getState().tabs[i].title }, { x: r.left + 60, y: r.bottom + 14 });
+                    var tp = register.get(ev.tabId), r = tp ? tp.chip.getBoundingClientRect() : null;
+                    if (tp) docking.detach(tp, { x: r.left + 60, y: r.bottom + 14 });
                     break;
                 }
-                // REMOVED, not detached: the tab is gone for good, so the source dissolves the branch it was built
-                // on - the only thing that frees the name for the party, and the reason a source hands names out
-                case "TabRemoved":   say("Removed   " + ev.tab.id + "  from " + ev.slotId); if (tabs) tabs.release(ev.tab.id); break;
+                // REMOVED: the tab-pane closed itself - its widget, its branch, its name - so there is nothing to release
+                case "TabRemoved":   say("Removed   " + ev.tab.id + "  from " + ev.slotId); break;
                 case "TabAdded":     say("Added     " + ev.tab.id + "  to " + ev.slotId); break;
                 // THE PLUS CANNOT KNOW WHICH KIND YOU MEANT, and a plus that guesses one is worse than a plus that
                 // asks. So it opens a tab holding the OPENER, and picking in there turns that same tab into what was
                 // picked - the chip stays where it was made. The page says nothing about which kinds; the opener
                 // reads them off the source, which is the one list there is.
                 case "AddRequested": {
-                    var mine = regionById(ev.slotId);
-                    if (mine && tabs) { say("Opener    in " + mine.name); tabs.opener(mine.dock); }
+                    var host = docking.docks().filter(function (p) { return p.slotId === ev.slotId; })[0];
+                    if (host && tabs) { say("Opener    in " + ev.slotId); tabs.opener(host); }
                     break;
                 }
                 default:             say(ev.kind);
@@ -162,7 +166,7 @@ class DockingWidget {
             }
         });
         // ── the desk, then the regions on the grid ───────────────────────
-        this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink, keyboard: kb, keyboardId: "docking/desk" });
+        this._docking = new Docking(branch.createBranch("docking"), { host: box, onEvent: sink, keyboard: kb, keyboardId: "docking/desk", menus: menus });
         var docking = this._docking;
         // A REGION IS A CELL OF THE GRID AND A DOCK IN IT. Nothing sits between them: a panel round a dock would be
         // a box that draws no line, takes no keys and holds nothing the cell does not already hold - and the one job
@@ -211,7 +215,7 @@ class DockingWidget {
             var plan = PaneMerge.plan(r.dock.tabs(), to.dock.tabs(), to.dock.budget());
             if (!plan.ok) { say("Refused   " + r.name + " into " + to.name + " - " + plan.says); return; }
             var whole = acrossOf(r).some(function (n) { return n.region === to; });
-            plan.ids.forEach(function (id) { to.dock.attachTab(r.dock.detachTab(id), to.dock.count()); });
+            plan.ids.forEach(function (id) { docking.move(r.dock.tabPaneOf(id), to.dock); });
             docking.removeDock(r.dock);
             r.dock.dispose();
             if (tabs) tabs.refresh();
@@ -255,7 +259,7 @@ class DockingWidget {
             askRegion("Go to a region", regions.slice(), at, function (r) { Keys.claim(r.dock.focus.owner); say("Went to   " + r.name); });
         }
         var switches = 0;
-        function domopsOf() { return monitors && monitors.has("domops") ? monitors.widgetOf("domops") : null; }
+        function domopsOf() { return instruments ? instruments.domops() : null; }
         // the tab bar's own ground, right-clicked: the page's menu about the room the dock sits in
         menus.handle("split", {
             pick: function (id, o) {
@@ -288,45 +292,25 @@ class DockingWidget {
         // the tab menu's picks: detach floats the tab under where its chip was, with no hand; close removes it
         menus.handle(MultiTabPane.MENU, {
             pick: function (id, o) {
-                if (id === "detach") { var r = o.anchor.getBoundingClientRect(); docking.undockAt(o.pane, o.tab, { x: r.left + 60, y: r.bottom + 14 }); }
+                if (id === "detach") { var r = o.anchor.getBoundingClientRect(); docking.detach(o.tab, { x: r.left + 60, y: r.bottom + 14 }); }
                 else if (id === "close") o.pane.removeTab(o.tab.id);
             },
             state: function (id, o) { return { disabled: !!o.tab.pinned || o.tab.closable === false }; }
         });
 
-        // the tabs, each on a branch of the page's own: they travel, the page keeps them; a widget joins the dock it
-        // starts in, or the page's own afloat branch until the desk holds one
+        // THE DESK'S REGISTER: every tab on the page is a tab-pane opened there, owned there for its whole life, and a
+        // widget rests in the page's afloat branch while no dock holds it
         var afloat = focusParty.root.createBranch("afloat", this);
         this._afloat = afloat;
-        function tab(id, title, Widget, params, into) {
-            var own = branch.createBranch("tab-" + id);
-            return { id: id, title: title, widget: new Widget(own, Object.assign({}, params, { focus: into })) };
-        }
+        var register = new TabRegister(branch.createBranch("tabpanes"), { focus: afloat });
+        this._register = register;
         // ── the instruments ───────────────────────────────────────────────
-        // A dock like any other, in a pane that floats: the focus tree, the steward's lamp, the DomOps party and the
-        // page's own log, one to a tab. They watch the page from inside it and obey the law the other widgets obey.
-        var monHost = branch.createElement("instruments", "div");   // the float's widget: a box the dock fills
-        css.addClass(monHost, ga_tab_fill);
-        var monitors = new MultiTabPane(branch.createBranch("monitors"), { host: monHost, slotId: "monitors", budget: 6, addable: false,
-                                                                          menus: menus, stripMenu: "split", focusName: "monitors" });
-        function instrument(id, title, Widget) { return { id: id, title: title, widget: new Widget(branch.createBranch("mon-" + id), { focus: monitors.focus }) }; }
-        monitors.addTab(instrument("events", "Events", EventsTab));
-        monitors.addTab(instrument("focus", "Focus", FocusTab));
-        monitors.addTab(instrument("steward", "Steward", StewardTab));
-        monitors.addTab(instrument("domops", "DomOps", DomOpsTab));
-        events = monitors.widgetOf("events");
+        // A float of their own on a DESK of their own, the page's whole section for a floor: they watch the workspace
+        // and are not part of it, so no dock of it offers to take them - DockingMonitors' Instruments.
+        var instruments = new Instruments(branch.createBranch("instruments"), { host: el, keyboard: kb, onEvent: sink });
+        this._instruments = instruments;
+        events = instruments.events;
         waiting.forEach(function (line) { events.say(line); });
-        this._monitors = monitors;
-        var domops = monitors.widgetOf("domops");
-        // A DESK OF THEIR OWN, and the page's whole section for a floor. The instruments watch the workspace; they are
-        // not part of it - no dock will ever offer to take them, because docking's protocol is between ITS desk and its
-        // docks, and this is not that desk - and they are not penned into the box the workspace lives in.
-        this._stage = new Desk(branch.createBranch("instruments-desk"), { host: el, layer: true, onEvent: sink,
-                                                                         keyboard: kb, keyboardId: "docking/instruments" });
-        // over the work rather than over the heading: it is free to go anywhere on the section, but it should not open
-        // on top of what the page says about itself
-        this._stage.open({ id: "instruments", title: "Instruments", widget: { root: monHost, dispose: function () {} },
-                           x: 34, y: 430, w: 420, h: 300 });
 
         var store = new BooksStore();
         var domain = branch.createBranch("domain");
@@ -334,6 +318,7 @@ class DockingWidget {
         // WHERE THE TABS COME FROM, all of them: DockingTabs holds the source and the new-tab control, and the four
         // this page opens with are asked for exactly the way a later one is.
         tabs = new DockingTabs(branch.createBranch("tabs"), { host: newRow, store: store, domain: domain, note: _NOTE,
+            register: register, place: function (tp, pane, index) { return docking.move(tp, pane, index); },
             panes: function () { return regions.map(function (r) { return r.dock; }); },
             onAdded: function (pane, tab) { var r = regionOf(pane); say("Added     " + tab.id + "  to " + (r ? r.name : pane.slotId)); } });
         this._tabs = tabs;
@@ -344,13 +329,15 @@ class DockingWidget {
         tabs.addTo(left, "shelves", "quiet");
         tabs.addTo(right, "plate", "quiet");
         tabs.addTo(right, "note", "quiet");
-        docking.desk.open({ id: "afloat", title: "Afloat", widget: tab("afloat", "Afloat", PictureTab, { title: "A plate afloat" }, afloat).widget, x: 60, y: 210, w: 280, h: 190 });
+        docking.move(register.open({ id: "afloat", title: "Afloat", make: function (b, t) { return new PictureTab(b, { focus: t.focus, title: "A plate afloat" }); } }),
+                     docking.float({ x: 60, y: 210, w: 280, h: 190 }).host);
 
         this.root = el;
     }
 
-    dispose() { this._offMenus(); this._offF6(); if (this._ownMenus) this._ownMenus.dispose(); this._tabs.dispose(); this._docking.dispose();
-                this._regions.forEach(function (r) { r.dock.dispose(); }); this._stage.dispose(); this._monitors.dispose(); this._afloat.owner.leave(); this._grid.dispose(); }
+    dispose() { this._offMenus(); this._offF6(); this._register.dispose(); this._instruments.dispose();   // the tab-panes first: a dock is disposed only empty
+                if (this._ownMenus) this._ownMenus.dispose(); this._tabs.dispose(); this._docking.dispose();
+                this._regions.forEach(function (r) { r.dock.dispose(); }); this._afloat.owner.leave(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {

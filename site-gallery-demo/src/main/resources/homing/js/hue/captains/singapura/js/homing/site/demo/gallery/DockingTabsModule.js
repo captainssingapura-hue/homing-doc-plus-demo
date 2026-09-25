@@ -3,11 +3,14 @@
 // puts one somewhere. One object for the whole business, so the page that runs
 // a workspace is about the workspace.
 //
-//   new DockingTabs(branch, { host, panes, store, domain, note, onAdded? })
+//   new DockingTabs(branch, { host, panes, store, domain, note, register, place, onAdded? })
 //     host:   where the new-tab control goes
 //     panes:  () → [pane], asked afresh: the workspace is split and merged
 //     store, domain, note: what the KINDS need — each closes over its own, so
 //             the source hands a maker only the branch and the dock's branch
+//     register, place: the page's desk — every tab is a TAB-PANE opened in its
+//             register, and put in a pane by place, the desk's move, so the desk
+//             says it arrived (RFC 0066 E3, appendix "tab-panes")
 //
 //   tabs.addTo(pane, kindId, how?)  a tab of that kind, there, arriving the way
 //                              the caller says — the four the page opens with are
@@ -41,7 +44,7 @@ class DockingTabs {
         var store = o.store, domain = o.domain, note = o.note == null ? "" : String(o.note);
         // The page's answer to "what can be mounted". Each kind closes over whatever IT needs, so the only things
         // handed to a maker are the branch to build on, the dock's focus branch, and the pane it is going into.
-        var source = new TabSource(branch.createBranch("source"), { kinds: [
+        var source = new TabSource(branch.createBranch("source"), { register: o.register, place: o.place, kinds: [
             { id: "note",    label: "A note",      title: "Notes",   make: function (b, p) { return new NoteTab(b, { focus: p.focus, text: note }); } },
             { id: "plate",   label: "A picture",   title: "Plate",   make: function (b, p) { return new PictureTab(b, { focus: p.focus, title: "A plate" }); } },
             { id: "books",   label: "The books",   title: "Books",   make: function (b, p) { return new BooksTab(b, { focus: p.focus, store: store, domain: domain }); } },
