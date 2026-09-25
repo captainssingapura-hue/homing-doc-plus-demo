@@ -13,11 +13,10 @@
 //   new EventsTab(branch, { focus })     say(line) adds a line and keeps it in view
 //
 //   new Instruments(branch, { host, keyboard, onEvent? })   the four together: a
-//       float of their own on a DESK of their own, the page's section for a
-//       floor. They watch the workspace and are not part of it — no dock of
-//       it offers to take them, and a desk's tab-panes never leave it — so
-//       they have their own register as well, and rest in a focus branch of
-//       their own. No tab menu: Detach would carry one onto the workspace.
+//       float on a DESK of their own, the page's section for a floor. They
+//       watch the workspace and are not part of it — no dock of it offers to
+//       take them, and a desk's tab-panes never leave it. No tab menu: Detach
+//       would only float one on its own desk.
 //     instruments.events     the EventsTab
 //     instruments.domops()   the DomOpsTab, or null once the float is closed
 // =============================================================================
@@ -108,20 +107,16 @@ class Instruments {
         var o = opts || {}, self = this;
         branch.activate(_monitorOwner);
         this.branch = branch;
-        this.desk = new FloatLayer(branch.createBranch("desk"), { host: o.host, layer: true, onEvent: o.onEvent, keyboard: o.keyboard, keyboardId: "docking/instruments" });
-        this._rest = focusParty.root.createBranch("instruments", this);
-        this.register = new TabRegister(branch.createBranch("tabs"), { focus: this._rest });
-        this.float = new Floater(this.desk, { id: "instruments", x: 34, y: 430, w: 420, h: 300, addable: false, onEvent: o.onEvent });
+        this.desk = new Desk(branch.createBranch("desk"), { host: o.host, onEvent: o.onEvent, keyboard: o.keyboard, keyboardId: "docking/instruments", focusName: "instruments" });
+        this.float = this.desk.float({ id: "instruments", x: 34, y: 430, w: 420, h: 300 });
         [["events", "Events", EventsTab], ["focus", "Focus", FocusTab], ["steward", "Steward", StewardTab], ["domops", "DomOps", DomOpsTab]].forEach(function (d) {
-            self.float.take(self.register.open({ id: d[0], title: d[1], make: function (b, t) { return new d[2](b, { focus: t.focus }); } }));
+            self.desk.open({ id: d[0], title: d[1], make: function (b, t) { return new d[2](b, { focus: t.focus }); } }, self.float.host);
         });
         this.events = this.float.host.widgetOf("events");
     }
     domops() { return this.float.closed() ? null : this.float.host.widgetOf("domops"); }
     dispose() {
-        this.register.dispose();   // every instrument closed, and the float with the last
-        this.desk.dispose();
-        if (this._rest.owner.in) this._rest.owner.leave();
+        this.desk.dispose();   // every instrument closed, and the float with the last
         try { this.branch.dissolve(); } catch (e) {}
     }
 }

@@ -5,8 +5,6 @@ import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
-import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
-import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -16,9 +14,7 @@ import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
 import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
-import hue.captains.singapura.js.homing.ui.docking.FloaterModule;
-import hue.captains.singapura.js.homing.ui.floating.FloatLayerModule;
-import hue.captains.singapura.js.homing.ui.panes.TabRegisterModule;
+import hue.captains.singapura.js.homing.ui.docking.DeskModule;
 
 import java.util.List;
 
@@ -68,10 +64,7 @@ public record DockingMonitorsModule() implements DomModule<DockingMonitorsModule
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new FloatLayerModule.FloatLayer()), FloatLayerModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new FloaterModule.Floater()), FloaterModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabRegisterModule.TabRegister()), TabRegisterModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_monitor(),
                         new GalleryStyles.ga_domops_row(),

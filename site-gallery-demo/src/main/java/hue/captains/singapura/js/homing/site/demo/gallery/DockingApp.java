@@ -10,10 +10,9 @@ import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.docking.DockingModule;
+import hue.captains.singapura.js.homing.ui.docking.DeskModule;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuStewardModule;
 import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
-import hue.captains.singapura.js.homing.ui.panes.TabRegisterModule;
 import hue.captains.singapura.js.homing.ui.panes.PaneMergeModule;
 import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
@@ -53,10 +52,9 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
                 ), DockingSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DockingMonitorsModule.Instruments()), DockingMonitorsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new GalleryRelations.BooksStore()), GalleryRelations.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DockingModule.Docking()), DockingModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabRegisterModule.TabRegister()), TabRegisterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneMergeModule.PaneMerge()), PaneMergeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))

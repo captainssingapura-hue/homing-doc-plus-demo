@@ -13,6 +13,7 @@ import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
 import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
+import hue.captains.singapura.js.homing.ui.docking.DeskModule;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
         return ImportsFor.<PanesApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))

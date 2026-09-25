@@ -1,13 +1,14 @@
 // =============================================================================
-// PanesApp — one multi-tab pane as a page. The page is the holder: each tab's
-// widget is constructed on a branch the page mints for it, by the base's
-// contract (a class: new Widget(branch, params) → root, focus, activate(),
-// setActive?, dispose?), and handed to the pane. THE LAW (§15.1): a tab's
+// PanesApp — one multi-tab pane as a page: a DESK WITH ONE HOST (RFC 0066 E3,
+// appendix "tab-panes"). Every tab is a tab-pane the desk opens in its
+// register, its widget made by the base's contract (a class: new
+// Widget(branch, params) → root, focus, activate(), setActive?, dispose?) on
+// a branch of the tab-pane's own, and put in the pane; a close is the
+// tab-pane's own, branch and all. THE LAW (§15.1): a tab's
 // widget is logically focusable — it joins the dock's focus branch, handed in
 // as params.focus, and answers activate(), a claim; its Escape yields back to
-// the pane. The pane reports; the page acts on the report: it tells the
-// active widget so, and dissolves a closed tab's branch after the pane has
-// disposed the widget. The plus opens a picker in the dialog. Every event
+// the pane. The pane and the desk report; the page acts on the report: it
+// tells the active widget so. The plus opens a picker in the dialog. Every event
 // goes on the log under the pane as the data it is; the focus monitor and
 // the steward's lamp sit beside the pane, so the two levels can be watched:
 // ← → walk the tabs while the pane holds, Enter enters the widget, Escape
@@ -130,8 +131,8 @@ class PanesWidget {
 
         var lede = branch.createElement("lede", "p");
         css.addClass(lede, ga_lede);
-        lede.textContent = "One pane of tabs. Each tab holds a widget by the base's contract, constructed by this page on a branch "
-            + "of its own and a member of the dock's focus branch — the law; the plus asks the page, the page asks you. Switch by "
+        lede.textContent = "One pane of tabs - a desk with one host. Each tab holds a widget by the base's contract, made on a branch "
+            + "of the tab's own and a member of the dock's focus branch — the law; the plus asks the page, the page asks you. Switch by "
             + "click, reorder by drag, close on the cross; or press a chip and the pane holds the keys: ← → walk the tabs, Home and "
             + "End the ends, Shift+← → move the active tab along the rail, Shift+↓ asks to detach, Enter enters the widget — the "
             + "counter then counts ↑ ↓ — and Escape comes back up to the pane, and from the pane to no one. Every event the pane "
@@ -163,52 +164,46 @@ class PanesWidget {
         css.addClass(status, ga_status);
         el.appendChild(status);
 
-        // The holder's book: tab id → the branch its widget lives on.
-        var branches = new Map();
         var seq = 0;
-        var pane = null;
+        var pane = null, desk = null;
         function state() { status.textContent = "state: " + JSON.stringify(pane.getState()); }
 
-        // The event as data: every field but the widget, which does not travel.
+        // The event as data: a tab-pane as what it says it is - its id, its title, whether pinned - and never its widget.
         function line(ev) {
-            return JSON.stringify(ev, function (k, v) { return k === "widget" ? undefined : v; });
+            return JSON.stringify(ev, function (k, v) {
+                if (k === "widget") return undefined;
+                return k === "tab" && v && typeof v.title === "function" ? { id: v.id, title: v.title(), pinned: v.pinned } : v;
+            });
         }
 
-        pane = new MultiTabPane(branch.createBranch("pane"), {
-            host: host, slotId: "main", budget: 8,
-            onEvent: function (ev) {
-                say(line(ev));
-                switch (ev.kind) {
-                    case "AddRequested":
-                        pick();
-                        break;
-                    case "TabRemoved":
-                        branch.dissolveBranch(branches.get(ev.tab.id));   // the widget was disposed by the pane already
-                        branches.delete(ev.tab.id);
-                        break;
-                    case "TabActivated":
-                        pane.tabs().forEach(function (id) {
-                            var w = pane.widgetOf(id);
-                            if (w && typeof w.setActive === "function") w.setActive(id === ev.tabId);
-                        });
-                        break;
-                    default:
-                        break;   // TabAdded, TabAttached, TabMoved: the log is enough
-                }
-                state();
+        // the pane's reports and the desk's - a tab's arrival is the desk's to say - on one log
+        function onEvent(ev) {
+            say(line(ev));
+            switch (ev.kind) {
+                case "AddRequested":
+                    pick();
+                    break;
+                case "TabActivated":
+                    pane.tabs().forEach(function (id) {
+                        var w = pane.widgetOf(id);
+                        if (w && typeof w.setActive === "function") w.setActive(id === ev.tabId);
+                    });
+                    break;
+                default:
+                    break;   // TabAdded, TabRemoved, TabMoved: the log is enough
             }
-        });
+            if (pane) state();
+        }
+        pane = new MultiTabPane(branch.createBranch("pane"), { host: host, slotId: "main", budget: 8, onEvent: onEvent });
+        desk = new Desk(branch.createBranch("desk"), { host: host, onEvent: onEvent });
+        desk.addDock(pane);
 
         function add(kind, params, extra) {
-            var id = kind.key + "-" + (++seq);
-            var name = "tab_" + id;
-            var own = branch.createBranch(name);
-            own.activate(_owner);
-            branches.set(id, name);
-            var tab = { id: id, title: params.title || (kind.label + " " + seq), widget: new kind.Widget(own, Object.assign({}, params, { focus: pane.focus })) };
-            if (extra) for (var k in extra) tab[k] = extra[k];
-            pane.addTab(tab);
-            return id;
+            ++seq;
+            var spec = { title: params.title || (kind.label + " " + seq),
+                         make: function (b, t) { b.activate(_owner); return new kind.Widget(b, Object.assign({}, params, { focus: t.focus })); } };
+            if (extra) for (var k in extra) spec[k] = extra[k];
+            return desk.open(spec, pane).id;
         }
 
         // The plus: a picker in the dialog. Enter is the first kind's.
@@ -255,9 +250,10 @@ class PanesWidget {
         } }).el);
         this.root = el;
         this._pane = pane;
+        this._desk = desk;
     }
 
-    dispose() { this._steward.dispose(); this._monitor.dispose(); this._pane.dispose(); }
+    dispose() { this._steward.dispose(); this._monitor.dispose(); this._desk.dispose(); this._pane.dispose(); }   // the desk first: a pane is disposed only empty
 }
 
 function appMain(el, params) {
