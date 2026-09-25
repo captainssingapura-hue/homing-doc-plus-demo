@@ -17,7 +17,7 @@ import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
 import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
 import hue.captains.singapura.js.homing.ui.docking.FloaterModule;
-import hue.captains.singapura.js.homing.ui.floating.DeskModule;
+import hue.captains.singapura.js.homing.ui.floating.FloatLayerModule;
 import hue.captains.singapura.js.homing.ui.panes.TabRegisterModule;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public record DockingMonitorsModule() implements DomModule<DockingMonitorsModule
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FloatLayerModule.FloatLayer()), FloatLayerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloaterModule.Floater()), FloaterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabRegisterModule.TabRegister()), TabRegisterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))

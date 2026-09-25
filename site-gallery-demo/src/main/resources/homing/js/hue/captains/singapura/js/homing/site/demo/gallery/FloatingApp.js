@@ -103,7 +103,7 @@ class FloatingWidget {
             log.scrollTop = log.scrollHeight;
         }
 
-        this._desk = new Desk(branch.createBranch("desk"), { host: host, keyboard: kb, keyboardId: "floating/desk", onEvent: function (ev) {
+        this._desk = new FloatLayer(branch.createBranch("desk"), { host: host, keyboard: kb, keyboardId: "floating/desk", onEvent: function (ev) {
             switch (ev.kind) {
                 case "Opened":  say("Opened   " + ev.id + "  \"" + ev.title + "\"  at " + ev.x + "," + ev.y + "  " + ev.w + "×" + ev.h); break;
                 case "Moved":   say("Moved    " + ev.id + "  to " + ev.x + "," + ev.y); break;

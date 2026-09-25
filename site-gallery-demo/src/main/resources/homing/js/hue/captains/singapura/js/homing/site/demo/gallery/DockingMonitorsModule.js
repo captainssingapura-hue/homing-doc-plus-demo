@@ -108,7 +108,7 @@ class Instruments {
         var o = opts || {}, self = this;
         branch.activate(_monitorOwner);
         this.branch = branch;
-        this.desk = new Desk(branch.createBranch("desk"), { host: o.host, layer: true, onEvent: o.onEvent, keyboard: o.keyboard, keyboardId: "docking/instruments" });
+        this.desk = new FloatLayer(branch.createBranch("desk"), { host: o.host, layer: true, onEvent: o.onEvent, keyboard: o.keyboard, keyboardId: "docking/instruments" });
         this._rest = focusParty.root.createBranch("instruments", this);
         this.register = new TabRegister(branch.createBranch("tabs"), { focus: this._rest });
         this.float = new Floater(this.desk, { id: "instruments", x: 34, y: 430, w: 420, h: 300, addable: false, onEvent: o.onEvent });

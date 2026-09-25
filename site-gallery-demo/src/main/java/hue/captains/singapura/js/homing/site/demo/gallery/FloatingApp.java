@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.floating.DeskModule;
+import hue.captains.singapura.js.homing.ui.floating.FloatLayerModule;
 import hue.captains.singapura.js.homing.ui.elements.Elements;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public record FloatingApp() implements AppModule<AppModule._None, FloatingApp> {
         return ImportsFor.<FloatingApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder(), new Elements.CardBuilder()), Elements.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FloatLayerModule.FloatLayer()), FloatLayerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),
