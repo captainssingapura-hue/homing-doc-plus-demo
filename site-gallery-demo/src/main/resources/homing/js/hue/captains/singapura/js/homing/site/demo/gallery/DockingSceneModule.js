@@ -26,17 +26,10 @@ const _sceneOwner = Object.freeze({ toString: () => "dockingScene" });
 function _join(w, branch, params) { w.focus = params.focus.join(branch.name, w); w._off = Keys.claimOn(w.root, w.focus); }
 function _leave(w) { if (w._off) w._off(); if (w.focus && w.focus.in) w.focus.leave(); }
 
-/** Held, or lent while something of its own has the browser's focus: one attribute, which the design answers and a panel follows. */
-function _mark(w) {
-    var a = typeof document === "undefined" ? null : document.activeElement;
-    w.root.setAttribute("data-keys", a && a !== document.body && w.root.contains(a) ? "lent" : "held");
-}
-
 /** A tab holding a relation widget: the box, the seam, and the member's answers. What is mounted is the subclass's. */
 class RelTab {
     constructor(branch, params) {
         branch.activate(_sceneOwner);
-        var self = this;
         var root = branch.createElement("root", "div");
         css.addClass(root, ga_tab_fill);
         var box = branch.createElement("box", "div");
@@ -45,23 +38,11 @@ class RelTab {
         this.root = root;
         this.box = box;
         this._widget = null;
-        // the seam: an Escape the host let through blurs it — the widget, the holder since the press, has the keys again
-        root.addEventListener("keydown", function (ev) {
-            if (ev.key !== "Escape" || !box.contains(ev.target) || ev.target === root) return;
-            ev.target.blur();
-            ev.preventDefault();
-            ev.stopPropagation();
-            _mark(self);
-        });
-        root.addEventListener("focusin", function () { if (self.root.getAttribute("data-keys")) _mark(self); });
-        root.addEventListener("focusout", function () { setTimeout(function () { if (self.root.getAttribute("data-keys")) _mark(self); }, 0); });
+        // where the focus is, and an Escape the host let through, are the steward's (RFC 0066 E3, keyboard §17.5)
     }
-    /** Told to activate by the pane: the keys are claimed, and the host takes the focus so its own keys work at once. */
+    /** Told to activate by the pane: the keys are claimed, and the host takes the focus so its own keys work at once — unless the focus arriving in it is what made this the holder. */
     activate() { Keys.claim(this.focus); }
-    granted() { _mark(this); if (this._widget && this._widget.focus) { try { this._widget.focus(); } catch (e) {} } }
-    taken() { this.root.removeAttribute("data-keys"); }
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
+    granted(by) { if (by !== "native" && this._widget && this._widget.focus) { try { this._widget.focus(); } catch (e) {} } }
     /** Nothing is natively focused and the keys are the widget's: Escape gives them back to the dock. */
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
     dispose() {
@@ -136,10 +117,6 @@ class PictureTab {
         return this;
     }
     activate() { Keys.claim(this.focus); }
-    granted() { this.root.setAttribute("data-keys", "held"); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
     /** The keys, while the picture holds them: the zoom, and Escape back to the dock. */
     keyDown(ev) {
         if (ev.key === "Escape") { Keys.yield(this.focus); return true; }
@@ -217,10 +194,6 @@ class NoteTab {
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }
-    granted() { this.root.setAttribute("data-keys", "held"); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
     dispose() { _leave(this); }
 }

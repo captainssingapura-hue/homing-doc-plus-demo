@@ -1,11 +1,11 @@
 // =============================================================================
 // FocusScene — the scene's components for the focus page, in two worlds. A
-// leaf is a card and a panel is a pane, in the design's vocabulary, and each
-// says where the keys are with one attribute — data-keys="held", "candidate"
-// while the walk rests on it, or "lent"
-// while a control of its own has the native focus; the design answers it on
-// the word, so a card and a pane are marked as that design marks a card and
-// a pane. The
+// leaf is a card and a panel is a pane, in the design's vocabulary, and the
+// steward says where the keys are on each with one attribute — data-keys=
+// "held", "candidate" while the walk rests on it, or "lent" while a control of
+// its own has the native focus (RFC 0066 E3, keyboard §17.5); the design
+// answers it on the word, so a card and a pane are marked as that design marks
+// a card and a pane. The
 // LOGICAL world: Leaf and Panel are members of the focus party — never
 // natively focused, their ring drawn from granted, their keys from the
 // steward while nothing on the page is natively focused; a press claims for
@@ -70,11 +70,7 @@ class Leaf {
         return box;
     }
     reset() { this._n = 0; this._count.textContent = "0"; }
-    granted() { this.root.setAttribute("data-keys", "held"); if (this._onHold) this._onHold(this); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
+    granted() { if (this._onHold) this._onHold(this); }
     dispose() { this._off(); this.focus.leave(); }
 }
 
@@ -99,19 +95,14 @@ class Panel {
         this.focus = focusBranch.createBranch(name, this);
         this._off = Keys.claimOn(root, this.focus.owner);
         this._leaves = [];
-        var self0 = this;   // held or lent follows the native focus inside the panel
-        root.addEventListener("focusin", function () { if (self0.root.getAttribute("data-keys")) self0._mark(); });
-        root.addEventListener("focusout", function () { setTimeout(function () { if (self0.root.getAttribute("data-keys")) self0._mark(); }, 0); });
-        // a press on the header claims, and moves the native focus itself: one outside the panel is let go, and the
-        // press's own default — the focus to the body — is stopped, so what granted put in a control of the panel's
+        // a press on the header claims — and the steward lets go of any focus outside the panel's own area — and the
+        // press's own default, the focus to the body, is stopped, so what granted put in a control of the panel's
         // own (panel C's list, a wrapped grid's host) stays there
-        var self = this;
-        header.addEventListener("pointerdown", function () { var a = document.activeElement; if (a && a !== document.body && !self.root.contains(a)) a.blur(); });
         header.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
     }
     /** A leaf inside: it joins the panel's branch. */
     leaf(branch, name, onHold) { var l = new Leaf(branch, this.root, this.focus, name, onHold); this._leaves.push(l); return l; }
-    /** A native text field inside the panel, wired by the panel: Escape lets it go, so the panel — the holder since the press — has the keys again. */
+    /** A native text field inside the panel: an Escape it does not take lets it go — the steward's rule — so the panel has the keys again. */
     field(branch, label) {
         branch.activate(_owner);
         var input = branch.createElement("field", "input");
@@ -119,7 +110,6 @@ class Panel {
         css.addClass(input, ga_field);
         input.setAttribute("aria-label", label);
         input.placeholder = label;
-        input.addEventListener("keydown", function (ev) { if (ev.key === "Escape") { input.blur(); ev.preventDefault(); ev.stopPropagation(); } });
         this.root.appendChild(input);
         return input;
     }
@@ -140,16 +130,6 @@ class Panel {
     keyDown(ev) {
         if (ev.key === "Escape") { Keys.yield(this.focus.owner); return true; }
         return ev.key === "ArrowUp" || ev.key === "ArrowDown";
-    }
-    /** Held; or lent, while a control of this panel's own has the native focus — the keys are the panel's and it is not listening. */
-    granted() { this._mark(); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    /** The walk rests here: a confirming key would bring the keys. Never over what it already says. */
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
-    _mark() {
-        var a = typeof document === "undefined" ? null : document.activeElement;
-        this.root.setAttribute("data-keys", a && a !== document.body && this.root.contains(a) ? "lent" : "held");
     }
     dispose() { this._leaves.forEach(function (l) { l.dispose(); }); this._off(); this.focus.owner.leave(); }
 }
@@ -193,6 +173,6 @@ class ListPanel extends Panel {
         this._byName[name] = l;
         return l;
     }
-    /** Granted, however: the list takes the native focus, so the pick is made by keys. The steward is dormant from here until the list lets go. */
-    granted(by) { super.granted(by); try { this._list.focus({ preventScroll: true }); } catch (e) {} }
+    /** Granted by a press or a call: the list takes the native focus, so the pick is made by keys; the focus arriving is already somewhere. */
+    granted(by) { if (by !== "native") try { this._list.focus({ preventScroll: true }); } catch (e) {} }
 }

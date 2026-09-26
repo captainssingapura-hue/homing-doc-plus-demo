@@ -23,23 +23,16 @@ const _owner = Object.freeze({ toString: () => "relFocusPage" });
 class RelPanel extends Panel {
     constructor(branch, host, focusBranch, name, mount) {
         super(branch, host, focusBranch, name, true);
-        var self = this;
         var box = branch.createElement("box", "div");
         css.addClass(box, ga_rel_host);
         this.root.appendChild(box);
         this._box = box;
         this._widget = mount(box, branch.createBranch("widget-" + branch.name));
-        // the seam, wired by the panel: an Escape the host let through blurs it — the panel, the holder since the
-        // press, has the keys again; a second Escape is the panel's own and yields
-        this.root.addEventListener("keydown", function (ev) {
-            if (ev.key !== "Escape" || !box.contains(ev.target)) return;
-            ev.target.blur();
-            ev.preventDefault();
-            ev.stopPropagation();
-        });
+        // an Escape the host lets through is the steward's: the host lets go, the panel has the keys again, and a
+        // second Escape is the panel's own and yields (RFC 0066 E3, keyboard §17.5)
     }
-    /** Granted, however: the host takes the native focus, so the grid's or the tree's keys are theirs at once. */
-    granted(by) { super.granted(by); this._widget.focus(); }
+    /** Granted by a press or a call: the host takes the native focus, so the grid's or the tree's keys are theirs at once. */
+    granted(by) { if (by !== "native") this._widget.focus(); }
     dispose() { this._widget.destroy(); super.dispose(); }
 }
 

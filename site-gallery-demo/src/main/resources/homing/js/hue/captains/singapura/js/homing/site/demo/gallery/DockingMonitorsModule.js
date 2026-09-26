@@ -42,10 +42,7 @@ class MonitorTab {
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }
-    granted() { this.root.setAttribute("data-keys", "held"); if (this.refresh) this.refresh(); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
+    granted() { if (this.refresh) this.refresh(); }
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
     dispose() { _leave(this); if (this._it && this._it.dispose) this._it.dispose(); }
 }
