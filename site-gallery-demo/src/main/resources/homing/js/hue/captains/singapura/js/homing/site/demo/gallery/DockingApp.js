@@ -104,13 +104,6 @@ class DockingWidget {
         var box = branch.createElement("box", "div");
         css.addClass(box, ga_dock_box);
         el.appendChild(box);
-        // the seam: the workspace is flat, and flat is not the same as featureless - a hairline says where one region
-        // ends and the next begins, which the panels' own edges are too pale to do against the ground
-        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, seam: true, thickness: 1,
-            onEvent: function () { if (tabs) tabs.refresh(); },   // a splitter moved, a room was parted: the picture is of where the panes ARE
-            layout: { kind: "split", orientation: "horizontal", children: [
-            { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
-        this._grid = grid;
         var tabs = null;    // DockingTabs: the source and the new-tab control, built once the scene is up
 
         // what the page reports goes to the instruments' Events tab, which is built below and floats with the rest
@@ -119,8 +112,11 @@ class DockingWidget {
         function labelOf(tab) { return tab.id + (typeof tab.title === "function" ? " \u201c" + tab.title() + "\u201d" : ""); }   // which tab, and what it says it is
         function sink(ev) {
             if (domopsOf()) domopsOf().refresh();   // the party changes with every one of these
-            if (tabs) tabs.refresh();             // and so does how full each dock is, which is what the new-tab control shows
+            if (tabs) tabs.refresh();             // and so does how full each dock is, and where the panes are, which is what the new-tab control shows
             switch (ev.kind) {
+                case "Subdivided":   say("Split     " + nameOf(ev.cellId) + " " + ev.side + " - " + nameOf(ev.newCellId)); break;
+                case "Removed":      say("Merged    " + nameOf(ev.cellId) + " - its tabs and its room gone to a neighbour"); break;
+                case "TracksChanged": say("Tracks    " + ev.path.join(".") + "  " + ev.ratios.map(function (r) { return r.toFixed(2); }).join(" : ")); break;
                 case "Opened":       say("Opened    " + ev.id + "  at " + ev.x + "," + ev.y); break;
                 case "Released":     say("Released  " + ev.id + "  (left the desk for a dock)"); break;
                 case "Moved":        say("Moved     " + ev.id + "  to " + ev.x + "," + ev.y); break;
@@ -168,63 +164,26 @@ class DockingWidget {
         // life - its focus branch, where a widget rests while no dock holds it, its floats, and every move between them
         this._desk = new Desk(branch.createBranch("desk"), { host: box, budget: 16, onEvent: sink, keyboard: kb, keyboardId: "docking/desk", menus: menus, focusName: "afloat" });
         var desk = this._desk;
-        // A REGION IS A CELL OF THE GRID AND A DOCK IN IT. Nothing sits between them: a panel round a dock would be
-        // a box that draws no line, takes no keys and holds nothing the cell does not already hold - and the one job
-        // it had left was watching the dock for where the keys are and telling the dock about itself, a loop through
-        // a third object for a fact the pane is handed directly. The cell is already a flex column that fills its
-        // room; the dock stretches into it.
-        var regions = [], named = 0;
-        this._regions = regions;
-        function region(id) {
-            var name = "region " + (++named);   // for the log alone: nothing shows a name, the chips say what is in it
-            var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: grid.cell(id), slotId: id, addable: true,
-                                                                            onEvent: sink, menus: menus, stripMenu: "split", focusName: "dock-" + id });
-            desk.addDock(dock);
-            var r = { id: id, name: name, dock: dock };
-            regions.push(r);
-            return r;
-        }
-        function regionOf(pane) { for (var i = 0; i < regions.length; i++) if (regions[i].dock === pane) return regions[i]; return null; }
-        function part(r, side) { var made = region(grid.subdivide(r.id, side)); say("Split     " + r.name + " " + side + " - " + made.name); if (tabs) tabs.refresh(); }
-        // ONE OWNER FOR THE LINES, AND THE HINT IS NOT A LINE. The grid draws every line in the workspace and nothing
-        // else draws any: there is nothing round a dock to draw one, the dock never drew a frame, and the box that
-        // holds the grid stopped drawing one, because the grid draws its OWN outer edge in the same line as the rest.
-        // The splitter IS the line - one of them shared by two rooms, flush on both sides, with the hand reaching 3px
-        // past it either way - so there is no gutter to notice. And the room being worked in is said on its TAB BAR,
-        // lit a shade, by the dock itself: a second set of lines around one room would say what the grid's lines
-        // already say. Flat throughout; the chips keep their lift, which is theirs.
-
-        function regionById(id) { for (var k = 0; k < regions.length; k++) if (regions[k].id === id) return regions[k]; return null; }
-        // The panes this region's room can go to WHOLE: those across a splitter of its own - a whole divider with this
-        // region alone on one side and that pane alone on the other. At most two, and the grid says which.
-        function acrossOf(r) {
-            return grid.splitters(r.id).map(function (s) {
-                return { way: s.axis === "horizontal" ? (s.side === "before" ? "left" : "right") : (s.side === "before" ? "up" : "down"),
-                         region: regionById(s.id) };
-            }).filter(function (n) { return n.region; });
-        }
-        function towards(r, way) { var n = acrossOf(r).filter(function (x) { return x.way === way; })[0]; return n ? n.region : null; }
-        // where the room would go with nobody named: one pane across a splitter, or the group beside it - the tabs follow it
-        function heirOf(r) { var ids = grid.heirs(r.id); for (var k = 0; k < regions.length; k++) if (ids.indexOf(regions[k].id) >= 0) return regions[k]; return null; }
-        // ONE OPERATION, TWO DESTINATIONS. The tabs go to the region named - any region, since moving tabs asks nothing
-        // of the geometry. The room goes where the grid can put it: the whole of it to that same region when they share
-        // a splitter of their own, else to the neighbour holding it. And it is all or nothing: the plan is made from the
-        // two docks' names before a single tab moves, so a merge cannot stop half way and strand a widget - and a dock has
-        // no limit of its own to run out of: the limit is the desk's, and a move leaves its count as it was.
-        function mergeRegion(r, to) {
-            if (regions.length < 2 || !to || to === r) { say("Refused   the last region stays"); return; }
-            var plan = PaneMerge.plan(r.dock.tabs(), to.dock.tabs());
-            if (!plan.ok) { say("Refused   " + r.name + " into " + to.name + " - " + plan.says); return; }
-            var whole = acrossOf(r).some(function (n) { return n.region === to; });
-            plan.ids.forEach(function (id) { desk.move(r.dock.tabPaneOf(id), to.dock); });
-            desk.removeDock(r.dock);
-            r.dock.dispose();
-            if (tabs) tabs.refresh();
-            grid.remove(r.id, to.id);
-            regions.splice(regions.indexOf(r), 1);
-            say("Merged    " + r.name + " into " + to.name + (whole ? " - its room went with them" : " - its room went to the neighbour"));
-        }
-        var left = region("left").dock, right = region("right").dock;
+        // THE REGIONS ARE THE DOCK GRID'S: a region is a cell of the grid and a dock in it, nothing between, and parting,
+        // merging and closing one is said once, in the component - the workspace is built from the same one (RFC 0066 E3,
+        // the workspace detour). The grid draws every line and nothing else draws any; the room being worked in is said on
+        // its tab bar, lit a shade, by the dock itself. The page names the regions for its log and its switcher, and asks
+        // which region a merge goes into.
+        var names = {}, named = 0;
+        function nameOf(id) { return names[id] || (names[id] = "region " + (++named)); }
+        var docks = new DockGrid(branch.createBranch("docks"), { host: box, desk: desk, menus: menus, onEvent: sink, dock: { addable: true },
+            chooseRegion: function (from, others, pick) {
+                askRegion("Merge " + nameOf(from.id) + " into", others, 0, function (to) {
+                    var plan = pick(to);
+                    if (!plan.ok) say("Refused   " + nameOf(from.id) + " into " + nameOf(to.id) + " - " + plan.says);
+                });
+            },
+            layout: { kind: "split", orientation: "horizontal", children: [
+                { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
+        this._docks = docks;
+        var grid = docks.grid;
+        var left = docks.region("left").dock, right = docks.region("right").dock;
+        nameOf("left"); nameOf("right");
 
         // ── moving BETWEEN regions is its own gesture ─────────────────────
         // Inside a dock, Escape comes back to the bar and stops there: nothing overshoots out of the room. To go to
@@ -242,7 +201,7 @@ class DockingWidget {
             var rows = of.map(function (r) {
                 var active = r.dock.activeTab(), shown = null;
                 r.dock.getState().tabs.forEach(function (t) { if (t.id === active) shown = t.title; });
-                return { label: r.name, hint: r.dock.count() + (r.dock.count() === 1 ? " tab" : " tabs") + (shown ? "  \u2014  " + shown : "") };
+                return { label: nameOf(r.id), hint: r.dock.count() + (r.dock.count() === 1 ? " tab" : " tabs") + (shown ? "  \u2014  " + shown : "") };
             });
             var list = null;
             switcher = new Dialog(branch.createBranch("switcher-" + (++switches)), {
@@ -255,40 +214,18 @@ class DockingWidget {
             });
         }
         function openSwitcher() {
-            var holder = kb.holder(), at = 0;
+            var holder = kb.holder(), at = 0, regions = docks.regions();
             regions.forEach(function (r, i) { if (r.dock.focus.owner.id === holder || (r.dock.focus.owner.holds && r.dock.focus.owner.holds(focusParty.find(holder) || {}))) at = i; });
-            askRegion("Go to a region", regions.slice(), at, function (r) { Keys.claim(r.dock.focus.owner); say("Went to   " + r.name); });
+            askRegion("Go to a region", regions, at, function (r) { Keys.claim(r.dock.focus.owner); say("Went to   " + nameOf(r.id)); });
         }
         var switches = 0;
         function domopsOf() { return instruments ? instruments.domops() : null; }
-        // the tab bar's own ground, right-clicked: the page's menu about the room the dock sits in
-        menus.handle("split", {
-            pick: function (id, o) {
-                var r = regionOf(o.pane);
-                if (!r) return;
-                if (id === "beside") part(r, "right");
-                else if (id === "below") part(r, "bottom");
-                else if (id === "close") mergeRegion(r, heirOf(r));
-                else if (id === "merge-into") askRegion("Merge " + r.name + " into", regions.filter(function (x) { return x !== r; }), 0,
-                                                       function (to) { mergeRegion(r, to); });
-                else if (id.indexOf("merge-") === 0) mergeRegion(r, towards(r, id.slice(6)));
-            },
-            // a direction with no pane across a splitter of this region's own is not offered at all; one whose dock
-            // cannot take the tabs is offered and refused, so the reason can be read rather than guessed at
-            state: function (id, o) {
-                var r = regionOf(o.pane), to;
-                if (id === "close" || id === "merge-into") return { hidden: id === "merge-into" && !r, disabled: !r || regions.length < 2 };
-                if (id.indexOf("merge-") !== 0) return { disabled: !r };   // every row here is about a region, and a dock afloat is not one
-                to = r && towards(r, id.slice(6));
-                return { hidden: !to, disabled: !!to && !PaneMerge.plan(r.dock.tabs(), to.dock.tabs()).ok };
-            }
-        });
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/lines").label("the lines").range(0, 6, 1).detent(1).value(1).icon("size")
             .format(function (v) { return v === 0 ? "none" : v + "px"; })
             .onInput(function (v) { grid.thickness(v); }).labelWidth("6em")
             .build(branch.createBranch("lines")).root);
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { regions.forEach(function (r) { r.dock.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { regions.forEach(function (r) { r.dock.aspect(v); }); })
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { docks.regions().forEach(function (r) { r.dock.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
+        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { docks.regions().forEach(function (r) { r.dock.aspect(v); }); })
             .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
         // the tab menu's picks: detach floats the tab under where its chip was, with no hand; close removes it
         menus.handle(MultiTabPane.MENU, {
@@ -314,8 +251,8 @@ class DockingWidget {
         // this page opens with are asked for exactly the way a later one is.
         tabs = new DockingTabs(branch.createBranch("tabs"), { host: newRow, store: store, domain: domain, note: _NOTE,
             desk: desk,
-            panes: function () { return regions.map(function (r) { return r.dock; }); },
-            onAdded: function (pane, tab) { var r = regionOf(pane); say("Added     " + tab.id + "  to " + (r ? r.name : pane.slotId)); } });
+            panes: function () { return docks.regions().map(function (r) { return r.dock; }); },
+            onAdded: function (pane, tab) { var r = docks.regionOf(pane); say("Added     " + tab.id + "  to " + (r ? nameOf(r.id) : pane.slotId)); } });
         this._tabs = tabs;
         // QUIET: a page seeding its own workspace is not answering anybody, so nothing is brought forward and
         // nothing takes the keys - the pane's own rule leaves the first of each pair showing, which is all that is
@@ -332,7 +269,7 @@ class DockingWidget {
 
     dispose() { this._offMenus(); this._offF6(); this._desk.dispose(); this._instruments.dispose();   // the desks first: a dock is disposed only empty
                 if (this._ownMenus) this._ownMenus.dispose(); this._tabs.dispose();
-                this._regions.forEach(function (r) { r.dock.dispose(); }); this._grid.dispose(); }
+                this._docks.dispose(); }
 }
 
 function appMain(el, params) {

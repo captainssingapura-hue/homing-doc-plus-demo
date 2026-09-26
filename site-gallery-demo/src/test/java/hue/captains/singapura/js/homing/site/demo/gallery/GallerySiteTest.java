@@ -175,9 +175,9 @@ class GallerySiteTest {
         assertEquals(List.of(), ComponentTrees.validate(List.of(GalleryCrate.INSTANCE)));
         var composed = ComponentTrees.compose("gallery", List.of(GalleryCrate.INSTANCE));
         assertEquals("gallery", composed.root().children().get(0).segment().value(), "the site's own catalogue first in the closure, then the crates it requires");
-        assertEquals(12, composed.root().children().size(), "the gallery and the eleven vehicles in its closure, the base (the keyboard steward) and the focus monitor among them: the split crate is not required, docking ships statics only");
+        assertEquals(13, composed.root().children().size(), "the gallery and the twelve vehicles in its closure, the base (the keyboard steward), the focus monitor and docking's dock grid among them: the split crate is not required");
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
-        assertEquals(List.of("split", "animal", "counter", "swatch", "tab"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the docking widget names the split menu, the context menus widget three; the pane in the panes crate names the tab menu; nothing lists them");
+        assertEquals(List.of("animal", "counter", "swatch", "tab", "split"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three; the pane in the panes crate names the tab menu, the dock grid in the docking crate the split menu; nothing lists them");
         // the keys likewise: the slider and its group declare theirs; the page's map is derived, and no declared component listens for itself
         // one capture left in the closure: the grid's header drag cancels on Escape; the grid migrates with the tree renderer, not before
         assertEquals(List.of("homing-rel-grid: RelGridHeaderDragModule captures keys on the document; only the steward does"), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
