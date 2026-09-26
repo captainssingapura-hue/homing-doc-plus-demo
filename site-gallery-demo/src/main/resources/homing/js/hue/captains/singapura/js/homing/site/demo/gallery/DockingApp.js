@@ -166,7 +166,7 @@ class DockingWidget {
         // ── the desk, then the regions on the grid ───────────────────────
         // THE DESK, the whole: its register - every tab on the page is a tab-pane opened there, owned there for its whole
         // life - its focus branch, where a widget rests while no dock holds it, its floats, and every move between them
-        this._desk = new Desk(branch.createBranch("desk"), { host: box, onEvent: sink, keyboard: kb, keyboardId: "docking/desk", menus: menus, focusName: "afloat" });
+        this._desk = new Desk(branch.createBranch("desk"), { host: box, budget: 16, onEvent: sink, keyboard: kb, keyboardId: "docking/desk", menus: menus, focusName: "afloat" });
         var desk = this._desk;
         // A REGION IS A CELL OF THE GRID AND A DOCK IN IT. Nothing sits between them: a panel round a dock would be
         // a box that draws no line, takes no keys and holds nothing the cell does not already hold - and the one job
@@ -177,7 +177,7 @@ class DockingWidget {
         this._regions = regions;
         function region(id) {
             var name = "region " + (++named);   // for the log alone: nothing shows a name, the chips say what is in it
-            var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: grid.cell(id), slotId: id, budget: 8, addable: true,
+            var dock = new MultiTabPane(branch.createBranch("dock-" + id), { host: grid.cell(id), slotId: id, addable: true,
                                                                             onEvent: sink, menus: menus, stripMenu: "split", focusName: "dock-" + id });
             desk.addDock(dock);
             var r = { id: id, name: name, dock: dock };
@@ -209,10 +209,11 @@ class DockingWidget {
         // ONE OPERATION, TWO DESTINATIONS. The tabs go to the region named - any region, since moving tabs asks nothing
         // of the geometry. The room goes where the grid can put it: the whole of it to that same region when they share
         // a splitter of their own, else to the neighbour holding it. And it is all or nothing: the plan is made from the
-        // two docks' names and the budget before a single tab moves, so a merge cannot stop half way and strand a widget.
+        // two docks' names before a single tab moves, so a merge cannot stop half way and strand a widget - and a dock has
+        // no limit of its own to run out of: the limit is the desk's, and a move leaves its count as it was.
         function mergeRegion(r, to) {
             if (regions.length < 2 || !to || to === r) { say("Refused   the last region stays"); return; }
-            var plan = PaneMerge.plan(r.dock.tabs(), to.dock.tabs(), to.dock.budget());
+            var plan = PaneMerge.plan(r.dock.tabs(), to.dock.tabs());
             if (!plan.ok) { say("Refused   " + r.name + " into " + to.name + " - " + plan.says); return; }
             var whole = acrossOf(r).some(function (n) { return n.region === to; });
             plan.ids.forEach(function (id) { desk.move(r.dock.tabPaneOf(id), to.dock); });
@@ -279,7 +280,7 @@ class DockingWidget {
                 if (id === "close" || id === "merge-into") return { hidden: id === "merge-into" && !r, disabled: !r || regions.length < 2 };
                 if (id.indexOf("merge-") !== 0) return { disabled: !r };   // every row here is about a region, and a dock afloat is not one
                 to = r && towards(r, id.slice(6));
-                return { hidden: !to, disabled: !!to && !PaneMerge.plan(r.dock.tabs(), to.dock.tabs(), to.dock.budget()).ok };
+                return { hidden: !to, disabled: !!to && !PaneMerge.plan(r.dock.tabs(), to.dock.tabs()).ok };
             }
         });
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/lines").label("the lines").range(0, 6, 1).detent(1).value(1).icon("size")

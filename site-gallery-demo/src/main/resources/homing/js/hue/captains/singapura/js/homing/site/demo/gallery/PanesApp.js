@@ -194,8 +194,8 @@ class PanesWidget {
             }
             if (pane) state();
         }
-        pane = new MultiTabPane(branch.createBranch("pane"), { host: host, slotId: "main", budget: 8, onEvent: onEvent });
-        desk = new Desk(branch.createBranch("desk"), { host: host, onEvent: onEvent });
+        pane = new MultiTabPane(branch.createBranch("pane"), { host: host, slotId: "main", onEvent: onEvent });
+        desk = new Desk(branch.createBranch("desk"), { host: host, budget: 8, onEvent: onEvent });   // the limit is the desk's: the pane's bar scrolls
         desk.addDock(pane);
 
         function add(kind, params, extra) {
