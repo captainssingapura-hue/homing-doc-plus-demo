@@ -20,13 +20,14 @@ import java.util.List;
 /**
  * A short playlist: {@code new EmbeddedVideo(container, params)} - five cooks,
  * one dish, a player over a strip of takes. A switch destroys the player and
- * mints a fresh one, paused; the widget pauses when it is not seen, and never
- * starts audio by itself.
+ * mints a fresh one, paused; the widget pauses when it is not seen, and plays
+ * again when it is seen only if it was the one that paused it - by the state
+ * the player says - so it never starts audio you did not.
  */
 public record EmbeddedVideoModule() implements DomModule<EmbeddedVideoModule> {
 
     public record EmbeddedVideo() implements SelfContainedWidget<EmbeddedVideoModule>, NeedKeyboard {
-        @Override public String summary() { return "A short playlist - a player over a strip of takes; a switch mints a fresh player, paused, and it pauses when it is not seen."; }
+        @Override public String summary() { return "A short playlist - a player over a strip of takes; a switch mints a fresh player, paused; it pauses when it is not seen, and plays again when seen if it paused it."; }
         @Override public List<KeyBinding> keys() {
             return List.of(
                     KeyBinding.of(Key.ARROW_RIGHT, "the next take, browsed - into the strip, when the widget holds the keys"),

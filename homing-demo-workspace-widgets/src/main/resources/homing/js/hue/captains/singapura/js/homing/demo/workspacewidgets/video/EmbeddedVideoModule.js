@@ -9,16 +9,20 @@
 // shows it — and one method moves all four, so they never disagree.
 //
 // SWITCHING DESTROYS THE PLAYER rather than commanding it. The player is a
-// control plane this widget does not own: it can be told, never read. So a
-// switch dissolves the branch that owns the frame — the element goes, and the
-// player with it — and mints a fresh one on a branch of its own: the outgoing
-// video stops by construction, and a src reassigned would have walked the
-// browser's history. No autoplay: a widget never starts audio you did not ask
-// for, so a take put on the stage is a paused player.
+// control plane this widget does not own: it is told, and it says what it is
+// doing, never more. So a switch dissolves the branch that owns the frame —
+// the element goes, and the player with it — and mints a fresh one on a branch
+// of its own: the outgoing video stops by construction, and a src reassigned
+// would have walked the browser's history. No autoplay: a widget never starts
+// audio you did not ask for, so a take put on the stage is a paused player.
 //
 // IT PAUSES WHEN IT IS NOT SEEN — its tab hidden behind another, its float
 // closed over — by watching its own root, since a widget respects its
-// container by itself. It never resumes: coming back must not start audio.
+// container by itself. And it PLAYS AGAIN WHEN IT IS SEEN AGAIN, if it was
+// the one that paused it: the player says its state (YouTube's listening
+// channel), so a video playing when it went behind plays when it comes back,
+// and one you paused stays paused. A player whose state was never said is
+// paused all the same, and never played again: no audio you did not ask for.
 //
 // THE KEYS. The strip is a tablist with MANUAL activation: arrows move the
 // focus among the takes, Enter or Space puts one on the stage — one player per
@@ -55,7 +59,7 @@ var _VIDEO_TAKES = Object.freeze([
 class EmbeddedVideo {
     constructor(container, params) {
         if (!container || typeof container.appendChild !== "function") throw new Error("[EmbeddedVideo] a container is required: the one its page lends it");
-        var name = "embeddedVideo-" + (++_videos), self = this, d;
+        var name = this._name = "embeddedVideo-" + (++_videos), self = this, d;
         this._dom = d = domOpsParties.mobile(name);
         d.activate(_videoOwner);
         var root = d.createElement("root", "div");
@@ -86,8 +90,12 @@ class EmbeddedVideo {
         this._players = 0;
         this._player = null;
         this._frame = null;
+        this._state = null;      // the player's state as it last said it: 1 playing, 2 paused, 3 buffering...; null, never said
+        this._resume = false;    // paused by the widget while it was playing: played again when seen
+        this._heard = function (ev) { self._said(ev); };
+        window.addEventListener("message", this._heard);
         this._seen = typeof IntersectionObserver === "function"
-            ? new IntersectionObserver(function (entries) { entries.forEach(function (e) { if (!e.isIntersecting) self._pause(); }); }) : null;
+            ? new IntersectionObserver(function (entries) { entries.forEach(function (e) { if (e.isIntersecting) self._seenAgain(); else self._hidden(); }); }) : null;
         if (this._seen) this._seen.observe(root);
         this.show(0);
     }
@@ -153,9 +161,13 @@ class EmbeddedVideo {
     /** Dissolve, then mint: the old frame leaves the page, its player with it, and a fresh one comes on a branch of its own. */
     _swap(take) {
         if (this._player) { this._player.dissolve(); this._player = null; this._frame = null; }
-        var p = this._player = this._dom.createBranch("player" + (++this._players));
+        this._state = null;
+        this._resume = false;
+        var self = this, p = this._player = this._dom.createBranch("player" + (++this._players));
         p.activate(_videoOwner);
         var frame = this._frame = p.createElement("frame", "iframe");
+        // loaded - and loaded again, when the frame is moved and the page reloads it - the player is asked to say its state
+        frame.addEventListener("load", function () { if (self._frame === frame) self._post({ event: "listening", id: self._name, channel: "widget" }); });
         css.addClass(frame, vd_frame);
         frame.src = _VIDEO_ORIGIN + "/embed/" + take.id + "?enablejsapi=1&rel=0";
         frame.title = take.note + " — YouTube video player";
@@ -165,12 +177,33 @@ class EmbeddedVideo {
         this._stage.appendChild(frame);
     }
 
-    /** Told, never read: pause, posted to the player's own origin. Not loaded yet, or gone - nothing to pause. */
-    _pause() {
+    /** Not seen: paused - and, when it was playing by its own word, marked to play again when it is seen. */
+    _hidden() {
+        if (this._state === 1 || this._state === 3) this._resume = true;
+        this._post({ event: "command", func: "pauseVideo", args: "" });
+    }
+
+    /** Seen again: played, if this widget paused it while it played; else left as it is. */
+    _seenAgain() {
+        if (!this._resume) return;
+        this._resume = false;
+        this._post({ event: "command", func: "playVideo", args: "" });
+    }
+
+    /** What the player says, from its own origin and its own frame alone: the state it is in. */
+    _said(ev) {
+        if (!this._frame || ev.origin !== _VIDEO_ORIGIN || ev.source !== this._frame.contentWindow) return;
+        var m;
+        try { m = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch (e) { return; }
+        if (!m) return;
+        if (m.event === "onStateChange" && typeof m.info === "number") this._state = m.info;
+        else if (m.info && typeof m.info.playerState === "number") this._state = m.info.playerState;
+    }
+
+    /** Told: a message posted to the player's own origin. Not loaded yet, or gone - nothing to tell. */
+    _post(message) {
         try {
-            if (this._frame && this._frame.contentWindow) {
-                this._frame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', _VIDEO_ORIGIN);
-            }
+            if (this._frame && this._frame.contentWindow) this._frame.contentWindow.postMessage(JSON.stringify(message), _VIDEO_ORIGIN);
         } catch (e) {}
     }
 
@@ -183,6 +216,7 @@ class EmbeddedVideo {
 
     dispose() {
         if (this._seen) { this._seen.disconnect(); this._seen = null; }
+        if (this._heard) { window.removeEventListener("message", this._heard); this._heard = null; }
         if (this._off) { this._off(); this._off = null; }
         this._focusParty.dissolve();
         this._dom.dissolve();
