@@ -19,6 +19,11 @@
         <module>site-gallery-demo</module>
         <module>mermaid-mirror-demo</module>
         <module>doc-pdf-export</module>
+        <!-- The demo's widgets ported to the workspace on its core (the homing-ssjs-workspace
+             repo), and the workspace that launches them - linked to that workspace alone,
+             never to the studio's old one. -->
+        <module>homing-demo-workspace-widgets</module>
+        <module>homing-demo-workspace</module>
     </modules>
 
     <properties>
@@ -31,6 +36,8 @@
              their own version. -->
         <homing.components.version>LOCAL-SNAPSHOT</homing.components.version>
         <homing.relgrid.version>LOCAL-SNAPSHOT</homing.relgrid.version>
+        <!-- The workspace on its headless core, from the homing-ssjs-workspace repo. -->
+        <homing.ws.version>LOCAL-SNAPSHOT</homing.ws.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.14</jacoco.version>
     </properties>

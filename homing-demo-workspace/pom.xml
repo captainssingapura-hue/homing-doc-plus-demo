@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+        <artifactId>homing-doc-plus-demo</artifactId>
+        <version>VOID-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>homing-demo-workspace</artifactId>
+
+    <description>
+        The demo's workspace on the new core, standing up on its own: the demo's
+        ported widgets and the workspace repo's monitors, declared together as one
+        workspace, served as a page of the workspace shell on a site of its own,
+        with a server that keeps its states. No studio, and none of its old
+        workspace. Run with DemoWorkspaceServer; listens on 8104.
+    </description>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- The demo's ported widgets. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>homing-demo-workspace-widgets</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- From the workspace repo: the page a workspace is, the monitors, what a workspace declares of its kinds. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-shell</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-monitors</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-widgets</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
+        <!-- The substrate a page and a server come from, the page model, its standard implementation, the designs. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-base</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa-standard</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-designs</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-conformance-rules</artifactId>
+            <version>${homing.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-conformance-engine</artifactId>
+            <version>${homing.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- mvn -pl homing-demo-workspace exec:java -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <mainClass>hue.captains.singapura.js.homing.demo.workspace.DemoWorkspaceServer</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
