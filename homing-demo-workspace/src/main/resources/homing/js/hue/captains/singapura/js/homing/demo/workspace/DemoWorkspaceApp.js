@@ -1,12 +1,13 @@
 // =============================================================================
-// DemoWorkspaceApp — the demo's workspace on the new core, as a page: the
-// shell's workspace page (WorkspacePage), handed the demo's manifest,
-// DEMO_WORKSPACE, generated from its declaration in Java (DemoWorkspace) - the
-// demo's ported widgets, and the monitors beside them - and its first state,
-// DEMO_ARRANGEMENT (DemoArrangements): two videos side by side, laid out when
-// the page writes a log that holds nothing yet.
+// DemoWorkspaceApp — the demo's workspaces on the new core, as a page: the
+// grouped workspace page (GroupedWorkspacePage), handed the demo's manifests,
+// DEMO_WORKSPACES - the video room, the animal platformer, each generated from
+// its declaration in Java - the groups they are filed in, DEMO_GROUPS, and
+// their first states, DEMO_ARRANGEMENTS (DemoArrangements), laid out when the
+// page writes a log that holds nothing yet. The route names the group, the
+// anchor the workspace.
 // =============================================================================
 
 function appMain(el, params) {
-    WorkspacePage.main(el, params, DEMO_WORKSPACE, { fresh: function (p) { return nav.DemoWorkspaceApp(p); }, arrangement: DEMO_ARRANGEMENT });
+    GroupedWorkspacePage.main(el, params, DEMO_WORKSPACES, DEMO_GROUPS, DEMO_ARRANGEMENTS);
 }

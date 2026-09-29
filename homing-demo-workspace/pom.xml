@@ -38,6 +38,12 @@
             <artifactId>homing-workspace-shell</artifactId>
             <version>${homing.ws.version}</version>
         </dependency>
+        <!-- The grouped site: a group a page, each workspace in its anchor, the switcher the page summons. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-site</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
             <artifactId>homing-workspace-monitors</artifactId>

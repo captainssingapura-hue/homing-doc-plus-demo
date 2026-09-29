@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * The demo's workspace on the new core, declared: {@code demo} - its log's kind
- * too - where the demo's ported widgets can be opened, and the monitors beside
- * them, watching the page's parties. The ported widgets come a few at a time,
- * each driving what the workspace still lacks; the first is the video playlist.
+ * The demo's media workspace, declared: {@code demo} - its log's kind too - where
+ * the video playlist can be opened, and the monitors beside it, watching the
+ * page's parties. Filed by the group as the Video room.
  */
 public record DemoWorkspace() implements WorkspaceDeclaration {
 
@@ -22,6 +21,6 @@ public record DemoWorkspace() implements WorkspaceDeclaration {
 
     @Override
     public List<WidgetDeclaration<?>> kinds() {
-        return Stream.concat(DemoWorkspaceWidgetsCrate.KINDS.stream(), WorkspaceMonitorsCrate.KINDS.stream()).toList();
+        return Stream.concat(DemoWorkspaceWidgetsCrate.MEDIA.stream(), WorkspaceMonitorsCrate.KINDS.stream()).toList();
     }
 }
