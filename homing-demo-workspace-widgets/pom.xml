@@ -49,6 +49,18 @@
             <artifactId>homing-design-core</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <!-- The platformer's sound: Tone.js, bundled and served from the classpath, no CDN. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-libs</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- The design's slider: the platformer's gravity and its music's volume. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-elements</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -70,6 +82,13 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-designs</artifactId>
+            <version>${homing.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- The secretaries and the game's pure parts, run headless. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ssjs-test-fixtures</artifactId>
             <version>${homing.core.version}</version>
             <scope>test</scope>
         </dependency>
