@@ -8,9 +8,10 @@ import java.util.List;
 
 /**
  * The platformer's workspace, declared: {@code platformer} - its log's kind too -
- * where the game is played, one at a time (its kind is single), and the animal it
- * runs as chosen. Its root parties are resolved from its kinds: the platformer
- * party the game tells its run to, and the animal choice. Filed by the group
+ * where the game is played, one at a time (its kind is single), watched in as
+ * many replays as you like, and the animal it runs as chosen. Its root parties
+ * are resolved from its kinds: the platformer party the game tells its run to
+ * and the replays re-simulate it from, and the animal choice. Filed by the group
  * under Games.
  */
 public record PlatformerWorkspace() implements WorkspaceDeclaration {

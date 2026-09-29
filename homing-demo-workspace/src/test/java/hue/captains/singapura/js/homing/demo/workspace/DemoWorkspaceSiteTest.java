@@ -44,7 +44,7 @@ class DemoWorkspaceSiteTest {
         assertTrue(js.contains("kind: \"platformer\", title: \"Animal platformer\", path: \"games/platformer\""), js);
     }
 
-    /** The video room: the playlist and the monitors. The platformer: the game - held once - and the animals, and nothing else. */
+    /** The video room: the playlist and the monitors. The platformer: the game - held once - its replays, and the animals. */
     @Test
     void eachWorkspacesManifest_isItsDeclaration() {
         String js = String.join("\n", DemoWorkspaceModule.INSTANCE.selfContent(null));
@@ -54,15 +54,17 @@ class DemoWorkspaceSiteTest {
         assertTrue(js.contains("\"animal-selector\": Object.freeze({ Widget: AnimalSelector, title: \"Animal\", parties: Object.freeze([ANIMAL_CHOICE]) })"), js);
         assertEquals(List.of("animal-choice", "platformer"), PlatformerWorkspace.INSTANCE.rootParties().stream().map(r -> r.type().name()).sorted().toList(),
                 "its root parties: the run, told, and the animal, chosen");
-        assertEquals(2, PlatformerWorkspace.INSTANCE.kinds().size(), "the game and the selector alone");
+        assertTrue(js.contains("\"platformer-replay\": Object.freeze({ Widget: PlatformerReplay, title: \"Platformer replay\", parties: Object.freeze([PLATFORMER, ANIMAL_CHOICE]) })"), js);
+        assertEquals(List.of("platformer", "platformer-replay", "animal-selector"), PlatformerWorkspace.INSTANCE.kinds().stream().map(k -> k.kind()).toList(),
+                "the game, its replays and the selector");
     }
 
-    /** The first time, in the split grid: two videos side by side; the animals beside the game, a quarter of the room. */
+    /** The first time, in the split grid: two videos side by side; the animals a quarter of the room, the game above its replay beside them. */
     @Test
     void eachFirstStateIsTheLaunchersArrangement() {
         assertEquals(List.of("left", "right"), DemoArrangements.SPLIT_GRID.placement().regions().stream().map(r -> r.name().value()).toList());
         assertTrue(DemoArrangements.SPLIT_GRID.widgets().stream().allMatch(w -> w.kind().value().equals("video")));
-        assertEquals(List.of("animals", "game"), DemoArrangements.PLATFORMER_GRID.placement().regions().stream().map(r -> r.name().value()).toList());
+        assertEquals(List.of("animals", "game", "watch"), DemoArrangements.PLATFORMER_GRID.placement().regions().stream().map(r -> r.name().value()).toList());
         String js = String.join("\n", DemoArrangementModule.INSTANCE.selfContent(null));
         assertTrue(js.contains("const DEMO_ARRANGEMENTS = Object.freeze({ \"demo\": Object.freeze({ engine: \"split-grid\", workspace: \"demo\""), js);
         assertTrue(js.contains("\"platformer\": Object.freeze({ engine: \"split-grid\", workspace: \"platformer\""), js);

@@ -24,11 +24,13 @@ public final class DemoArrangements {
     /** Every engine's the video room has: the split grid's. */
     public static final WorkspaceArrangements<DemoWorkspace> ALL = WorkspaceArrangements.of(DemoWorkspace.INSTANCE, SPLIT_GRID);
 
-    /** The platformer, in the split grid: the animals on the left, the game three times as wide beside them. */
+    /** The platformer, in the split grid: the animals on the left; three times as wide beside them, the game above its replay. */
     public static final Arrangement<PlatformerWorkspace, SplitGrid> PLATFORMER_GRID = Arrangement.of(PlatformerWorkspace.INSTANCE,
-            SplitGrid.of(SplitGrid.row(Part.of(SplitGrid.region("animals", "selector"), 1), Part.of(SplitGrid.region("game", "play"), 3))),
+            SplitGrid.of(SplitGrid.row(Part.of(SplitGrid.region("animals", "selector"), 1),
+                    Part.of(SplitGrid.column(SplitGrid.region("game", "play"), SplitGrid.region("watch", "replay")), 3))),
             ArrangedWidget.of("selector", "animal-selector"),
-            ArrangedWidget.of("play", "platformer"));
+            ArrangedWidget.of("play", "platformer"),
+            ArrangedWidget.of("replay", "platformer-replay"));
 
     /** Every engine's the platformer has: the split grid's. */
     public static final WorkspaceArrangements<PlatformerWorkspace> PLATFORMER = WorkspaceArrangements.of(PlatformerWorkspace.INSTANCE, PLATFORMER_GRID);
