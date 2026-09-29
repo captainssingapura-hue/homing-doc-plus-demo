@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,5 +35,17 @@ class DemoWorkspaceSiteTest {
         assertTrue(js.contains("const DEMO_WORKSPACE = Object.freeze({ name: \"demo\""), js);
         for (String kind : List.of("\"video\"", "\"focus-tree\"", "\"steward-lamp\"", "\"domops-tree\"", "\"party-log\"")) assertTrue(js.contains(kind), kind + " in " + js);
         assertTrue(js.contains("Widget: EmbeddedVideo, title: \"Video\""), js);
+    }
+
+    /** The first time, in the split grid: two videos side by side, each half of the room, each shown in its own region. */
+    @Test
+    void theFirstStateIsTwoVideosSideBySide() {
+        var grid = DemoArrangements.SPLIT_GRID.placement();
+        assertEquals(List.of("left", "right"), grid.regions().stream().map(r -> r.name().value()).toList());
+        assertTrue(DemoArrangements.SPLIT_GRID.widgets().stream().allMatch(w -> w.kind().value().equals("video")));
+        String js = String.join("\n", DemoArrangementModule.INSTANCE.selfContent(null));
+        assertTrue(js.contains("const DEMO_ARRANGEMENT = Object.freeze({ engine: \"split-grid\", workspace: \"demo\""), js);
+        assertTrue(js.contains("kind: \"split\", axis: \"horizontal\""), js);
+        assertEquals(DemoArrangements.SPLIT_GRID, DemoArrangements.ALL.forEngine(DemoArrangements.SPLIT_GRID.engine()).orElseThrow());
     }
 }

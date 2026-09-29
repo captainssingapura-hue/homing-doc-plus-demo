@@ -36,6 +36,8 @@ public record DemoWorkspaceApp() implements AppModule<WorkspacePageModule.Params
                 // its own address, for the log bar's new workspace of the kind
                 .add(new ModuleImports<>(List.of(new link()), INSTANCE))
                 .add(new ModuleImports<>(List.of(new DemoWorkspaceModule.DEMO_WORKSPACE()), DemoWorkspaceModule.INSTANCE))
+                // its first state in the split grid: two videos side by side
+                .add(new ModuleImports<>(List.of(new DemoArrangementModule.DEMO_ARRANGEMENT()), DemoArrangementModule.INSTANCE))
                 .build();
     }
 

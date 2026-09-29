@@ -48,6 +48,12 @@
             <artifactId>homing-workspace-widgets</artifactId>
             <version>${homing.ws.version}</version>
         </dependency>
+        <!-- The arrangements' core models: the demo's first state, per placement engine. JDK only. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-groups-core-models</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
         <!-- The substrate a page and a server come from, the page model, its standard implementation, the designs. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
