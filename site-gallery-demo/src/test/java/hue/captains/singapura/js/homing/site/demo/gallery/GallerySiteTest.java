@@ -53,7 +53,7 @@ class GallerySiteTest {
     void aDemoPageIsToldNothingButItsKeyboardSteward() {
         var body = GallerySite.INSTANCE.router().resolve(Path.of("buttons")).orElseThrow().html(Query.NONE).body();
         assertTrue(body.contains("<title>Buttons · Gallery</title>"), body);
-        assertTrue(body.contains("appMain(page.main, Object.freeze(Object.assign({}, {}, { keyboard: page.keyboard })));"), body);   // paramless: nothing stamped, the page's keyboard steward alone
+        assertTrue(body.contains("appMain(page.main, Object.freeze(Object.assign({}, {}, { keyboard: page.keyboard, trail: page.trail })));"), body);   // paramless: nothing stamped, the page's own alone - its keyboard steward and its trail
     }
 
     @Test
