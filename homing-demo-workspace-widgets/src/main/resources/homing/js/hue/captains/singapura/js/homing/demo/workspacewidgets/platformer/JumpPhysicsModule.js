@@ -8,6 +8,7 @@
 //   physics.fall()          off an edge: in the air, from rest
 //   physics.gravity(g)      the pull per frame, from now on
 //   physics.step(y, groundY) → y, a frame on: pulled, and stopped at the ground
+//   physics.restore(vy, inAir)   the fall as a world has it
 //   physics.inAir()   physics.vy()
 //
 // Pure: no DOM.
@@ -41,6 +42,12 @@ class JumpPhysics {
         y += this._vy;
         if (y >= groundY) { y = groundY; this._vy = 0; this._air = false; }
         return y;
+    }
+
+    /** The fall as a world has it: how fast, and whether in the air. */
+    restore(vy, inAir) {
+        this._vy = vy;
+        this._air = inAir;
     }
 
     inAir() { return this._air; }

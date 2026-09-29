@@ -5,8 +5,11 @@
 // run, and tells it — every action, every platform the terrain makes, and a
 // Tick every step of the world, sixty a second whatever the display's frames —
 // to the platformer party, in the order it happened, so a
-// watcher applying them re-simulates the run exactly (PlatformerGame). Which
-// animal runs is what the animal choice party says; until it says, the first.
+// watcher applying them re-simulates the run exactly (PlatformerGame). A
+// watcher that joins mid-run is handed the world as it stands, alone - a
+// Snapshot, records inside records; a run joined or begun again is one to
+// every member. Which animal runs is what the animal choice party says; until
+// it says, the first.
 //
 // A self-contained widget (the Workspace & Widgets doctrines): made with the
 // container its page lends it and its params, and nothing else; its DomOps and
@@ -96,7 +99,11 @@ class PlatformerPlay {
         if (this._joined) throw new Error("[PlatformerPlay] joined already: leave first");
         this._joined = true;
         var run = given && given[PLATFORMER.name], choice = given && given[ANIMAL_CHOICE.name], self = this;
-        if (run) this._run = run.join("platformerPlay", {});
+        if (run) {
+            // a watcher that joins mid-run is handed the world alone; the ones there already, the run it joins
+            this._run = run.join("platformerPlay", { WorldWanted: function (m) { self._snapshot(m.asker); } });
+            this._snapshot("");
+        }
         if (choice) {
             this._choice = choice.join("platformerPlay", { Chosen: function (m) { if (Animals.byId(m.animal)) self._stage.animal(m.animal); } });
             this._choice.tell({ kind: "CurrentRequested" });
@@ -111,11 +118,11 @@ class PlatformerPlay {
 
     state() { return this._game.state(); }
 
-    /** A fresh run: the world made again, the platforms ahead told, the frames going. */
+    /** A fresh run: the world made again and told whole - its terrain is new - the steps going. */
     again() {
         if (this._frame) cancelAnimationFrame(this._frame);
-        var self = this;
-        this._game.reset().forEach(function (p) { self._platform(p); });
+        this._game.reset();
+        this._snapshot("");
         this._stage.over(null);
         this._drawn();
         this._last = null;
@@ -198,6 +205,9 @@ class PlatformerPlay {
     }
 
     _platform(p) { this._tell({ kind: "PlatformGenerated", x: p.x, y: p.y, w: p.w, vehicle: p.vehicle }); }
+
+    /** The world as it stands, told whole: to the member that asked - or, to "", to every member. */
+    _snapshot(to) { this._tell({ kind: "Snapshot", to: to, world: this._game.world() }); }
 
     _tell(message) { if (this._run) this._run.tell(message); }
 

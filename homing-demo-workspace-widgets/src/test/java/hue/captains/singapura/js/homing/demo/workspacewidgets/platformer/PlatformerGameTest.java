@@ -27,22 +27,24 @@ class PlatformerGameTest extends JsModuleTestBase {
                 function seeded(seed) { var s = seed >>> 0; return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
                 function never() { throw new Error("a watcher never makes a platform"); }
                 function scene(g) { var s = g.state(); return [s.tick, s.x, s.y.toFixed(3), s.cameraX.toFixed(3), s.facingRight, s.score, s.over, s.platforms.length].join(" "); }
-                // A run played: actions at frames; what it told, in order, kept - as the widget tells the platformer party.
-                function play(seed, plan, frames) {
-                    var g = new PlatformerGame({ random: seeded(seed) }), told = [];
+                // A run played: actions at frames; what it told, in order, kept - as the widget tells the platformer party -
+                // and the world as it stood at a frame, with where the stream stood then: a watcher joining there.
+                function play(seed, plan, frames, joinAt) {
+                    var g = new PlatformerGame({ random: seeded(seed) }), told = [], joined = null;
                     g.reset().forEach(function (p) { told.push({ kind: "PlatformGenerated", x: p.x, y: p.y, w: p.w, vehicle: p.vehicle }); });
                     for (var f = 0; f < frames && !g.over; f++) {
+                        if (f === joinAt) joined = { world: JSON.parse(JSON.stringify(g.world())), from: told.length };
                         (plan[f] || []).forEach(function (a) { g.apply(a); told.push(a); });
                         var r = g.step();
                         if (r.alive) { g.ahead().forEach(function (p) { told.push({ kind: "PlatformGenerated", x: p.x, y: p.y, w: p.w, vehicle: p.vehicle }); }); g.prune(); }
                         told.push({ kind: "Tick" });
                     }
-                    return { game: g, told: told };
+                    return { game: g, told: told, joined: joined };
                 }
-                // A watcher: the start alone of its own, then the stream applied in order, a step for each Tick.
-                function watch(told) {
+                // A watcher: the start alone of its own - or the world it was handed - then the stream applied in order, a step for each Tick.
+                function watch(told, world) {
                     var w = new PlatformerGame({ random: never });
-                    w.reset(false);
+                    if (world) w.restore(world); else w.reset(false);
                     told.forEach(function (m) {
                         if (m.kind === "PlatformGenerated") w.place(m);
                         else if (m.kind === "Tick") { if (w.step().alive) w.prune(); }
@@ -84,6 +86,22 @@ class PlatformerGameTest extends JsModuleTestBase {
         eval("var p = play(42, RUN, 150), w = watch(p.told);");
         assertEquals(eval("scene(p.game)"), eval("scene(w)"));
         assertTrue(Integer.parseInt(eval("p.told.filter(function (m) { return m.kind === 'Tick'; }).length")) > 0);
+    }
+
+    @Test
+    void aWatcherJoiningMidRun_handedTheWorldAsItStood_andTheStreamAfter_reSimulatesTheRest() {
+        eval("var p = play(42, RUN, 150, 30), w = watch(p.told.slice(p.joined.from), p.joined.world);");
+        assertEquals(eval("scene(p.game)"), eval("scene(w)"));
+        assertEquals("true", eval("String(p.joined.world.platforms.length > 3 && p.joined.world.right === true && p.joined.world.tick === 30 && p.joined.world.inAir)"),
+                "the world whole: its platforms, the moves held, the steps taken - joined mid-jump");
+    }
+
+    @Test
+    void theWorldIsPlainData_andTakenAsItIs() {
+        eval("var g = new PlatformerGame({ random: seeded(9) }); g.reset(); g.apply({ kind: 'MoveStarted', dir: 'right' }); for (var i = 0; i < 30; i++) g.step();"
+                + "var w = g.world(), back = new PlatformerGame({ random: never }); back.restore(JSON.parse(JSON.stringify(w)));");
+        assertEquals(eval("JSON.stringify(w)"), eval("JSON.stringify(back.world())"));
+        assertEquals("false", eval("String(w.platforms === g.state().platforms)"), "a copy, never the world's own list");
     }
 
     @Test

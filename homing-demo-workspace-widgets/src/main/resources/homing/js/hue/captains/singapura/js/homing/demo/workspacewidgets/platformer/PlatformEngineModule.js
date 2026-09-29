@@ -10,6 +10,7 @@
 //   engine.start(x, y)            one platform under a start at x - the same every run
 //   engine.ahead(untilX) → [platform]   made, until the last reaches untilX: the new ones
 //   engine.place(platform)        one made elsewhere, taken as it is
+//   engine.restore([platform])    the terrain as a world has it, whole - copies
 //   engine.behind(cameraX)        the ones far behind the camera, let go
 //   engine.platforms()            [{ x, y, w, vehicle }], left to right: the engine's own list
 //   engine.ground(x, y, vy) → { groundY, platform } | null   what an animal at x, y, falling by vy, lands on
@@ -64,6 +65,14 @@ class PlatformEngine {
     }
 
     place(p) { this._take({ x: p.x, y: p.y, w: p.w, vehicle: p.vehicle }); }
+
+    /** The terrain as a world has it, whole - its own copies, left to right: the next is made past the last. */
+    restore(list) {
+        this._list = list.map(function (p) { return { x: p.x, y: p.y, w: p.w, vehicle: p.vehicle }; });
+        var last = this._list.length ? this._list[this._list.length - 1] : null;
+        this._right = last ? last.x + last.w : 0;
+        this._lastY = last ? last.y : 0;
+    }
 
     behind(cameraX) {
         var cutoff = cameraX - PlatformEngine.KEPT_BEHIND;

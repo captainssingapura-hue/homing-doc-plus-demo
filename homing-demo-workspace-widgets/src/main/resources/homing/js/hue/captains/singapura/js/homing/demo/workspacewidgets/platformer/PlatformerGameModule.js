@@ -23,6 +23,9 @@
 //   game.prune()                 the terrain far behind, let go
 //   game.state() → { x, y, cameraX, facingRight, score, over, tick, gravity, active, platforms }
 //   game.heights() → { min, max }   where the platforms may be: a landing's pitch reads it
+//   game.world() → the world as it stands, whole: a Snapshot's World, platforms and all
+//   game.restore(world)          taken whole - a watcher joining mid-run: the stream after it
+//                                applied from here makes the player's world
 //
 // Pure: no DOM.
 // =============================================================================
@@ -103,6 +106,30 @@ class PlatformerGame {
     }
 
     heights() { return this._engine.heights(); }
+
+    /** The world as it stands, whole - plain data, a Snapshot's: what a watcher that joins now is handed. */
+    world() {
+        return { x: this.x, y: this.y, cameraX: this.cameraX, facingRight: this.facingRight, score: this.score, over: this.over, tick: this.tick,
+                 gravity: this._gravity, vy: this._physics.vy(), inAir: this._physics.inAir(), left: this._keys.left, right: this._keys.right,
+                 platforms: this._engine.platforms().map(function (p) { return { x: p.x, y: p.y, w: p.w, vehicle: p.vehicle }; }) };
+    }
+
+    /** The world as a Snapshot has it, taken whole: what the stream says next, applied from here, makes the player's world. */
+    restore(w) {
+        this.x = w.x;
+        this.y = w.y;
+        this.cameraX = w.cameraX;
+        this.facingRight = w.facingRight;
+        this.score = w.score;
+        this.over = w.over;
+        this.tick = w.tick;
+        this.active = null;
+        this._gravity = w.gravity;
+        this._physics = new JumpPhysics(w.gravity, PlatformerGame.JUMP);
+        this._physics.restore(w.vy, w.inAir);
+        this._keys = { left: w.left, right: w.right };
+        this._engine.restore(w.platforms);
+    }
 
     _begin() {
         this.x = PlatformerGame.START_X;

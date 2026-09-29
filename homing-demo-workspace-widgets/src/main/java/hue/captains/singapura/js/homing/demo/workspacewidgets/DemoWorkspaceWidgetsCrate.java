@@ -17,6 +17,8 @@ import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.Platfor
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerPlayDeclaration;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerPlayModule;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerReplayDeclaration;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerReplayModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSecretaryModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSoundModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerStageModule;
@@ -39,8 +41,8 @@ import java.util.stream.Stream;
  * self-contained, each worn in the design's words. Any workspace may declare
  * them among its kinds; nothing here knows a shell, a page or the studio's old
  * workspace. Two sets: the media - the video playlist - and the games - the
- * animal platformer, played, and the animal selector its animal is chosen by,
- * with the two parties they meet in.
+ * animal platformer, played and watched, and the animal selector its animal is
+ * chosen by, with the two parties they meet in.
  */
 public final class DemoWorkspaceWidgetsCrate implements Crate {
 
@@ -49,8 +51,8 @@ public final class DemoWorkspaceWidgetsCrate implements Crate {
     /** The media: the video playlist. */
     public static final List<WidgetDeclaration<?>> MEDIA = List.of(EmbeddedVideoDeclaration.INSTANCE);
 
-    /** The games: the platformer, played - single - and the animal selector. */
-    public static final List<WidgetDeclaration<?>> GAMES = List.of(PlatformerPlayDeclaration.INSTANCE, AnimalSelectorDeclaration.INSTANCE);
+    /** The games: the platformer, played - single - and watched - many - and the animal selector. */
+    public static final List<WidgetDeclaration<?>> GAMES = List.of(PlatformerPlayDeclaration.INSTANCE, PlatformerReplayDeclaration.INSTANCE, AnimalSelectorDeclaration.INSTANCE);
 
     /** Every kind, for a workspace that offers them all. */
     public static final List<WidgetDeclaration<?>> KINDS = Stream.concat(MEDIA.stream(), GAMES.stream()).toList();
@@ -100,6 +102,8 @@ public final class DemoWorkspaceWidgetsCrate implements Crate {
                 // the game drawn, and played
                 CrateEntry.of(PlatformerStyles.INSTANCE),
                 CrateEntry.of(PlatformerStageModule.INSTANCE, StandardJsModuleType.CONSUMER),
-                CrateEntry.of(PlatformerPlayModule.INSTANCE, StandardJsModuleType.CONSUMER));
+                CrateEntry.of(PlatformerPlayModule.INSTANCE, StandardJsModuleType.CONSUMER),
+                // and watched: the run re-simulated, a snapshot of records inside records to join by
+                CrateEntry.of(PlatformerReplayModule.INSTANCE, StandardJsModuleType.CONSUMER));
     }
 }

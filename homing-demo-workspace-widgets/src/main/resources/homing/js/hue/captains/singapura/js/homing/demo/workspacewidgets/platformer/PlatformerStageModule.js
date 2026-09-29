@@ -11,7 +11,8 @@
 // the platform it holds now, or hidden: the world makes and lets go platforms
 // all the time, and a page's elements are the branch's, made once.
 //
-//   new PlatformerStage(branch, { onAgain })   onAgain: the card's Play again, pressed
+//   new PlatformerStage(branch, { onAgain? })  onAgain: the card's Play again, pressed - none, and
+//                                              the card has no button: a stage that only watches
 //   stage.root              the view: the stage centred and scaled in it
 //   stage.draw(state)       PlatformerGame's state, drawn
 //   stage.animal(id)        its picture (Animals)
@@ -49,11 +50,13 @@ class PlatformerStage {
         var card = this._card = PlatformerStage._el(b, "over", "div", pf_over, stage);
         PlatformerStage._el(b, "overTitle", "h3", pf_over_title, card).textContent = "Game over";
         this._final = PlatformerStage._el(b, "overScore", "p", pf_hint, card);
-        var again = PlatformerStage._el(b, "again", "button", el_button, card);
-        css.addClass(again, el_button_primary);
-        again.type = "button";
-        again.textContent = "Play again";
-        again.addEventListener("click", function () { again.blur(); if (typeof o.onAgain === "function") o.onAgain(); });
+        if (typeof o.onAgain === "function") {   // a stage that only watches has no run of its own to begin again
+            var again = PlatformerStage._el(b, "again", "button", el_button, card);
+            css.addClass(again, el_button_primary);
+            again.type = "button";
+            again.textContent = "Play again";
+            again.addEventListener("click", function () { again.blur(); o.onAgain(); });
+        }
         css.addClass(card, pf_gone);
         this.root = view;
         this._fits = typeof ResizeObserver === "function" ? new ResizeObserver(function () { self._fit(); }) : null;

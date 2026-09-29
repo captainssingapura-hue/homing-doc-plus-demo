@@ -53,10 +53,33 @@ class PlatformerSecretaryTest extends SecretaryTestBase {
     }
 
     @Test
+    void aWatcherAsksForTheWorld_andThePartyAsksThePlayer_namingWhoAsked() {
+        Value step = dispatch(initial(), envelope("WorldRequested", Map.of(), "late"));
+        assertActionCount(step, 1);
+        assertActionKind(step, 0, "BroadcastToMembers");
+        Value m = action(step, 0).getMember("message");
+        assertEquals("WorldWanted late", m.getMember("kind").asString() + " " + m.getMember("asker").asString());
+        assertStateField(step, "events", 0);
+    }
+
+    @Test
+    void aSnapshotGoesToTheOneThatAsked_alone_orToEveryOne() {
+        Value alone = dispatch(initial(), envelope("Snapshot", Map.of("to", "late", "world", Map.of("score", 12)), "play"));
+        assertActionCount(alone, 1);
+        assertActionKind(alone, 0, "SendToMember");
+        assertEquals("late", action(alone, 0).getMember("to").asString());
+        assertEquals(12, action(alone, 0).getMember("message").getMember("world").getMember("score").asInt(), "the world as it was told");
+        Value all = dispatch(alone.getMember("newState"), envelope("Snapshot", Map.of("to", "", "world", Map.of("score", 0)), "play"));
+        assertActionKind(all, 0, "BroadcastToMembers");
+        assertStateField(all, "snapshots", 2);
+    }
+
+    @Test
     void anythingElseIsKept_andNothingDone() {
-        Value step = dispatch(initial(), envelope("Snapshot", Map.of(), "late"));
+        Value step = dispatch(initial(), envelope("WorldWanted", Map.of("asker", "p9"), "late"));
         assertActionCount(step, 0);
         assertStateField(step, "events", 0);
-        assertEquals("Snapshot", step.getMember("newState").getMember("recentUnknown").getArrayElement(0).getMember("kind").asString());
+        assertEquals("WorldWanted", step.getMember("newState").getMember("recentUnknown").getArrayElement(0).getMember("kind").asString(),
+                "the party's own word, never a member's");
     }
 }
