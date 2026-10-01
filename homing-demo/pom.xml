@@ -18,23 +18,6 @@
     </properties>
 
     <dependencies>
-        <!-- Sibling sub-studio: the building-blocks reference. The demo's
-             umbrella composes BuildingBlocksStudio alongside MultiStudio +
-             DemoBaseStudio so a deployed demo surfaces the framework's
-             primitives reference under the same chrome as the animal-game
-             content. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
-            <artifactId>homing-blocks</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <!-- Public release docs (0.5.1 onward). The demo's ReleasesCatalogue
-             (sibling to Learning under MultiStudioHome) mounts these. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
-            <artifactId>homing-docs</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-server</artifactId>

@@ -17,36 +17,14 @@ import hue.captains.singapura.js.homing.workspace.shell.WorkspaceShellCrate;
 import hue.captains.singapura.js.homing.demo.css.AliceStyles;
 import hue.captains.singapura.js.homing.demo.css.BaseStyles;
 import hue.captains.singapura.js.homing.demo.css.PlaygroundStyles;
-import hue.captains.singapura.js.homing.demo.css.SpinningStyles;
-import hue.captains.singapura.js.homing.demo.css.VideoStyles;
-import hue.captains.singapura.js.homing.demo.css.SubwayStyles;
 import hue.captains.singapura.js.homing.demo.es.animation.AnimalCell;
 import hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal;
-import hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals;
-import hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget;
-import hue.captains.singapura.js.homing.demo.es.svg.DecomposedSvgDemo;
-import hue.captains.singapura.js.homing.demo.es.svg.ExtrudedSvgDemo;
-import hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.JumpPhysics;
 import hue.captains.singapura.js.homing.demo.es.game.MovingAnimal;
 import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame;
-import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalReplayWidget;
-import hue.captains.singapura.js.homing.demo.es.game.MovingAnimalWidget;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformEngine;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformerBgm;
-import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals;
-import hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimalsWidget;
-import hue.captains.singapura.js.homing.demo.es.media.EmbeddedVideoWidget;
-import hue.captains.singapura.js.homing.demo.es.svg.SvgDecomposer;
-import hue.captains.singapura.js.homing.demo.es.svg.SvgExtruder;
 import hue.captains.singapura.js.homing.demo.playground.AnimalsPlaygroundStyles;
-import hue.captains.singapura.js.homing.demo.playground.AnimalsSecretaryModule;
-import hue.captains.singapura.js.homing.demo.playground.DocViewWidget;
-import hue.captains.singapura.js.homing.demo.playground.ClassTableWidget;
-import hue.captains.singapura.js.homing.demo.playground.StateTableWidget;
-import hue.captains.singapura.js.homing.demo.playground.TableDemoModule;
-import hue.captains.singapura.js.homing.demo.playground.TableDemoStyles;
-import hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA;
 
 import java.util.List;
 
@@ -96,37 +74,14 @@ public final class HomingDemoCrate implements Crate {
                 CrateEntry.of(AliceStyles.INSTANCE),
                 CrateEntry.of(BaseStyles.INSTANCE),
                 CrateEntry.of(PlaygroundStyles.INSTANCE),
-                CrateEntry.of(SpinningStyles.INSTANCE),
-                CrateEntry.of(VideoStyles.INSTANCE),
-                CrateEntry.of(SubwayStyles.INSTANCE),
                 CrateEntry.of(AnimalCell.INSTANCE),
                 CrateEntry.of(CuteAnimal.INSTANCE),
-                CrateEntry.of(DancingAnimals.INSTANCE),
-                CrateEntry.of(DancingAnimalsWidget.INSTANCE),
-                CrateEntry.of(DecomposedSvgDemo.INSTANCE),
-                CrateEntry.of(ExtrudedSvgDemo.INSTANCE),
-                CrateEntry.of(ExtrudedTurtleDemo.INSTANCE),
                 CrateEntry.of(JumpPhysics.INSTANCE),
                 CrateEntry.of(MovingAnimal.INSTANCE),
                 // The downstream extension, made visible in the studio:
                 CrateEntry.of(MovingAnimalGame.INSTANCE, GameLoopModuleType.GAME_LOOP),
-                CrateEntry.of(MovingAnimalReplayWidget.INSTANCE),
-                CrateEntry.of(MovingAnimalWidget.INSTANCE),
                 CrateEntry.of(PlatformEngine.INSTANCE),
                 CrateEntry.of(PlatformerBgm.INSTANCE),
-                CrateEntry.of(SpinningAnimals.INSTANCE),
-                CrateEntry.of(SpinningAnimalsWidget.INSTANCE),
-                CrateEntry.of(EmbeddedVideoWidget.INSTANCE),
-                CrateEntry.of(SvgDecomposer.INSTANCE),
-                CrateEntry.of(SvgExtruder.INSTANCE),
-                CrateEntry.of(AnimalsPlaygroundStyles.INSTANCE),
-                CrateEntry.of(AnimalsSecretaryModule.INSTANCE),
-                CrateEntry.of(DocViewWidget.INSTANCE),
-                // The Tables Playground — plain tables under the design substrate, by state and by class.
-                CrateEntry.of(TableDemoStyles.INSTANCE),
-                CrateEntry.of(TableDemoModule.INSTANCE),
-                CrateEntry.of(StateTableWidget.INSTANCE),
-                CrateEntry.of(ClassTableWidget.INSTANCE),
-                CrateEntry.of(DemoStandardMPA.INSTANCE));
+                CrateEntry.of(AnimalsPlaygroundStyles.INSTANCE));
     }
 }

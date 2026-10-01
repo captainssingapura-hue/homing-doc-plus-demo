@@ -9,8 +9,6 @@
     <version>VOID-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>homing-blocks</module>
-        <module>homing-docs</module>
         <module>homing-demo</module>
         <!-- RFC 0066 - the bare app: served and themed with no studio on the classpath. -->
         <module>bare-app-demo</module>
@@ -24,6 +22,8 @@
              never to the studio's old one. -->
         <module>homing-demo-workspace-widgets</module>
         <module>homing-demo-workspace</module>
+        <!-- The demo's docs on the site the studio is read on: a catalogue site, its docs read in DocView. -->
+        <module>homing-demo-site</module>
     </modules>
 
     <properties>
@@ -38,6 +38,8 @@
         <homing.relgrid.version>LOCAL-SNAPSHOT</homing.relgrid.version>
         <!-- The workspace on its headless core, from the homing-ssjs-workspace repo. -->
         <homing.ws.version>LOCAL-SNAPSHOT</homing.ws.version>
+        <!-- The site the docs are read on: the catalogue site and DocView, from the homing-ssjs-studio repo. -->
+        <homing.studio.version>LOCAL-SNAPSHOT</homing.studio.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.14</jacoco.version>
     </properties>

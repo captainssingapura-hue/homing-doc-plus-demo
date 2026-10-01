@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.core.BundledExternalModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.demo.css.PlaygroundStyles;
-import hue.captains.singapura.js.homing.demo.es.svg.*;
 import hue.captains.singapura.js.homing.demo.es.animation.*;
 import hue.captains.singapura.js.homing.demo.es.game.*;
 import hue.captains.singapura.js.homing.demo.es.game.platformer.*;
@@ -159,21 +158,6 @@ class EsModuleGetActionTest {
                 "Bundled three.js should still expose its native export statements");
     }
 
-    @Test
-    void execute_extrudedTurtleDemoImportsFromBundledThreeJs() throws Exception {
-        var query = new ModuleQuery(ExtrudedTurtleDemo.class.getCanonicalName());
-        var result = action.execute(query, new EmptyParam.NoHeaders()).get();
-        String js = result.body();
-
-        // The framework generates an import line that points to the BundledExternalModule's
-        // homing.js URL — the browser will fetch the bundle from our server, not a CDN.
-        assertTrue(js.contains("from \"/module?class=hue.captains.singapura.js.homing.libs.ThreeJs\""),
-                "Should import from the bundled ThreeJs module on the homing.js classpath");
-        assertTrue(js.contains("export {appMain"),
-                "Should export appMain");
-        assertTrue(js.contains("new Scene()"),
-                "Should contain three.js scene code");
-    }
 
     @Test
     void execute_generatedImportsUseQueryParamPaths() throws Exception {
