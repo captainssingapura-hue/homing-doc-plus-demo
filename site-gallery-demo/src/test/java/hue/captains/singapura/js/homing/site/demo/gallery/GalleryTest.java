@@ -14,9 +14,6 @@ import hue.captains.singapura.js.homing.core.Theme;
 import hue.captains.singapura.js.homing.design.Deployment;
 import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.server.ServedModules;
-import hue.captains.singapura.js.homing.site.Path;
-import hue.captains.singapura.js.homing.site.Query;
-import hue.captains.singapura.js.homing.site.SiteGetAction;
 import hue.captains.singapura.js.homing.site.mpa.ThemesGetAction;
 import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
@@ -26,35 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** The router's arms, the scaffold each page writes, the routes the MPA mounts, and the designs' coverage. */
-class GallerySiteTest {
-
-    @Test
-    void theShellIsTheRootAndImportsTheChromeThenTheApp() {
-        var body = GallerySite.INSTANCE.router().resolve(Path.ROOT).orElseThrow().html(Query.NONE).body();
-        assertTrue(body.contains("<title>Gallery · Gallery</title>"), body);
-        assertTrue(body.contains("const theme = \"editorial\";"), body);
-        assertTrue(body.contains("brand: Object.freeze({label:\"Gallery\",home:\"\\/\"})"), body);   // jsString escapes the slash
-        assertTrue(body.contains("crumbs: Object.freeze([])"), body);
-        assertTrue(body.contains("preferences: Object.freeze({module:\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences\"})"), body);
-        int chrome = body.indexOf("site.mpa.MpaChrome");
-        int app    = body.indexOf("demo.gallery.GalleryShellApp");
-        assertTrue(chrome > 0 && app > chrome, "chrome import before app import: " + body);
-        assertTrue(body.contains("const params = Object.freeze({});"), body);   // no demo asked for: the first
-        var asked = GallerySite.INSTANCE.router().resolve(Path.ROOT).orElseThrow().html(Query.of("demo", "grid")).body();
-        assertTrue(asked.contains("const params = Object.freeze({\"demo\":\"grid\"});"), asked);
-    }
-
-    @Test
-    void aDemoPageIsToldNothingButItsKeyboardSteward() {
-        var body = GallerySite.INSTANCE.router().resolve(Path.of("buttons")).orElseThrow().html(Query.NONE).body();
-        assertTrue(body.contains("<title>Buttons · Gallery</title>"), body);
-        assertTrue(body.contains("appMain(page.main, Object.freeze(Object.assign({}, {}, { keyboard: page.keyboard, trail: page.trail })));"), body);   // paramless: nothing stamped, the page's own alone - its keyboard steward and its trail
-    }
+/**
+ * The gallery as it is declared: its demos and its preferences as their modules stamp them, its
+ * tree, its crate, its modules' lane, the designs' coverage, its components and menus. The pages
+ * themselves are the demo site's, which grafts the gallery's tree - and checks them there.
+ */
+class GalleryTest {
 
     @Test
     void theDemosNameEveryAppByItsServedAddressAndTheNavigator() {
@@ -71,28 +47,17 @@ class GallerySiteTest {
         assertTrue(json.contains("\"navigator\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidgetModule\""), json);
         assertTrue(json.contains("\"gallery\\/layout\\/panes\":{\"label\":\"Panes\""), json);
         assertTrue(json.contains("\"widget\":{\"module\":\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.PanesApp\",\"export\":\"PanesWidget\",\"params\":{}}"), json);
-        assertTrue(json.contains("\"page\":\"\\/panes\""), json);
-        for (var d : GalleryDemos.DEMOS) assertTrue(GallerySite.INSTANCE.router().resolve(Path.parse(d.page())).isPresent(), d.page() + " is a page");
+        assertTrue(json.contains("\"page\":\"\\/gallery\\/layout\\/panes\""), json);   // its place in the tree, under where a site grafts the gallery
     }
 
+    /** The tree a site grafts: the tour and the plain page at its root, then a catalogue per group, in the order the demos declare them. */
     @Test
-    void theArms() {
-        var r = GallerySite.INSTANCE.router();
-        assertSame(GallerySite.PLAIN, r.resolve(Path.of("plain")).orElseThrow());
-        assertTrue(r.resolve(Path.of("panes")).isPresent());
-        assertTrue(r.resolve(Path.of("panes", "x")).isEmpty(), "a demo is one below the root, and no deeper");
-        assertTrue(r.resolve(Path.of("nowhere")).isEmpty());
-    }
-
-    @Test
-    void theGridAndTheTreeArePagesToldTheirTrail() {
-        for (String arm : List.of("grid", "tree", "dialog", "preferences", "panes", "buttons", "cards", "floating", "docking", "splitgrid", "tabstrip", "menus", "sliders")) {
-            var body = GallerySite.INSTANCE.router().resolve(Path.of(arm)).orElseThrow().html(Query.NONE).body();
-            assertTrue(body.contains(arm.equals("splitgrid") ? "SplitGridApp" : arm.equals("tabstrip") ? "TabStripApp" : arm.equals("menus") ? "ContextMenusApp" : Character.toUpperCase(arm.charAt(0)) + arm.substring(1) + "App"), body);
-            assertTrue(body.contains("Object.freeze({text:\"Gallery\",to:\"\\/\"})"), body);
-            assertTrue(body.contains("to:\"\\/" + arm + "\""), body);
-            assertTrue(GallerySite.INSTANCE.router().resolve(Path.of(arm, "more")).isEmpty());
-        }
+    void theTreeIsACataloguePerGroup_inTheDemosOrder() {
+        assertEquals("gallery", GalleryCatalogue.INSTANCE.slug().value());
+        assertEquals(GalleryDemos.GROUPS.stream().map(GalleryDemos.Group::slug).toList(),
+                GalleryCatalogue.INSTANCE.subCatalogues().stream().map(c -> c.slug().value()).toList());
+        assertEquals(GalleryDemos.GROUPS.stream().map(GalleryDemos.Group::label).toList(),
+                GalleryCatalogue.INSTANCE.subCatalogues().stream().map(c -> c.name()).toList());
     }
 
     @Test
@@ -104,9 +69,6 @@ class GallerySiteTest {
         assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.site.mpa.ThemeWidgetModule"), json);
         assertTrue(json.contains("/module?class=hue.captains.singapura.js.homing.preferences.ScaleWidgetModule"), json);
         assertTrue(json.contains("\"preferences/editor/wrap\""), json);
-        // the page imports the view and the registry only; no widget module is on it
-        var body = GallerySite.INSTANCE.router().resolve(Path.of("preferences")).orElseThrow().html(Query.NONE).body();
-        assertFalse(body.contains("ThemeWidget") || body.contains("ScaleWidget"), "widgets are not imported by the page");
     }
 
     @Test
@@ -129,13 +91,6 @@ class GallerySiteTest {
             checked++;
         }
         assertTrue(checked >= 10, "the apps, the shell, the relations, the tree widget; checked " + checked);
-    }
-
-    @Test
-    void theMpaMountsTheFrameworkRoutesFirstAndTheCatchAllLast() {
-        var routes = new ArrayList<>(GallerySite.MPA.registry(GallerySite.INSTANCE).getActions().keySet());
-        assertTrue(routes.containsAll(List.of("/module", "/css-content", "/app", ThemesGetAction.ROUTE, SiteGetAction.ROUTE)), routes.toString());
-        assertEquals(SiteGetAction.ROUTE, routes.get(routes.size() - 1), routes.toString());
     }
 
     @Test

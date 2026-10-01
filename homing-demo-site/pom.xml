@@ -12,10 +12,11 @@
     <artifactId>homing-demo-site</artifactId>
 
     <description>
-        The demo's front door: a catalogue site whose docs are read in DocView and
-        whose workspaces open beside it, served through the standard MPA, with a
-        server that keeps the workspaces' states. No old studio, none of its viewers,
-        none of its old workspace. Run with DemoSiteServer; listens on 8082.
+        The demo's front door: a catalogue site whose docs are read in DocView, whose
+        gallery is grafted in - the components, each a page, and the tour - and whose
+        workspaces open beside it, served through the standard MPA, with a server that
+        keeps the workspaces' states. No old studio, none of its viewers, none of its
+        old workspace. Run with DemoSiteServer; listens on 8082.
     </description>
 
     <properties>
@@ -46,6 +47,12 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
             <artifactId>homing-demo-workspace</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- The gallery: its tree, grafted at /gallery, its apps, and the preferences the site's MPA offers. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>site-gallery-demo</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- From the workspace repo: the grouped page's params, and the server that keeps the workspaces' states. -->

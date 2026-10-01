@@ -9,10 +9,13 @@ import hue.captains.singapura.js.homing.docview.site.PayloadGetAction;
 import hue.captains.singapura.js.homing.server.EmptyParam;
 import hue.captains.singapura.js.homing.site.Path;
 import hue.captains.singapura.js.homing.site.Query;
+import hue.captains.singapura.js.homing.site.SiteGetAction;
+import hue.captains.singapura.js.homing.site.mpa.ThemesGetAction;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,8 +43,15 @@ class DemoSiteTest {
         assertTrue(root.contains("label:\"Homing · demo\""), "the demo's brand on the chrome");
         JsonObject e = entry("/");
         assertEquals("Homing demo", e.getString("name"));
-        assertEquals(List.of("/composed-doc", "/demo"), children(e, "to"));
-        assertEquals(List.of("in-place", "new-tab"), children(e, "opens"), "a doc in place; the workspaces beside, a place of work of their own");
+        assertEquals(List.of("/gallery", "/composed-doc", "/demo"), children(e, "to"), "the gallery grafted, then the site's own leaves");
+        assertEquals(List.of("in-place", "in-place", "new-tab"), children(e, "opens"), "the gallery and a doc in place; the workspaces beside, a place of work of their own");
+    }
+
+    @Test
+    void theMpaMountsTheFrameworkRoutesFirstAndTheCatchAllLast() {
+        var routes = new ArrayList<>(DemoSite.MPA.registry(DemoSite.INSTANCE).getActions().keySet());
+        assertTrue(routes.containsAll(List.of("/module", "/css-content", "/app", ThemesGetAction.ROUTE, SiteGetAction.ROUTE)), routes.toString());
+        assertEquals(SiteGetAction.ROUTE, routes.get(routes.size() - 1), routes.toString());
     }
 
     @Test
