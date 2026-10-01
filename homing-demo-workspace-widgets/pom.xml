@@ -72,12 +72,13 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- The gate, headless and strict, as the workspace repo's widget sets have it. -->
+        <!-- The widgets' own module type and rule set - the game loop, held to the RAF rule: a
+             downstream extension of the framework's policy (RFC 0044). Headless. The gate is
+             headless and strict, as the workspace repo's widget sets have it. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-rules</artifactId>
             <version>${homing.core.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

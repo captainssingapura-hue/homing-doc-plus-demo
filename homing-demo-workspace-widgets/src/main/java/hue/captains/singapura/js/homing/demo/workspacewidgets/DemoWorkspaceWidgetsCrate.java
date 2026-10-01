@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.conformance.GameLoopModuleType;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.animals.AnimalChoiceModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.animals.AnimalChoiceSecretaryModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.animals.AnimalSelectorDeclaration;
@@ -102,7 +103,7 @@ public final class DemoWorkspaceWidgetsCrate implements Crate {
                 // the game drawn, and played
                 CrateEntry.of(PlatformerStyles.INSTANCE),
                 CrateEntry.of(PlatformerStageModule.INSTANCE, StandardJsModuleType.CONSUMER),
-                CrateEntry.of(PlatformerPlayModule.INSTANCE, StandardJsModuleType.CONSUMER),
+                CrateEntry.of(PlatformerPlayModule.INSTANCE, GameLoopModuleType.GAME_LOOP),
                 // and watched: the run re-simulated, a snapshot of records inside records to join by
                 CrateEntry.of(PlatformerReplayModule.INSTANCE, StandardJsModuleType.CONSUMER));
     }

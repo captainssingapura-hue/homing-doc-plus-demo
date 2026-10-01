@@ -9,7 +9,6 @@
     <version>VOID-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>homing-demo</module>
         <!-- RFC 0066 - the bare app: served and themed with no studio on the classpath. -->
         <module>bare-app-demo</module>
         <!-- RFC 0066 E3 - the gallery: JS apps under the standard MPA, and the
@@ -25,6 +24,9 @@
         <module>homing-demo-workspace</module>
         <!-- The demo's front door: a catalogue site, its docs read in DocView, its workspaces opened beside. -->
         <module>homing-demo-site</module>
+        <!-- The demo's conformance: every crate it serves, graded by the framework's policy extended
+             with the widgets' game-loop rule set; and its studio, the studio repo's workbench, on 8091. -->
+        <module>homing-demo-conformance</module>
     </modules>
 
     <properties>

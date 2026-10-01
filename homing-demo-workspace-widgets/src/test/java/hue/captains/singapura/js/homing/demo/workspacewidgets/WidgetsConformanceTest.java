@@ -6,10 +6,10 @@ import hue.captains.singapura.js.homing.conformance.engine.ServedModuleRenderer;
 import hue.captains.singapura.js.homing.conformance.rules.CrateClosure;
 import hue.captains.singapura.js.homing.conformance.rules.CrateConformance;
 import hue.captains.singapura.js.homing.conformance.rules.CssConformance;
-import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.Finding;
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.conformance.GameLoopConformance;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.design.Deployment;
@@ -48,7 +48,7 @@ class WidgetsConformanceTest {
 
     @Test
     void everyServedModuleKeepsItsLane_strictly() {
-        List<Finding> raw = new ConformanceEngine(DefaultJsRulePolicy.INSTANCE, new ServedModuleRenderer()).checkCrates(TOP);
+        List<Finding> raw = new ConformanceEngine(GameLoopConformance.POLICY, new ServedModuleRenderer()).checkCrates(TOP);
         List<GradedFinding> errors = FindingGrader.STRICT.grade(raw).stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors.stream().map(g -> describe(g.finding())).toList(),
                 "the ported widgets carry no debt - fix these, there is no ledger to file them in");
