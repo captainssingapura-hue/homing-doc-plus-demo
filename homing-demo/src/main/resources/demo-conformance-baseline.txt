@@ -8,6 +8,10 @@
 #   - DocViewWidget renders markdown via innerHTML.
 # Anything NOT here is a NEW violation and fails the build. Regenerate deliberately; list should shrink.
 #
+hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [exports-are-classes] exported function 'createAnimalCell' — a component is a class: function createAnimalCell(className, scope) {
+hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [exports-are-classes] exported function 'createAnimalScope' — a component is a class: function createAnimalScope() {
+hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [exports-are-classes] exported function 'createAnimalSelector' — a component is a class: function createAnimalSelector(scope) {
+hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [exports-are-classes] exported function 'setScopeAnimal' — a component is a class: function setScopeAnimal(scope, index) {
 hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [no-raw-css] raw CSS operation (use css.* API): cell.className = className;
 hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var cell = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.animation.AnimalCell [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var container = document.createElement("label");
@@ -133,6 +137,7 @@ hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal [no-literal-color]
 hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): fill="none" stroke="#8B7536" stroke-width="3" stroke-linecap="round"/>
 hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): fill="none" stroke="#C9A84C" stroke-width="2"/>
 hue.captains.singapura.js.homing.demo.es.animation.CuteAnimal [no-literal-color] literal colour (use a theme token var(--...), not a baked hex/rgb): fill="url(#lensGrad)" stroke="#8B7536" stroke-width="2.5"/>
+hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [keys-through-the-party] captures keys on the document — only the keyboard steward does: document.addEventListener("keydown", (e) => {
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): _loading.style.cssText = "padding:24px;";
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): cells.forEach((cell, i) => cell.style.transform = reversed[i] ? "scaleX(-1)" : "scaleX(1)");
@@ -146,6 +151,7 @@ hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [use-dom-ops-p
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var _loading = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var _main = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimals [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var e = document.createElement("div");
+hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget [keys-through-the-party] captures keys on the document — only the keyboard steward does: if (active) document.addEventListener('keydown', keyHandler);
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): cells[n].style.marginTop = offsets[n] + 'px';
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): for (var j = 0; j < cells.length; j++) cells[j].style.transform = reversed[j] ? 'scaleX(1)' : 'scaleX(-1)';
 hue.captains.singapura.js.homing.demo.es.animation.DancingAnimalsWidget [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): for (var k = 0; k < cells.length; k++) cells[k].style.transform = reversed[k] ? 'scaleX(-1)' : 'scaleX(1)';
@@ -165,6 +171,8 @@ hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [use-dom-ops-
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var _main = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimals [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var e = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.animation.SpinningAnimalsWidget [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): cells[j].style.transform = 'rotate(' + angles[j] + 'deg)';
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [keys-through-the-party] captures keys on the document — only the keyboard steward does: document.addEventListener("keydown", function (e) {
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [keys-through-the-party] captures keys on the document — only the keyboard steward does: document.addEventListener("keyup", function (e) {
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [max-effective-lines] module exceeds the 250 effective-line limit — split it
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [no-dom-destruction] wholesale DOM wipe: rootElement.replaceChildren();
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.height = ANIMAL_SIZE + "px";
@@ -207,6 +215,9 @@ hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [use-dom-ops-party] r
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var scoreEl = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var sky = document.createElement("div");
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimal [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): var world = document.createElement("div");
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [exports-are-classes] exported function 'createMovingAnimalGame' — a component is a class: function createMovingAnimalGame(config) {
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [keys-through-the-party] captures keys on the document — only the keyboard steward does: document.addEventListener('keydown', keyDown);
+hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [keys-through-the-party] captures keys on the document — only the keyboard steward does: document.addEventListener('keyup',   keyUp);
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [max-effective-lines] module exceeds the 250 effective-line limit — split it
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.left = worldX + 'px';
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): animal.style.top  = worldY + 'px';
@@ -226,6 +237,9 @@ hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [no-inline-style]
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): (function (note, t) { setTimeout(function () { deathSynth.triggerAttackRelease(note, '16n'); }, t); })(notes[di], timing[di]);
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [raf-game-loop] wall-clock timer in a game loop (use requestAnimationFrame): bgmTimer = setTimeout(bgmStep, durationToMs(dur, bgmData.bpm));
 hue.captains.singapura.js.homing.demo.es.game.MovingAnimalGame [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): el = document.createElement('div');
+hue.captains.singapura.js.homing.demo.es.game.platformer.JumpPhysics [exports-are-classes] exported function 'createJumpPhysics' — a component is a class: function createJumpPhysics(gravity, jumpStrength) {
+hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformEngine [exports-are-classes] exported function 'createPlatformEngine' — a component is a class: function createPlatformEngine(config) {
+hue.captains.singapura.js.homing.demo.es.game.platformer.PlatformerBgm [exports-are-classes] exported function 'getBgm' — a component is a class: function getBgm() {
 hue.captains.singapura.js.homing.demo.es.svg.DecomposedSvgDemo [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): controls.style.cssText = "padding:12px;display:flex;align-items:center;gap:16px;font-family:sans-serif;color:#ccc;flex-wrap:wrap;";
 hue.captains.singapura.js.homing.demo.es.svg.DecomposedSvgDemo [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): depthDisplay.style.minWidth = "3em";
 hue.captains.singapura.js.homing.demo.es.svg.DecomposedSvgDemo [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): depthLabel.style.whiteSpace = "nowrap";
@@ -305,7 +319,10 @@ hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [use-dom-ops-par
 hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): const thickLabel = document.createElement("label");
 hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): const zoomLabel = document.createElement("label");
 hue.captains.singapura.js.homing.demo.es.svg.ExtrudedTurtleDemo [use-dom-ops-party] raw DOM factory (use branch.createElement via the DomOpsParty, not document.create*): const zoomSlider = document.createElement("input");
+hue.captains.singapura.js.homing.demo.es.svg.SvgDecomposer [exports-are-classes] exported function 'decomposeSvg' — a component is a class: function decomposeSvg(svgString, opts) {
+hue.captains.singapura.js.homing.demo.es.svg.SvgExtruder [exports-are-classes] exported function 'extrudeSvg' — a component is a class: function extrudeSvg(svgString, opts) {
 hue.captains.singapura.js.homing.demo.playground.DocViewWidget [view-doctrine] innerHTML/outerHTML write (Pure-Component Views): body.innerHTML = marked.parse(md);
+hue.captains.singapura.js.homing.demo.playground.TableDemoModule [exports-are-classes] exported function 'mountTableDemo' — a component is a class: function mountTableDemo(branch, host, mode) {
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): errEl.style.cssText = 'padding:20px;color:#900;background:#fee;border:1px solid #c00;margin:20px;white-space:pre-wrap;font-family:monospace;';
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): noWidgetEl.style.cssText = 'padding:20px;color:#666;font-family:sans-serif;';
 hue.captains.singapura.js.homing.demo.studio.DemoStandardMPA [no-inline-style] inline style write (use a typed css class via css.addClass, not element.style): unknownEl.style.cssText = 'padding:20px;color:#900;font-family:sans-serif;';

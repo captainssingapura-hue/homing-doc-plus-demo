@@ -1,0 +1,178 @@
+// =============================================================================
+// FocusScene — the scene's components for the focus page, in two worlds. A
+// leaf is a card and a panel is a pane, in the design's vocabulary, and the
+// steward says where the keys are on each with one attribute — data-keys=
+// "held", "candidate" while the walk rests on it, or "lent" while a control of
+// its own has the native focus (RFC 0066 E3, keyboard §17.5); the design
+// answers it on the word, so a card and a pane are marked as that design marks
+// a card and a pane. The
+// LOGICAL world: Leaf and Panel are members of the focus party — never
+// natively focused, their ring drawn from granted, their keys from the
+// steward while nothing on the page is natively focused; a press claims for
+// the innermost member under it; a panel holds a branch and answers
+// wouldHold. The NATIVE world: the controls a panel puts inside itself — a
+// text field wired to let go on Escape, a button wired to nothing, a
+// checkbox inside a logical leaf, ListPanel's select — are natively
+// focusable, the browser's focus and ring, their own keys on their own
+// element; while one is focused the steward is dormant, whoever holds.
+// ListPanel picks which of its logical leaves holds with a native select,
+// wired by a listener on its own root. The framework wires none of it. No
+// component here knows the steward: they join a branch and call Keys.
+// =============================================================================
+
+const _owner = Object.freeze({ toString: () => "focusScene" });
+
+/** A leaf of the logical world: a member; a press claims, the arrows count while it holds, Escape or its button yields; never natively focused. */
+class Leaf {
+    constructor(branch, host, focusBranch, name, onHold) {
+        branch.activate(_owner);
+        var self = this;
+        var root = branch.createElement("leaf", "div");
+        css.addClass(root, ga_leaf);
+        root.setAttribute("role", "group");
+        root.setAttribute("aria-label", name);
+        var label = branch.createElement("label", "span");
+        label.textContent = name;
+        var count = branch.createElement("count", "span");
+        css.addClass(count, ga_leaf_count);
+        count.textContent = "0";
+        var yieldBtn = branch.createElement("yield", "button");
+        yieldBtn.type = "button";
+        yieldBtn.tabIndex = -1;
+        css.addClass(yieldBtn, ga_leaf_yield);
+        yieldBtn.textContent = "yield";
+        yieldBtn.setAttribute("aria-label", "yield the keys");
+        root.appendChild(label);
+        root.appendChild(count);
+        root.appendChild(yieldBtn);
+        host.appendChild(root);
+        this.root = root; this._count = count; this._n = 0; this._onHold = onHold || null;
+        this.focus = focusBranch.join(name, this);
+        this._off = Keys.claimOn(root, this.focus);
+        yieldBtn.addEventListener("mousedown", function (ev) { ev.preventDefault(); });   // the press claimed by the convention; the button takes no focus of its own
+        yieldBtn.addEventListener("click", function () { Keys.yield(self.focus); });
+    }
+    keyDown(ev) {
+        if (ev.key === "Escape") { Keys.yield(this.focus); return true; }
+        if (ev.key === "ArrowUp") { this._n++; } else if (ev.key === "ArrowDown") { this._n--; } else return false;
+        this._count.textContent = String(this._n);
+        return true;
+    }
+    /** Told to activate by its container: what a press on it does — a claim. */
+    activate() { Keys.claim(this.focus); }
+    /** A native checkbox inside this logical leaf: a press on it claims the leaf (the innermost member) and focuses the box; Space toggles it natively. */
+    check(branch, label) {
+        branch.activate(_owner);
+        var box = branch.createElement("check", "input");
+        box.type = "checkbox";
+        box.setAttribute("aria-label", label);
+        this.root.insertBefore(box, this._count);
+        return box;
+    }
+    reset() { this._n = 0; this._count.textContent = "0"; }
+    granted() { if (this._onHold) this._onHold(this); }
+    dispose() { this._off(); this.focus.leave(); }
+}
+
+/** A panel: a container that holds a branch; a press on its header claims for the panel; a yield from below it catches or lets pass, as built. Never natively focused. */
+class Panel {
+    constructor(branch, host, focusBranch, name, catches) {
+        branch.activate(_owner);
+        var root = branch.createElement("panel", "div");
+        css.addClass(root, ga_panel);
+        root.setAttribute("role", "group");
+        root.setAttribute("aria-label", name);
+        var header = branch.createElement("header", "div");
+        css.addClass(header, ga_panel_header);
+        header.textContent = name;
+        var note = branch.createElement("note", "span");
+        css.addClass(note, ga_panel_note);
+        note.textContent = catches ? "catches a yield" : "lets a yield pass";
+        header.appendChild(note);
+        root.appendChild(header);
+        host.appendChild(root);
+        this.root = root; this._header = header; this._catches = !!catches;
+        this.focus = focusBranch.createBranch(name, this);
+        this._off = Keys.claimOn(root, this.focus.owner);
+        this._leaves = [];
+        // a press on the header claims — and the steward lets go of any focus outside the panel's own area — and the
+        // press's own default, the focus to the body, is stopped, so what granted put in a control of the panel's
+        // own (panel C's list, a wrapped grid's host) stays there
+        header.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
+    }
+    /** A leaf inside: it joins the panel's branch. */
+    leaf(branch, name, onHold) { var l = new Leaf(branch, this.root, this.focus, name, onHold); this._leaves.push(l); return l; }
+    /** A native text field inside the panel: an Escape it does not take lets it go — the steward's rule — so the panel has the keys again. */
+    field(branch, label) {
+        branch.activate(_owner);
+        var input = branch.createElement("field", "input");
+        input.type = "text";
+        css.addClass(input, ga_field);
+        input.setAttribute("aria-label", label);
+        input.placeholder = label;
+        this.root.appendChild(input);
+        return input;
+    }
+    /** A native button inside the panel, wired to nothing but its click: Enter and Space are the browser's, Escape goes nowhere. */
+    button(branch, label, onClick) {
+        branch.activate(_owner);
+        var btn = branch.createElement("button", "button");
+        btn.type = "button";
+        css.addClass(btn, ga_button);
+        btn.textContent = label;
+        btn.addEventListener("click", onClick);
+        this.root.appendChild(btn);
+        return btn;
+    }
+    /** Asked when a descendant yields: a catching panel holds, the other lets the keys go on up. */
+    wouldHold(from) { return this._catches; }
+    /** The arrows taken and dropped, so a leaf's count shows who holds; Escape yields on up. */
+    keyDown(ev) {
+        if (ev.key === "Escape") { Keys.yield(this.focus.owner); return true; }
+        return ev.key === "ArrowUp" || ev.key === "ArrowDown";
+    }
+    dispose() { this._leaves.forEach(function (l) { l.dispose(); }); this._off(); this.focus.owner.leave(); }
+}
+
+/**
+ * Panel C: a container of the logical world with a native select that picks which of its leaves — members of its
+ * branch, like any panel's — holds the keys. While the list is focused the steward is dormant and the arrows walk it
+ * natively; the panel hears its keys by a listener on its own root, bubbled: Enter blurs the list and tells the picked
+ * leaf to activate itself — a claim, what a press on it does; Escape blurs the list and yields the panel. A leaf's own
+ * Escape yields up the tree, the panel catches, and on granted — a press on its header, a leaf's yield — it puts the
+ * focus back in its list, so the pick is made by keys again. App-layer wiring, all of it.
+ */
+class ListPanel extends Panel {
+    constructor(branch, host, focusBranch, name) {
+        super(branch, host, focusBranch, name, true);
+        var self = this;
+        var list = branch.createElement("list", "select");
+        css.addClass(list, ga_panel_list);
+        list.setAttribute("size", "3");
+        list.setAttribute("aria-label", "which leaf holds the keys; Enter confirms");
+        this.root.appendChild(list);
+        this._list = list;
+        this._byName = {};
+        this.root.addEventListener("keydown", function (ev) {
+            if (ev.target !== list) return;
+            if (ev.key === "Enter") { list.blur(); var l = self._byName[list.value]; if (l) l.activate(); }
+            else if (ev.key === "Escape") { list.blur(); Keys.yield(self.focus.owner); }
+            else return;
+            ev.preventDefault();
+            ev.stopPropagation();
+        });
+    }
+    /** A leaf inside, a member of the panel's branch, and an option for it; a leaf that comes to hold by any way is shown in the list. */
+    leaf(branch, name) {
+        var self = this;
+        var l = super.leaf(branch, name, function (held) { self._list.value = held.focus.name; });
+        var option = branch.createElement("option-" + name, "option");
+        option.value = name;
+        option.textContent = name;
+        this._list.appendChild(option);
+        this._byName[name] = l;
+        return l;
+    }
+    /** Granted by a press or a call: the list takes the native focus, so the pick is made by keys; the focus arriving is already somewhere. */
+    granted(by) { if (by !== "native") try { this._list.focus({ preventScroll: true }); } catch (e) {} }
+}
