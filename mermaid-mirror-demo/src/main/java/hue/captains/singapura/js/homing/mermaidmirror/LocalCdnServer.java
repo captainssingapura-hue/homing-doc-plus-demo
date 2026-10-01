@@ -11,8 +11,8 @@ import java.nio.file.Path;
 
 /**
  * Port 2 — a minimal "manual CDN": a static file server over {@code ./mirror/} that adds the
- * headers a <em>cross-origin</em> ES-module import requires. The studio page (port 8090)
- * imports {@code http://localhost:8091/mermaid.esm.min.mjs}, which is cross-origin, so the
+ * headers a <em>cross-origin</em> ES-module import requires. The studio page (port 8108)
+ * imports {@code http://localhost:8109/mermaid.esm.min.mjs}, which is cross-origin, so the
  * browser enforces CORS on the module fetch — hence {@code Access-Control-Allow-Origin: *}
  * here. Also serves a JavaScript MIME type (module scripts are MIME-checked strictly) and
  * preserves the relative directory layout so Mermaid's {@code ./chunks/…} imports resolve.
@@ -26,7 +26,7 @@ import java.nio.file.Path;
  *     -Dexec.mainClass=hue.captains.singapura.js.homing.mermaidmirror.LocalCdnServer
  * }</pre>
  *
- * <p>Config: {@code -Dmermaid.cdn.port} (default 8091), {@code -Dmermaid.mirror.dir}
+ * <p>Config: {@code -Dmermaid.cdn.port} (default 8109), {@code -Dmermaid.mirror.dir}
  * (default {@code mirror}).</p>
  */
 public final class LocalCdnServer {
@@ -34,7 +34,7 @@ public final class LocalCdnServer {
     private LocalCdnServer() {}
 
     public static void main(String[] args) throws IOException {
-        int port = Integer.getInteger("mermaid.cdn.port", 8091);
+        int port = Integer.getInteger("mermaid.cdn.port", 8109);
         Path root = Path.of(System.getProperty("mermaid.mirror.dir", "mirror")).toAbsolutePath().normalize();
 
         if (!Files.isDirectory(root)) {

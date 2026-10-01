@@ -12,12 +12,12 @@
     <artifactId>mermaid-mirror-demo</artifactId>
 
     <description>
-        End-to-end demo of running a Mermaid-enabled studio against a self-hosted
+        End-to-end demo of running a Mermaid-enabled site against a self-hosted
         "manual CDN" instead of the public one:
 
-          • MermaidStudioServer (port 8090) — a tiny studio with one Mermaid doc,
-            whose MermaidProxyModule URL is OVERRIDDEN to the local CDN below.
-          • LocalCdnServer (port 8091) — serves ./mirror/ over HTTP with the CORS
+          • MermaidStudioServer (port 8108) — a tiny catalogue site with one Mermaid doc,
+            read in DocView, whose MermaidProxyModule URL is OVERRIDDEN to the local CDN below.
+          • LocalCdnServer (port 8109) — serves ./mirror/ over HTTP with the CORS
             headers a cross-origin ES-module import needs.
           • MermaidDownloader — mirrors Mermaid (entry + transitive chunks) from
             jsDelivr into ./mirror/ so the local CDN has something to serve.
@@ -32,20 +32,80 @@
     </properties>
 
     <dependencies>
+        <!-- The doc, and Mermaid's proxy with the override table it reads its address from. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-studio-starter</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-studio-base</artifactId>
+            <artifactId>homing-doc-model</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-libs</artifactId>
             <version>${homing.core.version}</version>
+        </dependency>
+        <!-- The site: the catalogue site, DocView, and the standard MPA it is served through. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.studio</groupId>
+            <artifactId>homing-catalogue-site</artifactId>
+            <version>${homing.studio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.studio</groupId>
+            <artifactId>homing-docview-app</artifactId>
+            <version>${homing.studio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.studio</groupId>
+            <artifactId>homing-docview-site</artifactId>
+            <version>${homing.studio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa-standard</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <!-- The site's own substrate: the catalogue its tree is, the page and the MPA, a node's name, the designs. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-catalogue</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-base</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-rigid-tree</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-designs</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-server</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.studio</groupId>
+            <artifactId>homing-catalogue-gate</artifactId>
+            <version>${homing.studio.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

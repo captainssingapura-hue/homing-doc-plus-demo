@@ -15,7 +15,7 @@ public record MermaidMirrorDoc() implements ClasspathMarkdownDoc {
     @Override public UUID   uuid()    { return ID; }
     @Override public String title()   { return "Mermaid via Local CDN"; }
     @Override public String summary() {
-        return "A Mermaid diagram whose library is served by the local CDN (port 8091), not "
+        return "A Mermaid diagram whose library is served by the local CDN (port 8109), not "
              + "the public one — the studio overrides MermaidProxyModule's URL at boot.";
     }
     @Override public String category(){ return "DEMO"; }

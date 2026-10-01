@@ -6,11 +6,11 @@ public one — the scenario for enterprise / air-gapped networks where the brows
 
 ```
  ┌────────────────────┐  import proxy (same-origin)   ┌──────────────────────┐
- │  Browser           │ ────────────────────────────▶ │  Studio  :8090       │
+ │  Browser           │ ────────────────────────────▶ │  Studio  :8108       │
  │                    │ ◀──────────────────────────── │  (MermaidStudioServer)│
  │                    │        proxy JS               └──────────────────────┘
  │                    │   import mermaid.esm.min.mjs   ┌──────────────────────┐
- │                    │ ────────────────────────────▶ │  Local CDN  :8091     │
+ │                    │ ────────────────────────────▶ │  Local CDN  :8109     │
  │                    │ ◀──────────────────────────── │  (LocalCdnServer)     │
  └────────────────────┘   JS + CORS headers           └──────────▲───────────┘
                                                                   │ mirrors files
@@ -23,10 +23,10 @@ The studio's `main()` overrides the proxy URL at boot so Mermaid is fetched from
 
 ```java
 ExternalModuleUrlRegistry.INSTANCE.override(
-        MermaidProxyModule.class, "http://localhost:8091/mermaid.esm.min.mjs");
+        MermaidProxyModule.class, "http://localhost:8109/mermaid.esm.min.mjs");
 ```
 
-Because the studio page (`:8090`) imports from a *different* origin (`:8091`), that fetch is
+Because the studio page (`:8108`) imports from a *different* origin (`:8109`), that fetch is
 **cross-origin** — so `LocalCdnServer` sends `Access-Control-Allow-Origin: *` (and a JS MIME
 type). That's the CORS control added locally.
 
@@ -43,11 +43,11 @@ mvn -o -f pom.xml compile
 mvn -o -f pom.xml org.codehaus.mojo:exec-maven-plugin:3.1.0:java \
     -Dexec.mainClass=hue.captains.singapura.js.homing.mermaidmirror.MermaidDownloader
 
-# 2) start the local CDN on :8091  (leave running)
+# 2) start the local CDN on :8109  (leave running)
 mvn -o -f pom.xml org.codehaus.mojo:exec-maven-plugin:3.1.0:java \
     -Dexec.mainClass=hue.captains.singapura.js.homing.mermaidmirror.LocalCdnServer
 
-# 3) start the studio on :8090     (leave running)
+# 3) start the studio on :8108     (leave running)
 mvn -o -f pom.xml org.codehaus.mojo:exec-maven-plugin:3.1.0:java \
     -Dexec.mainClass=hue.captains.singapura.js.homing.mermaidmirror.MermaidStudioServer
 ```
@@ -55,7 +55,7 @@ mvn -o -f pom.xml org.codehaus.mojo:exec-maven-plugin:3.1.0:java \
 Then open the doc printed by step 3:
 
 ```
-http://localhost:8090/app?app=doc-reader&doc=b10c4500-000e-4001-8000-00000000000e
+http://localhost:8108/mermaid
 ```
 
 If the flowchart renders as a picture, the loop works end to end: **downloader → local CDN →
@@ -66,9 +66,9 @@ override → studio**. If it shows a fallback note, the CDN couldn't serve the f
 
 | What | Property | Default |
 |---|---|---|
-| Studio port | `-Dmermaid.studio.port` | `8090` |
-| CDN URL the studio overrides to | `-Dmermaid.cdn.url` | `http://localhost:8091/mermaid.esm.min.mjs` |
-| CDN port | `-Dmermaid.cdn.port` | `8091` |
+| Studio port | `-Dmermaid.studio.port` | `8108` |
+| CDN URL the studio overrides to | `-Dmermaid.cdn.url` | `http://localhost:8109/mermaid.esm.min.mjs` |
+| CDN port | `-Dmermaid.cdn.port` | `8109` |
 | Mirror dir | `-Dmermaid.mirror.dir` | `mirror` |
 | Download source base | `-Dmermaid.base` | `https://cdn.jsdelivr.net/npm/mermaid@11/dist/` |
 | Download entry file | `-Dmermaid.entry` | `mermaid.esm.min.mjs` |
