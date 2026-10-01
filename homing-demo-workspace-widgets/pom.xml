@@ -32,6 +32,12 @@
             <artifactId>homing-workspace-widgets</artifactId>
             <version>${homing.ws.version}</version>
         </dependency>
+        <!-- The parties the widgets meet in: the animal choice, the platformer's run. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-parties</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
         <!-- The party a widget mints its elements from, and the keys: its focus member, the steward's convention. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

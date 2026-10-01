@@ -32,18 +32,13 @@
             <artifactId>homing-demo-workspace-widgets</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!-- From the workspace repo: the page a workspace is, the monitors, what a workspace declares of its kinds. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
-            <artifactId>homing-workspace-shell</artifactId>
-            <version>${homing.ws.version}</version>
-        </dependency>
         <!-- The grouped site: a group a page, each workspace in its anchor, the switcher the page summons. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
             <artifactId>homing-workspace-site</artifactId>
             <version>${homing.ws.version}</version>
         </dependency>
+        <!-- From the workspace repo: the monitors, and what a workspace declares of its kinds. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
             <artifactId>homing-workspace-monitors</artifactId>
@@ -60,26 +55,12 @@
             <artifactId>homing-workspace-groups-core-models</artifactId>
             <version>${homing.ws.version}</version>
         </dependency>
-        <!-- The substrate a page and a server come from, the page model, its standard implementation, the designs. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-site-base</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-site-mpa</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-site-mpa-standard</artifactId>
-            <version>${homing.components.version}</version>
-        </dependency>
+        <!-- The designs the tests hold the sheets to; the site that serves the page brings its own. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-designs</artifactId>
             <version>${homing.core.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -55,7 +55,8 @@
             <artifactId>site-gallery-demo</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- From the workspace repo: the grouped page's params, and the server that keeps the workspaces' states. -->
+        <!-- From the workspace repo: the grouped page's params, the group it places, the server that
+             keeps the workspaces' states and the files it keeps them in. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
             <artifactId>homing-workspace-site</artifactId>
@@ -63,8 +64,45 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-groups-core-models</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
             <artifactId>homing-workspace-shell</artifactId>
             <version>${homing.ws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-log</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
+        <!-- The site's own substrate: the catalogue its tree is, the page and the MPA it is served
+             through, the preferences behind the bar's button, a node's name. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-catalogue</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-base</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-preferences</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-rigid-tree</artifactId>
+            <version>${homing.core.version}</version>
         </dependency>
         <!-- The site: the catalogue site, DocView, and the standard MPA it is served through. -->
         <dependency>
