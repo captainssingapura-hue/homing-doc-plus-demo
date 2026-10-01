@@ -12,9 +12,10 @@
     <artifactId>homing-demo-site</artifactId>
 
     <description>
-        The demo's docs on the site the studio is read on: a catalogue site whose
-        docs are read in DocView, served through the standard MPA. No old studio,
-        none of its viewers. Run with DemoSiteServer; listens on 8082.
+        The demo's front door: a catalogue site whose docs are read in DocView and
+        whose workspaces open beside it, served through the standard MPA, with a
+        server that keeps the workspaces' states. No old studio, none of its viewers,
+        none of its old workspace. Run with DemoSiteServer; listens on 8082.
     </description>
 
     <properties>
@@ -40,6 +41,23 @@
             <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
             <artifactId>homing-demo-workspace-widgets</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <!-- The demo's workspaces, declared, and the page they open in: placed in the catalogue, opened beside it. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>homing-demo-workspace</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- From the workspace repo: the grouped page's params, and the server that keeps the workspaces' states. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-site</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-shell</artifactId>
+            <version>${homing.ws.version}</version>
         </dependency>
         <!-- The site: the catalogue site, DocView, and the standard MPA it is served through. -->
         <dependency>

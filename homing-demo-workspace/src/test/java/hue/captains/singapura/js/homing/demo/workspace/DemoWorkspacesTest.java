@@ -1,40 +1,20 @@
 package hue.captains.singapura.js.homing.demo.workspace;
 
-import hue.captains.singapura.js.homing.site.Path;
-import hue.captains.singapura.js.homing.site.Query;
 import hue.captains.singapura.js.homing.workspace.groups.core.models.SplitGrid;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The demo's workspaces run on their own: a site of one group - the video room
- * under Media, its default, and the animal platformer under Games - the grouped
- * page handed the demo's manifests, groups and first states. What this checks is
- * the handover; past it, the site's and the shell's.
+ * The demo's workspaces, declared: one group - the video room under Media, its
+ * default, and the animal platformer under Games - and what the grouped page is
+ * handed, the demo's manifests, groups and first states. The page itself is the
+ * demo site's, placed in its catalogue; past the handover, the site's and the shell's.
  */
-class DemoWorkspaceSiteTest {
-
-    private static String page(String path) {
-        return DemoWorkspaceSite.INSTANCE.router().resolve(Path.parse(path)).orElseThrow(() -> new AssertionError("nothing at " + path)).html(Query.NONE).body();
-    }
-
-    @Test
-    void theGroupIsThePage_theRootSendsToIt_itsServerKeepingItsStates() {
-        String html = page("/demo");
-        assertTrue(html.contains(DemoWorkspaceApp.class.getCanonicalName()), "the page imports the demo's app and calls its appMain");
-        assertTrue(html.contains("appMain(page.main"), "the app is handed the MPA's slot");
-        assertTrue(html.contains("\"ws_group\":\"demo\""), "the route's group");
-        assertTrue(html.contains("\"ws_server\":\"on\""), "the route says the server keeps its states");
-        assertTrue(page("/").contains("window.location.replace(\"\\/demo\" + window.location.hash)"), "the root sends to the group");
-        for (String nowhere : List.of("/elsewhere", "/media/demo", "/games/platformer")) {
-            assertFalse(DemoWorkspaceSite.INSTANCE.router().resolve(Path.parse(nowhere)).isPresent(), nowhere);
-        }
-    }
+class DemoWorkspacesTest {
 
     @Test
     void theGroupFilesTheVideoRoomUnderMedia_andThePlatformerUnderGames() {

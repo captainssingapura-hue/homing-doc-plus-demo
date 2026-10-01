@@ -18,11 +18,11 @@
         <module>mermaid-mirror-demo</module>
         <module>doc-pdf-export</module>
         <!-- The demo's widgets ported to the workspace on its core (the homing-ssjs-workspace
-             repo), and the workspace that launches them - linked to that workspace alone,
-             never to the studio's old one. -->
+             repo), and its workspaces declared - linked to that workspace alone, never to the
+             studio's old one. The demo site serves them. -->
         <module>homing-demo-workspace-widgets</module>
         <module>homing-demo-workspace</module>
-        <!-- The demo's docs on the site the studio is read on: a catalogue site, its docs read in DocView. -->
+        <!-- The demo's front door: a catalogue site, its docs read in DocView, its workspaces opened beside. -->
         <module>homing-demo-site</module>
     </modules>
 

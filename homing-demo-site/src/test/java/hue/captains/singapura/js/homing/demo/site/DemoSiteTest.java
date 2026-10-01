@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.demo.site;
 
 import hue.captains.singapura.js.homing.catalogue.site.CatalogueListingApp;
 import hue.captains.singapura.js.homing.catalogue.site.EntryGetAction;
+import hue.captains.singapura.js.homing.demo.workspace.DemoWorkspaceApp;
 import hue.captains.singapura.js.homing.docview.app.DocViewApp;
 import hue.captains.singapura.js.homing.docview.site.DocViews;
 import hue.captains.singapura.js.homing.docview.site.PayloadGetAction;
@@ -18,8 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The demo site: its root a listing page of the site's one MPA, and the composed doc read in
- * DocView at its authentic path - its tree built, every content kind it holds a part of it.
+ * The demo site: its root a listing page of the site's one MPA; the composed doc read in DocView
+ * at its authentic path - its tree built, every content kind it holds a part of it; and the
+ * demo's workspaces, the grouped page at the group's address.
  */
 class DemoSiteTest {
 
@@ -38,7 +40,22 @@ class DemoSiteTest {
         assertTrue(root.contains("label:\"Homing · demo\""), "the demo's brand on the chrome");
         JsonObject e = entry("/");
         assertEquals("Homing demo", e.getString("name"));
-        assertEquals(List.of("/composed-doc"), e.getJsonArray("children").stream().map(o -> ((JsonObject) o).getString("to")).toList());
+        assertEquals(List.of("/composed-doc", "/demo"), children(e, "to"));
+        assertEquals(List.of("in-place", "new-tab"), children(e, "opens"), "a doc in place; the workspaces beside, a place of work of their own");
+    }
+
+    @Test
+    void theWorkspaces_theGroupsPageAtTheGroupsAddress_itsServerKeepingItsStates() {
+        String html = page("/demo");
+        assertTrue(html.contains(DemoWorkspaceApp.class.getCanonicalName()), "the page imports the demo's app and calls its appMain");
+        assertTrue(html.contains("appMain(page.main"), "the app is handed the MPA's slot");
+        assertTrue(html.contains("\"ws_group\":\"demo\""), "the route's group");
+        assertTrue(html.contains("\"ws_server\":\"on\""), "the route says the server keeps its states");
+        assertTrue(html.contains("label:\"Homing · demo\""), "under the demo's brand, as every page of the site");
+    }
+
+    private static List<String> children(JsonObject e, String field) {
+        return e.getJsonArray("children").stream().map(o -> ((JsonObject) o).getString(field)).toList();
     }
 
     @Test

@@ -11,8 +11,8 @@ import hue.captains.singapura.js.homing.site.mpa.StandardMpa;
 
 /**
  * The demo as a site: its router IS the catalogue router, at the root, its tree read with the
- * site's one MPA - every doc read in DocView, every catalogue's listing - so {@code /} is the
- * demo's listing and every other address a walk down its tree.
+ * site's one MPA - every doc read in DocView, the workspaces' page, every catalogue's listing - so
+ * {@code /} is the demo's listing and every other address a walk down its tree.
  */
 public record DemoSite() implements Site {
 
