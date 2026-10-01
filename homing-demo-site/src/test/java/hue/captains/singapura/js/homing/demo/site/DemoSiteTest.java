@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -43,8 +44,11 @@ class DemoSiteTest {
         assertTrue(root.contains("label:\"Homing · demo\""), "the demo's brand on the chrome");
         JsonObject e = entry("/");
         assertEquals("Homing demo", e.getString("name"));
-        assertEquals(List.of("/gallery", "/composed-doc", "/demo"), children(e, "to"), "the gallery grafted, then the site's own leaves");
-        assertEquals(List.of("in-place", "in-place", "new-tab"), children(e, "opens"), "the gallery and a doc in place; the workspaces beside, a place of work of their own");
+        assertEquals(List.of("/docs", "/workspaces", "/gallery"), children(e, "to"), "three catalogues, nothing loose: its own two, then the gallery grafted");
+        assertEquals(List.of("catalogue", "catalogue", "catalogue"), children(e, "kind"));
+        assertEquals(List.of("/docs/composed-doc"), children(entry("/docs"), "to"));
+        assertEquals(List.of("/workspaces/demo"), children(entry("/workspaces"), "to"));
+        assertEquals(List.of("new-tab"), children(entry("/workspaces"), "opens"), "a workspace beside the listing, a place of work of its own");
     }
 
     @Test
@@ -55,12 +59,14 @@ class DemoSiteTest {
     }
 
     @Test
-    void theWorkspaces_theGroupsPageAtTheGroupsAddress_itsServerKeepingItsStates() {
-        String html = page("/demo");
+    void theWorkspaces_theGroupsPageUnderTheWorkspaces_toldWhereTheGroupsAre_itsServerKeepingItsStates() {
+        String html = page("/workspaces/demo");
         assertTrue(html.contains(DemoWorkspaceApp.class.getCanonicalName()), "the page imports the demo's app and calls its appMain");
         assertTrue(html.contains("appMain(page.main"), "the app is handed the MPA's slot");
         assertTrue(html.contains("\"ws_group\":\"demo\""), "the route's group");
         assertTrue(html.contains("\"ws_server\":\"on\""), "the route says the server keeps its states");
+        assertTrue(html.contains("\"ws_under\":\"\\/workspaces\""), "where the site placed the groups: the addresses the page makes of them are there");
+        assertFalse(DemoSite.INSTANCE.router().resolve(Path.parse("/demo")).isPresent(), "the root is not where the groups are");
         assertTrue(html.contains("label:\"Homing · demo\""), "under the demo's brand, as every page of the site");
     }
 
@@ -70,11 +76,11 @@ class DemoSiteTest {
 
     @Test
     void theComposedDoc_readInDocView_itsTreeBuilt() throws Exception {
-        String doc = page("/composed-doc");
+        String doc = page("/docs/composed-doc");
         assertTrue(doc.contains(DocViewApp.class.getCanonicalName()), "DocView, as the page");
         var payload = new JsonObject(new PayloadGetAction(new DocViews(DemoSite.ROUTER))
-                .execute(new PayloadGetAction.Query("/composed-doc"), new EmptyParam.NoHeaders()).get().body());
-        assertEquals("/composed-doc", payload.getString("doc"), "a doc read by the path its page is at");
+                .execute(new PayloadGetAction.Query("/docs/composed-doc"), new EmptyParam.NoHeaders()).get().body());
+        assertEquals("/docs/composed-doc", payload.getString("doc"), "a doc read by the path its page is at");
         JsonObject tree = payload.getJsonObject("tree");
         assertEquals(ComposedDemoDoc.INSTANCE.title(), tree.getJsonObject("label").getString("text"));
         String all = tree.encode();
