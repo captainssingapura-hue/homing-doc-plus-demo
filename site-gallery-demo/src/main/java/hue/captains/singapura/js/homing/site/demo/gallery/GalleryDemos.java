@@ -170,10 +170,23 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "an offset within the chip, so the chip is placed and the hand never asked where on it the press was — kept within "
                     + "the row and on its rail however the hand wanders; the slot it is nearest is where it will land, and the chips "
                     + "between step aside, live, as it passes them. Let go and it settles onto its slot, eased as the design eases it, "
-                    + "the others stepping back at once. Leaving the row — the tab that detaches and floats — is being worked out here "
+                    + "the others stepping back at once. Leaving the row — the tab that detaches and floats — is being worked out in the tear lab "
                     + "next; a dock takes a tab by call meanwhile. TabHand is the hand, TabDrag the arithmetic, headless: the bar as "
                     + "slots at one pitch, the nearest slot, who steps aside.",
                     TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
+            demo("tear", "layout", "Tearing a tab off", "A lab for the detach by mouse: the rail, the breach, the flight and the settle.",
+                    "Detaching a tab by the mouse, as a browser does it, worked out before a desk is asked to: a lab, with the "
+                    + "arithmetic in its own headless module, TabTear. Drag a chip and it stays on its rail while the hand is within "
+                    + "a band around the strip, however far it wanders sideways. Past the band it tears, and a window would be made "
+                    + "there, at the breach. The hand is usually fast at that moment, so the window does not chase it: the velocity at "
+                    + "the breach is taken as the flight's own, and the window waits while the hand keeps it. A material change in the "
+                    + "velocity, held for a moment, ends the flight: the window is moved to the hand and follows it from then on. A "
+                    + "tear slower than the floor settles where it happens, and a release in flight settles where the hand lets go. "
+                    + "The band, the change, the hold, the span the velocity is measured over, the floor, and what counts as a change "
+                    + "- the speed either way, the speed falling only, or the vector, so a turn counts - are all on sliders; the "
+                    + "hand's path is dotted in the phase's colour, and the speed is charted a frame at a time against the breach's. "
+                    + "No window is made: a torn chip stands for one.",
+                    TearLabApp.INSTANCE, "TearLabWidget", Map.of()),
             demo("sliders", "controls", "Sliders", "A number set by a knob on a track; every part the design's.",
                     "The slider the other pages set their size, aspect and extent with, on its own: the track sunk, the fill from "
                     + "the detent to the value, the knob raised and ringed when it has the focus, the notch where the knob rests — "
