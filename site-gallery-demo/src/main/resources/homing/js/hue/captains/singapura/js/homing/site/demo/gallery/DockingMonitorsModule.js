@@ -13,12 +13,13 @@
 //   new EventsTab(branch, { focus })     say(line) adds a line and keeps it in view
 //
 //   new Instruments(branch, { host, keyboard, onEvent? })   the four together: a
-//       float on a DESK of their own, the page's section for a floor. They
-//       watch the workspace and are not part of it — no dock of it offers to
-//       take them, and a desk's tab-panes never leave it. No tab menu: Detach
-//       would only float one on its own desk.
+//       dock that floats, on a DESK of their own, the page's section for a
+//       floor. They watch the workspace and are not part of it — no dock of it
+//       offers to take them, and a desk's tab-panes never leave it. No tab
+//       menu: Detach would only float one on its own desk.
 //     instruments.events     the EventsTab
-//     instruments.domops()   the DomOpsTab, or null once the float is closed
+//     instruments.domops()   the DomOpsTab, or null once the dock is closed
+//     instruments.close()    the four closed and the dock gone: its cross does this
 // =============================================================================
 
 const _monitorOwner = Object.freeze({ toString: () => "dockingMonitors" });
@@ -104,16 +105,37 @@ class Instruments {
         var o = opts || {}, self = this;
         branch.activate(_monitorOwner);
         this.branch = branch;
+        this._closed = false;
         this.desk = new Desk(branch.createBranch("desk"), { host: o.host, onEvent: o.onEvent, keyboard: o.keyboard, keyboardId: "docking/instruments", focusName: "instruments" });
-        this.float = this.desk.float({ id: "instruments", x: 34, y: 430, w: 420, h: 300 });
+        // A DOCK THAT FLOATS: a frame on the desk's own layer around a multi-tab pane, the strip the frame's one bar. Not a
+        // desk's float - a float is one tab in transit - but a dock the desk holds like any other, lying on its layer: the
+        // strip's ground moves the frame, and the cross at its end closes the four.
+        this.frame = this.desk.layer.open({ id: "instruments", head: false, closable: false, title: "Instruments", x: 34, y: 430, w: 420, h: 300 });
+        var own = this.frame.branch.createBranch("dock");
+        own.activate(_monitorOwner);
+        this.pane = new MultiTabPane(own.createBranch("host"), { host: this.frame.body, slotId: "instruments", addable: false, focusName: this.frame.branch.name,
+            onEvent: o.onEvent, onEmpty: function () { self.close(); }, onClose: function () { self.close(); } });
+        this.desk.addDock(this.pane);
+        this.frame.handle(this.pane.bar(), function (ev) { return self.pane.barGround(ev.target); });
         [["events", "Events", EventsTab], ["focus", "Focus", FocusTab], ["steward", "Steward", StewardTab], ["domops", "DomOps", DomOpsTab]].forEach(function (d) {
-            self.desk.open({ id: d[0], title: d[1], make: function (b, t) { return new d[2](b, { focus: t.focus }); } }, self.float.host);
+            self.desk.open({ id: d[0], title: d[1], make: function (b, t) { return new d[2](b, { focus: t.focus }); } }, self.pane);
         });
-        this.events = this.float.host.widgetOf("events");
+        this.events = this.pane.widgetOf("events");
     }
-    domops() { return this.float.closed() ? null : this.float.host.widgetOf("domops"); }
+    domops() { return this._closed ? null : this.pane.widgetOf("domops"); }
+    /** The four closed, the dock out of the desk, and its frame gone. */
+    close() {
+        if (this._closed) return;
+        this._closed = true;
+        var pane = this.pane;
+        pane.tabs().forEach(function (id) { pane.removeTab(id); });
+        this.desk.removeDock(pane);
+        pane.dispose();
+        this.desk.layer.close(this.frame.id);
+    }
     dispose() {
-        this.desk.dispose();   // every instrument closed, and the float with the last
+        this.close();
+        this.desk.dispose();
         try { this.branch.dissolve(); } catch (e) {}
     }
 }
