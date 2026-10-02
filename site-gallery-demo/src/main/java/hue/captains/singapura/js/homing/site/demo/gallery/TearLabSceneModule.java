@@ -46,7 +46,8 @@ public record TearLabSceneModule() implements DomModule<TearLabSceneModule> {
                         new PaneStyles.mtp_chip_shifted()
                 ), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new TearLabStyles.tl_stage(), new TearLabStyles.tl_strip(), new TearLabStyles.tl_band(), new TearLabStyles.tl_free(),
+                        new TearLabStyles.tl_stage(), new TearLabStyles.tl_strip(), new TearLabStyles.tl_band(), new TearLabStyles.tl_band_inner(),
+                        new TearLabStyles.tl_centre(), new TearLabStyles.tl_free(),
                         new TearLabStyles.tl_waiting(), new TearLabStyles.tl_hand(), new TearLabStyles.tl_dot(), new TearLabStyles.tl_mark(),
                         new TearLabStyles.tl_rail(), new TearLabStyles.tl_flight(), new TearLabStyles.tl_follow(),
                         new TearLabStyles.tl_chart(), new TearLabStyles.tl_bar(), new TearLabStyles.tl_level()

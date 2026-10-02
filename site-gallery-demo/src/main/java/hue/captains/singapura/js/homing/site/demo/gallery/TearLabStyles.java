@@ -25,7 +25,7 @@ import static hue.captains.singapura.js.homing.design.Text.Caption;
 import static hue.captains.singapura.js.homing.design.Text.Code;
 
 /**
- * The tear-off lab's sheet: a sunken stage the strip sits in, the band's two
+ * The tear-off lab's sheet: a sunken stage the strip sits in, the escape's and the capture's
  * edges, the hand, its trail and the breach and settle marks, a chip torn
  * off the strip and placed by the lab, and the speed chart under the stage.
  * The phases are three colours the design already has — the rail secondary,
@@ -74,6 +74,32 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
             top: var(--tl-y, 0px);
             border-top-width: 1px;
             border-top-style: dashed;
+            pointer-events: none;
+            """;
+        }
+    }
+
+    /** The capture's edge, inside the escape's: dotted where the escape's is dashed. */
+    public record tl_band_inner() implements CssClass<TearLabStyles> {
+        @Override public String body() { return "border-top-style: dotted;"; }
+    }
+
+    /** The chip's centre, drawn as a ring: what both bands measure, wherever the chip was taken. */
+    public record tl_centre() implements CssClass<TearLabStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--tl-x"), new CssVar("--tl-y")); }
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class)); }
+        @Override public String body() { return """
+            position: absolute;
+            left: var(--tl-x, 0px);
+            top: var(--tl-y, 0px);
+            width: 14px;
+            height: 14px;
+            margin: -7px 0 0 -7px;
+            box-sizing: border-box;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 50%;
+            z-index: 3;
             pointer-events: none;
             """;
         }
@@ -216,7 +242,7 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
 
     @Override
     public List<CssClass<TearLabStyles>> cssClasses() {
-        return List.of(new tl_stage(), new tl_strip(), new tl_band(), new tl_free(), new tl_waiting(), new tl_hand(), new tl_dot(), new tl_mark(),
+        return List.of(new tl_stage(), new tl_strip(), new tl_band(), new tl_band_inner(), new tl_centre(), new tl_free(), new tl_waiting(), new tl_hand(), new tl_dot(), new tl_mark(),
                        new tl_rail(), new tl_flight(), new tl_follow(), new tl_chart(), new tl_bar(), new tl_level(), new tl_readout());
     }
 }

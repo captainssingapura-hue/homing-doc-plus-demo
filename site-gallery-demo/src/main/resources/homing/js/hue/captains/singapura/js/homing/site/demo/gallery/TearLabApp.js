@@ -22,12 +22,15 @@ class TearLabWidget {
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
         var el = this.root = branch.createElement("root", "div");
         [["kicker", "div", ga_kicker, "homing-ui-panes · TabTear"], ["title", "h1", ga_title, "Tearing a tab off"],
-         ["lede", "p", ga_lede, "Drag a chip. Between the dashed lines it stays on its rail, sliding along the row however far "
-            + "your hand wanders sideways. Past a line it tears: the faded chip is the window, made where you crossed — the breach. "
-            + "It waits there while your hand keeps the speed it had at the breach; slow down, stop or turn (as the measure says) "
-            + "and keep it up for the hold, and the window settles at your hand and follows it. A tear slower than the floor "
-            + "settles at once. Let go between the lines and the chip goes back into the row; anywhere else it stays, and you can "
-            + "drag it again. The dots are your hand's path, in the phase's colour; B is the breach, S the settle."]].forEach(function (d) {
+         ["lede", "p", ga_lede, "Drag a chip. The ring is its centre, and the lines measure the ring, not your hand. While the "
+            + "ring is between the dashed lines the chip stays on its rail, sliding along the row however far your hand wanders "
+            + "sideways. Past a dashed line it tears: the faded chip is the window, made where you crossed — the breach. It waits "
+            + "there while your hand keeps the speed it had at the breach; slow down, stop or turn (as the measure says) and keep it "
+            + "up for the hold, and the window settles at your hand and follows it. A tear slower than the floor settles at once. "
+            + "Bring the ring back between the dotted lines and the chip is captured: in the row again at once, still in your "
+            + "hand. The gap between the two pairs of lines is what keeps a chip on the edge from tearing and landing by turns. "
+            + "Let go anywhere else and it stays; dragged again, it is a window from the start, captured the same way. The dots "
+            + "are your hand's path, in the phase's colour; B is the breach, S the settle, C the capture."]].forEach(function (d) {
             var e = branch.createElement(d[0], d[1]);
             css.addClass(e, d[2]);
             e.textContent = d[3];
@@ -41,11 +44,12 @@ class TearLabWidget {
         function slider(id, label, min, max, step, value, unit, to) {
             controls.appendChild(new SliderBuilder().keyboard(kb, "tear-lab/" + id).label(label).range(min, max, step).value(value).icon(null).labelWidth("7em")
                 .format(function (v) { return (step < 1 ? v.toFixed(2) : v) + unit; })
-                .onInput(function (v) { var o = {}; o[id] = to ? to(v) : v; tear.set(o); if (id === "margin") self._stage.edges(); })
+                .onInput(function (v) { var o = {}; o[id] = to ? to(v) : v; tear.set(o); if (id === "escape" || id === "capture") self._stage.edges(); })
                 .build(branch.createBranch(id)).root);
         }
         var d = TabTear.DEFAULTS;
-        slider("margin", "the band", 0, 80, 2, d.margin, " px");
+        slider("escape", "the escape", 0, 80, 2, d.escape, " px");
+        slider("capture", "the capture", 0, 80, 2, d.capture, " px");
         slider("change", "the change", 10, 150, 5, d.change * 100, " %", function (v) { return v / 100; });
         slider("hold", "the hold", 0, 200, 10, d.hold, " ms");
         slider("span", "measured over", 20, 200, 10, d.span, " ms");
@@ -76,7 +80,7 @@ class TearLabWidget {
         el.appendChild(readout);
         el.appendChild(log);
         readout.textContent = "Press a chip and drag it.";
-        say("five chips on the strip; the band " + d.margin + " px either side of it");
+        say("five chips on the strip; the escape " + d.escape + " px either side of it, the capture " + d.capture);
     }
 
     /** The measure: what counts as a change. */
@@ -110,16 +114,19 @@ class TearLabWidget {
             + "\nchange   " + f(s.ratio) + "    material above " + f(o.change) + ", held " + o.hold + " ms, by " + o.measure
             + "\nhand     " + Math.round(p.x) + ", " + Math.round(p.y)
             + (b ? "    breach " + Math.round(b.x) + ", " + Math.round(b.y) : "")
-            + (s.settle ? "    settled " + Math.round(s.settle.x) + ", " + Math.round(s.settle.y) + " (" + s.settle.why + ", " + Math.round(s.settle.t - b.t) + " ms after)" : "");
+            + (s.settle ? "    settled " + Math.round(s.settle.x) + ", " + Math.round(s.settle.y) + " (" + s.settle.why
+                          + (b ? ", " + Math.round(s.settle.t - b.t) + " ms after" : "") + ")" : "")
+            + (s.captured ? "\ncaptured " + Math.round(s.captured.x) + ", " + Math.round(s.captured.y) + "    within " + Math.min(o.capture, o.escape)
+                            + " px of the strip, the escape at " + o.escape : "");
     }
 
     /** A gesture over, as a line on the log. */
     _story(r) {
         var name = (r.name + "        ").slice(0, 8);
-        if (r.loose) return (r.docked ? "Docked    " : "Moved     ") + name + (r.docked ? "back on the strip" : "a window, dragged where it is");
-        if (!r.torn) return "Rail      " + name + "stayed on the strip";
-        return "Torn      " + name + "settled by " + r.why + " " + Math.round(r.flightMs) + " ms after the breach, " + Math.round(r.jump) + " px on"
-            + (r.docked ? " — let go on the band: back on the strip" : " — left as a window");
+        var times = (r.tears ? ", torn " + r.tears + "×" : "") + (r.captures ? ", captured " + r.captures + "×" : "");
+        if (!r.torn) return (r.afloat ? "Landed    " + name + "a window, captured onto the strip" : "Rail      " + name + "on the strip") + times;
+        if (r.why === "afloat") return "Moved     " + name + "a window, dragged where it is" + times;
+        return "Torn      " + name + "settled by " + r.why + " " + Math.round(r.flightMs) + " ms after the breach, " + Math.round(r.jump) + " px on — left as a window" + times;
     }
 
     dispose() {}

@@ -174,15 +174,18 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "next; a dock takes a tab by call meanwhile. TabHand is the hand, TabDrag the arithmetic, headless: the bar as "
                     + "slots at one pitch, the nearest slot, who steps aside.",
                     TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
-            demo("tear", "layout", "Tearing a tab off", "A lab for the detach by mouse: the rail, the breach, the flight and the settle.",
+            demo("tear", "layout", "Tearing a tab off", "A lab for the detach by mouse: the rail, the breach, the flight, the settle and the capture.",
                     "Detaching a tab by the mouse, as a browser does it, worked out before a desk is asked to: a lab, with the "
                     + "arithmetic in its own headless module, TabTear. Drag a chip and it stays on its rail while the hand is within "
-                    + "a band around the strip, however far it wanders sideways. Past the band it tears, and a window would be made "
+                    + "a band around the strip - the chip's centre measured, wherever it was taken - however far it wanders sideways. Past the band it tears, and a window would be made "
                     + "there, at the breach. The hand is usually fast at that moment, so the window does not chase it: the velocity at "
                     + "the breach is taken as the flight's own, and the window waits while the hand keeps it. A material change in the "
                     + "velocity, held for a moment, ends the flight: the window is moved to the hand and follows it from then on. A "
-                    + "tear slower than the floor settles where it happens, and a release in flight settles where the hand lets go. "
-                    + "The band, the change, the hold, the span the velocity is measured over, the floor, and what counts as a change "
+                    + "tear slower than the floor settles where it happens, and a release in flight settles where the hand lets go. Torn, "
+                    + "the chip is captured the moment its centre is back within a narrower band: in the row again at once, mid-drag; "
+                    + "the gap between the bands keeps a chip on the edge from tearing and landing by turns. A chip left as a window "
+                    + "starts afloat when dragged again, and is captured the same way. "
+                    + "The escape, the capture, the change, the hold, the span the velocity is measured over, the floor, and what counts as a change "
                     + "- the speed either way, the speed falling only, or the vector, so a turn counts - are all on sliders; the "
                     + "hand's path is dotted in the phase's colour, and the speed is charted a frame at a time against the breach's. "
                     + "No window is made: a torn chip stands for one.",
