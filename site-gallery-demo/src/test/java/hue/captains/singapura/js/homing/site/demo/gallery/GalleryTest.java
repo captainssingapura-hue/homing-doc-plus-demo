@@ -134,8 +134,8 @@ class GalleryTest {
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of("animal", "counter", "swatch", "tab", "split"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three; the pane in the panes crate names the tab menu, the dock grid in the docking crate the split menu; nothing lists them");
         // the keys likewise: the slider and its group declare theirs; the page's map is derived, and no declared component listens for itself
-        // one capture left in the closure: the grid's header drag cancels on Escape; the grid migrates with the tree renderer, not before
-        assertEquals(List.of("homing-rel-grid: RelGridHeaderDragModule captures keys on the document; only the steward does"), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
+        // no capture left in the closure: the grid's header drag hears its Escape on its own handle
+        assertEquals(List.of(), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(List.of(GalleryCrate.INSTANCE)).stream().filter(m -> !m.startsWith("RelGrid") && !m.startsWith("RelTree") && !m.startsWith("Tree")).toList(), "the gallery's own widgets and the components it serves: every key through the party");
         assertEquals(List.of("BooksTab", "Card", "ContextMenuSteward", "ContextMenusWidget", "Dialog", "DomOpsTab", "EventsTab", "FloatLayer", "FocusTab", "FocusWidget", "KeyboardWidget", "Leaf", "ListMasterWidget", "ListPanel", "MultiTabPane", "NoteTab", "Panel", "PictureTab", "PreferencesView", "RegionList", "RelFocusWidget", "ShelvesTab", "Slider", "SliderGroup", "SplitGridMirror", "StewardTab", "TabOpener"),
                 KeyboardRegistry.requiredBy(List.of(GalleryCrate.INSTANCE)).byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList());
