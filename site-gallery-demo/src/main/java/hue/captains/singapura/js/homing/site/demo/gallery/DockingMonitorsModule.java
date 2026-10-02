@@ -15,6 +15,7 @@ import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
 import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
 import hue.captains.singapura.js.homing.ui.docking.DeskModule;
+import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public record DockingMonitorsModule() implements DomModule<DockingMonitorsModule
         @Override public List<KeyBinding> keys() { return ESCAPE; }
     }
 
-    /** The four together: a float of their own on a desk and in a register of their own — {@code new Instruments(branch, { host, keyboard, onEvent })}. */
+    /** The four together: a dock of their own, floating on a desk and in a register of their own — {@code new Instruments(branch, { host, keyboard, onEvent })}. */
     public record Instruments() implements Exportable._Class<DockingMonitorsModule> {}
     /** What every instrument answers: the keys go back to the bar. */
     static final List<KeyBinding> ESCAPE = List.of(KeyBinding.of(Key.ESCAPE, "the keys go back to the dock's bar"));
@@ -65,6 +66,7 @@ public record DockingMonitorsModule() implements DomModule<DockingMonitorsModule
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_monitor(),
                         new GalleryStyles.ga_domops_row(),

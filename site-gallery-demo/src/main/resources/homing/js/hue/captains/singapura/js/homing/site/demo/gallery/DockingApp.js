@@ -26,9 +26,9 @@
 // EVERY TAB IS A TAB-PANE (RFC 0066 E3, appendix "tab-panes"): its chip and
 // its pane minted once on a branch of its own under the page's desk register,
 // and carried whole from dock to float and back - the same chip in every strip.
-// Detach puts it in a float of its own; a float holding one tab is that tab in
-// the hand, and let go over a strip it lands there; a float of many moves as a
-// window. The plus's chooser becomes what you pick IN PLACE. The instruments
+// Detach puts it in a float of its own: one tab in transit, its chip the bar,
+// all of it a handle, and let go over a strip it lands there - a float is never
+// a landing itself. The plus's chooser becomes what you pick IN PLACE. The instruments
 // are tab-panes too, on a desk and in a register of their own.
 // The menu is the pane's own need — this page declares no kind; it holds a
 // steward and answers the picks. The Tab key walks the chips. The chips are
@@ -251,17 +251,11 @@ class DockingWidget {
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { docks.regions().forEach(function (r) { r.dock.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
         controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { docks.regions().forEach(function (r) { r.dock.aspect(v); }); })
             .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
-        // the tab menu's picks: detach floats the tab under where its chip was, with no hand; close removes it
-        menus.handle(MultiTabPane.MENU, {
-            pick: function (id, o) {
-                if (id === "detach") { var r = o.anchor.getBoundingClientRect(); desk.detach(o.tab, { x: r.left + 60, y: r.bottom + 14 }); }
-                else if (id === "close") o.pane.removeTab(o.tab.id);
-            },
-            state: function (id, o) { return { disabled: !!o.tab.pinned || o.tab.closable === false }; }
-        });
+        // the tab menu's picks are the desk's, which was handed the steward: Detach floats the tab under its chip - off
+        // on a tab afloat already - and Close asks it to close
 
         // ── the instruments ───────────────────────────────────────────────
-        // A float of their own on a DESK of their own, the page's whole section for a floor: they watch the workspace
+        // A floating dock of their own on a DESK of their own, the page's whole section for a floor: they watch the workspace
         // and are not part of it, so no dock of it offers to take them - DockingMonitors' Instruments.
         var instruments = new Instruments(branch.createBranch("instruments"), { host: el, keyboard: kb, onEvent: sink });
         this._instruments = instruments;
