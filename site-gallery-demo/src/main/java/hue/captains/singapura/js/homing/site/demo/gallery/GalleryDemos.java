@@ -141,11 +141,12 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "what a workspace holds: the books as a relation grid, the shelves as a relation tree, a picture the design draws "
                     + "and the keys zoom. The multi-tab pane is the dock; the desk owns every tab and floats over the docks. A tab "
                     + "is a tab-pane — its chip and its pane, one whole — with one placement at a time: in a dock's strip, or afloat "
-                    + "in a float of its own, the same chip on the float's one bar. A drag along a strip reorders, on its rail; "
-                    + "pulling a tab off to float is being worked out on the tab strip page and comes here after — the tab's menu "
-                    + "and Shift+Down detach meanwhile. Drag a float of one over either strip and that dock wears the drop-target "
-                    + "word and marks where the tab would land; let go there and it is that dock's tab, shown, let go over content "
-                    + "and it stays afloat. Every chip is in the tab "
+                    + "in a float of its own, the same chip on the float's one bar. The desk's hand carries a chip as a chip, as the "
+                    + "tear lab worked it out: along a strip it reorders, on its rail; pulled off past the escape it tears into a "
+                    + "float, which waits at the breach until the hand settles and then follows it; brought within the capture of "
+                    + "either strip it is captured onto it at once, the float gone, still in the hand. Docking is by the chip "
+                    + "alone: a float's bar's own ground moves it as a window and lands nowhere. The tab's menu and Shift+Down "
+                    + "detach too. Every chip is in the tab "
                     + "order, and the design draws its hover, its press, the selected one and the focus ring. The chip is Control.Tab "
                     + "to the design — like a button, but a hard frame whose measure is the design's, wide and low as a browser's tab, "
                     + "the label ellipsised within; the sliders set the tabs' size and aspect, 0 the design's. A float stays within the "
@@ -170,8 +171,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "an offset within the chip, so the chip is placed and the hand never asked where on it the press was — kept within "
                     + "the row and on its rail however the hand wanders; the slot it is nearest is where it will land, and the chips "
                     + "between step aside, live, as it passes them. Let go and it settles onto its slot, eased as the design eases it, "
-                    + "the others stepping back at once. Leaving the row — the tab that detaches and floats — is being worked out in the tear lab "
-                    + "next; a dock takes a tab by call meanwhile. TabHand is the hand, TabDrag the arithmetic, headless: the bar as "
+                    + "the others stepping back at once. A strip on its own keeps a chip on its rail; on a desk, the desk's hand carries it "
+                    + "off and onto other strips, as the docking page shows. TabHand is the hand, TabDrag the arithmetic, headless: the bar as "
                     + "slots at one pitch, the nearest slot, who steps aside.",
                     TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
             demo("tear", "layout", "Tearing a tab off", "A lab for the detach by mouse: the rail, the breach, the flight, the settle and the capture.",
