@@ -87,7 +87,9 @@ class DockingWidget {
             + "strip's own plus makes, and the third list says HOW the tab arrives - quietly, in front, or in front with the keys - so every way it can go is here "
             + "to try. A room that is full dims rather than disappearing, because where it is belongs to the picture. THE PLUS ON A STRIP asks the "
             + "same question the other way about: it opens a tab with the chooser in it, and what you pick becomes that very tab, in the place you made it. The Tab key walks the chips, "
-            + "and the region you are working in is the lit one.";
+            + "and the region you are working in is the lit one. THE ROOM'S EDGE is a strip's: the thin lip along the foot of the box is all it takes of the room, "
+            + "and the hand brought to it lays the strip over the room's foot - what the room holds, and the switcher offered to the hand as F6 offers it to the keys - "
+            + "until the hand leaves it, when the room has its foot back. The workspace's own strip is this one.";
         el.appendChild(lede);
 
         // ── the chips' size and aspect ────────────────────────────────────
@@ -105,6 +107,7 @@ class DockingWidget {
         css.addClass(box, ga_dock_box);
         el.appendChild(box);
         var tabs = null;    // DockingTabs: the source and the new-tab control, built once the scene is up
+        var edge = null;    // the strip on the room's edge, built once the regions are
 
         // what the page reports goes to the instruments' Events tab, which is built below and floats with the rest
         var events = null, waiting = [];
@@ -113,6 +116,7 @@ class DockingWidget {
         function sink(ev) {
             if (domopsOf()) domopsOf().refresh();   // the party changes with every one of these
             if (tabs) tabs.refresh();             // and so does how full each dock is, and where the panes are, which is what the new-tab control shows
+            if (edge) countRoom();                // and what the strip on the room's edge says it holds
             switch (ev.kind) {
                 case "Subdivided":   say("Split     " + nameOf(ev.cellId) + " " + ev.side + " - " + nameOf(ev.newCellId)); break;
                 case "Removed":      say("Merged    " + nameOf(ev.cellId) + " - its tabs and its room gone to a neighbour"); break;
@@ -184,6 +188,26 @@ class DockingWidget {
         var grid = docks.grid;
         var left = docks.region("left").dock, right = docks.region("right").dock;
         nameOf("left"); nameOf("right");
+
+        // ── the room's edge: a strip over the box's foot, a thin lip all it takes of the room ──
+        // What the room holds, and the way to another region by the hand, as F6 is by the keys. It lies over the
+        // room while the hand is at the lip or on it: the workspace's control strip is this same component.
+        edge = new EdgeStripBuilder().label("The room").host(box).build(branch.createBranch("edge"));
+        this._edge = edge;
+        var census = branch.createElement("census", "span");
+        css.addClass(census, ga_strip_census);
+        edge.root.appendChild(census);
+        var goTo = new ButtonBuilder();
+        var goEl = branch.createElement("go", goTo.tag);
+        goTo.label("Go to a region…").plain().size(-1).onClick(function () { if (!switcher) openSwitcher(); }).build(goEl);
+        edge.root.appendChild(goEl);
+        function countRoom() {
+            var regions = docks.regions(), held = 0, afloat = desk.floats().length;
+            regions.forEach(function (r) { held += r.dock.count(); });
+            census.textContent = regions.length + (regions.length === 1 ? " region" : " regions") + " · " + held + (held === 1 ? " tab" : " tabs")
+                + " · " + afloat + " afloat";
+        }
+        countRoom();
 
         // ── moving BETWEEN regions is its own gesture ─────────────────────
         // Inside a dock, Escape comes back to the bar and stops there: nothing overshoots out of the room. To go to
@@ -267,7 +291,7 @@ class DockingWidget {
         this.root = el;
     }
 
-    dispose() { this._offMenus(); this._offF6(); this._desk.dispose(); this._instruments.dispose();   // the desks first: a dock is disposed only empty
+    dispose() { this._offMenus(); this._offF6(); this._edge.dispose(); this._desk.dispose(); this._instruments.dispose();   // the desks first: a dock is disposed only empty
                 if (this._ownMenus) this._ownMenus.dispose(); this._tabs.dispose();
                 this._docks.dispose(); }
 }
