@@ -32,6 +32,12 @@
             <artifactId>homing-workspace-widgets</artifactId>
             <version>${homing.ws.version}</version>
         </dependency>
+        <!-- The parties the widgets meet in: the animal choice, the platformer's run. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-parties</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
         <!-- The party a widget mints its elements from, and the keys: its focus member, the steward's convention. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
@@ -66,12 +72,13 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- The gate, headless and strict, as the workspace repo's widget sets have it. -->
+        <!-- The widgets' own module type and rule set - the game loop, held to the RAF rule: a
+             downstream extension of the framework's policy (RFC 0044). Headless. The gate is
+             headless and strict, as the workspace repo's widget sets have it. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-rules</artifactId>
             <version>${homing.core.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

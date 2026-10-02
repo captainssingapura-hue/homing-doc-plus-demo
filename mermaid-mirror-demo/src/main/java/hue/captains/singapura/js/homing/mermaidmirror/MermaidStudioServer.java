@@ -1,19 +1,19 @@
 package hue.captains.singapura.js.homing.mermaidmirror;
 
+import hue.captains.singapura.js.homing.catalogue.site.CatalogueRoutes;
+import hue.captains.singapura.js.homing.docview.site.DocRoutes;
 import hue.captains.singapura.js.homing.libs.ExternalModuleUrlRegistry;
 import hue.captains.singapura.js.homing.libs.MermaidProxyModule;
-import hue.captains.singapura.js.homing.studio.base.Bootstrap;
-import hue.captains.singapura.js.homing.studio.base.DefaultRuntimeParams;
-import hue.captains.singapura.js.homing.studio.base.Studio;
-import hue.captains.singapura.js.homing.studio.base.Umbrella;
-import hue.captains.singapura.js.homing.studio.starter.StudioStarterFixtures;
+import hue.captains.singapura.tao.http.config.HostConfig;
+import hue.captains.singapura.tao.http.vertx.VertxActionHost;
 
 /**
- * Port 1 — the studio serving the Mermaid doc, wired to the local CDN.
+ * Port 1 — the site serving the Mermaid doc ({@link MermaidSite}), wired to the local CDN.
  *
- * <p>Before booting, it OVERRIDES {@link MermaidProxyModule}'s URL to point at the
+ * <p>Before serving, it OVERRIDES {@link MermaidProxyModule}'s URL to point at the
  * {@link LocalCdnServer} (port 2). From then on, every page's Mermaid import goes to the
- * local CDN, never the public one — the whole point of the demo.</p>
+ * local CDN, never the public one — the whole point of the demo. DocView imports Mermaid
+ * through that same proxy, so the override is all it takes.</p>
  *
  * <pre>{@code
  * mvn -o -f mermaid-mirror-demo/pom.xml \
@@ -21,25 +21,34 @@ import hue.captains.singapura.js.homing.studio.starter.StudioStarterFixtures;
  *     -Dexec.mainClass=hue.captains.singapura.js.homing.mermaidmirror.MermaidStudioServer
  * }</pre>
  *
- * <p>Ports: {@code -Dmermaid.studio.port} (default 8090),
- * {@code -Dmermaid.cdn.url} (default {@code http://localhost:8091/mermaid.esm.min.mjs}).</p>
+ * <p>Ports: {@code -Dmermaid.studio.port} (default 8108),
+ * {@code -Dmermaid.cdn.url} (default {@code http://localhost:8109/mermaid.esm.min.mjs}).</p>
  */
 public final class MermaidStudioServer {
 
     private MermaidStudioServer() {}
 
+    /** The CDN the proxy imports Mermaid from, unless {@code -Dmermaid.cdn.url} says otherwise. */
+    static final String DEFAULT_CDN_URL = "http://localhost:8109/mermaid.esm.min.mjs";
+
     public static void main(String[] args) {
-        int studioPort = Integer.getInteger("mermaid.studio.port", 8090);
-        String cdnUrl = System.getProperty("mermaid.cdn.url",
-                "http://localhost:8091/mermaid.esm.min.mjs");
+        int port = Integer.getInteger("mermaid.studio.port", 8108);
+        String cdnUrl = System.getProperty("mermaid.cdn.url", DEFAULT_CDN_URL);
 
         // (3) Override the proxy so Mermaid loads from OUR local CDN, not jsDelivr.
-        ExternalModuleUrlRegistry.INSTANCE.override(MermaidProxyModule.class, cdnUrl);
+        mirrorTo(cdnUrl);
 
-        Umbrella<Studio<?>> umbrella = new Umbrella.Solo<>(MermaidDemoStudio.INSTANCE);
-        System.out.println("Mermaid studio → mermaid served from: " + cdnUrl);
-        System.out.println("Open: http://localhost:" + studioPort
-                + "/app?app=doc-reader&doc=" + MermaidMirrorDoc.INSTANCE.uuid());
-        new Bootstrap<>(new StudioStarterFixtures<>(umbrella), new DefaultRuntimeParams(studioPort)).start();
+        var routes = DocRoutes.with(CatalogueRoutes.with(MermaidSite.MPA.registry(MermaidSite.INSTANCE), MermaidSite.ROUTER), MermaidSite.ROUTER);
+        new VertxActionHost(routes, HostConfig.http(port)).start()
+                .onSuccess(s -> {
+                    System.out.println("Mermaid site → mermaid served from: " + cdnUrl);
+                    System.out.println("Open: http://localhost:" + s.actualPort() + "/mermaid");
+                })
+                .onFailure(err -> { err.printStackTrace(); System.exit(1); });
+    }
+
+    /** Every page's Mermaid import, from {@code cdnUrl}: the proxy's address overridden, process-wide. */
+    static void mirrorTo(String cdnUrl) {
+        ExternalModuleUrlRegistry.INSTANCE.override(MermaidProxyModule.class, cdnUrl);
     }
 }

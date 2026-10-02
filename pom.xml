@@ -9,21 +9,24 @@
     <version>VOID-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>homing-blocks</module>
-        <module>homing-docs</module>
-        <module>homing-demo</module>
         <!-- RFC 0066 - the bare app: served and themed with no studio on the classpath. -->
         <module>bare-app-demo</module>
         <!-- RFC 0066 E3 - the gallery: JS apps under the standard MPA, and the
-             relation grid and its tree as pages beside them. -->
+             relation grid and its tree as pages beside them. Its tree is grafted
+             into the demo site, which serves it. -->
         <module>site-gallery-demo</module>
         <module>mermaid-mirror-demo</module>
         <module>doc-pdf-export</module>
         <!-- The demo's widgets ported to the workspace on its core (the homing-ssjs-workspace
-             repo), and the workspace that launches them - linked to that workspace alone,
-             never to the studio's old one. -->
+             repo), and its workspaces declared - linked to that workspace alone, never to the
+             studio's old one. The demo site serves them. -->
         <module>homing-demo-workspace-widgets</module>
         <module>homing-demo-workspace</module>
+        <!-- The demo's front door: a catalogue site, its docs read in DocView, its workspaces opened beside. -->
+        <module>homing-demo-site</module>
+        <!-- The demo's conformance: every crate it serves, graded by the framework's policy extended
+             with the widgets' game-loop rule set; and its studio, the studio repo's workbench, on 8091. -->
+        <module>homing-demo-conformance</module>
     </modules>
 
     <properties>
@@ -38,6 +41,8 @@
         <homing.relgrid.version>LOCAL-SNAPSHOT</homing.relgrid.version>
         <!-- The workspace on its headless core, from the homing-ssjs-workspace repo. -->
         <homing.ws.version>LOCAL-SNAPSHOT</homing.ws.version>
+        <!-- The site the docs are read on: the catalogue site and DocView, from the homing-ssjs-studio repo. -->
+        <homing.studio.version>LOCAL-SNAPSHOT</homing.studio.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.14</jacoco.version>
     </properties>

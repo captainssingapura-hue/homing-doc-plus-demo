@@ -11,11 +11,12 @@
     <artifactId>site-gallery-demo</artifactId>
     <description>
         RFC 0066 Episode 3 - the gallery: JS apps served as pages under the
-        standard MPA, wearing the seven studio designs, with a hand-written
-        router and no catalogue anywhere. Moved here as-is from the core's
-        nested site demos so that it can host components from other repos -
-        the relation grid and its tree - without the core depending on them.
-        Run with GalleryServer; listens on 8096.
+        standard MPA, wearing the seven studio designs - the components, each on a
+        page of its own, and the tour that shows every one beside what it explains.
+        Its tree is written alone, a catalogue per group, and knows no site: the
+        demo site grafts it at /gallery and serves it. Here so that it can host
+        components from other repos - the relation grid and its tree - without
+        the core depending on them.
     </description>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -26,6 +27,23 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-site-mpa</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- The gallery's tree: a catalogue per group, which a site grafts. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-catalogue</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- What the tree and the plain page are made of: a navigable, a page's content, a node's name. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-base</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-rigid-tree</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <!-- The MPA's implementation - StandardMpa, its page, its chrome - from the
@@ -85,11 +103,13 @@
             <artifactId>homing-component-base</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- The designs the gallery wears: the framework's, nothing legacy (HomingDesigns.REGISTRY). -->
+        <!-- The designs the gallery wears - the framework's, nothing legacy - which its tests hold
+             every sheet to; the site that serves it brings its own. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-designs</artifactId>
             <version>${homing.core.version}</version>
+            <scope>test</scope>
         </dependency>
         <!-- The relation grid and its tree, from their own repo: layer-2 components
              on core and design-core alone; the page hands each a branch and a

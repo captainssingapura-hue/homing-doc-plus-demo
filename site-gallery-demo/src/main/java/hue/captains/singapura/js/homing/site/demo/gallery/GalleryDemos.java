@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -7,12 +8,15 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.SelfContent;
 import hue.captains.singapura.js.homing.core.StampedParams;
+import hue.captains.singapura.js.homing.site.Placed;
+import hue.captains.singapura.js.homing.site.mpa.Mpa;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesApp;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.PreferencesTreeWidgetModule;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * The gallery's demos, stamped into one JS module for the shell: each demo
@@ -43,9 +47,22 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
 
     public static final GalleryDemos INSTANCE = new GalleryDemos();
 
-    /** One demo: its slug and its group's, what the navigator and the explanation say, the page it also is, the app and the class in it that shows it. */
-    public record Demo(String slug, String group, String label, String summary, String explanation, String page,
-                       EsModule<?> app, String widget, Map<String, String> params) {}
+    /**
+     * One demo: its slug and its group's, what the navigator and the explanation say, the app and the class
+     * in it that shows it - and the page it also is, made with the MPA of whatever site places the gallery.
+     */
+    public record Demo(String slug, String group, String label, String summary, String explanation,
+                       EsModule<?> app, Function<Mpa, Placed> pageIn, String widget, Map<String, String> params) {
+
+        /** Where the page is: its place in the gallery's tree, under the address a site grafts the gallery at - {@code /gallery}. */
+        public String page() { return "/" + pathOf(this); }
+    }
+
+    /** A demo of an app that takes no params: the page it also is, the app's, as a page of the site's MPA. */
+    static <M extends AppModule<AppModule._None, M>> Demo demo(String slug, String group, String label, String summary, String explanation,
+                                                              M app, String widget, Map<String, String> params) {
+        return new Demo(slug, group, label, summary, explanation, app, mpa -> mpa.page(app), widget, params);
+    }
 
     /** A sub-catalogue: its slug, its label in the navigator, and what it is about. */
     public record Group(String slug, String label, String summary) {}
@@ -59,27 +76,27 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
             new Group("focus", "Keyboard & focus", "Who has the keys: the party, the steward, the logical-focus tree, and the native world beside it."));
 
     public static final List<Demo> DEMOS = List.of(
-            new Demo("grid", "relations", "Grid", "The relation grid, from its own repo.",
+            demo("grid", "relations", "Grid", "The relation grid, from its own repo.",
                     "The relation grid over twelve books. Titles and ratings edit; the status line under it counts the cells minted "
                     + "and follows the cursor. The grid is a layer-2 component on core and design-core alone; the page hands it a "
                     + "branch and a relation and nothing else.",
-                    "/grid", GridApp.INSTANCE, "GridWidget", Map.of()),
-            new Demo("tree", "relations", "Tree", "The same books as shelf → book.",
+                    GridApp.INSTANCE, "GridWidget", Map.of()),
+            demo("tree", "relations", "Tree", "The same books as shelf → book.",
                     "The relation tree over the same store: shelves that fold and unfold, each unfold a question the relation "
                     + "answers. Arrow keys move the cursor, Enter activates; the status line says what the tree did.",
-                    "/tree", TreeApp.INSTANCE, "TreeWidget", Map.of()),
-            new Demo("dialog", "dialogs", "Dialog", "A frame that owns the screen until dismissed.",
+                    TreeApp.INSTANCE, "TreeWidget", Map.of()),
+            demo("dialog", "dialogs", "Dialog", "A frame that owns the screen until dismissed.",
                     "Three ways to open a dialog: modal with actions, non-modal, and modal with a control inside that takes its "
                     + "own keys. Modal: the page behind goes inert, keys are captured, Escape cancels, Enter confirms, and the "
                     + "focus comes back to where it was. The dialog is built on a child of the caller's branch and dissolved with it.",
-                    "/dialog", DialogApp.INSTANCE, "DialogWidget", Map.of()),
-            new Demo("preferences", "dialogs", "Preferences", "A rigid tree, a widget per node.",
+                    DialogApp.INSTANCE, "DialogWidget", Map.of()),
+            demo("preferences", "dialogs", "Preferences", "A rigid tree, a widget per node.",
                     "The site's preferences as a master and a detail: a rigid tree on the left from the relation tree, the chosen "
                     + "node's widget on the right, loaded when first chosen and kept after. Every widget writes through the "
                     + "steward and follows it, so a theme picked here is worn by this shell as it is picked. The same view is "
                     + "behind the bar's Preferences button.",
-                    "/preferences", PreferencesApp.INSTANCE, "PreferencesWidget", Map.of()),
-            new Demo("buttons", "controls", "Buttons", "The button, through its builder.",
+                    PreferencesApp.INSTANCE, "PreferencesWidget", Map.of()),
+            demo("buttons", "controls", "Buttons", "The button, through its builder.",
                     "Every colour word the builder knows — plain, primary, secondary, danger, warning, success — under one extent "
                     + "slider: at 1 the word as the design binds it, at 0 the design's neutral, at −1 the meaning turned the other way. "
                     + "A colour word is a semantic surface complete: the surface, the ink on it and the edge move together, each along "
@@ -87,24 +104,24 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "touch: safe at none, dangerous at all. The size is the other number: 0 regular, 1 the biggest, −1 the smallest, "
                     + "exponential, and every length the design gives a button — its inset, gap, least width and type — grows by the "
                     + "ratio the design gives that length; the five sit at −1, −½, 0, ½ and 1, and the slider moves the rest.",
-                    "/buttons", ButtonsApp.INSTANCE, "ButtonsWidget", Map.of()),
-            new Demo("cards", "controls", "Cards", "The card, through its builder.",
+                    ButtonsApp.INSTANCE, "ButtonsWidget", Map.of()),
+            demo("cards", "controls", "Cards", "The card, through its builder.",
                     "A card is Container.Card.Base to the design: a raised box whose measure is its own. The design gives it its "
                     + "measure, grown by its size, and its aspect — square at 0, the design's widest at 1, its tallest at −1 — and what is "
                     + "inside fits it — the head and the foot are fixed, the body "
                     + "scrolls beyond what they leave. It lifts on hover and presses as an enlarged button would, and with an "
                     + "action it is a button to the keyboard too and rings on focus. The size slider grows every length the "
                     + "design gives a card and its parts, each by its own ratio; the proportion holds.",
-                    "/cards", CardsApp.INSTANCE, "CardsWidget", Map.of()),
-            new Demo("floating", "layout", "Floating panes", "A desk, and the panes that float on it.",
+                    CardsApp.INSTANCE, "CardsWidget", Map.of()),
+            demo("floating", "layout", "Floating panes", "A desk, and the panes that float on it.",
                     "A floating pane is Container.Pane.Floating: a container's corner, rule and ring, the overlay's shadow, the "
                     + "pane's air on its head — a larger, movable card whose place and measure are its user's, not the design's. "
                     + "The desk owns the stack: open a pane holding a widget by the base's contract, drag it by the head, size it "
                     + "by the corner, press one to raise it, close with the cross or Escape; the active one is the ring drawn now. "
                     + "Every mutation is one FloatEvents object on one sink — Opened, Moved, Resized, Raised, Closed — reported "
                     + "once when it happened, never per pixel.",
-                    "/floating", FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
-            new Demo("sheets", "layout", "Sheets", "A panel is a sheet, and a sheet sits somewhere: sunken, flat or lifted.",
+                    FloatingApp.INSTANCE, "FloatingWidget", Map.of()),
+            demo("sheets", "layout", "Sheets", "A panel is a sheet, and a sheet sits somewhere: sunken, flat or lifted.",
                     "The three registers, read against each other on one ground, because a register only means anything beside the "
                     + "others. A panel offers two axes and links neither to anything: where it SITS — sunken, flat, elevated, said "
                     + "on one attribute the design answers as a state — and whether it is MARKED as the current one, which is colour "
@@ -115,8 +132,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "presses it in, and sketchy declines both outright, because ink casts no shadow and a design should not express "
                     + "depth in a plane it does not otherwise use. Beneath them a sheet lies on a sheet: the same word, a different "
                     + "colour beneath it, and nothing had to be told which.",
-                    "/sheets", SheetsApp.INSTANCE, "SheetsWidget", Map.of()),
-            new Demo("docking", "layout", "Dock and undock", "Regions in a split, a desk over them, tabs that float and land.",
+                    SheetsApp.INSTANCE, "SheetsWidget", Map.of()),
+            demo("docking", "layout", "Dock and undock", "Regions in a split, a desk over them, tabs that float and land.",
                     "A small workspace: every region is a cell of the split grid, a dock in it, and a panel around the dock that draws "
                     + "the frame and lights while the keys are anywhere inside it. RIGHT-CLICK THE EMPTY GROUND OF A TAB BAR — the room "
                     + "the chips leave — and the page offers the split menu: part the region beside or below, each new one a dock of its "
@@ -134,8 +151,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "the label ellipsised within; the sliders set the tabs' size and aspect, 0 the design's. A float stays within the "
                     + "box. Every step is data on one sink: TabAdded and TabMoved from the desk, Opened, Moved and the rest from "
                     + "the float layer, TabActivated and the rest from the dock.",
-                    "/docking", DockingApp.INSTANCE, "DockingWidget", Map.of()),
-            new Demo("splitgrid", "layout", "Split grid", "Rows and columns of cells, arranged; what is in them, the page's.",
+                    DockingApp.INSTANCE, "DockingWidget", Map.of()),
+            demo("splitgrid", "layout", "Split grid", "Rows and columns of cells, arranged; what is in them, the page's.",
                     "The split grid is a container in the relation grid's sense: the page mints what goes in a cell, the grid arranges "
                     + "the cells — a tree of rows and columns sharing their space by ratio, a divider between neighbours — and reports "
                     + "every change of arrangement as data: TracksChanged, Subdivided, Removed. Subdivide beside a cell and it gets a "
@@ -146,8 +163,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "sets, with a cursor the arrows move from cell to cell by the workspace's rule once the mirror has focus; the page "
                     + "marks that cell current in the grid. A widget switcher in the making: a shortcut raises the mirror, the arrows "
                     + "pick a pane, the owner makes it active.",
-                    "/splitgrid", SplitGridApp.INSTANCE, "SplitGridWidget", Map.of()),
-            new Demo("tabstrip", "layout", "Tab strip", "The strip alone: the drag that is a browser's, along a rail.",
+                    SplitGridApp.INSTANCE, "SplitGridWidget", Map.of()),
+            demo("tabstrip", "layout", "Tab strip", "The strip alone: the drag that is a browser's, along a rail.",
                     "The tab strip without a pane, to see the drag on its own. Press a chip and it is selected and lifted, before any "
                     + "release — pressed is grabbed. Drag it and it goes where the hand goes along the row — the press is remembered as "
                     + "an offset within the chip, so the chip is placed and the hand never asked where on it the press was — kept within "
@@ -156,15 +173,15 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "the others stepping back at once. Leaving the row — the tab that detaches and floats — is being worked out here "
                     + "next; a dock takes a tab by call meanwhile. TabHand is the hand, TabDrag the arithmetic, headless: the bar as "
                     + "slots at one pitch, the nearest slot, who steps aside.",
-                    "/tabstrip", TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
-            new Demo("sliders", "controls", "Sliders", "A number set by a knob on a track; every part the design's.",
+                    TabStripApp.INSTANCE, "TabStripWidget", Map.of()),
+            demo("sliders", "controls", "Sliders", "A number set by a knob on a track; every part the design's.",
                     "The slider the other pages set their size, aspect and extent with, on its own: the track sunk, the fill from "
                     + "the detent to the value, the knob raised and ringed when it has the focus, the notch where the knob rests — "
                     + "every part a real element wearing a design word, so no browser's slider shows through. Press anywhere on a "
                     + "rail and it jumps and grabs, the pointer captured; the knob takes the keys. Two events, live and on release. "
                     + "The three axes, a plain range with a unit, one that is off, and the slider at its three sizes.",
-                    "/sliders", SlidersApp.INSTANCE, "SlidersWidget", Map.of()),
-            new Demo("keyboard", "focus", "Keyboard", "Who has the keys: one party per page, one holder or none.",
+                    SlidersApp.INSTANCE, "SlidersWidget", Map.of()),
+            demo("keyboard", "focus", "Keyboard", "Who has the keys: one party per page, one holder or none.",
                     "The keyboard party on view. Every component that takes keys is a member of the page's party; a press in it, "
                     + "or the focus arriving, claims the keys — and a claim evicts whoever held, who is told by whom. One steward, "
                     + "the page's, captures keys on the document only while someone holds and asks the holder first: a key it "
@@ -173,8 +190,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "holds keys down, so keyup travels through the party as keydown does. The strip shows the holder live; the "
                     + "log says who took the keys from whom. One button shows the bug the design names: the platformer claiming by "
                     + "call from behind a modal — the party is blind, so it holds, and the dialog stops hearing Escape.",
-                    "/keyboard", KeyboardApp.INSTANCE, "KeyboardWidget", Map.of()),
-            new Demo("focus", "focus", "Focus", "Who is in focus: the logical-focus tree, in two worlds, and its monitors.",
+                    KeyboardApp.INSTANCE, "KeyboardWidget", Map.of()),
+            demo("focus", "focus", "Focus", "Who is in focus: the logical-focus tree, in two worlds, and its monitors.",
                     "The focus party keeps the logical-focus tree and nothing else: a container holds a branch, a leaf joins one, "
                     + "and the steward reads the tree and never writes it; it routes by state - the holder's keys while nothing is "
                     + "natively focused, nothing while a native control is. Three panels hold a branch each with leaves inside; "
@@ -184,8 +201,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "pick, Escape yields. Native controls outside and inside the panels stress the line: a search field, a notes "
                     + "field that keeps its Tab, a field in panel A that lets go on Escape, a button, a checkbox inside a leaf. The "
                     + "monitors: the tree with the holder lit, and the steward's lamp. No component here knows the steward.",
-                    "/focus", FocusApp.INSTANCE, "FocusWidget", Map.of()),
-            new Demo("relfocus", "focus", "Relations in focus", "The relation tree and grid, wrapped and unwrapped, under the focus model.",
+                    FocusApp.INSTANCE, "FocusWidget", Map.of()),
+            demo("relfocus", "focus", "Relations in focus", "The relation tree and grid, wrapped and unwrapped, under the focus model.",
                     "The relation grid and the relation tree are the native world - a focusable host, their own keys, worked hard "
                     + "for the keyboard - and nothing in them joins the party. Unwrapped, straight on the page: a press claims "
                     + "nothing, the steward goes dormant on the host, the keys are theirs, and whoever held resumes when the host "
@@ -194,8 +211,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "the keys; the next Escape yields. The leaf holds the keys when nothing is focused, so the arrows show where "
                     + "they go. Arrows, Enter on a cell, Escape in the editor, a header drag, Ctrl+C: every one of them the grid's, "
                     + "none of them moving the holder - the conflicts to look for are the ones that would show here.",
-                    "/relfocus", RelFocusApp.INSTANCE, "RelFocusWidget", Map.of()),
-            new Demo("menus", "dialogs", "Context menus", "One steward, three cells, each with a menu of its kind.",
+                    RelFocusApp.INSTANCE, "RelFocusWidget", Map.of()),
+            demo("menus", "dialogs", "Context menus", "One steward, three cells, each with a menu of its kind.",
                     "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "
                     + "steward for the page — lazy, minting a kind's menu at its first open and listening to nothing while none is "
                     + "open. A cell asks for its kind on a right-click or Shift+F10 and is bound to the menu while it is open; the "
@@ -204,12 +221,12 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "toggles its inverted surface, both checked; the counter adds a step, resets — disabled at nought — and picks "
                     + "its step. A press outside closes the menu and is swallowed; Escape closes; arrows, Right, Left and Enter "
                     + "do what a menu's keys do. At most one menu is ever open.",
-                    "/menus", ContextMenusApp.INSTANCE, "ContextMenusWidget", Map.of()),
-            new Demo("panes", "layout", "Panes", "One pane of tabs holding widgets.",
+                    ContextMenusApp.INSTANCE, "ContextMenusWidget", Map.of()),
+            demo("panes", "layout", "Panes", "One pane of tabs holding widgets.",
                     "One multi-tab pane. Each tab holds a widget by the base's contract; the plus asks the page and the page asks "
                     + "you through the dialog; a drag on a chip reorders; the cross closes. Every mutation is one event on one "
                     + "sink, written under the pane as the data it is.",
-                    "/panes", PanesApp.INSTANCE, "PanesWidget", Map.of())
+                    PanesApp.INSTANCE, "PanesWidget", Map.of())
     );
 
     public static String pathOf(Group g) { return "gallery/" + g.slug(); }

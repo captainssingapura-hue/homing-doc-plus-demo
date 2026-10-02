@@ -52,12 +52,12 @@ class CardsWidget {
         var grid = branch.createElement("grid", "div");
         css.addClass(grid, ga_cards);
         this._cards = [];
-        var plain = new CardBuilder().title("A plain card").badge("BASE").text("Title, badge, a line of text, and a link in the foot.").link("/", "The gallery").aspect(0.6)
+        var plain = new CardBuilder().title("A plain card").badge("BASE").text("Title, badge, a line of text, and a link in the foot.").link("/gallery", "The gallery").aspect(0.6)
             .build(branch.createBranch("plain"));
         grid.appendChild(plain.root);
         this._cards.push(plain);
 
-        var long = new CardBuilder().title("A card with too much to say").badge("SCROLLS").text(LONG).link("/buttons", "Buttons").aspect(0.6)
+        var long = new CardBuilder().title("A card with too much to say").badge("SCROLLS").text(LONG).link("/gallery/controls/buttons", "Buttons").aspect(0.6)
             .build(branch.createBranch("long"));
         grid.appendChild(long.root);
         this._cards.push(long);
