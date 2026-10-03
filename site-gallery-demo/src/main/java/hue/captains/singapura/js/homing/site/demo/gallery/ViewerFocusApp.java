@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.site.demo.gallery;
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
+import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -16,11 +17,12 @@ import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
 import java.util.List;
 
 /**
- * The viewer-in-focus page, an experiment: an SVG viewer, alone, as a widget
- * under the focus model as designed - a member of its own focus party,
- * grafted at the page's root, the viewport inside it the native world - with
- * the monitors and a log of every grant, release, mark and key route: where
- * the keys go when the viewer is let go of from its native control.
+ * The viewers-in-focus page, an experiment: SVG viewers as widgets under the
+ * focus model - members of their own focus parties, the viewport inside each
+ * the native world - at the root, in a panel that catches and in one that
+ * lets pass, with a home at the root: where the keys go when a viewport lets
+ * them go, with the monitors and a log of every grant, release, mark and key
+ * route.
  */
 public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocusApp> {
 
@@ -32,7 +34,7 @@ public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocus
         @Override public String summary() { return "An SVG viewer, alone, as a widget under the focus model as designed; the monitors and a log of where the keys go."; }
     }
 
-    @Override public String title()      { return "A viewer in focus"; }
+    @Override public String title()      { return "Viewers in focus"; }
     @Override public String simpleName() { return "viewerfocus"; }
 
     @Override
@@ -41,6 +43,8 @@ public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocus
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FocusSceneModule.Leaf(), new FocusSceneModule.Panel()), FocusSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ViewerSceneModule.SvgViewer()), ViewerSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ViewerDrawings.focusTree()), ViewerDrawings.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))

@@ -230,13 +230,14 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "they go. Arrows, Enter on a cell, Escape in the editor, a header drag, Ctrl+C: every one of them the grid's, "
                     + "none of them moving the holder - the conflicts to look for are the ones that would show here.",
                     RelFocusApp.INSTANCE, "RelFocusWidget", Map.of()),
-            demo("viewerfocus", "focus", "A viewer in focus", "An experiment: an SVG viewer, alone, as a widget under the focus model as designed.",
-                    "An SVG viewer as a widget - its DomOps and focus parties its own, grafted at the root of the page's - and "
-                    + "for the keys nothing but the design as it stands: the viewer a member of its own focus party, the "
-                    + "viewport inside it the native world. A press claims the keys for the viewer and puts the browser's focus "
-                    + "in the viewport; an Escape the viewport has no use for is the steward's, and the viewport lets go; the "
-                    + "viewer's own Escape yields, up the tree to the root, where no one holds. The monitors and a log of every "
-                    + "grant, release, mark and key route say where the keys are after each press and each key.",
+            demo("viewerfocus", "focus", "Viewers in focus", "An experiment: where the keys go when a widget's native control lets them go.",
+                    "SVG viewers as widgets - their DomOps and focus parties their own, grafted where they sit - each a member of "
+                    + "its own focus party, the viewport inside it the native world. One Escape in a viewport lets it go, a yield "
+                    + "from it: the viewer is asked first and, with nothing designed for holding the keys, is passed by; the keys "
+                    + "go up to the first that would hold them - a panel that catches - or, none would, to the root's default, "
+                    + "the home, which holds from the start as the doc reader's contents would. Three viewers: at the root, in a "
+                    + "panel that catches, in one that lets pass. The monitors and a log of every grant, release, mark and key "
+                    + "route say where the keys went.",
                     ViewerFocusApp.INSTANCE, "ViewerFocusWidget", Map.of()),
             demo("menus", "dialogs", "Context menus", "One steward, three cells, each with a menu of its kind.",
                     "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "

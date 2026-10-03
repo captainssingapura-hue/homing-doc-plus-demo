@@ -4,15 +4,17 @@
 // container and its params alone, its DomOps party and its focus party its
 // own, offered as roots for its host to graft. It never learns where it sits.
 //
-// The keys, by the design as it stands (RFC 0066 E3, keyboard §15.1, §17.5)
-// and nothing added: the widget is a member of its own focus party, never
-// focused itself; the viewport inside it is the native world, a control with
-// its own keys. A press in the widget claims the keys for it, and the widget
-// puts the browser's focus in its viewport - lent. An Escape the viewport has
-// no use for is the steward's: the viewport lets go, and the widget holds with
-// nothing focused - its keys from the steward then, handed on to the view. Its
-// own Escape yields: the keys go up the focus tree to the first ancestor that
-// would hold them, else to no one.
+// The keys (RFC 0066 E3, keyboard §15.1, §17.5): the widget is a member of its
+// own focus party, never focused itself; the viewport inside it is the native
+// world, a control with its own keys. A press in the widget claims the keys
+// for it, and the widget puts the browser's focus in its viewport - lent. An
+// Escape the viewport has no use for lets it go: a yield from the viewport,
+// and the widget is asked first whether it would hold the keys. It has nothing
+// designed for holding them once its viewport lets go, so it says nothing
+// (no wouldHold) and is passed by: the keys go on up the tree to the first
+// ancestor that would hold them, else to the root's default, the home. Held
+// with nothing focused by other means, its keys go to the view and its own
+// Escape yields.
 //
 //   var v = new SvgViewer(container, { svg, label? })
 //   v.root   v.roots { dom, focus }   v.focus  its membership   v.view  the SvgPanZoom
