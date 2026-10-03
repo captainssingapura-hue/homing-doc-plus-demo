@@ -24,9 +24,10 @@ class TearLabWidget {
         [["kicker", "div", ga_kicker, "homing-ui-panes · TabTear"], ["title", "h1", ga_title, "Tearing a tab off"],
          ["lede", "p", ga_lede, "Drag a chip. The ring is its centre, and the lines measure the ring, not your hand. While the "
             + "ring is between the dashed lines the chip stays on its rail, sliding along the row however far your hand wanders "
-            + "sideways. Past a dashed line it tears: the faded chip is the window, made where you crossed — the breach. It waits "
-            + "there while your hand keeps the speed it had at the breach; slow down, stop or turn (as the measure says) and keep it "
-            + "up for the hold, and the window settles at your hand and follows it. A tear slower than the floor settles at once. "
+            + "sideways. Past a dashed line it tears: the chip is the window, made where you crossed — the breach — and it follows "
+            + "your hand from there. Turn the flight on for the other model: the faded window waits at the breach while your hand "
+            + "keeps the speed it had there; slow down, stop or turn (as the measure says) and keep it up for the hold, and it "
+            + "settles at your hand and follows it; a tear slower than the floor settles at once. "
             + "Bring the ring back between the dotted lines and the chip is captured: in the row again at once, still in your "
             + "hand. The gap between the two pairs of lines is what keeps a chip on the edge from tearing and landing by turns. "
             + "Let go anywhere else and it stays; dragged again, it is a window from the start, captured the same way. The dots "
@@ -55,7 +56,12 @@ class TearLabWidget {
         slider("span", "measured over", 20, 200, 10, d.span, " ms");
         slider("idle", "at rest after", 0, 200, 10, d.idle, " ms");
         slider("floor", "the floor", 0, 1, 0.05, d.floor, " px/ms");
-        controls.appendChild(this._measure(branch, tear));
+        controls.appendChild(this._pick(branch, "flight", "the flight", "what the window does at the breach",
+            [["off", "none: it follows from the breach"], ["on", "it waits until the hand changes"]], tear.options().flight ? "on" : "off",
+            function (v) { tear.set({ flight: v === "on" }); }));
+        controls.appendChild(this._pick(branch, "measure", "the measure", "what counts as a change",
+            [["speed", "the speed, either way"], ["slowdown", "the speed, falling only"], ["velocity", "the vector: a turn counts"]], tear.options().measure,
+            function (v) { tear.set({ measure: v }); }));
         var reset = new ButtonBuilder().label("Put them back").colour("secondary").onClick(function () { self._stage.reset(); say("Reset     every chip back on the strip"); });
         controls.appendChild(reset.build(branch.createElement("reset", reset.tag)).el);
 
@@ -83,25 +89,25 @@ class TearLabWidget {
         say("five chips on the strip; the escape " + d.escape + " px either side of it, the capture " + d.capture);
     }
 
-    /** The measure: what counts as a change. */
-    _measure(branch, tear) {
-        var row = branch.createElement("measure", "div");
+    /** A choice among a few, labelled: the flight, and what counts as a change in it. */
+    _pick(branch, id, text, aria, choices, value, onPick) {
+        var row = branch.createElement(id, "div");
         css.addClass(row, ga_control);
-        var label = branch.createElement("measure-label", "span");
+        var label = branch.createElement(id + "-label", "span");
         css.addClass(label, ga_control_label);
-        label.textContent = "the measure";
+        label.textContent = text;
         row.appendChild(label);
-        var pick = branch.createElement("measure-pick", "select");
+        var pick = branch.createElement(id + "-pick", "select");
         css.addClass(pick, mtp_new_pick);
-        pick.setAttribute("aria-label", "what counts as a change");
-        [["speed", "the speed, either way"], ["slowdown", "the speed, falling only"], ["velocity", "the vector: a turn counts"]].forEach(function (m) {
-            var opt = branch.createElement("measure-" + m[0], "option");
+        pick.setAttribute("aria-label", aria);
+        choices.forEach(function (m) {
+            var opt = branch.createElement(id + "-" + m[0], "option");
             opt.value = m[0];
             opt.textContent = m[1];
             pick.appendChild(opt);
         });
-        pick.value = tear.options().measure;
-        pick.addEventListener("change", function () { tear.set({ measure: pick.value }); });
+        pick.value = value;
+        pick.addEventListener("change", function () { onPick(pick.value); });
         row.appendChild(pick);
         return row;
     }

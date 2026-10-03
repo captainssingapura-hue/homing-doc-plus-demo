@@ -15,8 +15,8 @@
 // tab bar and stops there. The
 // divider between them the grid's, and a desk over both. A CHIP IS CARRIED AS
 // A CHIP, by the desk's hand: along its strip it reorders on the rail; pulled
-// off past the escape it tears into a float of its own, which waits at the
-// breach until the hand settles and then follows it; brought near either
+// off past the escape it tears into a float of its own, which follows the
+// hand from where it crossed; brought near either
 // strip it is captured onto it at once, still in the hand. A float moves as a
 // window by its bar's own ground and lands nowhere: docking is by the chip
 // alone. The cross on a chip closes it. A right-click
@@ -73,8 +73,8 @@ class DockingWidget {
         lede.textContent = "Docks in a split grid and a desk over them, holding what a workspace holds: the books as a relation grid, the shelves as a "
             + "relation tree, a picture zoomed by its own keys. Right-click the empty ground of a tab bar to part the room — beside or below — or to "
             + "merge one away: its tabs go to the region you name and its room to the pane across a splitter of its own. Drag a chip along a strip: it "
-            + "reorders, on its rail. Pull it off the strip and it tears into a float of its own, which waits where you crossed and comes to your "
-            + "hand once you slow down; bring the chip near either strip and it is in that strip at once, still in your hand - let go and it is a tab "
+            + "reorders, on its rail. Pull it off the strip and it tears into a float of its own, which follows your hand from where you "
+            + "crossed; bring the chip near either strip and it is in that strip at once, still in your hand - let go and it is a tab "
             + "there. A float's bar moves it as a window and docks nowhere: only its chip docks it. Detach a tab by its menu too — right-click a "
             + "chip, or Shift+F10. Inside a dock, Escape comes back to the tab bar and stops there; F6 asks for the switcher, and picking a "
             + "region is how the keys move between them. THE WORKSPACE IS FLAT, and the grid owns every line in it: the splitter IS the line between two rooms, "
