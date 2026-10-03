@@ -230,6 +230,14 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "they go. Arrows, Enter on a cell, Escape in the editor, a header drag, Ctrl+C: every one of them the grid's, "
                     + "none of them moving the holder - the conflicts to look for are the ones that would show here.",
                     RelFocusApp.INSTANCE, "RelFocusWidget", Map.of()),
+            demo("viewerfocus", "focus", "A viewer in focus", "An experiment: an SVG viewer, alone, as a widget under the focus model as designed.",
+                    "An SVG viewer as a widget - its DomOps and focus parties its own, grafted at the root of the page's - and "
+                    + "for the keys nothing but the design as it stands: the viewer a member of its own focus party, the "
+                    + "viewport inside it the native world. A press claims the keys for the viewer and puts the browser's focus "
+                    + "in the viewport; an Escape the viewport has no use for is the steward's, and the viewport lets go; the "
+                    + "viewer's own Escape yields, up the tree to the root, where no one holds. The monitors and a log of every "
+                    + "grant, release, mark and key route say where the keys are after each press and each key.",
+                    ViewerFocusApp.INSTANCE, "ViewerFocusWidget", Map.of()),
             demo("menus", "dialogs", "Context menus", "One steward, three cells, each with a menu of its kind.",
                     "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "
                     + "steward for the page — lazy, minting a kind's menu at its first open and listening to nothing while none is "

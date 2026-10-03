@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.site.demo.gallery;
 import hue.captains.singapura.js.homing.component.C0_Components;
 import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
+import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
 import hue.captains.singapura.js.homing.design.DesignCrate;
@@ -23,6 +24,7 @@ import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
+import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomCrate;
 
 import java.util.List;
 
@@ -44,7 +46,7 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-site-demo-gallery"; }
 
     @Override public List<Crate> requires() {
-        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiDockingCrate.INSTANCE, UiSplitGridCrate.INSTANCE, UiMenuCrate.INSTANCE, UiFocusCrate.INSTANCE,
+        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiDockingCrate.INSTANCE, UiSplitGridCrate.INSTANCE, UiMenuCrate.INSTANCE, UiFocusCrate.INSTANCE, UiPanZoomCrate.INSTANCE,
                        CoreJsCrate.INSTANCE, DesignCrate.INSTANCE, ServerCrate.INSTANCE,
                        RelGridCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
     }
@@ -72,12 +74,15 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(SlidersApp.INSTANCE),
                 CrateEntry.of(KeyboardApp.INSTANCE),
                 CrateEntry.of(FocusSceneModule.INSTANCE),
+                CrateEntry.of(ViewerSceneModule.INSTANCE),
+                CrateEntry.of(ViewerDrawings.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(DockingSceneModule.INSTANCE),
                 CrateEntry.of(DockingTabsModule.INSTANCE),
                 CrateEntry.of(DockingKeysModule.INSTANCE),
                 CrateEntry.of(DockingMonitorsModule.INSTANCE),
                 CrateEntry.of(FocusApp.INSTANCE),
                 CrateEntry.of(RelFocusApp.INSTANCE),
+                CrateEntry.of(ViewerFocusApp.INSTANCE),
                 CrateEntry.of(GalleryMenus.INSTANCE),
                 // The preferences: the page, the site's own stamped registry, and the one
                 // widget that is the site's - the tree master; the theme widget is the MPA's.

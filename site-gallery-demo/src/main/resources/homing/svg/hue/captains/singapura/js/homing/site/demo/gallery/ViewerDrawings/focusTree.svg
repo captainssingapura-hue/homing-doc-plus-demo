@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" width="720" height="400" fill="none" stroke="currentColor" stroke-width="1.5" font-size="14">
+  <path stroke-opacity="0.15" d="M40 0V400M80 0V400M120 0V400M160 0V400M200 0V400M240 0V400M280 0V400M320 0V400M360 0V400M400 0V400M440 0V400M480 0V400M520 0V400M560 0V400M600 0V400M640 0V400M680 0V400M0 40H720M0 80H720M0 120H720M0 160H720M0 200H720M0 240H720M0 280H720M0 320H720M0 360H720"/>
+  <rect x="250" y="30" width="220" height="56" rx="8"/>
+  <text x="360" y="54" text-anchor="middle" fill="currentColor" stroke="none" font-weight="600">the page's focus party</text>
+  <text x="360" y="74" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.7">its root: no one holds here</text>
+  <rect x="250" y="172" width="220" height="56" rx="8"/>
+  <text x="360" y="196" text-anchor="middle" fill="currentColor" stroke="none" font-weight="600">the viewer</text>
+  <text x="360" y="216" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.7">a member: held, or lent</text>
+  <rect x="250" y="314" width="220" height="56" rx="8"/>
+  <text x="360" y="338" text-anchor="middle" fill="currentColor" stroke="none" font-weight="600">the viewport</text>
+  <text x="360" y="358" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.7">the native world: + − 0 and the arrows</text>
+  <path d="M300 172V86M294 95L300 86L306 95"/>
+  <text x="288" y="134" text-anchor="end" fill="currentColor" stroke="none">the viewer's Escape: a yield</text>
+  <path d="M300 314V228M294 237L300 228L306 237"/>
+  <text x="288" y="276" text-anchor="end" fill="currentColor" stroke="none">an Escape it has no use for: let go</text>
+  <path d="M420 86V172M414 163L420 172L426 163"/>
+  <text x="432" y="134" fill="currentColor" stroke="none">a press: a claim</text>
+  <path d="M420 228V314M414 305L420 314L426 305"/>
+  <text x="432" y="276" fill="currentColor" stroke="none">granted: the focus put here</text>
+</svg>
