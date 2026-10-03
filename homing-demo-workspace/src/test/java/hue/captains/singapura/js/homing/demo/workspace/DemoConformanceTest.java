@@ -11,7 +11,6 @@ import hue.captains.singapura.js.homing.conformance.rules.Finding;
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.core.Crate;
-import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -53,7 +52,7 @@ class DemoConformanceTest {
     @Test
     void theCssGraphKeepsItsLaws() {
         Set<String> own = own();
-        List<Finding> css = CssConformance.check(new ArrayList<>(CrateClosure.of(TOP)), HomingDesigns.REGISTRY.palettes())
+        List<Finding> css = CssConformance.check(new ArrayList<>(CrateClosure.of(TOP)))
                 .stream().filter(f -> own.contains(f.moduleClass())).toList();
         assertEquals(List.of(), css.stream().map(DemoConformanceTest::describe).toList());
     }

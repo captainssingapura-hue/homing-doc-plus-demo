@@ -11,16 +11,16 @@ import hue.captains.singapura.js.homing.server.PreferenceSteward;
 import java.util.List;
 
 /**
- * RFC 0066 — the bare app. One page, no studio: every token the global
- * palette declares, drawn as a swatch with the value the browser actually
- * computed for it, and a picker that switches the theme without a reload.
+ * RFC 0066 — the bare app. One page, no studio: every colour word the board
+ * reads, drawn as a swatch with the value the browser actually computed for
+ * it, and a picker that switches the palette without a reload.
  *
- * <p>What it proves: {@code core + core-js + server + theme-color}, a
- * {@code Theme} and a {@code Provision} per theme, and a {@code ThemeRegistry}
- * are the whole of what a served JS app needs to be themed. The palette
- * arrives as the prior of this page's one CSS group; the switch goes through
- * the preference steward and the CSS manager follows it, exactly as the
- * studio's picker does — the studio just is not here.</p>
+ * <p>What it proves: {@code core + core-js + server + design-core}, a design
+ * and its palettes, and a {@code DesignRegistry} are the whole of what a
+ * served JS app needs to be designed. The classes wear design words and the
+ * registry's renderer binds them; the switch goes through the preference
+ * steward and the CSS manager follows it, exactly as the studio's picker
+ * does — the studio just is not here.</p>
  */
 public record Swatchboard() implements AppModule<AppModule._None, Swatchboard> {
 
@@ -53,7 +53,6 @@ public record Swatchboard() implements AppModule<AppModule._None, Swatchboard> {
                         new SwatchboardStyles.sb_grid(),
                         new SwatchboardStyles.sb_swatch(),
                         new SwatchboardStyles.sb_chip(),
-                        new SwatchboardStyles.sb_chip_scale(),
                         new SwatchboardStyles.sb_name(),
                         new SwatchboardStyles.sb_value(),
                         new SwatchboardStyles.sb_foot(),

@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * RFC 0044 — the bare app's crate gate. The second assertion is the proof the
- * module exists for: every JS import of a themed, served app resolves into
- * core-js, server or theme-color. Nothing reaches the studio, because the
+ * module exists for: every JS import of a designed, served app resolves into
+ * core-js, server or design-core. Nothing reaches the studio, because the
  * studio is not on this classpath at all.
  */
 class BareAppCrateConformanceTest {
