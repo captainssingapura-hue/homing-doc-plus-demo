@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 200" width="360" height="200" fill="none" stroke="currentColor" stroke-width="1.2" font-size="13">
+  <path stroke-opacity="0.15" d="M20 0V200M40 0V200M60 0V200M80 0V200M100 0V200M120 0V200M140 0V200M160 0V200M180 0V200M200 0V200M220 0V200M240 0V200M260 0V200M280 0V200M300 0V200M320 0V200M340 0V200M0 20H360M0 40H360M0 60H360M0 80H360M0 100H360M0 120H360M0 140H360M0 160H360M0 180H360"/>
+  <circle cx="60" cy="60" r="28"/>
+  <circle cx="60" cy="60" r="10" fill="currentColor" fill-opacity="0.25"/>
+  <rect x="130" y="34" width="100" height="52" rx="8"/>
+  <path d="M250 86L290 34L330 86Z"/>
+  <path d="M88 60H130M230 60H262" stroke-dasharray="4 3"/>
+  <text x="180" y="128" text-anchor="middle" fill="currentColor" stroke="none">+ and − zoom · 0 fits · the arrows pan</text>
+  <text x="180" y="152" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.7">Escape lets the viewport go: a yield</text>
+  <text x="180" y="184" text-anchor="middle" fill="currentColor" stroke="none" opacity="0.5" font-size="9">small print, to zoom in on</text>
+</svg>

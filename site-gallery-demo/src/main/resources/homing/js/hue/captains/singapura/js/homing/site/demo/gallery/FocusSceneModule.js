@@ -60,6 +60,8 @@ class Leaf {
     }
     /** Told to activate by its container: what a press on it does — a claim. */
     activate() { Keys.claim(this.focus); }
+    /** A control inside it letting go of the keys - the checkbox inside a2 - leaves them with the leaf: it has keys of its own, the arrows it counts. */
+    wouldHold() { return true; }
     /** A native checkbox inside this logical leaf: a press on it claims the leaf (the innermost member) and focuses the box; Space toggles it natively. */
     check(branch, label) {
         branch.activate(_owner);
@@ -113,7 +115,7 @@ class Panel {
         this.root.appendChild(input);
         return input;
     }
-    /** A native button inside the panel, wired to nothing but its click: Enter and Space are the browser's, Escape goes nowhere. */
+    /** A native button inside the panel, wired to nothing but its click: Enter and Space are the browser's; an Escape lets it go, a yield from it - the panel asked first, as any ancestor. */
     button(branch, label, onClick) {
         branch.activate(_owner);
         var btn = branch.createElement("button", "button");

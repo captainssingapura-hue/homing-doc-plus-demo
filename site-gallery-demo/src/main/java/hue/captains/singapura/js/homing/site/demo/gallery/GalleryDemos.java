@@ -230,6 +230,16 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "they go. Arrows, Enter on a cell, Escape in the editor, a header drag, Ctrl+C: every one of them the grid's, "
                     + "none of them moving the holder - the conflicts to look for are the ones that would show here.",
                     RelFocusApp.INSTANCE, "RelFocusWidget", Map.of()),
+            demo("viewerfocus", "focus", "Viewers in focus", "A case board: where the keys go when a widget's native control lets them go.",
+                    "SVG viewers as widgets - their DomOps and focus parties their own, grafted where they sit - each a member of "
+                    + "its own focus party, the viewport inside it the native world. One Escape in a viewport lets it go, a yield "
+                    + "from it: the viewer is asked first and, with nothing designed for holding the keys, is passed by; the keys "
+                    + "go up to the first that would hold them, else to the root's default, the home, which holds from the start "
+                    + "as the doc reader's contents would. Seven cases, each saying what to do and what to expect, its lamps lit "
+                    + "from what happened: the home and its own Escape; a viewer at the root; in a panel that catches; in one that "
+                    + "lets pass; a viewer that keeps the keys; one in a layer that keeps Escape while open, as a stage closing "
+                    + "does; and no home, where no one holds. The monitors and a log beside them.",
+                    ViewerFocusApp.INSTANCE, "ViewerFocusWidget", Map.of()),
             demo("menus", "dialogs", "Context menus", "One steward, three cells, each with a menu of its kind.",
                     "The page's context menus: declared once in Java as kinds and items, stamped as data, and held by one "
                     + "steward for the page — lazy, minting a kind's menu at its first open and listening to nothing while none is "

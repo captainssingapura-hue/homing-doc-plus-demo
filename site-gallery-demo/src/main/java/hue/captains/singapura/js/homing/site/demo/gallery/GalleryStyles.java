@@ -846,6 +846,79 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         }
     }
 
+    // ── The viewers' case board ───────────────────────────────────────────────
+
+    /** The chain, drawn once at the head of the board: as wide as the column allows, in its own proportions. */
+    public record ga_case_figure() implements CssClass<GalleryStyles> {
+        @Override public String body() { return "display: block; width: 100%; max-width: 560px; height: auto; margin: 0 0 16px;"; }
+    }
+
+    /** A case: its title, what to do, its scene and its checks - raised, a column of its own. */
+    public record ga_case() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return """
+            flex: 1 1 340px;
+            min-width: 0;
+            max-width: 560px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            """;
+        }
+    }
+
+    /** A case's number and title. */
+    public record ga_case_title() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Kicker.class, Color.Ink.class)); }
+        @Override public String body() { return ""; }
+    }
+
+    /** A case's scene: what it holds, stacked. */
+    public record ga_case_body() implements CssClass<GalleryStyles> {
+        @Override public String body() { return "display: flex; flex-direction: column; gap: 8px;"; }
+    }
+
+    /** A check of a case: what is done, what is expected, and the lamp, on a line that wraps. */
+    public record ga_case_check() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class)); }
+        @Override public String body() { return "display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;"; }
+    }
+
+    /** The lamp: what happened - waiting, set back; then as expected or not, in the feedback surfaces after it in the sheet. */
+    public record ga_lamp() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Recessed.class, Shape.Corner.class)); }
+        @Override public String body() { return "padding: 1px 8px;"; }
+    }
+    public record ga_lamp_ok() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Success.class, Color.Surface.class)); }
+        @Override public String body() { return ""; }
+    }
+    public record ga_lamp_off() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Danger.class, Color.Surface.class)); }
+        @Override public String body() { return ""; }
+    }
+
+    /** A viewer's viewport on the board: a box of a set height its drawing is fitted to. */
+    public record ga_viewer_view() implements CssClass<GalleryStyles> {
+        @Override public String body() { return "height: 170px;"; }
+    }
+
+    /** The layer that keeps an Escape while open: a frame around its viewer, its head saying which it is. */
+    public record ga_layer() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Recessed.class, Shape.Corner.class)); }
+        @Override public String body() { return "padding: 8px; display: flex; flex-direction: column; gap: 8px;"; }
+    }
+    public record ga_layer_head() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class)); }
+        @Override public String body() { return "padding: 2px 8px; user-select: none;"; }
+    }
+    /** Open: the head in the warning surface - an Escape here is the layer's. After the head in the sheet. */
+    public record ga_layer_open() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Warning.class, Color.Surface.class)); }
+        @Override public String body() { return ""; }
+    }
+
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
         return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
@@ -859,6 +932,8 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
                        new ga_sheet_ground(), new ga_sheet_slot(), new ga_sheet_note(), new ga_sheet_lines(),
                        new ga_plate(), new ga_plate_sun(), new ga_plate_far(), new ga_plate_near(), new ga_plate_ground(),
                        new ga_shell(), new ga_shell_nav(), new ga_shell_demo(), new ga_shell_explain(), new ga_explain_text(), new ga_explain_link(),
-                       new ga_control(), new ga_control_label(), new ga_control_readout());
+                       new ga_control(), new ga_control_label(), new ga_control_readout(),
+                       new ga_case_figure(), new ga_case(), new ga_case_title(), new ga_case_body(), new ga_case_check(),
+                       new ga_lamp(), new ga_lamp_ok(), new ga_lamp_off(), new ga_viewer_view(), new ga_layer(), new ga_layer_head(), new ga_layer_open());
     }
 }
