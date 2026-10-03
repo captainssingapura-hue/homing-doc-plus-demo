@@ -72,12 +72,15 @@ class ViewerFocusWidget {
         function to(check, m, says) { return function () { return { check: check, id: m.id, says: says }; }; }
 
         var c1 = aCase(1, "The home: the root's default", "A leaf standing in for the doc reader's contents, named the home once the page "
-            + "is laid out. Its keys: the arrows count. Press it, then Escape: its own yield reaches the root, and the root's default is itself.");
+            + "is laid out. Its keys: the arrows count. The home is the anchor: press it, then Escape - its yield reaches the page and is given straight back, granted anew by home; an Escape by mistake moves nothing.");
         var home = new Leaf(branch.createBranch("home"), c1.body, top, "the home");
         this._parts.push(home);
         board.name(home.focus, "the home");
-        var entering = c1.check("Entering the page");
-        board.watch(home.focus, toRoot(c1.check("Its own Escape")));
+        var entering = c1.check("Entering the page"), ownEscape = c1.check("Its own Escape");
+        board.watch(home.focus, function () {   // the anchor while it is the home; taken away (case 7), a leaf like any
+            return steward.homed() === home.focus.id ? { check: ownEscape, id: home.focus.id, says: "the home, given straight back: the anchor" }
+                                                     : { check: ownEscape, id: null, says: "no one: it is not the home now" };
+        });
 
         var c2 = aCase(2, "A viewer at the root", "Press the drawing, then Escape: the viewer is asked, has nothing designed for holding the "
             + "keys, and is passed by; nothing is above it but the root.");
