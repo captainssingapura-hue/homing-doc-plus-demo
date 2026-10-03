@@ -137,7 +137,7 @@ class GalleryTest {
         // no capture left in the closure: the grid's header drag hears its Escape on its own handle
         assertEquals(List.of(), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(List.of(GalleryCrate.INSTANCE)).stream().filter(m -> !m.startsWith("RelGrid") && !m.startsWith("RelTree") && !m.startsWith("Tree")).toList(), "the gallery's own widgets and the components it serves: every key through the party");
-        assertEquals(List.of("BooksTab", "Card", "ContextMenuSteward", "ContextMenusWidget", "Dialog", "DomOpsTab", "EventsTab", "FloatLayer", "FocusTab", "FocusWidget", "KeyboardWidget", "Leaf", "ListMasterWidget", "ListPanel", "MultiTabPane", "NoteTab", "Panel", "PictureTab", "PreferencesView", "RegionList", "RelFocusWidget", "ShelvesTab", "Slider", "SliderGroup", "SplitGridMirror", "StewardTab", "SvgPanZoom", "SvgViewer", "TabOpener"),
+        assertEquals(List.of("BooksTab", "Card", "ContextMenuSteward", "ContextMenusWidget", "Dialog", "DomOpsTab", "EscapeLayer", "EventsTab", "FloatLayer", "FocusTab", "FocusWidget", "KeyboardWidget", "Leaf", "ListMasterWidget", "ListPanel", "MultiTabPane", "NoteTab", "Panel", "PictureTab", "PreferencesView", "RegionList", "RelFocusWidget", "ShelvesTab", "Slider", "SliderGroup", "SplitGridMirror", "StewardTab", "SvgPanZoom", "SvgViewer", "TabOpener"),
                 KeyboardRegistry.requiredBy(List.of(GalleryCrate.INSTANCE)).byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList());
     }
 }

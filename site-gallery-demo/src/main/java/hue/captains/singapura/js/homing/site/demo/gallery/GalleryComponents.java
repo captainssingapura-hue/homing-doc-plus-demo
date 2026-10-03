@@ -54,6 +54,8 @@ public record GalleryComponents() implements C0_Components<GalleryComponents> {
                     ComponentEntry.of(this, new RelFocusApp.RelFocusWidget()),
                     ComponentEntry.of(this, new ViewerFocusApp.ViewerFocusWidget()),
                     ComponentEntry.of(this, new ViewerSceneModule.SvgViewer()),
+                    ComponentEntry.of(this, new ViewerSceneModule.EscapeLayer()),
+                    ComponentEntry.of(this, new ViewerCasesModule.ViewerCase()),
                     ComponentEntry.of(this, new FocusSceneModule.Leaf()),
                     ComponentEntry.of(this, new FocusSceneModule.Panel()),
                     ComponentEntry.of(this, new FocusSceneModule.ListPanel()),

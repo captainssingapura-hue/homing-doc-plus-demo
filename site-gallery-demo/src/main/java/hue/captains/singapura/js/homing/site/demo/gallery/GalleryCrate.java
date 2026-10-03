@@ -75,6 +75,7 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(KeyboardApp.INSTANCE),
                 CrateEntry.of(FocusSceneModule.INSTANCE),
                 CrateEntry.of(ViewerSceneModule.INSTANCE),
+                CrateEntry.of(ViewerCasesModule.INSTANCE),
                 CrateEntry.of(ViewerDrawings.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(DockingSceneModule.INSTANCE),
                 CrateEntry.of(DockingTabsModule.INSTANCE),

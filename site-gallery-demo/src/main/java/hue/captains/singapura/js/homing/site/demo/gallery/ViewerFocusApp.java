@@ -17,12 +17,11 @@ import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
 import java.util.List;
 
 /**
- * The viewers-in-focus page, an experiment: SVG viewers as widgets under the
- * focus model - members of their own focus parties, the viewport inside each
- * the native world - at the root, in a panel that catches and in one that
- * lets pass, with a home at the root: where the keys go when a viewport lets
- * them go, with the monitors and a log of every grant, release, mark and key
- * route.
+ * The viewers-in-focus page, a case board: where the keys go when a widget's
+ * native control lets them go. Seven cases - the home, a viewer at the root,
+ * in a panel that catches, in one that lets pass, one that keeps the keys, one
+ * in a layer that keeps Escape, and no home - each with its checks and lamps,
+ * lit from the route of every Escape; the monitors and a log beside them.
  */
 public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocusApp> {
 
@@ -31,7 +30,7 @@ public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocus
     record appMain() implements AppModule._AppMain<AppModule._None, ViewerFocusApp> {}
     /** The app as a widget by the base's contract: {@code new ViewerFocusWidget(branch, params)}; appMain delegates to it. */
     public record ViewerFocusWidget() implements BranchComponent<ViewerFocusApp> {
-        @Override public String summary() { return "An SVG viewer, alone, as a widget under the focus model as designed; the monitors and a log of where the keys go."; }
+        @Override public String summary() { return "A case board: SVG viewers as widgets, and where the keys go when a viewport lets them go - each case with its checks and lamps."; }
     }
 
     @Override public String title()      { return "Viewers in focus"; }
@@ -45,8 +44,9 @@ public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocus
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusSceneModule.Leaf(), new FocusSceneModule.Panel()), FocusSceneModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ViewerSceneModule.SvgViewer()), ViewerSceneModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ViewerDrawings.focusTree()), ViewerDrawings.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ViewerSceneModule.SvgViewer(), new ViewerSceneModule.EscapeLayer()), ViewerSceneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ViewerCasesModule.ViewerCase(), new ViewerCasesModule.CaseBoard()), ViewerCasesModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ViewerDrawings.focusTree(), new ViewerDrawings.specimen()), ViewerDrawings.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
@@ -56,7 +56,9 @@ public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocus
                         new GalleryStyles.ga_focus(),
                         new GalleryStyles.ga_focus_scene(),
                         new GalleryStyles.ga_focus_monitor(),
-                        new GalleryStyles.ga_log()
+                        new GalleryStyles.ga_log(),
+                        new GalleryStyles.ga_button(),
+                        new GalleryStyles.ga_case_figure()
                 ), GalleryStyles.INSTANCE))
                 .build();
     }
