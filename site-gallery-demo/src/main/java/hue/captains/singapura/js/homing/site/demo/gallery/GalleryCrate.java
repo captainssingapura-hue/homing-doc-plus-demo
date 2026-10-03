@@ -66,6 +66,8 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(SheetsApp.INSTANCE),
                 CrateEntry.of(SplitGridApp.INSTANCE),
                 CrateEntry.of(TabStripApp.INSTANCE),
+                CrateEntry.of(TearLabApp.INSTANCE),
+                CrateEntry.of(TearLabSceneModule.INSTANCE),
                 CrateEntry.of(ContextMenusApp.INSTANCE),
                 CrateEntry.of(SlidersApp.INSTANCE),
                 CrateEntry.of(KeyboardApp.INSTANCE),
@@ -83,6 +85,7 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(GalleryPreferences.INSTANCE),
                 CrateEntry.of(PreferencesTreeWidgetModule.INSTANCE),
                 CrateEntry.of(GalleryRelations.INSTANCE),
-                CrateEntry.of(GalleryStyles.INSTANCE));
+                CrateEntry.of(GalleryStyles.INSTANCE),
+                CrateEntry.of(TearLabStyles.INSTANCE));
     }
 }
