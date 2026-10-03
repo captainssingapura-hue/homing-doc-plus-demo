@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * RFC 0066 — the bare app's server: the framework's action registry over
- * one app and one theme registry, hosted directly. No Bootstrap, no
+ * one app and one design registry, hosted directly. No Bootstrap, no
  * Fixtures, no catalogue, no studio — this file is the whole deployment.
  * The one thing added over the base registry is the root: {@code /}
  * redirects to the app, the way the studio's Bootstrap does for its home.
@@ -41,7 +41,7 @@ public final class BareAppServer {
                 new QueryParamResolver("/module"),
                 new SimpleAppResolver(List.of(Swatchboard.INSTANCE)),
                 ResourceReader.INSTANCE,
-                BareThemes.Registry.INSTANCE,
+                BareThemes.REGISTRY,
                 AppMeta.DEFAULT,
                 List.of(BareAppCrate.INSTANCE));
         var rootRedirect = new RootRedirectGetAction(Swatchboard.INSTANCE.simpleName());

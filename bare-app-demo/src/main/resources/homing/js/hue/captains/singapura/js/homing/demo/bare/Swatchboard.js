@@ -1,12 +1,12 @@
 // Swatchboard — the bare app (RFC 0066).
 //
-// appMain(root) draws every token the global palette declares as a swatch,
-// the chip painted with the token itself and the caption showing what the
-// browser computed for it, plus a picker over the registry's themes. Picking
+// appMain(root) draws every colour word the board reads as a swatch, the
+// chip painted with the word itself and the caption showing what the browser
+// computed for it, plus a picker over the palettes the registry offers. Picking
 // writes the preference; the CSS manager follows the store and swaps the
-// palette's sheet; onThemeApplied is when the captions are re-read.
+// design's sheets; onThemeApplied is when the captions are re-read.
 //
-// Nothing here names a token or a theme — TOKENS and THEMES are generated
+// Nothing here names a variable or a theme — TOKENS and THEMES are generated
 // from the Java that owns them (SwatchboardData). The framework's
 // EsModuleWriter appends the import/export prologue — do not add import or
 // export lines here.
@@ -40,7 +40,7 @@ function appMain(root) {
 
     var picker = branch.createElement("picker", "label");
     css.addClass(picker, sb_picker);
-    picker.textContent = "Theme ";
+    picker.textContent = "Palette ";
     var select = branch.createElement("select", "select");
     css.addClass(select, sb_select);
     for (var i = 0; i < THEMES.length; i++) {
@@ -52,7 +52,7 @@ function appMain(root) {
     picker.appendChild(select);
     head.appendChild(picker);
 
-    // ── Grid: one swatch per token ───────────────────────────────────────────
+    // ── Grid: one swatch per word ───────────────────────────────────────────
     var grid = branch.createElement("grid", "div");
     css.addClass(grid, sb_grid);
     root.appendChild(grid);
@@ -65,10 +65,9 @@ function appMain(root) {
 
         var chip = branch.createElement("chip-" + token.name, "div");
         css.addClass(chip, sb_chip);
-        if (token.scale) css.addClass(chip, sb_chip_scale);
-        // The one custom property this page sets: the chip wears the token
-        // it names. var(--sb-chip) resolves to var(--<token>) through the
-        // palette, so the chip re-paints on a switch with no help from here.
+        // The one custom property this page sets: the chip wears the word
+        // it names. var(--sb-chip) resolves to the word's root binding, so
+        // the chip re-paints on a switch with no help from here.
         chip.style.setProperty("--sb-chip", "var(" + token.name + ")");
         swatch.appendChild(chip);
 
@@ -94,8 +93,8 @@ function appMain(root) {
     foot.appendChild(footText);
     var footMuted = branch.createElement("foot-muted", "span");
     css.addClass(footMuted, sb_foot_muted);
-    footMuted.textContent = "core + core-js + server + theme-color, two themes, one provision each. "
-        + "The palette is the prior of this page's one CSS group; the picker writes the "
+    footMuted.textContent = "core + core-js + server + design-core: one design, two palettes. "
+        + "The classes wear design words and the registry binds them; the picker writes the "
         + "preference and the CSS manager follows it.";
     foot.appendChild(footMuted);
     root.appendChild(foot);

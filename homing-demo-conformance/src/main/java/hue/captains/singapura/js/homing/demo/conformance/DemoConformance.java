@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
  * their own rule set for it ({@link GameLoopConformance}), and the platformer's play loop is held
  * to it. Strict, with no ledger: the demo was cut on the new stack and carries no debt.
  *
- * <p>The JS rules only. The CSS graph laws stay with each crate's own gate, which knows the
- * palettes its classes reach - the bare app's are its own, not the framework designs'.</p>
+ * <p>The JS rules only. The CSS graph laws stay with each crate's own gate, beside the check that
+ * its designs bind every word it wears - the bare app's design is its own, not the framework's.</p>
  */
 public final class DemoConformance {
 

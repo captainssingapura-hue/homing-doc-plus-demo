@@ -57,7 +57,7 @@ class WidgetsConformanceTest {
     @Test
     void theCssGraphKeepsItsLaws() {
         Set<String> own = own();
-        List<Finding> css = CssConformance.check(new ArrayList<>(CrateClosure.of(TOP)), HomingDesigns.REGISTRY.palettes())
+        List<Finding> css = CssConformance.check(new ArrayList<>(CrateClosure.of(TOP)))
                 .stream().filter(f -> own.contains(f.moduleClass())).toList();
         assertEquals(List.of(), css.stream().map(WidgetsConformanceTest::describe).toList());
     }
