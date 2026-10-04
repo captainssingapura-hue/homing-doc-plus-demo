@@ -4,8 +4,8 @@
 // left, the chosen demo top right, its explanation under it — the dividers
 // drag, nothing subdivides or goes. The navigator is the relation tree over DEMOS —
 // the demos in their groups, the sub-catalogues, folders open from the start; the
-// demo is the demo app's widget class, imported through the serving context
-// when first chosen and kept in a slot after; the explanation is what DEMOS
+// demo is the demo app's widget class, imported by its module's URL — the page's
+// own instance — when first chosen and kept in a slot after; the explanation is what DEMOS
 // says, with a link to the page the demo also is; a group chosen is described
 // and shows its first demo. The address follows. The
 // shell is one document under the chrome, which made the one keyboard steward
@@ -16,7 +16,7 @@ const _owner = Object.freeze({ toString: () => "galleryShell" });
 var _loaded = new Map();   // module url → Promise<class>
 
 function _load(entry) {
-    var url = withServingContext(entry.module);
+    var url = entry.module;
     var p = _loaded.get(url);
     if (!p) {
         p = import(url).then(function (m) {
