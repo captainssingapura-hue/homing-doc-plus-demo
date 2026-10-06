@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.demo.bare.BareAppCrate;
 import hue.captains.singapura.js.homing.demo.site.DemoSiteCrate;
+import hue.captains.singapura.js.homing.demo.taxonomy.TaxonomyWorkbenchCrate;
 import hue.captains.singapura.js.homing.demo.workspace.DemoWorkspaceCrate;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.DemoWorkspaceWidgetsCrate;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.conformance.GameLoopConformance;
@@ -34,6 +35,7 @@ public final class DemoConformance {
     public static final List<Crate> TOP_LEVEL = List.of(
             DemoWorkspaceWidgetsCrate.INSTANCE,
             DemoWorkspaceCrate.INSTANCE,
+            TaxonomyWorkbenchCrate.INSTANCE,
             GalleryCrate.INSTANCE,
             DemoSiteCrate.INSTANCE,
             MermaidSiteCrate.INSTANCE,

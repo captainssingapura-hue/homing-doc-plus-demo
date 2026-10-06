@@ -23,6 +23,8 @@
         <module>homing-demo-workspace-widgets</module>
         <module>homing-demo-workspace</module>
         <!-- The demo's front door: a catalogue site, its docs read in DocView, its workspaces opened beside. -->
+        <!-- RFC 0067: the house's taxonomy of components, in a workbench beside the gallery. -->
+        <module>homing-demo-taxonomy</module>
         <module>homing-demo-site</module>
         <!-- The demo's conformance: every crate it serves, graded by the framework's policy extended
              with the widgets' game-loop rule set; and its studio, the studio repo's workbench, on 8091. -->
