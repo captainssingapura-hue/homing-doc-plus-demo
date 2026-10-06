@@ -11,7 +11,7 @@
 //   TaxonomyIndex.the()          the one index over TAXONOMY
 //   index.node(id)  index.root()  index.nodes()  index.children(id)
 //   index.componentsUnder(id)    every component under a node, however deep
-//   index.partsUnder(id)         a component's parts; under a kind or the root, every part their components name
+//   index.partsOf(id)            a component's parts, in the order it names them
 //   index.above(id)              the nodes above one in the tree, nearest first
 //   index.label(id)              a part said as its role and what plays it
 //   index.classes(id)            its semantic classes, one per target leaf
@@ -57,12 +57,10 @@ class TaxonomyIndex {
         return out;
     }
 
-    /** A component's parts, in the order it names them; under a kind or the root, every part their components name, in tree order. */
-    partsUnder(id) {
-        var self = this, n = this.node(id);
-        if (!n || n.is === "part") return [];
-        var owners = n.is === "component" ? [n] : this.componentsUnder(id);
-        return [].concat.apply([], owners.map(function (c) { return self.children(c.id); }));
+    /** A component's parts, in the order it names them; anything else has none. */
+    partsOf(id) {
+        var n = this.node(id);
+        return n && n.is === "component" ? this.children(id) : [];
     }
 
     /** The nodes above one in the tree, nearest first - for a part, its owner and the owner's. */

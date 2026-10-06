@@ -31,7 +31,7 @@ class NodeDetails extends TaxonomyWidget {
         var v = this.fresh(), box = this._box, t = this.taxonomy, n = id ? t.node(id) : null;
         if (!n) {
             this.mint(v, "none", "p", tx_hint, box, id ? "No node " + id + " in the taxonomy."
-                : "Pick a node of the taxonomy - in the tree, the parts, or here - to see what it is, how it falls back, what it is made of or where it is a part, and its semantic classes.");
+                : "Pick a node of the taxonomy - in the tree, or here - to see what it is, how it falls back, what it is made of or where it is a part, and its semantic classes.");
             return;
         }
         this.mint(v, "title", "h3", tx_title, box, n.is === "root" ? "Any component" : t.label(id));

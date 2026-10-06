@@ -60,15 +60,14 @@ class TaxonomyDataTest extends JsModuleTestBase {
     }
 
     @Test
-    void theParts_aComponentsOwn_everyPartUnderAKind_everyPartUnderTheRoot() {
-        var house = HouseTaxonomy.INSTANCE.read();
+    void theParts_aComponentsOwn_nothingElseHasAny() {
         assertEquals("card-head,card-title,card-badge,card-body,card-text,card-foot,card-link",
-                     eval("t.partsUnder('card').map(function (p) { return p.id; }).join()").asString(), "a component's own, in the order it names them");
-        assertEquals(house.parts().size(), eval("t.partsUnder('root').length").asInt(), "every part under the root");
-        assertEquals("dialog-backdrop,dialog-frame,dialog-actions", eval("t.partsUnder('dialog').map(function (p) { return p.id; }).join()").asString());
-        assertTrue(eval("t.partsUnder('pane').every(function (p) { return t.above(p.owner).indexOf('pane') >= 0; })").asBoolean(), "under a kind: the parts its components name");
-        assertEquals(0, eval("t.partsUnder('text').length").asInt(), "the text components name no parts");
-        assertEquals(0, eval("t.partsUnder('card-title').length").asInt(), "a part has none");
+                     eval("t.partsOf('card').map(function (p) { return p.id; }).join()").asString(), "a component's own, in the order it names them");
+        assertEquals("dialog-backdrop,dialog-frame,dialog-actions", eval("t.partsOf('dialog').map(function (p) { return p.id; }).join()").asString());
+        assertEquals(0, eval("t.partsOf('heading').length").asInt(), "a component that names none");
+        assertEquals(0, eval("t.partsOf('pane').length").asInt(), "a kind has none: the parts are a component's");
+        assertEquals(0, eval("t.partsOf('root').length").asInt());
+        assertEquals(0, eval("t.partsOf('card-title').length").asInt(), "a part has none");
     }
 
     @Test

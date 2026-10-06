@@ -15,13 +15,13 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 
 import java.util.List;
 
-/** {@code PartsTable}: the parts of the house's components, a row each, in a relation grid - what it shows follows the pick; the row the cursor is on is picked. */
+/** {@code PartsTable}: the picked component's parts, a row each, in a relation grid - a view of the pick, never a picker. */
 public record PartsTableModule() implements DomModule<PartsTableModule> {
 
     public static final PartsTableModule INSTANCE = new PartsTableModule();
 
     public record PartsTable() implements SelfContainedWidget<PartsTableModule>, NeedKeyboard {
-        @Override public String summary() { return "The parts of the house's components, a row each: the component that names it, the role, the component that plays it, its token. The root shows every part, a kind those its components name, a component its own; the row the cursor is on is picked."; }
+        @Override public String summary() { return "The picked component's parts, a row each: the role, the component that plays it, its token. A part picked shows its owner's, the cursor on its row; a kind or the root, none. It picks nothing."; }
         @Override public List<KeyBinding> keys() { return List.of(KeyBinding.of(Key.ESCAPE, "the keys given back, when the grid did not take it")); }
     }
 
