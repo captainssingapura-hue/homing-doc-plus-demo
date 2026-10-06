@@ -14,13 +14,13 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 
 import java.util.List;
 
-/** {@code TaxonomyTree}: the taxonomy in a relation tree - the root, the kinds, the components at its leaves, each component's parts under it; the node the cursor is on is picked. */
+/** {@code TaxonomyTree}: the house's components in a relation tree - the root, the kinds, the components at its leaves; the node the cursor is on is picked. */
 public record TaxonomyTreeModule() implements DomModule<TaxonomyTreeModule> {
 
     public static final TaxonomyTreeModule INSTANCE = new TaxonomyTreeModule();
 
     public record TaxonomyTree() implements SelfContainedWidget<TaxonomyTreeModule>, NeedKeyboard {
-        @Override public String summary() { return "The house's taxonomy as the tree it is: each kind under its parent up to the root, with how many components are under it; each component a leaf under its kind, its parts - the roles it names - under it. The node the cursor is on is picked, and the chain it falls back along is lit."; }
+        @Override public String summary() { return "The house's components as the tree they are: each kind under its parent up to the root, with how many components are under it; each component a leaf under its kind, with how many parts it names. The node the cursor is on is picked, and the chain it falls back along is lit - a part's from the component that plays it."; }
         @Override public List<KeyBinding> keys() { return List.of(KeyBinding.of(Key.ESCAPE, "the keys given back, when the tree did not take it")); }
     }
 

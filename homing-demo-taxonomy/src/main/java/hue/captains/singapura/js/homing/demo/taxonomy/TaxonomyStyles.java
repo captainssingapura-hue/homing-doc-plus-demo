@@ -23,7 +23,7 @@ import static hue.captains.singapura.js.homing.design.Text.Code;
 import static hue.captains.singapura.js.homing.design.Text.Kicker;
 import static hue.captains.singapura.js.homing.design.Text.Link;
 
-/** The taxonomy workbench's widgets: a column of what each shows, the tree's port, facts, panels, links to nodes, what is lit. */
+/** The taxonomy workbench's widgets: a column of what each shows, the tree's port, the table's frame, facts, panels, links to nodes, what is lit. */
 public record TaxonomyStyles() implements CssGroup<TaxonomyStyles> {
 
     public static final TaxonomyStyles INSTANCE = new TaxonomyStyles();
@@ -61,6 +61,11 @@ public record TaxonomyStyles() implements CssGroup<TaxonomyStyles> {
     /** The tree's scrollport. */
     public record tx_port() implements CssClass<TaxonomyStyles> {
         @Override public String body() { return "flex: 1;\nmin-height: 0;\noverflow: auto;\n"; }
+    }
+
+    /** The frame round the parts table's scrollport: the grid's light goes round the scrollbar, not inside it. */
+    public record tx_frame() implements CssClass<TaxonomyStyles> {
+        @Override public String body() { return "position: relative;\nflex: 1;\ndisplay: flex;\nflex-direction: column;\nmin-height: 0;\n"; }
     }
 
     /** What scrolls in the details. */
@@ -118,7 +123,7 @@ public record TaxonomyStyles() implements CssGroup<TaxonomyStyles> {
 
     @Override
     public List<CssClass<TaxonomyStyles>> cssClasses() {
-        return List.of(new tx_root(), new tx_hint(), new tx_title(), new tx_port(), new tx_scroll(), new tx_panel(), new tx_facts(),
+        return List.of(new tx_root(), new tx_hint(), new tx_title(), new tx_port(), new tx_frame(), new tx_scroll(), new tx_panel(), new tx_facts(),
                        new tx_key(), new tx_code(), new tx_line(), new tx_link(), new tx_tag(), new tx_on());
     }
 }

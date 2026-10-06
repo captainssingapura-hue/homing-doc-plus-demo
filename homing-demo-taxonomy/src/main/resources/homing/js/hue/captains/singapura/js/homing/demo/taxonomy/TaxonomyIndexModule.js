@@ -5,12 +5,13 @@
 // A node is { id, is, name, parent, children, fallback } - `is` the root, a
 // kind, a component or a part; its id its token. A component carries
 // `playedIn`, the parts it plays in others; a part its `owner`, `base` and
-// `role`. The tree places a component's parts under it, so a part's parent
-// is its owner - but it falls back through its base.
+// `role`. A component's children are its parts, so a part's parent is its
+// owner - but it falls back through its base.
 //
 //   TaxonomyIndex.the()          the one index over TAXONOMY
 //   index.node(id)  index.root()  index.nodes()  index.children(id)
 //   index.componentsUnder(id)    every component under a node, however deep
+//   index.partsUnder(id)         a component's parts; under a kind or the root, every part their components name
 //   index.above(id)              the nodes above one in the tree, nearest first
 //   index.label(id)              a part said as its role and what plays it
 //   index.classes(id)            its semantic classes, one per target leaf
@@ -37,7 +38,7 @@ class TaxonomyIndex {
 
     nodes() { return this.data.nodes; }
 
-    /** What the tree places under a node: a branch's kinds and components, a component's parts. */
+    /** What is under a node: a branch's kinds and components, a component's parts. */
     children(id) {
         var self = this, n = this.node(id);
         return n ? n.children.map(function (c) { return self.node(c); }) : [];
@@ -54,6 +55,14 @@ class TaxonomyIndex {
             });
         })(this.node(id));
         return out;
+    }
+
+    /** A component's parts, in the order it names them; under a kind or the root, every part their components name, in tree order. */
+    partsUnder(id) {
+        var self = this, n = this.node(id);
+        if (!n || n.is === "part") return [];
+        var owners = n.is === "component" ? [n] : this.componentsUnder(id);
+        return [].concat.apply([], owners.map(function (c) { return self.children(c.id); }));
     }
 
     /** The nodes above one in the tree, nearest first - for a part, its owner and the owner's. */

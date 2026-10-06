@@ -1,16 +1,18 @@
 // =============================================================================
-// TaxonomyTree — the house's taxonomy as the tree it is, in a relation tree:
-// the root; each kind under its parent, with how many components are under it;
-// each component a leaf under its kind, its parts - the roles it names, each
-// said with the component that plays it - under it, folded at first.
+// TaxonomyTree — the house's components as the tree they are, in a relation
+// tree: the root; each kind under its parent, with how many components are
+// under it; each component a leaf under its kind, with how many parts it
+// names. Components only: the parts are the Parts table's.
 //
-// THE PICK. The node the cursor lands on is picked for every pane - a kind, a
-// component or a part. A node picked elsewhere is unfolded to, and the cursor
-// goes to it; the chain it falls back along is lit - a part's through its
-// base, never its owner, so what lights is elsewhere in the tree.
+// THE PICK. The node the cursor lands on is picked for every pane - a kind or
+// a component. A node picked elsewhere is unfolded to and the cursor goes to
+// it; a part, picked elsewhere, takes the cursor to the component that plays
+// it - the first of its chain the tree holds, never its owner. The rest of the
+// chain it falls back along is lit.
 //
 // The keys: the tree's - ↑ ↓ Home End PageUp PageDown walk it, ← → fold and
-// unfold, Space toggles. Escape the tree did not take gives them back.
+// unfold, Space toggles. Escape the tree did not take gives them back. A press
+// on the row the cursor is on already picks it again.
 //
 //   new TaxonomyTree(container, params)   params: none
 //   (the rest is a TaxonomyWidget's)
@@ -19,16 +21,19 @@
 class TaxonomyTree extends TaxonomyWidget {
     constructor(container, params) {
         super(container, "taxonomyTree", "Taxonomy");
+        var self = this;
         this._hint = this.el("hint", "p", tx_hint, this.body, "");
         this._box = this.el("box", "div", tx_port, this.body);
+        this._box.addEventListener("click", function () { self._pickAtCursor(); });
         this._tree = null;
         this._cells = new Map();
         this._lit = [];
+        this._steering = false;
         this._build();
         this.selected(this.picked());
     }
 
-    /** The tree, the root and every kind unfolded: the components shown, their parts folded. */
+    /** The tree, the root and every kind unfolded: every component shown. */
     _build() {
         this._clear();
         var self = this, t = this.taxonomy, v = this.fresh();
@@ -38,21 +43,21 @@ class TaxonomyTree extends TaxonomyWidget {
         this._cellsBranch.activate(this);
         this._seq = 0;
         this._tree = new RelTree({
-            container: this._box, branch: v.createBranch("tree"), label: "The house's taxonomy", folder: true,
+            container: this._box, branch: v.createBranch("tree"), label: "The house's components", folder: true,
             relation: { view: function () { return self._places(); }, cellFor: function (key) { return self._cellFor(key); } },
             ask: function (q) { return self._answer(q); },
-            onCursorMoved: function (key) { if (key && key !== self.picked()) self.pick(key); }
+            onCursorMoved: function (key) { if (!self._steering && key && key !== self.picked()) self.pick(key); }
         });
         this.keysTo = this._tree;
         this._say();
     }
 
-    /** What the tree presents now: every node from the root down, those under a folded one left out. */
+    /** What the tree presents now: the root, the kinds and the components under them, those under a folded one left out. */
     _places() {
         var self = this, out = [];
         (function place(n, depth) {
-            var open = self._open.has(n.id);
-            out.push({ key: n.id, depth: depth, fold: n.children.length ? (open ? "open" : "closed") : "leaf" });
+            var branch = n.is !== "component", open = branch && self._open.has(n.id);
+            out.push({ key: n.id, depth: depth, fold: branch && n.children.length ? (open ? "open" : "closed") : "leaf" });
             if (open) self.taxonomy.children(n.id).forEach(function (c) { place(c, depth + 1); });
         })(this.taxonomy.root(), 0);
         return out;
@@ -60,7 +65,7 @@ class TaxonomyTree extends TaxonomyWidget {
 
     _cellFor(key) {
         var n = this.taxonomy.node(key);
-        if (!n) throw new Error("[TaxonomyTree] no such node: " + key);
+        if (!n || n.is === "part") throw new Error("[TaxonomyTree] no such component or kind: " + key);
         var c = this._cells.get(key);
         if (!c) {
             c = new RelTreeTextCell({ branch: this._cellsBranch.createBranch("n" + (++this._seq)), text: this._label(n) });
@@ -70,18 +75,14 @@ class TaxonomyTree extends TaxonomyWidget {
         return c;
     }
 
-    /** The root and a kind with how many components are under it; a component with its parts; a part with what plays it. */
+    /** The root and a kind with how many components are under it; a component with how many parts it names. */
     _label(n) {
-        var t = this.taxonomy;
-        if (n.is === "root" || n.is === "kind") {
-            var k = t.componentsUnder(n.id).length;
-            return (n.is === "root" ? "Any component" : n.name) + " · " + k + (k === 1 ? " component" : " components");
-        }
         if (n.is === "component") {
             var p = n.children.length;
             return p ? n.name + " · " + p + (p === 1 ? " part" : " parts") : n.name;
         }
-        return t.label(n.id);
+        var k = this.taxonomy.componentsUnder(n.id).length;
+        return (n.is === "root" ? "Any component" : n.name) + " · " + k + (k === 1 ? " component" : " components");
     }
 
     /** The tree's questions: a fold and an unfold, answered from the taxonomy; its notifications, with nothing. */
@@ -91,24 +92,33 @@ class TaxonomyTree extends TaxonomyWidget {
         return Promise.resolve();
     }
 
-    /** Picked: unfolded to, the cursor on it, and the chain it falls back along lit. */
+    /** A press on the row the cursor is on already: picked again - after a part took the cursor to what plays it. */
+    _pickAtCursor() {
+        var key = this._tree ? this._tree.cursor() : null;
+        if (key && key !== this.picked()) this.pick(key);
+    }
+
+    /** Picked: its chain as the tree holds it - a part's from what plays it - the cursor on the first, unfolded to, the rest lit. */
     selected(id) {
         if (!this._tree) return;
-        var self = this, n = id ? this.taxonomy.node(id) : null;
+        var self = this, t = this.taxonomy, n = id ? t.node(id) : null;
+        var chain = n ? n.fallback.filter(function (x) { return t.node(x).is !== "part"; }) : [];
         this._lit.forEach(function (key) { var c = self._cells.get(key); if (c) css.toggleClass(c.cellElement(), tx_on, false); });
-        this._lit = n ? n.fallback.slice(1) : [];
+        this._lit = chain.slice(1);
         this._lit.forEach(function (key) { var c = self._cells.get(key); if (c) css.addClass(c.cellElement(), tx_on); });
-        var folded = false;
-        if (n) this.taxonomy.above(id).forEach(function (up) { if (!self._open.has(up)) { self._open.add(up); folded = true; } });
+        var at = chain[0], folded = false;
+        if (at) t.above(at).forEach(function (up) { if (!self._open.has(up)) { self._open.add(up); folded = true; } });
         if (folded) this._tree.tell(new RelTreeViewChanged());
-        if (n && this._tree.cursor() !== id) this._tree.selectNode(id);
+        if (at && this._tree.cursor() !== at) {
+            this._steering = true;
+            try { this._tree.selectNode(at); } finally { this._steering = false; }
+        }
         this._say();
     }
 
     _say() {
         var t = this.taxonomy, n = this.picked() ? t.node(this.picked()) : null;
-        this._hint.textContent = (t.count("kind")) + " kinds, " + t.count("component") + " components and " + t.count("part")
-            + " parts: each kind and component under its parent up to the root, a component's parts - the roles it names - under it. "
+        this._hint.textContent = t.count("kind") + " kinds and " + t.count("component") + " components: each under its parent up to the root. "
             + (n ? "Lit: the chain " + t.label(n.id) + " falls back along." : "The node the cursor is on is picked.");
     }
 

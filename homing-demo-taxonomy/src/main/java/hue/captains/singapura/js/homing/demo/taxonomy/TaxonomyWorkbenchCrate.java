@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
 import hue.captains.singapura.js.homing.design.DesignCrate;
+import hue.captains.singapura.js.homing.relgrid.RelGridCrate;
 import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolCrate;
 import hue.captains.singapura.js.homing.reltree.RelTreeCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
@@ -33,8 +34,9 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 CoreJsCrate.INSTANCE,
                 ServerCrate.INSTANCE,
                 DesignCrate.INSTANCE,
-                // The tree: a relation tree, its fold questions the protocol's.
+                // The tree: a relation tree; the parts: a relation grid; their questions and notices the protocol's.
                 RelTreeCrate.INSTANCE,
+                RelGridCrate.INSTANCE,
                 RelGridProtocolCrate.INSTANCE,
                 // The workspace: its widgets' contract, their parties, the grouped page.
                 WorkspaceWidgetsCrate.INSTANCE,
@@ -55,6 +57,7 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 // The widgets.
                 CrateEntry.of(TaxonomyWidgetModule.INSTANCE),
                 CrateEntry.of(TaxonomyTreeModule.INSTANCE),
+                CrateEntry.of(PartsTableModule.INSTANCE),
                 CrateEntry.of(NodeDetailsModule.INSTANCE),
                 // The page.
                 CrateEntry.of(TaxonomyWorkspacesModule.INSTANCE),

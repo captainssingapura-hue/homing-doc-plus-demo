@@ -20,8 +20,8 @@ import java.util.List;
 
 /**
  * The taxonomy workbench: one workspace, {@code taxonomy}, filed in one group - the house's
- * taxonomy as a tree, and the picked node's details beside it, the two meeting in the
- * {@code node-selection} party.
+ * components as a tree, their parts in a table, and the picked node's details, the three
+ * meeting in the {@code node-selection} party.
  */
 public final class TaxonomyWorkbench {
 
@@ -42,6 +42,13 @@ public final class TaxonomyWorkbench {
         @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new TaxonomyTreeModule.TaxonomyTree()), TaxonomyTreeModule.INSTANCE); }
     }
 
+    public record Parts() implements Kind {
+        public static final Parts INSTANCE = new Parts();
+        @Override public String kind() { return "taxonomy-parts"; }
+        @Override public String title() { return "Parts"; }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new PartsTableModule.PartsTable()), PartsTableModule.INSTANCE); }
+    }
+
     public record Details() implements Kind {
         public static final Details INSTANCE = new Details();
         @Override public String kind() { return "taxonomy-node"; }
@@ -53,16 +60,18 @@ public final class TaxonomyWorkbench {
     public record Workspace() implements WorkspaceDeclaration {
         public static final Workspace INSTANCE = new Workspace();
         @Override public String name() { return "taxonomy"; }
-        @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Details.INSTANCE); }
+        @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Parts.INSTANCE, Details.INSTANCE); }
     }
 
-    /** The first time: the tree, and the details beside it. */
+    /** The first time: the tree; beside it, the parts over the details. */
     public static final WorkspaceArrangements<Workspace> ARRANGED = WorkspaceArrangements.of(Workspace.INSTANCE,
             Arrangement.of(Workspace.INSTANCE,
                     SplitGrid.of(SplitGrid.row(
-                            SplitGrid.Part.of(SplitGrid.region("tree", "tree"), 4),
-                            SplitGrid.Part.of(SplitGrid.region("node", "node"), 5))),
+                            SplitGrid.Part.of(SplitGrid.region("tree", "tree"), 3),
+                            SplitGrid.Part.of(SplitGrid.column(SplitGrid.Part.of(SplitGrid.region("parts", "parts"), 2),
+                                                               SplitGrid.Part.of(SplitGrid.region("node", "node"), 3)), 5))),
                     ArrangedWidget.of("tree", Tree.INSTANCE.kind()),
+                    ArrangedWidget.of("parts", Parts.INSTANCE.kind()),
                     ArrangedWidget.of("node", Details.INSTANCE.kind())));
 
     /** The one group. */
