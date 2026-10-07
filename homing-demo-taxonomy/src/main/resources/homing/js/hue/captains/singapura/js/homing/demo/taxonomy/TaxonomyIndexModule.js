@@ -92,6 +92,9 @@ class TaxonomyIndex {
     /** Every semantic class of a node: the node × each target leaf, derived. */
     classes(id) { return this.data.targets.map(function (t) { return id + "-" + t; }); }
 
+    /** Where an axis rests until it is set: 1 for colour, the meaning at full; 0 for size and aspect. */
+    rest(axis) { return this.data.axes[axis]; }
+
     count(is) { return this.data.nodes.filter(function (n) { return n.is === is; }).length; }
 
     // ── the role catalogue ───────────────────────────────────────────────

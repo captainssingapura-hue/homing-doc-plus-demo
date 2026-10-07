@@ -19,9 +19,10 @@ import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceDeclaration;
 import java.util.List;
 
 /**
- * The taxonomy workbench: one workspace, {@code taxonomy}, filed in one group - the house's
+ * The taxonomy workbench: two workspaces filed in one group. {@code taxonomy} - the house's
  * components as a tree, their parts in a table, the picked node's details, and the role catalogue
- * with each role's uses - the four meeting in the {@code node-selection} party.
+ * with each role's uses; and {@code in-action} - the same tree, the picked component built live by
+ * its specimen, and its details. Each workspace's widgets meet in its {@code node-selection} party.
  */
 public final class TaxonomyWorkbench {
 
@@ -56,6 +57,13 @@ public final class TaxonomyWorkbench {
         @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new RoleTreeModule.RoleTree()), RoleTreeModule.INSTANCE); }
     }
 
+    public record Specimens() implements Kind {
+        public static final Specimens INSTANCE = new Specimens();
+        @Override public String kind() { return "taxonomy-specimen"; }
+        @Override public String title() { return "In action"; }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new SpecimenWidgetModule.SpecimenWidget()), SpecimenWidgetModule.INSTANCE); }
+    }
+
     public record Details() implements Kind {
         public static final Details INSTANCE = new Details();
         @Override public String kind() { return "taxonomy-node"; }
@@ -68,6 +76,13 @@ public final class TaxonomyWorkbench {
         public static final Workspace INSTANCE = new Workspace();
         @Override public String name() { return "taxonomy"; }
         @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Parts.INSTANCE, Details.INSTANCE, Roles.INSTANCE); }
+    }
+
+    /** The workspace: {@code in-action} - the same tree, the picked component built live, and what it is beside it. */
+    public record InAction() implements WorkspaceDeclaration {
+        public static final InAction INSTANCE = new InAction();
+        @Override public String name() { return "in-action"; }
+        @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Specimens.INSTANCE, Details.INSTANCE); }
     }
 
     /** The first time: the tree; beside it, the parts over the details; and the roles, beside them. */
@@ -83,13 +98,26 @@ public final class TaxonomyWorkbench {
                     ArrangedWidget.of("node", Details.INSTANCE.kind()),
                     ArrangedWidget.of("roles", Roles.INSTANCE.kind())));
 
-    /** The one group. */
+    /** In action, the first time: the tree; the picked component live, the widest; and what it is, beside it. */
+    public static final WorkspaceArrangements<InAction> ARRANGED_IN_ACTION = WorkspaceArrangements.of(InAction.INSTANCE,
+            Arrangement.of(InAction.INSTANCE,
+                    SplitGrid.of(SplitGrid.row(
+                            SplitGrid.Part.of(SplitGrid.region("tree", "tree"), 3),
+                            SplitGrid.Part.of(SplitGrid.region("specimen", "specimen"), 5),
+                            SplitGrid.Part.of(SplitGrid.region("node", "node"), 3))),
+                    ArrangedWidget.of("tree", Tree.INSTANCE.kind()),
+                    ArrangedWidget.of("specimen", Specimens.INSTANCE.kind()),
+                    ArrangedWidget.of("node", Details.INSTANCE.kind())));
+
+    /** The one group: the taxonomy read, and its components in action. */
     public static final WorkspaceGroups GROUPS = WorkspaceGroups.of(
             WorkspaceGroup.of("components", "Components")
                     .section("The taxonomy", GroupedWorkspace.of(Workspace.INSTANCE.name(), "Taxonomy"))
+                    .section("In action", GroupedWorkspace.of(InAction.INSTANCE.name(), "In action"))
                     .defaultTo(WorkspaceKind.of(Workspace.INSTANCE.name()))
                     .build());
 
-    /** What the site serves: the workspace declared, filed, and arranged the first time. */
-    public static final GroupedWorkspaces SITE = new GroupedWorkspaces(GROUPS, List.of(Workspace.INSTANCE)).arranged(ARRANGED);
+    /** What the site serves: the workspaces declared, filed, and arranged the first time. */
+    public static final GroupedWorkspaces SITE = new GroupedWorkspaces(GROUPS, List.of(Workspace.INSTANCE, InAction.INSTANCE))
+            .arranged(ARRANGED, ARRANGED_IN_ACTION);
 }

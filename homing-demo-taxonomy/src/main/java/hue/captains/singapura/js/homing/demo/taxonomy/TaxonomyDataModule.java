@@ -60,6 +60,8 @@ public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, Self
         return "{\"root\":" + quote(Root.INSTANCE.token())
              + ",\"nodes\":[" + String.join(",", nodes) + "]"
              + ",\"targets\":[" + String.join(",", targetTokens) + "]"
+             + ",\"axes\":{" + String.join(",", java.util.Arrays.stream(ExtentAxis.values())
+                     .map(a -> quote(a.name().toLowerCase(java.util.Locale.ROOT)) + ":" + a.rest()).toList()) + "}"
              + ",\"catalogue\":" + catalogue(t) + "}";
     }
 
