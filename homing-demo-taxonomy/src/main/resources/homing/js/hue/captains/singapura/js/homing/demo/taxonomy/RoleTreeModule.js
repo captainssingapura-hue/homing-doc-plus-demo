@@ -105,7 +105,7 @@ class RoleTree extends TaxonomyWidget {
         }
         var uses = t.usesOf(id);
         if (!uses.length) {
-            this.mint(v, "none", "p", tx_hint, box, "Named by no component yet: the house's slots are still to be declared over the catalogue.");
+            this.mint(v, "none", "p", tx_hint, box, "Named by no component: the catalogue files it, and no slot plays it yet.");
             return;
         }
         uses.forEach(function (p, i) {

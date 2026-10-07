@@ -25,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * What the page is handed, read as JavaScript through the index: every node with what it is, where
  * the levelled tree places it and how it falls back - a part through its base, never its owner -
- * and its semantic classes, one per target leaf. The house is handed whole; its parts are yet to be
- * declared, so the parts are read off a small hypothetical taxonomy over the house's roles. And the
- * node-selection secretary keeps one pick and tells it.
+ * and its semantic classes, one per target leaf. The house is handed whole, its parts declared over
+ * the role catalogue; the finer shapes are pinned on a small hypothetical taxonomy over the house's
+ * roles. And the node-selection secretary keeps one pick and tells it.
  */
 class TaxonomyDataTest extends JsModuleTestBase {
 
@@ -103,10 +103,11 @@ class TaxonomyDataTest extends JsModuleTestBase {
         load(house);
         assertEquals(house.nodes().size(), eval("t.nodes().length").asInt());
         assertEquals("root", eval("t.root().id").asString());
-        assertEquals(16, eval("t.count('branch')").asInt());
-        assertEquals(81, eval("t.count('component')").asInt());
-        assertEquals(0, eval("t.count('part')").asInt(), "its slots are yet to be declared over the role catalogue");
-        assertEquals(81, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
+        assertEquals(17, eval("t.count('branch')").asInt());
+        assertEquals(85, eval("t.count('component')").asInt());
+        assertEquals(105, eval("t.count('part')").asInt(), "its slots, declared over the role catalogue");
+        assertEquals("dialog-veil,dialog-window,dialog-actions", eval("t.partsOf('dialog').map(function (p) { return p.id; }).join()").asString());
+        assertEquals(85, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
         assertEquals("container", eval("t.node('pane').parent").asString(), "a level-2 branch under its level-1 parent");
     }
 
@@ -149,7 +150,8 @@ class TaxonomyDataTest extends JsModuleTestBase {
         assertEquals("title,subtitle,name,category,symbol", eval("t.roleChildren('naming').map(function (n) { return n.id; }).join()").asString());
         assertEquals(2, eval("t.roleNode('naming').level").asInt());
         assertEquals("saying", eval("t.roleNode('naming').parent").asString());
-        assertEquals(0, eval("t.usesOf('title').length").asInt(), "named by no component yet");
+        assertEquals(6, eval("t.usesOf('title').length").asInt(), "a title in six components");
+        assertEquals(0, eval("t.usesOf('host').length").asInt(), "named by no component: a floater's, and the floater is not in the house");
     }
 
     @Test
