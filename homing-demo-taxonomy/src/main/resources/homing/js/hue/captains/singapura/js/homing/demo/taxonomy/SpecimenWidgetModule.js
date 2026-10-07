@@ -4,8 +4,9 @@
 // it does said, newest first; and a slider for each axis its leaf varies along
 // - colour, size, aspect - from −1 to 1, at the axis's rest until moved, the
 // number set on the live component as it moves. A leaf only: a branch or a part
-// shows how to pick one. A leaf nothing realizes yet says so, with what it
-// means; a realized one whose specimen is still to come says that.
+// shows how to pick one. A leaf the page around it shows in action - the
+// workspace, the page's bar, its preferences - says where to look; one nothing
+// realizes yet says so, with what it means.
 //
 // THE KEYS. Its own, as a member of the keyboard's party: a press in it claims
 // them, and they go on to what was last pressed in it - the specimen, or its
@@ -45,7 +46,9 @@ class SpecimenWidget extends TaxonomyWidget {
         if (first) this.mint(v, "means", "p", tx_prose, box, first);
         var Specimen = HOUSE_SPECIMENS[id];
         if (!Specimen) {
-            this.mint(v, "none", "p", tx_hint, box, HOUSE_UNREALIZED.indexOf(id) >= 0
+            this.mint(v, "none", "p", tx_hint, box, HOUSE_AROUND[id]
+                ? "Shown in action by the page around this one: " + HOUSE_AROUND[id] + "."
+                : HOUSE_UNREALIZED.indexOf(id) >= 0
                 ? "No realization yet: nothing implements it - an owner mints it, or nothing does - so what it means is all there is to show."
                 : "Realized, and its specimen is still to come.");
             return;

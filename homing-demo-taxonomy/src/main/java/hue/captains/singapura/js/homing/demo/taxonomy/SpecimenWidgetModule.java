@@ -34,8 +34,8 @@ public record SpecimenWidgetModule() implements DomModule<SpecimenWidgetModule> 
     public ImportsFor<SpecimenWidgetModule> imports() {
         return ImportsFor.<SpecimenWidgetModule>builder()
                 .add(new ModuleImports<>(List.of(new TaxonomyWidgetModule.TaxonomyWidget()), TaxonomyWidgetModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new HouseSpecimensModule.HOUSE_SPECIMENS(), new HouseSpecimensModule.HOUSE_UNREALIZED()),
-                        HouseSpecimensModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new HouseSpecimensModule.HOUSE_SPECIMENS(), new HouseSpecimensModule.HOUSE_UNREALIZED(),
+                        new HouseSpecimensModule.HOUSE_AROUND()), HouseSpecimensModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderGroupModule.SliderGroupBuilder()), SliderGroupModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyStyles.tx_scroll(), new TaxonomyStyles.tx_hint(), new TaxonomyStyles.tx_title(),
