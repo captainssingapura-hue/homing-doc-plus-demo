@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.demo.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentNode;
+import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleBranch;
@@ -10,6 +11,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleCatalogue;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleNode;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
+import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
@@ -29,7 +31,9 @@ import java.util.List;
  * node by its token, what it is - the root, a branch, a component, a part - where the tree places it and what is under it, how it falls
  * back; a component's parts and where it plays a role in another; a part's owner, base, role and
  * how many; the target leaves, whose product with the nodes is every semantic class; and the role
- * catalogue - its branches, its roles, and every part that names each.
+ * catalogue - its branches, its roles, and every part that names each. Every node of both trees comes
+ * with its meaning, and a node of the tree with the axes it varies along by degree - a part, its
+ * base's - and those it declares itself.
  */
 public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, SelfContent {
 
@@ -81,6 +85,11 @@ public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, Self
             case Part<?, ?> p -> List.<ComponentNode>of();
         }));
         b.append(",\"fallback\":").append(tokens(t.fallback(n)));
+        b.append(",\"extents\":").append(axes(t.extents(n)));
+        if (n instanceof Taxon x) {
+            b.append(",\"declares\":").append(axes(x.extents()));
+            b.append(",\"meaning\":").append(quote(t.meaning(x).markdown()));
+        }
         if (n instanceof Component<?> c) {
             b.append(",\"playedIn\":").append(tokens(t.parts().stream().filter(p -> p.base().equals(c)).map(p -> (ComponentNode) p).toList()));
         }
@@ -110,6 +119,7 @@ public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, Self
         b.append(",\"is\":").append(quote(n instanceof RoleRoot ? "root" : n instanceof RoleBranch ? "branch" : "role"));
         b.append(",\"name\":").append(quote(simple(n)));
         RoleBranch parent = c.parent(n);
+        b.append(",\"meaning\":").append(quote(c.meaning(n).markdown()));
         b.append(",\"parent\":").append(parent == null ? "null" : quote(parent.name().value()));
         if (n instanceof RoleBranch branch) {
             b.append(",\"level\":").append(branch.level());
@@ -120,6 +130,11 @@ public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, Self
             b.append(",\"uses\":").append(tokens(t.partsNaming(role)));
         }
         return b.append("}").toString();
+    }
+
+    /** Axes by their names: {@code ["size","colour"]}. */
+    private static String axes(List<ExtentAxis> axes) {
+        return "[" + String.join(",", axes.stream().map(a -> quote(a.name().toLowerCase(java.util.Locale.ROOT))).toList()) + "]";
     }
 
     private static String tokens(List<? extends ComponentNode> nodes) {

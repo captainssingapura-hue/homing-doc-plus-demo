@@ -99,6 +99,10 @@ class RoleTree extends TaxonomyWidget {
         if (!n) return;
         this.mint(v, "title", "h4", tx_title, box, n.is === "root" ? "Any role" : n.name);
         this.mint(v, "path", "p", tx_tag, box, this._path(n));
+        String(n.meaning || "").split(/\n\s*\n/).forEach(function (para, i) {
+            var words = para.replace(/\s+/g, " ").trim();
+            if (words) self.mint(v, "meaning-" + i, "p", tx_prose, box, words);
+        });
         if (n.is !== "role") {
             this.mint(v, "none", "p", tx_hint, box, "A branch organises its roles and nothing more. The cursor on a role shows its uses.");
             return;

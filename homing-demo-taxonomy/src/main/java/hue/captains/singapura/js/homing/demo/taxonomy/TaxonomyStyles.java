@@ -109,6 +109,11 @@ public record TaxonomyStyles() implements CssGroup<TaxonomyStyles> {
         @Override public String body() { return "background: none;\nborder: 0;\npadding: 0;\nmargin: 0;\ntext-align: start;\n"; }
     }
 
+    /** A meaning's words, to be read: a paragraph each. */
+    public record tx_prose() implements CssClass<TaxonomyStyles> {
+        @Override public String body() { return "margin: 0;\nline-height: 1.5;\nmax-width: 72ch;\n"; }
+    }
+
     /** A word beside a thing - what it is, where it is - small and quiet. */
     public record tx_tag() implements CssClass<TaxonomyStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
@@ -124,6 +129,6 @@ public record TaxonomyStyles() implements CssGroup<TaxonomyStyles> {
     @Override
     public List<CssClass<TaxonomyStyles>> cssClasses() {
         return List.of(new tx_root(), new tx_hint(), new tx_title(), new tx_port(), new tx_frame(), new tx_scroll(), new tx_panel(), new tx_facts(),
-                       new tx_key(), new tx_code(), new tx_line(), new tx_link(), new tx_tag(), new tx_on());
+                       new tx_key(), new tx_code(), new tx_line(), new tx_link(), new tx_tag(), new tx_on(), new tx_prose());
     }
 }

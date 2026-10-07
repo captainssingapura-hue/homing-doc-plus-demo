@@ -20,7 +20,7 @@ public record RoleTreeModule() implements DomModule<RoleTreeModule> {
     public static final RoleTreeModule INSTANCE = new RoleTreeModule();
 
     public record RoleTree() implements SelfContainedWidget<RoleTreeModule>, NeedKeyboard {
-        @Override public String summary() { return "The house's role catalogue, studied on its own: the root, the branches by what their roles do for their owner, the roles at the leaves; under the tree, the uses of the role the cursor is on - every component that names it, what plays it there, how many. The cursor picks nothing; a part picked anywhere brings it to its role."; }
+        @Override public String summary() { return "The house's role catalogue, studied on its own: the root, the branches by what their roles do for their owner, the roles at the leaves; under the tree, what the node the cursor is on means, and a role's uses - every component that names it, what plays it there, how many. The cursor picks nothing; a part picked anywhere brings it to its role."; }
         @Override public List<KeyBinding> keys() { return List.of(KeyBinding.of(Key.ESCAPE, "the keys given back, when the tree did not take it")); }
     }
 
@@ -33,7 +33,7 @@ public record RoleTreeModule() implements DomModule<RoleTreeModule> {
                 .add(new ModuleImports<>(List.of(new RelGridProtocolModule.RelTreeView(), new RelGridProtocolModule.RelTreeUnfold(),
                         new RelGridProtocolModule.RelTreeFold()), RelGridProtocolModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyStyles.tx_hint(), new TaxonomyStyles.tx_port(), new TaxonomyStyles.tx_panel(),
-                        new TaxonomyStyles.tx_title(), new TaxonomyStyles.tx_tag(), new TaxonomyStyles.tx_line(), new TaxonomyStyles.tx_code()),
+                        new TaxonomyStyles.tx_title(), new TaxonomyStyles.tx_tag(), new TaxonomyStyles.tx_line(), new TaxonomyStyles.tx_code(), new TaxonomyStyles.tx_prose()),
                         TaxonomyStyles.INSTANCE))
                 .build();
     }

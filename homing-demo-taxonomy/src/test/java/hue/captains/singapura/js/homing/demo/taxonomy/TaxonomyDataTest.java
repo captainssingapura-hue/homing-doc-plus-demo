@@ -112,6 +112,19 @@ class TaxonomyDataTest extends JsModuleTestBase {
     }
 
     @Test
+    void everyNode_withItsMeaning_andTheAxesItVariesAlong() {
+        load(HouseTaxonomy.INSTANCE.read());
+        assertTrue(eval("t.node('danger-button').meaning").asString().startsWith("Does a thing that destroys"));
+        assertTrue(eval("t.node('card').meaning").asString().startsWith("Stands for one thing among others"), "a branch's too");
+        assertTrue(eval("t.roleNode('title').meaning").asString().startsWith("Names a container"), "and the catalogue's");
+        assertEquals("size,colour", eval("t.node('danger-button').extents.join()").asString(), "the button branch's, then its own");
+        assertEquals("colour", eval("t.node('danger-button').declares.join()").asString());
+        assertEquals("size,aspect", eval("t.node('tab-pane-chip').extents.join()").asString(), "a part: its base's");
+        assertEquals("", eval("t.node('summary-card-open').extents.join()").asString(), "a card's link has none of its card's");
+        assertEquals(false, eval("'meaning' in t.node('summary-card-open')").asBoolean(), "a part has no meaning of its own");
+    }
+
+    @Test
     void aComponent_itsPartsUnderIt_andWhereItPlaysARole() {
         load(SAMPLE);
         assertEquals("card-title,card-summary", eval("t.node('card').children.join()").asString());

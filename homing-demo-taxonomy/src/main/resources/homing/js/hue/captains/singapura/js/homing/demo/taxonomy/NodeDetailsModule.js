@@ -1,9 +1,15 @@
 // =============================================================================
 // NodeDetails — the picked node of the taxonomy, in panels.
 //
+// MEANS: what it is for - its own meaning, then those it narrows, nearest
+// first; a part's, its role's, then the meaning of what plays it.
+//
 // WHAT IT IS: the root, a branch, a component or a part; its token; where it
 // sits - a branch's or a component's parent, a part's owner, its role and the
 // component that plays it.
+//
+// VARIES BY DEGREE: the axes it varies along - colour, size, aspect - each
+// with the node that declares it; a part's are its base's, never its owner's.
 //
 // FALLS BACK: the chain a design walks for a class of it, on the same target,
 // most specific first - a part's through its base, never its owner.
@@ -35,7 +41,9 @@ class NodeDetails extends TaxonomyWidget {
             return;
         }
         this.mint(v, "title", "h3", tx_title, box, n.is === "root" ? "Any component" : t.label(id));
+        this._means(v, box, n);
         this._what(v, box, n);
+        this._degrees(v, box, n);
         this._fallback(v, box, n);
         if (n.is === "component") { this._parts(v, box, n); this._plays(v, box, n); }
         if (n.is === "branch" || n.is === "root") this._under(v, box, n);
@@ -46,6 +54,55 @@ class NodeDetails extends TaxonomyWidget {
         var panel = this.mint(v, key, "section", tx_panel, box);
         this.mint(v, key + "-title", "h4", tx_title, panel, title);
         return panel;
+    }
+
+    /** What it means: its own meaning, then the meanings it narrows, nearest first; a part's, its role's and its base's. */
+    _means(v, box, n) {
+        var t = this.taxonomy, panel = this._panel(v, box, "means", "Means");
+        if (n.is === "part") {
+            this._prose(v, panel, "m", t.roleNode(n.roleId).meaning, tx_prose);
+            var by = this.mint(v, "m-by", "div", tx_line, panel);
+            this.mint(v, "m-by-tag", "span", tx_tag, by, "played by");
+            this.link(v, "m-by-base", n.base, by);
+            this._prose(v, panel, "m-base", t.node(n.base).meaning, tx_hint);
+            return;
+        }
+        this._prose(v, panel, "m", n.meaning, tx_prose);
+        var i = 0;
+        for (var up = n.parent ? t.node(n.parent) : null; up; up = up.parent ? t.node(up.parent) : null, i++) {
+            var line = this.mint(v, "m-up-" + i, "div", tx_line, panel);
+            this.mint(v, "m-up-" + i + "-tag", "span", tx_tag, line, "within");
+            this.link(v, "m-up-" + i + "-node", up.id, line);
+            this._prose(v, panel, "m-up-" + i + "-text", up.meaning, tx_hint);
+        }
+    }
+
+    /** A meaning's words, a paragraph each: a blank line between two. */
+    _prose(v, panel, key, markdown, cls) {
+        var self = this;
+        String(markdown || "").split(/\n\s*\n/).forEach(function (para, i) {
+            var words = para.replace(/\s+/g, " ").trim();
+            if (words) self.mint(v, key + "-" + i, "p", cls, panel, words);
+        });
+    }
+
+    /** The axes it varies along by degree, each with the node that declares it. */
+    _degrees(v, box, n) {
+        var self = this, t = this.taxonomy, panel = this._panel(v, box, "degrees", "Varies by degree (" + n.extents.length + ")");
+        var from = n.is === "part" ? t.node(n.base) : n;
+        this.mint(v, "degrees-hint", "p", tx_hint, panel, n.is === "part"
+            ? "A part follows its own component, never its owner: these are what plays it."
+            : "Each a number from −1 to 1 on the element, set live - no component of its own, and no state. Declared on a branch, every leaf under it has it.");
+        if (!n.extents.length) { this.mint(v, "degrees-none", "p", tx_hint, panel, "None: it varies by no degree."); return; }
+        n.extents.forEach(function (axis, i) {
+            var line = self.mint(v, "d" + i, "div", tx_line, panel);
+            self.mint(v, "d" + i + "-axis", "span", tx_code, line, axis);
+            var by = from;
+            while (by && by.declares.indexOf(axis) < 0) by = by.parent ? t.node(by.parent) : null;
+            if (by && by.id === n.id) { self.mint(v, "d" + i + "-own", "span", tx_tag, line, "its own"); return; }
+            self.mint(v, "d" + i + "-from", "span", tx_tag, line, "from");
+            if (by) self.link(v, "d" + i + "-by", by.id, line);
+        });
     }
 
     /** What it is, its token, and where it sits. */
