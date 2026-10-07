@@ -1,9 +1,8 @@
 package hue.captains.singapura.js.homing.demo.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Branch;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentNode;
-import hue.captains.singapura.js.homing.component.taxonomy.Kind;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
@@ -22,7 +21,7 @@ import java.util.List;
 
 /**
  * {@code TAXONOMY}: the house's taxonomy as the widgets read it, written when served - every
- * node by its token, what it is, where the tree places it and what is under it, how it falls
+ * node by its token, what it is - the root, a branch, a component, a part - where the tree places it and what is under it, how it falls
  * back; a component's parts and where it plays a role in another; a part's owner, base and role;
  * and the target leaves, whose product with the nodes is every semantic class.
  */
@@ -58,19 +57,19 @@ public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, Self
         b.append("\"id\":").append(quote(n.token()));
         b.append(",\"is\":").append(quote(switch (n) {
             case Root r -> "root";
-            case Kind<?> k -> "kind";
+            case ComponentBranch br -> "branch";
             case Component<?> c -> "component";
             case Part<?, ?> p -> "part";
         }));
         b.append(",\"name\":").append(quote(n instanceof Part<?, ?> p ? simple(p.role()) : simple(n)));
         b.append(",\"parent\":").append(switch (n) {
             case Root r -> "null";
-            case Kind<?> k -> quote(k.parent().token());
+            case ComponentBranch br -> quote(t.parent(br).token());
             case Component<?> c -> quote(c.parent().token());
-            case Part<?, ?> p -> quote(p.belongsTo().token());
+            case Part<?, ?> p -> quote(p.owner().token());
         });
         b.append(",\"children\":").append(tokens(switch (n) {
-            case Branch br -> new ArrayList<ComponentNode>(t.children(br));
+            case ComponentBranch br -> new ArrayList<ComponentNode>(t.children(br));
             case Component<?> c -> new ArrayList<ComponentNode>(t.partsOf(c));
             case Part<?, ?> p -> List.<ComponentNode>of();
         }));
@@ -79,7 +78,7 @@ public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, Self
             b.append(",\"playedIn\":").append(tokens(t.parts().stream().filter(p -> p.base().equals(c)).map(p -> (ComponentNode) p).toList()));
         }
         if (n instanceof Part<?, ?> p) {
-            b.append(",\"owner\":").append(quote(p.belongsTo().token()));
+            b.append(",\"owner\":").append(quote(p.owner().token()));
             b.append(",\"base\":").append(quote(p.base().token()));
             b.append(",\"role\":").append(quote(simple(p.role())));
         }

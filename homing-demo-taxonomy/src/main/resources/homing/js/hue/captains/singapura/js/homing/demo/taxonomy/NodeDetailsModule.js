@@ -1,15 +1,15 @@
 // =============================================================================
 // NodeDetails — the picked node of the taxonomy, in panels.
 //
-// WHAT IT IS: the root, a kind, a component or a part; its token; where it
-// sits - a kind's or a component's parent, a part's owner, its role and the
+// WHAT IT IS: the root, a branch, a component or a part; its token; where it
+// sits - a branch's or a component's parent, a part's owner, its role and the
 // component that plays it.
 //
 // FALLS BACK: the chain a design walks for a class of it, on the same target,
 // most specific first - a part's through its base, never its owner.
 //
 // A component's PARTS - the roles it names, each with what plays it - and the
-// roles it PLAYS in others; a kind's or the root's components UNDER it.
+// roles it PLAYS in others; a branch's or the root's components UNDER it.
 //
 // SEMANTIC CLASSES: one for every target leaf - the node × the target,
 // derived, never declared.
@@ -38,7 +38,7 @@ class NodeDetails extends TaxonomyWidget {
         this._what(v, box, n);
         this._fallback(v, box, n);
         if (n.is === "component") { this._parts(v, box, n); this._plays(v, box, n); }
-        if (n.is === "kind" || n.is === "root") this._under(v, box, n);
+        if (n.is === "branch" || n.is === "root") this._under(v, box, n);
         this._classes(v, box, n);
     }
 
@@ -58,14 +58,14 @@ class NodeDetails extends TaxonomyWidget {
         };
         fact("is", "is").textContent = {
             root: "the root: any component - what every chain ends at",
-            kind: "a kind: abstract, never realized, never worn on its own",
+            branch: "a branch: abstract, at its level - never realized, never worn on its own",
             component: "a component: a leaf, the only concrete node - realized by one implementation",
             part: "a part: a role its owner names, played by an independent component"
         }[n.is];
         var token = fact("token", "token");
         css.addClass(token, tx_code);
         token.textContent = n.id;
-        if (n.is === "kind" || n.is === "component") this.link(v, "parent", n.parent, fact("parent", "parent"));
+        if (n.is === "branch" || n.is === "component") this.link(v, "parent", n.parent, fact("parent", "parent"));
         if (n.is === "part") {
             this.link(v, "owner", n.owner, fact("owner", "owner"));
             var role = fact("role", "role");
@@ -113,7 +113,7 @@ class NodeDetails extends TaxonomyWidget {
         });
     }
 
-    /** What is under a kind or the root: its own children, and how many components in all. */
+    /** What is under a branch or the root: its own children, and how many components in all. */
     _under(v, box, n) {
         var self = this, t = this.taxonomy, all = t.componentsUnder(n.id).length;
         var panel = this._panel(v, box, "under", "Under it (" + all + (all === 1 ? " component)" : " components)"));

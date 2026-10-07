@@ -3,7 +3,7 @@
 // the role, the component that plays it, and its token.
 //
 // A VIEW OF THE PICK, never a picker. A component picked: its parts. A part
-// picked: its owner's, the cursor on its row. A kind or the root: nothing - the
+// picked: its owner's, the cursor on its row. A branch or the root: nothing - the
 // parts are a component's. The cursor walks the rows and picks nothing.
 //
 //   new PartsTable(container, params)   params: none
@@ -62,7 +62,7 @@ class PartsTable extends TaxonomyWidget {
         }
     }
 
-    /** Picked: the component's parts - a part's owner's, the cursor on its row; a kind's or the root's, none. */
+    /** Picked: the component's parts - a part's owner's, the cursor on its row; a branch's or the root's, none. */
     selected(id) {
         if (!this._grid) return;
         var t = this.taxonomy, n = id ? t.node(id) : null;

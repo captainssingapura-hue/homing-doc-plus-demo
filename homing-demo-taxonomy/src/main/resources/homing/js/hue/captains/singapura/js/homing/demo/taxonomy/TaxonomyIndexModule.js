@@ -3,7 +3,7 @@
 // TAXONOMY. Pure: no page, no clock.
 //
 // A node is { id, is, name, parent, children, fallback } - `is` the root, a
-// kind, a component or a part; its id its token. A component carries
+// branch, a component or a part; its id its token. A component carries
 // `playedIn`, the parts it plays in others; a part its `owner`, `base` and
 // `role`. A component's children are its parts, so a part's parent is its
 // owner - but it falls back through its base.
@@ -38,7 +38,7 @@ class TaxonomyIndex {
 
     nodes() { return this.data.nodes; }
 
-    /** What is under a node: a branch's kinds and components, a component's parts. */
+    /** What is under a node: a branch's branches and components, a component's parts. */
     children(id) {
         var self = this, n = this.node(id);
         return n ? n.children.map(function (c) { return self.node(c); }) : [];
@@ -51,7 +51,7 @@ class TaxonomyIndex {
             n.children.forEach(function (c) {
                 var k = self.node(c);
                 if (k.is === "component") out.push(k);
-                if (k.is === "kind") walk(k);
+                if (k.is === "branch") walk(k);
             });
         })(this.node(id));
         return out;
