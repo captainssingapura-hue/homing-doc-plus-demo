@@ -58,6 +58,7 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 CrateEntry.of(TaxonomyWidgetModule.INSTANCE),
                 CrateEntry.of(TaxonomyTreeModule.INSTANCE),
                 CrateEntry.of(PartsTableModule.INSTANCE),
+                CrateEntry.of(RoleTreeModule.INSTANCE),
                 CrateEntry.of(NodeDetailsModule.INSTANCE),
                 // The page.
                 CrateEntry.of(TaxonomyWorkspacesModule.INSTANCE),

@@ -16,6 +16,15 @@
 //   index.label(id)              a part said as its role and what plays it
 //   index.classes(id)            its semantic classes, one per target leaf
 //   index.count(is)
+//
+// The role catalogue, beside it: TAXONOMY.catalogue - its root, its branches,
+// its roles, each by its name; a role's `uses` the parts that name it, a part's
+// `roleId` its role and `count` how many its owner has.
+//
+//   index.roleRoot()  index.roleNode(id)  index.roleNodes()  index.roleChildren(id)
+//   index.rolesUnder(id)         every role under a branch of the catalogue, however deep
+//   index.usesOf(id)             the parts that name a role
+//   index.roleCount(is)
 // =============================================================================
 
 class TaxonomyIndex {
@@ -24,6 +33,9 @@ class TaxonomyIndex {
         data.nodes.forEach(function (n) { by.set(n.id, n); });
         this.data = data;
         this._by = by;
+        var roles = new Map();
+        (data.catalogue ? data.catalogue.nodes : []).forEach(function (n) { roles.set(n.id, n); });
+        this._roles = roles;
     }
 
     /** The one index over TAXONOMY. */
@@ -81,4 +93,35 @@ class TaxonomyIndex {
     classes(id) { return this.data.targets.map(function (t) { return id + "-" + t; }); }
 
     count(is) { return this.data.nodes.filter(function (n) { return n.is === is; }).length; }
+
+    // ── the role catalogue ───────────────────────────────────────────────
+
+    roleRoot() { return this.roleNode(this.data.catalogue.root); }
+
+    roleNode(id) { return this._roles.get(id) || null; }
+
+    roleNodes() { return this.data.catalogue.nodes; }
+
+    /** What is filed directly under a branch of the catalogue: its branches, then its roles. */
+    roleChildren(id) {
+        var self = this, n = this.roleNode(id);
+        return n ? n.children.map(function (c) { return self.roleNode(c); }) : [];
+    }
+
+    /** Every role under a branch of the catalogue, however deep. */
+    rolesUnder(id) {
+        var self = this, out = [];
+        (function walk(n) {
+            self.roleChildren(n.id).forEach(function (c) { if (c.is === "role") out.push(c); else walk(c); });
+        })(this.roleNode(id));
+        return out;
+    }
+
+    /** The parts that name a role: where it is used, what plays it, how many. */
+    usesOf(id) {
+        var self = this, n = this.roleNode(id);
+        return n && n.uses ? n.uses.map(function (p) { return self.node(p); }) : [];
+    }
+
+    roleCount(is) { return this.data.catalogue.nodes.filter(function (n) { return n.is === is; }).length; }
 }

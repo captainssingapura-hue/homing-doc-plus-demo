@@ -4,6 +4,11 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentNode;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
+import hue.captains.singapura.js.homing.component.taxonomy.Role;
+import hue.captains.singapura.js.homing.component.taxonomy.RoleBranch;
+import hue.captains.singapura.js.homing.component.taxonomy.RoleCatalogue;
+import hue.captains.singapura.js.homing.component.taxonomy.RoleNode;
+import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.core.EsModule;
@@ -22,8 +27,9 @@ import java.util.List;
 /**
  * {@code TAXONOMY}: the house's taxonomy as the widgets read it, written when served - every
  * node by its token, what it is - the root, a branch, a component, a part - where the tree places it and what is under it, how it falls
- * back; a component's parts and where it plays a role in another; a part's owner, base and role;
- * and the target leaves, whose product with the nodes is every semantic class.
+ * back; a component's parts and where it plays a role in another; a part's owner, base, role and
+ * how many; the target leaves, whose product with the nodes is every semantic class; and the role
+ * catalogue - its branches, its roles, and every part that names each.
  */
 public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, SelfContent {
 
@@ -49,7 +55,8 @@ public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, Self
         var targetTokens = targets.stream().map(x -> quote(x.token())).toList();
         return "{\"root\":" + quote(Root.INSTANCE.token())
              + ",\"nodes\":[" + String.join(",", nodes) + "]"
-             + ",\"targets\":[" + String.join(",", targetTokens) + "]}";
+             + ",\"targets\":[" + String.join(",", targetTokens) + "]"
+             + ",\"catalogue\":" + catalogue(t) + "}";
     }
 
     private static String node(Taxonomy t, ComponentNode n) {
@@ -81,6 +88,36 @@ public record TaxonomyDataModule() implements EsModule<TaxonomyDataModule>, Self
             b.append(",\"owner\":").append(quote(p.owner().token()));
             b.append(",\"base\":").append(quote(p.base().token()));
             b.append(",\"role\":").append(quote(simple(p.role())));
+            b.append(",\"roleId\":").append(quote(p.role().name().value()));
+            b.append(",\"count\":").append(quote(p.cardinality().multiplicity()));
+        }
+        return b.append("}").toString();
+    }
+
+    /** The role catalogue: its root, its branches by level, its roles - each by its name, unique across it - and a role's uses. */
+    private static String catalogue(Taxonomy t) {
+        RoleCatalogue c = t.catalogue();
+        var nodes = new ArrayList<String>();
+        nodes.add(roleNode(t, c, RoleRoot.INSTANCE));
+        for (RoleBranch b : c.branches()) nodes.add(roleNode(t, c, b));
+        for (Role<?> r : c.roles()) nodes.add(roleNode(t, c, r));
+        return "{\"root\":" + quote(RoleRoot.INSTANCE.name().value()) + ",\"nodes\":[" + String.join(",", nodes) + "]}";
+    }
+
+    private static String roleNode(Taxonomy t, RoleCatalogue c, RoleNode n) {
+        var b = new StringBuilder("{");
+        b.append("\"id\":").append(quote(n.name().value()));
+        b.append(",\"is\":").append(quote(n instanceof RoleRoot ? "root" : n instanceof RoleBranch ? "branch" : "role"));
+        b.append(",\"name\":").append(quote(simple(n)));
+        RoleBranch parent = c.parent(n);
+        b.append(",\"parent\":").append(parent == null ? "null" : quote(parent.name().value()));
+        if (n instanceof RoleBranch branch) {
+            b.append(",\"level\":").append(branch.level());
+            b.append(",\"children\":[").append(String.join(",", c.children(branch).stream().map(x -> quote(x.name().value())).toList())).append("]");
+        }
+        if (n instanceof Role<?> role) {
+            b.append(",\"children\":[]");
+            b.append(",\"uses\":").append(tokens(t.partsNaming(role)));
         }
         return b.append("}").toString();
     }

@@ -139,6 +139,31 @@ class TaxonomyDataTest extends JsModuleTestBase {
     }
 
     @Test
+    void theCatalogue_theHousesRoles_filedUnderTheirBranches() {
+        load(HouseTaxonomy.INSTANCE.read());
+        assertEquals("role-root", eval("t.roleRoot().id").asString());
+        assertEquals(21, eval("t.roleCount('branch')").asInt(), "three at level 1, eighteen at level 2");
+        assertEquals(67, eval("t.roleCount('role')").asInt());
+        assertEquals(67, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
+        assertEquals("saying,doing,shaping", eval("t.roleChildren('role-root').map(function (n) { return n.id; }).join()").asString());
+        assertEquals("title,subtitle,name,category,symbol", eval("t.roleChildren('naming').map(function (n) { return n.id; }).join()").asString());
+        assertEquals(2, eval("t.roleNode('naming').level").asInt());
+        assertEquals("saying", eval("t.roleNode('naming').parent").asString());
+        assertEquals(0, eval("t.usesOf('title').length").asInt(), "named by no component yet");
+    }
+
+    @Test
+    void aRolesUses_everyPartThatNamesIt_whatPlaysIt_howMany() {
+        load(SAMPLE);
+        assertEquals("card-title,dialog-title", eval("t.usesOf('title').map(function (p) { return p.id; }).join()").asString());
+        assertEquals("title", eval("t.node('card-title').roleId").asString(), "a part says which role it plays");
+        assertEquals("1", eval("t.node('card-title').count").asString());
+        assertEquals("0..1", eval("t.node('card-summary').count").asString(), "and how many");
+        assertEquals("heading,heading", eval("t.usesOf('title').map(function (p) { return p.base; }).join()").asString());
+        assertEquals("layers", eval("t.roleNode('window').parent").asString(), "only the branches the roles reached");
+    }
+
+    @Test
     void everyNodeHasASemanticClass_perTargetLeaf() {
         load(SAMPLE);
         assertEquals(Trees.targetLeaves().size(), eval("t.classes('card-title').length").asInt());
