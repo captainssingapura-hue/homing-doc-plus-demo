@@ -27,7 +27,7 @@ function _leave(w) { w._off(); if (w.focus.in) w.focus.leave(); }
 // Three kinds of tab widget, each a class by the base's contract and the law.
 class CardTab {
     constructor(branch, params) {
-        this.root = new CardBuilder().title(params.title).badge(params.badge).text(params.text).build(branch.createBranch("card")).root;
+        this.root = new SummaryCard(branch.createBranch("card"), { title: params.title, badge: params.badge, text: params.text }).root;
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }
@@ -46,8 +46,8 @@ class CounterTab {
         this._count.setAttribute("aria-live", "polite");
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
-        row.appendChild(new Button(branch.createElement("dec", Button.TAG), { label: "−", kind: "plain", onClick: function () { self._value--; self._draw(); } }).el);
-        this._inc = new Button(branch.createElement("inc", Button.TAG), { label: "+", onClick: function () { self._value++; self._draw(); } });
+        row.appendChild(new PlainButton(branch.createElement("dec", PlainButton.TAG), { label: "−", onClick: function () { self._value--; self._draw(); } }).el);
+        this._inc = new PrimaryButton(branch.createElement("inc", PrimaryButton.TAG), { label: "+", onClick: function () { self._value++; self._draw(); } });
         row.appendChild(this._inc.el);
         this._draw();
         root.appendChild(this._count);
@@ -224,13 +224,13 @@ class PanesWidget {
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
         el.appendChild(row);
-        row.appendChild(new Button(branch.createElement("moveFirst", Button.TAG), { label: "Move the active tab first", kind: "plain", onClick: function () {
+        row.appendChild(new PlainButton(branch.createElement("moveFirst", PlainButton.TAG), { label: "Move the active tab first", onClick: function () {
             var id = pane.activeTab(); if (id) pane.moveTab(id, 0);
         } }).el);
-        row.appendChild(new Button(branch.createElement("moveLast", Button.TAG), { label: "Move it last", kind: "plain", onClick: function () {
+        row.appendChild(new PlainButton(branch.createElement("moveLast", PlainButton.TAG), { label: "Move it last", onClick: function () {
             var id = pane.activeTab(); if (id) pane.moveTab(id, pane.count() - 1);
         } }).el);
-        row.appendChild(new Button(branch.createElement("closeAll", Button.TAG), { label: "Close every tab", kind: "plain", onClick: function () {
+        row.appendChild(new PlainButton(branch.createElement("closeAll", PlainButton.TAG), { label: "Close every tab", onClick: function () {
             pane.getState().tabs.forEach(function (t) { if (!t.pinned) pane.removeTab(t.id); });
         } }).el);
         this.root = el;

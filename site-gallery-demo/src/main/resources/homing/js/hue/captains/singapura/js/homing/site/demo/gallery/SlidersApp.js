@@ -66,10 +66,12 @@ class SlidersWidget {
             fill(box, own);
             specimens.appendChild(box);
         }
-        function reporting(b, name) {
-            return b.onInput(function (v) { say(name + "  " + v + "  (live)"); }).onChange(function (v) { say(name + "  " + v + "  changed"); });
+        function reporting(p, name) {
+            p.onInput = function (v) { say(name + "  " + v + "  (live)"); };
+            p.onChange = function (v) { say(name + "  " + v + "  changed"); };
+            return p;
         }
-        function keyed(b, id) { return b.keyboard(kb, "sliders/" + id); }   // qualified: the shell's one party has every page's sliders in it
+        function keyed(p, id) { p.keyboard = kb; p.keyboardId = "sliders/" + id; return p; }   // qualified: the shell's one party has every page's sliders in it
         var words = { size: function (v) { return v === 0 ? "regular" : v === 1 ? "the biggest" : v === -1 ? "the smallest" : ""; },
                       aspect: function (v) { return v === 0 ? "the design's" : v > 0 ? "wider" : "narrower"; },
                       extent: function (v) { return v === 1 ? "the word" : v === 0 ? "neutral" : v === -1 ? "the other meaning" : ""; } };
@@ -77,37 +79,37 @@ class SlidersWidget {
 
         section("axes", "the three axes — each rests at nought, on its detent", function (box, own) {
             ["size", "aspect", "extent"].forEach(function (axis) {
-                var s = keyed(reporting(new SliderBuilder().label(axis).axis().icon(axis).labelWidth("5em").value(axis === "extent" ? 1 : 0)
-                    .format(function (v) { return v.toFixed(1) + "  " + words[axis](v); }), axis), axis).build(own.createBranch(axis));
+                var s = new Slider(own.createBranch(axis), keyed(reporting({ label: axis, axis: true, icon: axis, labelWidth: "5em", value: axis === "extent" ? 1 : 0,
+                    format: function (v) { return v.toFixed(1) + "  " + words[axis](v); } }, axis), axis));
                 self._sliders.push(s);
                 box.appendChild(s.root);
             });
         });
         section("plain", "a plain range — 0 to 100 by 5, a unit in the readout, no detent", function (box, own) {
-            var s = keyed(reporting(new SliderBuilder().label("volume").range(0, 100, 5).icon("level").value(40).format(function (v) { return v + " %"; }), "volume"), "volume").build(own.createBranch("volume"));
+            var s = new Slider(own.createBranch("volume"), keyed(reporting({ label: "volume", min: 0, max: 100, step: 5, icon: "level", value: 40, format: function (v) { return v + " %"; } }, "volume"), "volume"));
             self._sliders.push(s);
             box.appendChild(s.root);
         });
         section("off", "off — inert, and says so; its knob keeps the grip", function (box, own) {
-            var s = keyed(new SliderBuilder().label("gain").range(-12, 12, 1).detent(0).value(3).format(function (v) { return (v > 0 ? "+" : "") + v + " dB"; }), "gain").build(own.createBranch("gain"));
+            var s = new Slider(own.createBranch("gain"), keyed({ label: "gain", min: -12, max: 12, step: 1, detents: [0], value: 3, format: function (v) { return (v > 0 ? "+" : "") + v + " dB"; } }, "gain"));
             s.setOn(false);
             self._sliders.push(s);
             box.appendChild(s.root);
         });
         section("sizes", "the slider at its three sizes: the track, the knob and the notch grow by the design's ratio", function (box, own) {
             [[-1, "the smallest"], [0, "the design's"], [1, "the biggest"]].forEach(function (pair) {
-                var s = keyed(reporting(new SliderBuilder().label(pair[1]).axis().icon("size").labelWidth("8em").size(pair[0]).format(function (v) { return v.toFixed(1); }), "size " + pair[0]), "size" + (pair[0] + 1)).build(own.createBranch("size" + (pair[0] + 1)));
+                var s = new Slider(own.createBranch("size" + (pair[0] + 1)), keyed(reporting({ label: pair[1], axis: true, icon: "size", labelWidth: "8em", size: pair[0], format: function (v) { return v.toFixed(1); } }, "size " + pair[0]), "size" + (pair[0] + 1)));
                 self._sliders.push(s);
                 box.appendChild(s.root);
             });
         });
         section("mixer", "a group: one member of the party for its four faders — press the header, Tab walks them, the arrows move the current one, Escape gives the keys back", function (box, own) {
-            var group = new SliderGroupBuilder().title("Mixer").keyboard(kb, "sliders/mixer").across().build(own.createBranch("mixer"));
+            var group = new SliderGroup(own.createBranch("mixer"), { title: "Mixer", keyboard: kb, keyboardId: "sliders/mixer", across: true });
             self._group = group;
             var scale = [{ at: 10, label: "+10" }, { at: 5, label: "+5" }, { at: 0, label: "0" }, { at: -5, label: "-5" }, { at: -10, label: "-10" }, { at: -20, label: "-20" }, { at: -30, label: "-30" }, { at: -40, label: "-40" }, { at: -60, label: "-∞" }];
             function dB(v) { return v <= -60 ? "-∞ dB" : (v > 0 ? "+" : "") + v + " dB"; }
             [["vocals", 0], ["bass", -6], ["drums", -3], ["keys", -12]].forEach(function (ch) {
-                group.add(ch[0], reporting(new SliderBuilder().label(ch[0]).vertical().range(-60, 10, 1).detent(0).value(ch[1]).icon("level").ticks(scale).format(dB), ch[0]));
+                group.add(ch[0], reporting({ label: ch[0], vertical: true, min: -60, max: 10, step: 1, detents: [0], value: ch[1], icon: "level", ticks: scale, format: dB }, ch[0]));
             });
             box.appendChild(group.root);
         });

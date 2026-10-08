@@ -12,7 +12,7 @@ class PanelDemo extends ComponentDemo {
     constructor(container, params) {
         super(container, "panel-demo", params);
         var host = this.el("host", "div", dm_host, this.stage);
-        this._panel = new PanelBuilder().title("Orders to pack").host(host).build(this.branch.createBranch("panel"));
+        this._panel = new Panel(this.branch.createBranch("panel"), { title: "Orders to pack", host: host });
         this.el("text", "p", dm_text, this._panel.body, "Twelve orders wait to be packed; three of them leave today.");
         this._current = false;
         this._raised = false;

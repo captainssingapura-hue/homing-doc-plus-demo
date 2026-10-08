@@ -15,10 +15,10 @@ class EdgeStripDemo extends ComponentDemo {
         var self = this;
         var host = this.el("host", "div", dm_host, this.stage);
         this.el("text", "p", dm_text, host, "Bring the pointer to the foot of this box: its tools lie there, out of the way until asked for.");
-        this._strip = new EdgeStripBuilder().label("The box's tools").host(host).build(this.branch.createBranch("strip"));
+        this._strip = new EdgeStrip(this.branch.createBranch("strip"), { label: "The box's tools", host: host });
         ["Copy", "Share", "Archive"].forEach(function (name) {
-            var b = new ButtonBuilder().label(name).plain().size(-1).onClick(function () { self.say(name + " pressed, on the strip"); });
-            self._strip.root.appendChild(b.build(self.branch.createElement("tool-" + name.toLowerCase(), b.tag)).el);
+            self._strip.root.appendChild(new PlainButton(self.branch.createElement("tool-" + name.toLowerCase(), PlainButton.TAG), {
+                label: name, size: -1, onClick: function () { self.say(name + " pressed, on the strip"); } }).el);
         });
         this._held = false;
         this.intro = "bring the pointer to the box's foot, or hold the strip shown in the controls";

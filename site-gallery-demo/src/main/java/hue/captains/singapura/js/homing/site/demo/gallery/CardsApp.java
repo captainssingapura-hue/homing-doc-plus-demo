@@ -7,14 +7,14 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
+import hue.captains.singapura.js.homing.ui.elements.SummaryCardModule;
 
 import java.util.List;
 
 /**
- * The cards page: a grid of cards through the builder — plain, one that scrolls, one with a caller's own body, one
- * with an action — under a size slider, and one card at three sizes. Every card is the shared {@code Card}.
+ * The cards page: a grid of summary cards — plain, one that scrolls, one with a caller's own body, one with an
+ * action — under a size slider, and one card at three sizes. Every card is the shared {@code SummaryCard}.
  */
 public record CardsApp() implements AppModule<AppModule._None, CardsApp> {
 
@@ -31,8 +31,8 @@ public record CardsApp() implements AppModule<AppModule._None, CardsApp> {
     public ImportsFor<CardsApp> imports() {
         return ImportsFor.<CardsApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.CardBuilder()), Elements.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SummaryCardModule.SummaryCard()), SummaryCardModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),

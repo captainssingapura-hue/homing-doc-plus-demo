@@ -31,7 +31,7 @@ public record SliderDemoModule() implements DomModule<SliderDemoModule> {
     public ImportsFor<SliderDemoModule> imports() {
         return ImportsFor.<SliderDemoModule>builder()
                 .add(new ModuleImports<>(List.of(new ComponentDemoModule.ComponentDemo()), ComponentDemoModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
                 .build();
     }
 

@@ -22,8 +22,7 @@ class ComponentLogView extends TaxonomyWidget {
         this._logMember = null;
         var head = this.el("head", "div", tx_line, this.body);
         this.el("title", "h4", tx_title, head, label);
-        var clear = new ButtonBuilder().label("Clear").plain().size(-1).onClick(function () { self._lines = []; self._draw(); });
-        head.appendChild(clear.build(this.branch.createElement("clear", clear.tag)).el);
+        head.appendChild(new PlainButton(this.branch.createElement("clear", PlainButton.TAG), { label: "Clear", size: -1, onClick: function () { self._lines = []; self._draw(); } }).el);
         this._box = this.el("lines", "div", tx_scroll, this.body);
         this._draw();
     }

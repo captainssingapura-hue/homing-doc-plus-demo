@@ -47,7 +47,7 @@ public record PlatformerPlayModule() implements DomModule<PlatformerPlayModule> 
                 .add(new ModuleImports<>(List.of(new domOpsParties()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParties()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlatformerGameModule.PlatformerGame()), PlatformerGameModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlatformerSoundModule.PlatformerSound()), PlatformerSoundModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlatformerStageModule.PlatformerStage()), PlatformerStageModule.INSTANCE))

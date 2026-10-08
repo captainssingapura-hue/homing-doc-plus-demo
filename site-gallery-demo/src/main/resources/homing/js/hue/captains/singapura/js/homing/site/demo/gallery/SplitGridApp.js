@@ -26,11 +26,9 @@ class CellWidget {
         css.addClass(row, ga_buttons);
         var self = this;
         [["←", "left"], ["↑", "top"], ["→", "right"], ["↓", "bottom"]].forEach(function (s) {
-            var b = new ButtonBuilder().label(s[0]).plain().size(-1).onClick(function () { params.onSplit(params.id, s[1]); });
-            row.appendChild(b.build(branch.createElement("split-" + s[1], b.tag)).el);
+            row.appendChild(new PlainButton(branch.createElement("split-" + s[1], PlainButton.TAG), { label: s[0], size: -1, onClick: function () { params.onSplit(params.id, s[1]); } }).el);
         });
-        var x = new ButtonBuilder().label("×").colour("danger", 0.6).size(-1).onClick(function () { params.onRemove(params.id); });
-        row.appendChild(x.build(branch.createElement("remove", x.tag)).el);
+        row.appendChild(new DangerButton(branch.createElement("remove", DangerButton.TAG), { label: "×", extent: 0.6, size: -1, onClick: function () { params.onRemove(params.id); } }).el);
         root.appendChild(row);
         this.root = root;
     }
@@ -109,20 +107,21 @@ class SplitGridWidget {
             say("Cursor     " + ev.cellId + "  by " + ev.by);
             self._widgets.forEach(function (w, id) { w.current(id === ev.cellId); });
         } });
-        var scale = new SliderBuilder().keyboard(kb, "split-grid/scale").label("the mirror's scale").icon("size").range(0.1, 0.5, 0.05).value(0.25).onInput(function (v) { self._mirror.scale(v); }).format(function (v) { return v.toFixed(2); }).build(branch.createBranch("scale")).root;
+        var scale = new Slider(branch.createBranch("scale"), { keyboard: kb, keyboardId: "split-grid/scale", label: "the mirror's scale", icon: "size", min: 0.1, max: 0.5, step: 0.05, value: 0.25,
+            onInput: function (v) { self._mirror.scale(v); }, format: function (v) { return v.toFixed(2); } }).root;
         mirrorRow.appendChild(scale);
         // the seam: a splitter has no presence of its own, but a grid whose cells bring no edges needs the line -
-        // so it is the owner's to ask for, and here you can see it both ways
+        // so it is the owner's to ask for, and here you can see it both ways; the button is a toggle, and the house has no
+        // toggle button yet: a plain one, its label saying the state
         var seamOn = true;
-        var seamButton = new ButtonBuilder().label("the seam at rest").size(-1).onClick(function () {
+        function seamLabel() { return "the seam at rest: " + (seamOn ? "on" : "off"); }
+        var seamButton = new PlainButton(branch.createElement("seam", PlainButton.TAG), { label: seamLabel(), size: -1, onClick: function () {
             seamOn = !seamOn;
             grid.seam(seamOn);
-            seamButton.colour(seamOn ? "primary" : "plain");
+            seamButton.label(seamLabel());
             say("Seam       the splitters " + (seamOn ? "keep the design's line at rest" : "have no presence at rest"));
-        });
-        var seamEl = branch.createElement("seam", seamButton.tag);
-        seamButton = seamButton.build(seamEl);
-        mirrorRow.appendChild(seamEl);
+        } });
+        mirrorRow.appendChild(seamButton.el);
 
         var hint = branch.createElement("hint", "span");
         css.addClass(hint, ga_control_readout);

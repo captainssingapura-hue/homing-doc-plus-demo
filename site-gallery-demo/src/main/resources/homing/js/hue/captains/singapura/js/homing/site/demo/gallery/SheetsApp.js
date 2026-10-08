@@ -67,16 +67,17 @@ class SheetsWidget {
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
         var SITS = [null, "sunken", "elevated"];
-        controls.appendChild(new SliderBuilder().keyboard(params.keyboard, "sheets/sits").label("the fourth sheet sits")
-            .range(-1, 1, 1).detent(-1, 0, 1).value(1).icon("level").labelWidth("11em")
-            .format(function (v) { return v < 0 ? "sunken" : v > 0 ? "elevated" : "flat"; })
-            .onInput(function (v) { yours.elevation(SITS[Math.abs(v) + (v > 0 ? 1 : 0)]); })
-            .build(branch.createBranch("sits")).root);
-        var mark = new ButtonBuilder().label("marked").size(-0.4).colour("plain")
-            .onClick(function () { yours.highlight(!yours.isHighlighted()); mark.colour(yours.isHighlighted() ? "primary" : "plain"); });
-        var markEl = branch.createElement("mark", mark.tag);
-        mark = mark.build(markEl);
-        controls.appendChild(markEl);
+        controls.appendChild(new Slider(branch.createBranch("sits"), {
+            keyboard: params.keyboard, keyboardId: "sheets/sits", label: "the fourth sheet sits",
+            min: -1, max: 1, step: 1, detents: [-1, 0, 1], value: 1, icon: "level", labelWidth: "11em",
+            format: function (v) { return v < 0 ? "sunken" : v > 0 ? "elevated" : "flat"; },
+            onInput: function (v) { yours.elevation(SITS[Math.abs(v) + (v > 0 ? 1 : 0)]); }
+        }).root);
+        // the mark is a toggle, and the house has no toggle button yet: a plain one, its label saying the state
+        var mark = new PlainButton(branch.createElement("mark", PlainButton.TAG), {
+            label: yours.isHighlighted() ? "marked" : "not marked", size: -0.4,
+            onClick: function () { yours.highlight(!yours.isHighlighted()); mark.label(yours.isHighlighted() ? "marked" : "not marked"); } });
+        controls.appendChild(mark.el);
 
         // ── a sheet on a sheet: the cast falls on paper, not on the table ─
         var stackNote = branch.createElement("stack-note", "p");
@@ -87,10 +88,10 @@ class SheetsWidget {
         var stackGround = branch.createElement("stack-ground", "div");
         css.addClass(stackGround, ga_sheet_ground);
         el.appendChild(stackGround);
-        var outer = new PanelBuilder().title("on the ground").host(stackGround).build(branch.createBranch("panel-outer"));
+        var outer = new Panel(branch.createBranch("panel-outer"), { title: "on the ground", host: stackGround });
         outer.elevation("elevated");
         this._panels.push(outer);
-        var inner = new PanelBuilder().title("on the sheet").host(outer.body).build(branch.createBranch("panel-inner"));
+        var inner = new Panel(branch.createBranch("panel-inner"), { title: "on the sheet", host: outer.body });
         inner.elevation("elevated");
         this._panels.push(inner);
         this._lines(branch, "inner", inner.body, ["the same register", "a different ground"]);
@@ -103,7 +104,7 @@ class SheetsWidget {
         var slot = branch.createElement("slot-" + name, "div");
         css.addClass(slot, ga_sheet_slot);
         ground.appendChild(slot);
-        var panel = new PanelBuilder().title(label).host(slot).build(branch.createBranch("panel-" + name));
+        var panel = new Panel(branch.createBranch("panel-" + name), { title: label, host: slot });
         this._panels.push(panel);
         this._lines(branch, name, panel.body, ["a sheet of card", "cut to its content"]);
         var caption = branch.createElement("note-" + name, "div");

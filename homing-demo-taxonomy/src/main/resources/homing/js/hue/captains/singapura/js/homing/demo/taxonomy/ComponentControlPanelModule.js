@@ -68,11 +68,11 @@ class ComponentControlPanel extends TaxonomyWidget {
             onInvoke: function (option) { self._invoke(option); }
         });
         scroll.appendChild(this._panel.root);
-        var rest = new ButtonBuilder().label("Back to rest").plain().size(-1).onClick(function () {
+        var rest = new PlainButton(v.createElement("rest", PlainButton.TAG), { label: "Back to rest", size: -1, onClick: function () {
             if (self._control) self._control.tell({ kind: "Reset" });
             self._note("everything back to rest");
-        });
-        line.appendChild(rest.build(v.createElement("rest", rest.tag)).el);
+        } });
+        line.appendChild(rest.el);
         if (this._control) this._control.tell({ kind: "StateRequested" });
     }
 

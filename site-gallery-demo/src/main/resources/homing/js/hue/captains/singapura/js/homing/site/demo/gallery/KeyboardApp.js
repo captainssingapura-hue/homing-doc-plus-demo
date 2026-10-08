@@ -151,14 +151,14 @@ class KeyboardWidget {
         }
 
         section("sliders", "a group of sliders — one member for the three; Tab walks them, the arrows move the current one", function (box, own) {
-            var g = new SliderGroupBuilder().title("Sliders").keyboard(kb, "keyboard/sliders").build(own.createBranch("group"));
-            ["size", "aspect", "extent"].forEach(function (axis) { g.add(axis, new SliderBuilder().label(axis).axis().icon(axis).labelWidth("5em").format(function (v) { return v.toFixed(1); })); });
+            var g = new SliderGroup(own.createBranch("group"), { title: "Sliders", keyboard: kb, keyboardId: "keyboard/sliders" });
+            ["size", "aspect", "extent"].forEach(function (axis) { g.add(axis, { label: axis, axis: true, icon: axis, labelWidth: "5em", format: function (v) { return v.toFixed(1); } }); });
             self._group = g;
             box.appendChild(g.root);
         });
         section("card", "a card with an action — Tab to it, or click it; Enter or Space is the action", function (box, own) {
-            self._card = new CardBuilder().title("A card with an action").badge("PRESS").text("Enter or Space, through the party.").aspect(0.6)
-                .onClick(function () { say("the card's action"); }).keyboard(kb, "keyboard/card").build(own.createBranch("card"));
+            self._card = new SummaryCard(own.createBranch("card"), { title: "A card with an action", badge: "PRESS", text: "Enter or Space, through the party.", aspect: 0.6,
+                onClick: function () { say("the card's action"); }, keyboard: kb, keyboardId: "keyboard/card" });
             box.appendChild(self._card.root);
         });
         section("strip", "a strip of tabs — the Tab key walks the chips (the browser's), Enter or Space selects (the party's)", function (box, own) {
@@ -182,8 +182,8 @@ class KeyboardWidget {
             self._game = new Platformer(own.createBranch("game"), stageHost, kb, "keyboard/platformer", say);
             var row = own.createElement("row", "div");
             css.addClass(row, ga_buttons);
-            row.appendChild(new Button(own.createElement("play", Button.TAG), { label: "Play", onClick: function () { self._game.play(); } }).el);
-            row.appendChild(new Button(own.createElement("bug", Button.TAG), { label: "A modal, then the platformer claims by call — the bug, shown", kind: "plain", onClick: function () {
+            row.appendChild(new PrimaryButton(own.createElement("play", PrimaryButton.TAG), { label: "Play", onClick: function () { self._game.play(); } }).el);
+            row.appendChild(new PlainButton(own.createElement("bug", PlainButton.TAG), { label: "A modal, then the platformer claims by call — the bug, shown", onClick: function () {
                 openDialog("A modal is up");
                 setTimeout(function () { self._game.play(); say("the platformer claimed by call from behind the modal: the party is blind, so it holds — and the dialog no longer hears Escape; close it by its cross"); }, 600);
             } }).el);
@@ -206,7 +206,7 @@ class KeyboardWidget {
         section("dialog", "a dialog — claims by call on open, evicting the holder; on close the keys go back to who held before", function (box, own) {
             var row = own.createElement("row", "div");
             css.addClass(row, ga_buttons);
-            row.appendChild(new Button(own.createElement("open", Button.TAG), { label: "Open a modal", onClick: function () { openDialog("A modal dialog"); } }).el);
+            row.appendChild(new PrimaryButton(own.createElement("open", PrimaryButton.TAG), { label: "Open a modal", onClick: function () { openDialog("A modal dialog"); } }).el);
             box.appendChild(row);
         });
         say("five members; no one holds the keys yet");

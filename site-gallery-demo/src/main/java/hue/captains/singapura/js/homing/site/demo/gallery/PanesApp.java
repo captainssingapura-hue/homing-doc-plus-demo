@@ -11,7 +11,9 @@ import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.PrimaryButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.SummaryCardModule;
 import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
 import hue.captains.singapura.js.homing.ui.docking.DeskModule;
 
@@ -45,7 +47,9 @@ public record PanesApp() implements AppModule<AppModule._None, PanesApp> {
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.Button(), new Elements.CardBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PrimaryButtonModule.PrimaryButton()), PrimaryButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SummaryCardModule.SummaryCard()), SummaryCardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
                         new GalleryStyles.ga_title(),

@@ -22,7 +22,7 @@ public record PanelDemoModule() implements DomModule<PanelDemoModule> {
     public ImportsFor<PanelDemoModule> imports() {
         return ImportsFor.<PanelDemoModule>builder()
                 .add(new ModuleImports<>(List.of(new ComponentDemoModule.ComponentDemo()), ComponentDemoModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PanelModule.PanelBuilder()), PanelModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PanelModule.Panel()), PanelModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DemoStyles.dm_host(), new DemoStyles.dm_text()), DemoStyles.INSTANCE))
                 .build();
     }

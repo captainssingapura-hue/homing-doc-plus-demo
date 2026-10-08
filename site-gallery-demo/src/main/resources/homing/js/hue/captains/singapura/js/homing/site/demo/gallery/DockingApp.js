@@ -196,15 +196,14 @@ class DockingWidget {
         // ── the room's edge: a strip over the box's foot, a thin lip all it takes of the room ──
         // What the room holds, and the way to another region by the hand, as F6 is by the keys. It lies over the
         // room while the hand is at the lip or on it: the workspace's control strip is this same component.
-        edge = new EdgeStripBuilder().label("The room").host(box).build(branch.createBranch("edge"));
+        edge = new EdgeStrip(branch.createBranch("edge"), { label: "The room", host: box });
         this._edge = edge;
         var census = branch.createElement("census", "span");
         css.addClass(census, ga_strip_census);
         edge.root.appendChild(census);
-        var goTo = new ButtonBuilder();
-        var goEl = branch.createElement("go", goTo.tag);
-        goTo.label("Go to a region…").plain().size(-1).onClick(function () { if (!switcher) openSwitcher(); }).build(goEl);
-        edge.root.appendChild(goEl);
+        var goTo = new PlainButton(branch.createElement("go", PlainButton.TAG), {
+            label: "Go to a region…", size: -1, onClick: function () { if (!switcher) openSwitcher(); } });
+        edge.root.appendChild(goTo.el);
         function countRoom() {
             var regions = docks.regions(), held = 0, afloat = desk.floats().length;
             regions.forEach(function (r) { held += r.dock.count(); });
@@ -248,13 +247,18 @@ class DockingWidget {
         }
         var switches = 0;
         function domopsOf() { return instruments ? instruments.domops() : null; }
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/lines").label("the lines").range(0, 6, 1).detent(1).value(1).icon("size")
-            .format(function (v) { return v === 0 ? "none" : v + "px"; })
-            .onInput(function (v) { grid.thickness(v); }).labelWidth("6em")
-            .build(branch.createBranch("lines")).root);
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { docks.regions().forEach(function (r) { r.dock.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { docks.regions().forEach(function (r) { r.dock.aspect(v); }); })
-            .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
+        controls.appendChild(new Slider(branch.createBranch("lines"), {
+            keyboard: kb, keyboardId: "docking/lines", label: "the lines", min: 0, max: 6, step: 1, detents: [1], value: 1, icon: "size", labelWidth: "6em",
+            format: function (v) { return v === 0 ? "none" : v + "px"; },
+            onInput: function (v) { grid.thickness(v); } }).root);
+        controls.appendChild(new Slider(branch.createBranch("size"), {
+            keyboard: kb, keyboardId: "docking/size", label: "the tabs' size", axis: true, icon: "size", labelWidth: "9em",
+            onInput: function (v) { docks.regions().forEach(function (r) { r.dock.size(v); }); },
+            format: function (v) { return v.toFixed(1); } }).root);
+        controls.appendChild(new Slider(branch.createBranch("aspect"), {
+            keyboard: kb, keyboardId: "docking/aspect", label: "the tabs' aspect", axis: true, icon: "aspect", labelWidth: "9em",
+            onInput: function (v) { docks.regions().forEach(function (r) { r.dock.aspect(v); }); },
+            format: function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); } }).root);
         // the tab menu's picks are the desk's, which was handed the steward: Detach floats the tab under its chip - off
         // on a tab afloat already - and Close asks it to close
 

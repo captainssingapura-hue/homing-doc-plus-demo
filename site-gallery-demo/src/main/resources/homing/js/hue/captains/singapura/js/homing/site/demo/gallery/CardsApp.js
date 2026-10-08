@@ -35,8 +35,8 @@ class CardsWidget {
         el.appendChild(title);
         var lede = branch.createElement("lede", "p");
         css.addClass(lede, ga_lede);
-        lede.textContent = "A card is built through its builder on a sub-branch of the caller's: title, badge, text, link, size, and an "
-            + "action if it has one. It is Container.Card.Base to the design — a raised box whose measure is its own — and it "
+        lede.textContent = "A summary card is made on a sub-branch of the caller's, with its properties: title, badge, text, link, size, "
+            + "and an action if it has one. It is Container.Card.Base to the design — a raised box whose measure is its own — and it "
             + "behaves as an enlarged button would: it lifts on hover, presses, and rings on focus. What a press does is the caller's. "
             + "Two numbers shape it: the size, and the aspect — square at 0, the design's widest at 1, its tallest at −1.";
         el.appendChild(lede);
@@ -52,18 +52,17 @@ class CardsWidget {
         var grid = branch.createElement("grid", "div");
         css.addClass(grid, ga_cards);
         this._cards = [];
-        var plain = new CardBuilder().title("A plain card").badge("BASE").text("Title, badge, a line of text, and a link in the foot.").link("/gallery", "The gallery").aspect(0.6)
-            .build(branch.createBranch("plain"));
+        var plain = new SummaryCard(branch.createBranch("plain"), {
+            title: "A plain card", badge: "BASE", text: "Title, badge, a line of text, and a link in the foot.", link: { to: "/gallery", label: "The gallery" }, aspect: 0.6 });
         grid.appendChild(plain.root);
         this._cards.push(plain);
 
-        var long = new CardBuilder().title("A card with too much to say").badge("SCROLLS").text(LONG).link("/gallery/controls/buttons", "Buttons").aspect(0.6)
-            .build(branch.createBranch("long"));
+        var long = new SummaryCard(branch.createBranch("long"), {
+            title: "A card with too much to say", badge: "SCROLLS", text: LONG, link: { to: "/gallery/controls/buttons", label: "Buttons" }, aspect: 0.6 });
         grid.appendChild(long.root);
         this._cards.push(long);
 
-        var own = new CardBuilder().title("A caller's own body").badge("BODY").aspect(0.6)
-            .build(branch.createBranch("own"));
+        var own = new SummaryCard(branch.createBranch("own"), { title: "A caller's own body", badge: "BODY", aspect: 0.6 });
         var list = branch.createElement("own-list", "ul");
         css.addClass(list, ga_card_list);
         ["The card gives the body", "the caller mints in it", "on the card's branch", "and the frame still bounds it", "however long the list", "gets to be"].forEach(function (t, i) {
@@ -75,23 +74,27 @@ class CardsWidget {
         grid.appendChild(own.root);
         this._cards.push(own);
 
-        var action = new CardBuilder().title("A card with an action").badge("PRESS").text("Click it, or Tab to it and press Enter or Space. It has a role and a ring; the plain ones do not.")
-            .onClick(function () { say("the action card was pressed"); }).aspect(0.6).keyboard(kb, "cards/action")
-            .build(branch.createBranch("action"));
+        var action = new SummaryCard(branch.createBranch("action"), {
+            title: "A card with an action", badge: "PRESS", text: "Click it, or Tab to it and press Enter or Space. It has a role and a ring; the plain ones do not.",
+            onClick: function () { say("the action card was pressed"); }, aspect: 0.6, keyboard: kb, keyboardId: "cards/action" });
         grid.appendChild(action.root);
         this._cards.push(action);
         el.appendChild(grid);
 
         this._size = 0;
-        var size = new SliderBuilder().keyboard(kb, "cards/size").label("size, for the grid").icon("size").labelWidth("10em").range(-1, 1, 0.05).detent(0).value(0)
-            .onInput(function (v) { self._size = v; self._cards.forEach(function (c) { c.size(v); }); })
-            .format(function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); })
-            .build(branch.createBranch("size")).root;
+        var size = new Slider(branch.createBranch("size"), {
+            keyboard: kb, keyboardId: "cards/size", label: "size, for the grid", icon: "size", labelWidth: "10em",
+            min: -1, max: 1, step: 0.05, detents: [0], value: 0,
+            onInput: function (v) { self._size = v; self._cards.forEach(function (c) { c.size(v); }); },
+            format: function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); }
+        }).root;
         el.appendChild(size);
-        var aspect = new SliderBuilder().keyboard(kb, "cards/aspect").label("aspect, for the grid").icon("aspect").labelWidth("10em").range(-1, 1, 0.05).detent(0).value(0.6)
-            .onInput(function (v) { self._cards.forEach(function (c) { c.aspect(v); }); })
-            .format(function (v) { return v.toFixed(2) + (v === 0 ? "  square" : v === 1 ? "  the widest" : v === -1 ? "  the tallest" : ""); })
-            .build(branch.createBranch("aspect")).root;
+        var aspect = new Slider(branch.createBranch("aspect"), {
+            keyboard: kb, keyboardId: "cards/aspect", label: "aspect, for the grid", icon: "aspect", labelWidth: "10em",
+            min: -1, max: 1, step: 0.05, detents: [0], value: 0.6,
+            onInput: function (v) { self._cards.forEach(function (c) { c.aspect(v); }); },
+            format: function (v) { return v.toFixed(2) + (v === 0 ? "  square" : v === 1 ? "  the widest" : v === -1 ? "  the tallest" : ""); }
+        }).root;
         el.appendChild(aspect);
 
         // ── one card across the aspect ────────────────────────────────────
@@ -102,8 +105,8 @@ class CardsWidget {
         var aspects = branch.createElement("aspects", "div");
         css.addClass(aspects, ga_cards);
         [-1, -0.5, 0, 0.5, 1].forEach(function (a) {
-            var c = new CardBuilder().title(a === 0 ? "square" : (a > 0 ? "+" : "−") + Math.abs(a)).badge("ASPECT").text("The design's widest to the power of the aspect.").size(-0.5).aspect(a)
-                .build(branch.createBranch("aspect-" + String(a).replace("-", "m").replace(".", "_")));
+            var c = new SummaryCard(branch.createBranch("aspect-" + String(a).replace("-", "m").replace(".", "_")), {
+                title: a === 0 ? "square" : (a > 0 ? "+" : "−") + Math.abs(a), badge: "ASPECT", text: "The design's widest to the power of the aspect.", size: -0.5, aspect: a });
             aspects.appendChild(c.root);
         });
         el.appendChild(aspects);
@@ -116,8 +119,8 @@ class CardsWidget {
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_cards);
         [-1, 0, 1].map(function (s) {
-            var c = new CardBuilder().title(s === 0 ? "regular" : s > 0 ? "+1" : "−1").badge("SIZE").text("The measure, the inset, the gap and the type grow by the design's ratios; the aspect holds.").size(s).aspect(0.6)
-                .build(branch.createBranch("sized-" + (s < 0 ? "m1" : s)));
+            var c = new SummaryCard(branch.createBranch("sized-" + (s < 0 ? "m1" : s)), {
+                title: s === 0 ? "regular" : s > 0 ? "+1" : "−1", badge: "SIZE", text: "The measure, the inset, the gap and the type grow by the design's ratios; the aspect holds.", size: s, aspect: 0.6 });
             row.appendChild(c.root);
             return c;
         });

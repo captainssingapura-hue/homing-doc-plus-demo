@@ -43,10 +43,11 @@ class TearLabWidget {
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
         function slider(id, label, min, max, step, value, unit, to) {
-            controls.appendChild(new SliderBuilder().keyboard(kb, "tear-lab/" + id).label(label).range(min, max, step).value(value).icon(null).labelWidth("7em")
-                .format(function (v) { return (step < 1 ? v.toFixed(2) : v) + unit; })
-                .onInput(function (v) { var o = {}; o[id] = to ? to(v) : v; tear.set(o); if (id === "escape" || id === "capture") self._stage.edges(); })
-                .build(branch.createBranch(id)).root);
+            controls.appendChild(new Slider(branch.createBranch(id), {
+                keyboard: kb, keyboardId: "tear-lab/" + id, label: label, min: min, max: max, step: step, value: value, icon: null, labelWidth: "7em",
+                format: function (v) { return (step < 1 ? v.toFixed(2) : v) + unit; },
+                onInput: function (v) { var o = {}; o[id] = to ? to(v) : v; tear.set(o); if (id === "escape" || id === "capture") self._stage.edges(); }
+            }).root);
         }
         var d = TabTear.DEFAULTS;
         slider("escape", "the escape", 0, 80, 2, d.escape, " px");
@@ -62,8 +63,8 @@ class TearLabWidget {
         controls.appendChild(this._pick(branch, "measure", "the measure", "what counts as a change",
             [["speed", "the speed, either way"], ["slowdown", "the speed, falling only"], ["velocity", "the vector: a turn counts"]], tear.options().measure,
             function (v) { tear.set({ measure: v }); }));
-        var reset = new ButtonBuilder().label("Put them back").colour("secondary").onClick(function () { self._stage.reset(); say("Reset     every chip back on the strip"); });
-        controls.appendChild(reset.build(branch.createElement("reset", reset.tag)).el);
+        controls.appendChild(new SecondaryButton(branch.createElement("reset", SecondaryButton.TAG), {
+            label: "Put them back", onClick: function () { self._stage.reset(); say("Reset     every chip back on the strip"); } }).el);
 
         var readout = branch.createElement("readout", "div");
         css.addClass(readout, tl_readout);

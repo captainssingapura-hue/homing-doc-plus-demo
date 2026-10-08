@@ -8,7 +8,6 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.SliderGroupModule;
-import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 
 import java.util.ArrayList;
@@ -32,8 +31,7 @@ public record SliderGroupDemoModule() implements DomModule<SliderGroupDemoModule
     public ImportsFor<SliderGroupDemoModule> imports() {
         return ImportsFor.<SliderGroupDemoModule>builder()
                 .add(new ModuleImports<>(List.of(new ComponentDemoModule.ComponentDemo()), ComponentDemoModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderGroupModule.SliderGroupBuilder()), SliderGroupModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderGroupModule.SliderGroup()), SliderGroupModule.INSTANCE))
                 .build();
     }
 

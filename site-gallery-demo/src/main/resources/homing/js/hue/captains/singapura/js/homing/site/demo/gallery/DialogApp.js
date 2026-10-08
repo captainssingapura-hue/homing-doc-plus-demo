@@ -44,7 +44,7 @@ class DialogWidget {
         el.appendChild(row);
 
         // 1. Modal, with actions. OK is primary; Enter anywhere but a form control fires it.
-        row.appendChild(new Button(branch.createElement("openModal", Button.TAG), { label: "Open a modal", onClick: function () {
+        row.appendChild(new PrimaryButton(branch.createElement("openModal", PrimaryButton.TAG), { label: "Open a modal", onClick: function () {
             new Dialog(branch.createBranch("dialog" + (++dialogs)), {
                 title: "A modal dialog", keyboard: kb, keyboardId: "dialog/modal",
                 content: function (b, body) {
@@ -63,7 +63,7 @@ class DialogWidget {
         } }).el);
 
         // 2. Non-modal: the page stays live, keys reach the dialog only while focus is inside.
-        row.appendChild(new Button(branch.createElement("openLoose", Button.TAG), { label: "Open a non-modal", kind: "plain", onClick: function () {
+        row.appendChild(new PlainButton(branch.createElement("openLoose", PlainButton.TAG), { label: "Open a non-modal", onClick: function () {
             new Dialog(branch.createBranch("dialog" + (++dialogs)), {
                 title: "A non-modal dialog", keyboard: kb, keyboardId: "dialog/loose-" + dialogs,
                 modal: false,
@@ -81,7 +81,7 @@ class DialogWidget {
 
         // 3. A control inside that takes its own keys: a counter on the arrows,
         //    and Escape resets it before the dialog is asked.
-        row.appendChild(new Button(branch.createElement("openKeys", Button.TAG), { label: "Open one with keys inside", kind: "plain", onClick: function () {
+        row.appendChild(new PlainButton(branch.createElement("openKeys", PlainButton.TAG), { label: "Open one with keys inside", onClick: function () {
             var n = 0, dlg;
             dlg = new Dialog(branch.createBranch("dialog" + (++dialogs)), {
                 title: "The content is asked first", keyboard: kb, keyboardId: "dialog/keys",

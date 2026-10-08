@@ -12,7 +12,7 @@ const _owner = Object.freeze({ toString: () => "floatingPage" });
 class CardWidget {
     constructor(branch, params) {
         branch.activate(_owner);
-        this.root = new CardBuilder().title(params.title).badge(params.badge).text(params.text).aspect(0.6).build(branch.createBranch("card")).root;
+        this.root = new SummaryCard(branch.createBranch("card"), { title: params.title, badge: params.badge, text: params.text, aspect: 0.6 }).root;
     }
 }
 
@@ -25,8 +25,7 @@ class CounterWidget {
         css.addClass(root, ga_buttons);
         var count = branch.createElement("count", "div");
         css.addClass(count, ga_count);
-        var b = new ButtonBuilder().label("Count").onClick(function () { self._value++; draw(); });
-        var btn = b.build(branch.createElement("btn", b.tag));
+        var btn = new PrimaryButton(branch.createElement("btn", PrimaryButton.TAG), { label: "Count", onClick: function () { self._value++; draw(); } });
         function draw() { count.textContent = String(self._value); }
         draw();
         root.appendChild(count);
@@ -79,8 +78,8 @@ class FloatingWidget {
         css.addClass(row, ga_buttons);
         var n = 0;
         function opener(label, spec) {
-            var b = new ButtonBuilder().label(label).plain().onClick(function () { n++; self._desk.open(spec(n)); });
-            row.appendChild(b.build(branch.createElement("open-" + label.replace(/\W+/g, "-"), b.tag)).el);
+            row.appendChild(new PlainButton(branch.createElement("open-" + label.replace(/\W+/g, "-"), PlainButton.TAG), {
+                label: label, onClick: function () { n++; self._desk.open(spec(n)); } }).el);
         }
         opener("Open a card", function (i) { return { title: "Card " + i, widget: CardWidget, params: { title: "A card in a pane", badge: "CARD", text: "The card keeps its own measure inside the pane's body; the pane bounds it." } }; });
         opener("Open a counter", function (i) { return { title: "Counter " + i, w: 240, h: 180, widget: CounterWidget, params: { start: i * 10 } }; });

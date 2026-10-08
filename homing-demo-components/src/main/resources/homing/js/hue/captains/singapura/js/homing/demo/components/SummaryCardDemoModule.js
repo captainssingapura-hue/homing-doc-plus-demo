@@ -14,12 +14,12 @@ class SummaryCardDemo extends ComponentDemo {
         super(container, "summary-card-demo", params);
         var self = this, opened = 0;
         var row = this.el("row", "div", dm_row, this.stage);
-        this._card = new CardBuilder()
-            .title("The quarter, in brief")
-            .badge("new")
-            .text("Revenue up a tenth on the last quarter, costs held, and three markets opening in the spring.")
-            .onClick(function () { opened++; self.say("opened - " + opened + (opened === 1 ? " time" : " times") + ", by the pointer or by Enter or Space"); })
-            .build(this.branch.createBranch("card"));
+        this._card = new SummaryCard(this.branch.createBranch("card"), {
+            title: "The quarter, in brief",
+            badge: "new",
+            text: "Revenue up a tenth on the last quarter, costs held, and three markets opening in the spring.",
+            onClick: function () { opened++; self.say("opened - " + opened + (opened === 1 ? " time" : " times") + ", by the pointer or by Enter or Space"); }
+        });
         row.appendChild(this._card.root);
         this.intro = "press the card, or press in the demo and use Enter or Space; size and shape it in the controls";
     }

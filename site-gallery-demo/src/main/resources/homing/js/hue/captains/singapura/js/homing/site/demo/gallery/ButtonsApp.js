@@ -1,6 +1,6 @@
 // =============================================================================
-// ButtonsApp — the button, exercised. Every colour word the builder knows, in
-// a row, with one extent slider over all of them: 1 is the word as the design
+// ButtonsApp — the button, exercised. Every button leaf of the house, in a
+// row, with one extent slider over all of them: 1 is the word as the design
 // binds it, 0 the design's neutral, −1 the meaning turned the other way. A
 // live one under it: a danger button whose extent follows how many rows an
 // action would touch — safe at none, dangerous at all. A size slider over all
@@ -11,7 +11,9 @@
 
 const _owner = Object.freeze({ toString: () => "buttonsPage" });
 
+/** Each colour word, and the leaf that wears it: the rank is the class. */
 var WORDS = ["plain", "primary", "secondary", "danger", "warning", "success"];
+var KINDS = { plain: PlainButton, primary: PrimaryButton, secondary: SecondaryButton, danger: DangerButton, warning: WarningButton, success: SuccessButton };
 
 class ButtonsWidget {
     constructor(branch, params) {
@@ -33,8 +35,8 @@ class ButtonsWidget {
         el.appendChild(title);
         var lede = branch.createElement("lede", "p");
         css.addClass(lede, ga_lede);
-        lede.textContent = "A button is built through its builder: the builder says which element to mint, the caller mints it "
-            + "on its own branch, the properties are set one by one, and build dresses the element. A colour word is a "
+        lede.textContent = "A button is one of six leaves, each its own class: the class says which element to mint, the caller "
+            + "mints it on its own branch and hands it in with the properties, and the leaf dresses it. A colour word is a "
             + "semantic surface complete — the surface, the ink on it, the edge — and one number, the extent, moves them all "
             + "together along the anchors each design gives them. A second number, the size, grows every length the design "
             + "gives a button — the inset, the gap, the least width, the type — each by its own ratio: 0 is regular, 1 the "
@@ -56,18 +58,21 @@ class ButtonsWidget {
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
         this._buttons = WORDS.map(function (word) {
-            var b = new ButtonBuilder().label(word).colour(word).onClick(function () { say(word + " pressed at extent " + self._extent.toFixed(2)); });
-            var btn = b.build(branch.createElement("btn-" + word, b.tag));
+            var Kind = KINDS[word];
+            var btn = new Kind(branch.createElement("btn-" + word, Kind.TAG), {
+                label: word, onClick: function () { say(word + " pressed at extent " + self._extent.toFixed(2)); } });
             row.appendChild(btn.el);
             return btn;
         });
         el.appendChild(row);
 
         this._extent = 1;
-        var extent = new SliderBuilder().keyboard(kb, "buttons/extent").label("extent").icon("extent").labelWidth("12em").range(-1, 1, 0.05).detent(0).value(1)
-            .onInput(function (v) { self._extent = v; self._buttons.forEach(function (b) { b.extent(v); }); })
-            .format(function (v) { return v.toFixed(2) + (v === 1 ? "  the word" : v === 0 ? "  neutral" : v === -1 ? "  the other meaning" : ""); })
-            .build(branch.createBranch("extent")).root;
+        var extent = new Slider(branch.createBranch("extent"), {
+            keyboard: kb, keyboardId: "buttons/extent", label: "extent", icon: "extent", labelWidth: "12em",
+            min: -1, max: 1, step: 0.05, detents: [0], value: 1,
+            onInput: function (v) { self._extent = v; self._buttons.forEach(function (b) { b.extent(v); }); },
+            format: function (v) { return v.toFixed(2) + (v === 1 ? "  the word" : v === 0 ? "  neutral" : v === -1 ? "  the other meaning" : ""); }
+        }).root;
         el.appendChild(extent);
 
         // ── one size for all, and one word at five ────────────────────────
@@ -78,17 +83,19 @@ class ButtonsWidget {
         var sizeRow = branch.createElement("sizeRow", "div");
         css.addClass(sizeRow, ga_buttons);
         this._sized = [-1, -0.5, 0, 0.5, 1].map(function (s) {
-            var b = new ButtonBuilder().label(s === 0 ? "regular" : (s > 0 ? "+" : "−") + Math.abs(s)).colour("primary").size(s).onClick(function () { say("size " + s + " pressed"); });
-            var btn = b.build(branch.createElement("size-" + String(s).replace("-", "m").replace(".", "_"), b.tag));
+            var btn = new PrimaryButton(branch.createElement("size-" + String(s).replace("-", "m").replace(".", "_"), PrimaryButton.TAG), {
+                label: s === 0 ? "regular" : (s > 0 ? "+" : "−") + Math.abs(s), size: s, onClick: function () { say("size " + s + " pressed"); } });
             sizeRow.appendChild(btn.el);
             return btn;
         });
         el.appendChild(sizeRow);
         this._size = 0;
-        var size = new SliderBuilder().keyboard(kb, "buttons/size").label("size, for all of them").icon("size").labelWidth("12em").range(-1, 1, 0.05).detent(0).value(0)
-            .onInput(function (v) { self._size = v; self._buttons.forEach(function (b) { b.size(v); }); if (self._delete) self._delete.size(v); })
-            .format(function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); })
-            .build(branch.createBranch("size")).root;
+        var size = new Slider(branch.createBranch("size"), {
+            keyboard: kb, keyboardId: "buttons/size", label: "size, for all of them", icon: "size", labelWidth: "12em",
+            min: -1, max: 1, step: 0.05, detents: [0], value: 0,
+            onInput: function (v) { self._size = v; self._buttons.forEach(function (b) { b.size(v); }); if (self._delete) self._delete.size(v); },
+            format: function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); }
+        }).root;
         el.appendChild(size);
 
         // ── a live one ────────────────────────────────────────────────────
@@ -98,35 +105,39 @@ class ButtonsWidget {
         el.appendChild(live);
         var liveRow = branch.createElement("liveRow", "div");
         css.addClass(liveRow, ga_buttons);
-        var del = new ButtonBuilder().colour("danger", -1).onClick(function () { say("deleted " + self._rows + " rows"); });
-        this._delete = del.build(branch.createElement("delete", del.tag));
+        this._delete = new DangerButton(branch.createElement("delete", DangerButton.TAG), {
+            extent: -1, onClick: function () { say("deleted " + self._rows + " rows"); } });
         liveRow.appendChild(this._delete.el);
         el.appendChild(liveRow);
         this._delete.size(this._size);
         this._rows = 0;
-        var rows = new SliderBuilder().keyboard(kb, "buttons/rows").label("rows the action touches").icon("level").labelWidth("12em").range(0, 100, 1).detent(50).value(0)
-            .onInput(function (n) {
+        var rows = new Slider(branch.createBranch("rows"), {
+            keyboard: kb, keyboardId: "buttons/rows", label: "rows the action touches", icon: "level", labelWidth: "12em",
+            min: 0, max: 100, step: 1, detents: [50], value: 0,
+            onInput: function (n) {
                 self._rows = n;
                 var t = (n - 50) / 50;                    // none: safe (−1); half: neutral (0); all: danger (1)
                 self._delete.label(n === 0 ? "Nothing to delete" : "Delete " + n + " row" + (n === 1 ? "" : "s"));
                 self._delete.extent(t);
-            })
-            .format(function (n) { return n + "  →  extent " + ((n - 50) / 50).toFixed(2); })
-            .build(branch.createBranch("rows")).root;
+            },
+            format: function (n) { return n + "  →  extent " + ((n - 50) / 50).toFixed(2); }
+        }).root;
         el.appendChild(rows);
 
         // ── off ───────────────────────────────────────────────────────────
         var offRow = branch.createElement("offRow", "div");
         css.addClass(offRow, ga_buttons);
         var on = true, toggleBtn = null;
-        var toggle = new ButtonBuilder().label("Switch them all off").plain().onClick(function () {
-            on = !on;
-            self._buttons.forEach(function (b) { b.setOn(on); });
-            self._sized.forEach(function (b) { b.setOn(on); });
-            self._delete.setOn(on);
-            toggleBtn.label(on ? "Switch them all off" : "Switch them all on");
+        toggleBtn = new PlainButton(branch.createElement("toggle", PlainButton.TAG), {
+            label: "Switch them all off",
+            onClick: function () {
+                on = !on;
+                self._buttons.forEach(function (b) { b.setOn(on); });
+                self._sized.forEach(function (b) { b.setOn(on); });
+                self._delete.setOn(on);
+                toggleBtn.label(on ? "Switch them all off" : "Switch them all on");
+            }
         });
-        toggleBtn = toggle.build(branch.createElement("toggle", toggle.tag));
         offRow.appendChild(toggleBtn.el);
         el.appendChild(offRow);
 

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.SecondaryButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 import hue.captains.singapura.js.homing.ui.panes.PaneStyles;
 import hue.captains.singapura.js.homing.ui.panes.TabTearModule;
@@ -38,8 +38,8 @@ public record TearLabApp() implements AppModule<AppModule._None, TearLabApp> {
         return ImportsFor.<TearLabApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabTearModule.TabTear()), TabTearModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SecondaryButtonModule.SecondaryButton()), SecondaryButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TearLabSceneModule.TearStage(), new TearLabSceneModule.TearChart()), TearLabSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneStyles.mtp_new_pick()), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TearLabStyles.tl_readout()), TearLabStyles.INSTANCE))
