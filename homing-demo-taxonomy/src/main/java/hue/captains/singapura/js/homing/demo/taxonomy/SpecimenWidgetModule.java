@@ -21,7 +21,7 @@ public record SpecimenWidgetModule() implements DomModule<SpecimenWidgetModule> 
     public static final SpecimenWidgetModule INSTANCE = new SpecimenWidgetModule();
 
     public record SpecimenWidget() implements SelfContainedWidget<SpecimenWidgetModule>, NeedKeyboard {
-        @Override public String summary() { return "The picked component in action: built live by its specimen, its behaviour exercised and every thing it does said; a slider for each axis its leaf varies along, set on the live component. A leaf only; one nothing realizes yet says so, with what it means."; }
+        @Override public String summary() { return "The picked component in action, top and bottom: above, the demo area - the component built live by its specimen, its behaviour exercised, scrolling on its own; below, a deck of fixed height that never moves - a slider for each axis its leaf varies along, then the log of every thing it did. A leaf only; one nothing realizes yet says so, with what it means."; }
         @Override public List<KeyBinding> keys() {
             var keys = new ArrayList<KeyBinding>(SliderModule.Slider.KEYS);
             keys.addAll(KeyBinding.each("handed on to the specimen: a card's action", Key.ENTER, Key.SPACE));
@@ -38,7 +38,8 @@ public record SpecimenWidgetModule() implements DomModule<SpecimenWidgetModule> 
                         new HouseSpecimensModule.HOUSE_AROUND()), HouseSpecimensModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderGroupModule.SliderGroupBuilder()), SliderGroupModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TaxonomyStyles.tx_scroll(), new TaxonomyStyles.tx_hint(), new TaxonomyStyles.tx_title(),
+                .add(new ModuleImports<>(List.of(new TaxonomyStyles.tx_demo(), new TaxonomyStyles.tx_head(), new TaxonomyStyles.tx_stage(),
+                        new TaxonomyStyles.tx_deck(), new TaxonomyStyles.tx_log(), new TaxonomyStyles.tx_hint(), new TaxonomyStyles.tx_title(),
                         new TaxonomyStyles.tx_prose(), new TaxonomyStyles.tx_panel(), new TaxonomyStyles.tx_code()), TaxonomyStyles.INSTANCE))
                 .build();
     }

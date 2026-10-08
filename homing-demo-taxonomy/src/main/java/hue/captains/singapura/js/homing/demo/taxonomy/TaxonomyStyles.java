@@ -126,9 +126,37 @@ public record TaxonomyStyles() implements CssGroup<TaxonomyStyles> {
         @Override public String body() { return "padding: 0 4px;"; }
     }
 
+    /** The demo area: what is shown, above the deck - all the room the deck leaves. */
+    public record tx_demo() implements CssClass<TaxonomyStyles> {
+        @Override public String body() { return "flex: 1;\nmin-height: 0;\ndisplay: flex;\nflex-direction: column;\ngap: 6px;\n"; }
+    }
+
+    /** What the demo area is about: a name, a line of what it means - as tall as it needs, no more. */
+    public record tx_head() implements CssClass<TaxonomyStyles> {
+        @Override public String body() { return "flex: none;\ndisplay: flex;\nflex-direction: column;\ngap: 2px;\n"; }
+    }
+
+    /** The stage: the thing shown, framed, scrolling on its own whatever it grows to. */
+    public record tx_stage() implements CssClass<TaxonomyStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return "flex: 1;\nmin-height: 0;\noverflow: auto;\npadding: 10px 12px;\n"; }
+    }
+
+    /** The deck under the demo area: of a fixed height, so what is on it never moves, whatever the stage shows. */
+    public record tx_deck() implements CssClass<TaxonomyStyles> {
+        @Override public String body() { return "flex: none;\nheight: 240px;\ndisplay: flex;\nflex-direction: column;\ngap: 6px;\nmargin-top: 8px;\n"; }
+    }
+
+    /** The log on the deck: framed, newest first, scrolling within what the controls leave of the deck. */
+    public record tx_log() implements CssClass<TaxonomyStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return "flex: 1;\nmin-height: 0;\noverflow: auto;\ndisplay: flex;\nflex-direction: column;\ngap: 4px;\npadding: 8px 12px 10px;\n"; }
+    }
+
     @Override
     public List<CssClass<TaxonomyStyles>> cssClasses() {
         return List.of(new tx_root(), new tx_hint(), new tx_title(), new tx_port(), new tx_frame(), new tx_scroll(), new tx_panel(), new tx_facts(),
-                       new tx_key(), new tx_code(), new tx_line(), new tx_link(), new tx_tag(), new tx_on(), new tx_prose());
+                       new tx_key(), new tx_code(), new tx_line(), new tx_link(), new tx_tag(), new tx_on(), new tx_prose(),
+                       new tx_demo(), new tx_head(), new tx_stage(), new tx_deck(), new tx_log());
     }
 }
