@@ -10,7 +10,8 @@ import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolCrate;
 import hue.captains.singapura.js.homing.reltree.RelTreeCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
-import hue.captains.singapura.js.homing.ui.specimens.UiSpecimensCrate;
+import hue.captains.singapura.js.homing.demo.components.DemoComponentsCrate;
+import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
 import hue.captains.singapura.js.homing.workspace.parties.WorkspacePartiesCrate;
 import hue.captains.singapura.js.homing.workspace.site.WorkspaceSiteCrate;
 import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceWidgetsCrate;
@@ -40,8 +41,9 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 RelTreeCrate.INSTANCE,
                 RelGridCrate.INSTANCE,
                 RelGridProtocolCrate.INSTANCE,
-                // The house's components in action: their specimens, and the sliders that set their axes.
-                UiSpecimensCrate.INSTANCE,
+                // The house's components in action: their demos and the parties they meet in, and what controls them.
+                DemoComponentsCrate.INSTANCE,
+                UiControlPanelCrate.INSTANCE,
                 UiElementsCrate.INSTANCE,
                 // The workspace: its widgets' contract, their parties, the grouped page.
                 WorkspaceWidgetsCrate.INSTANCE,
@@ -64,7 +66,11 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 CrateEntry.of(TaxonomyTreeModule.INSTANCE),
                 CrateEntry.of(PartsTableModule.INSTANCE),
                 CrateEntry.of(RoleTreeModule.INSTANCE),
-                CrateEntry.of(SpecimenWidgetModule.INSTANCE),
+                CrateEntry.of(ComponentDemoPanelModule.INSTANCE),
+                CrateEntry.of(ComponentControlPanelModule.INSTANCE),
+                CrateEntry.of(ComponentLogViewModule.INSTANCE),
+                CrateEntry.of(DemoLogViewModule.INSTANCE),
+                CrateEntry.of(ControlLogViewModule.INSTANCE),
                 CrateEntry.of(NodeDetailsModule.INSTANCE),
                 // The page.
                 CrateEntry.of(TaxonomyWorkspacesModule.INSTANCE),

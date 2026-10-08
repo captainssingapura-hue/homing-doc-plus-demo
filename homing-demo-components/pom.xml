@@ -9,27 +9,26 @@
         <version>VOID-SNAPSHOT</version>
     </parent>
 
-    <artifactId>homing-demo-taxonomy</artifactId>
+    <artifactId>homing-demo-components</artifactId>
     <description>
-        RFC 0067's taxonomy of components, shown beside the gallery: a workbench whose tree is
-        the house's taxonomy - the root, the kinds, the components at its leaves, and each
-        component's parts, the roles it names - and whose details say what the node picked is,
-        how it falls back, the roles it names and where it plays one, and its semantic classes.
-        Viewing only: the taxonomy is code, read when the page's data is served.
+        The house's components in action, each in a small widget of its own: the component built
+        live, its behaviour exercised and said, and every option it is controlled by - its axes,
+        its type's - answered by the method the option names. The parties a demo meets its panels
+        in: the one that controls it, keeping what is set across components, and the logs, one
+        for what the demos did and one for what was set. A demo, not a library: never published.
     </description>
 
     <dependencies>
-        <!-- What is shown: the house's taxonomy, read by core's reader, and its semantic classes. -->
+        <!-- What is shown: the house's taxonomy, and what of it is controlled, and how. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-taxonomy</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
-        <!-- The house's components in action - each a demo of its own - and what controls them. -->
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>homing-demo-components</artifactId>
-            <version>${project.version}</version>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-controllability</artifactId>
+            <version>${homing.components.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
@@ -41,13 +40,70 @@
             <artifactId>homing-component-taxonomy</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+
+        <!-- The components shown. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-semantic-class</artifactId>
-            <version>${homing.core.version}</version>
+            <artifactId>homing-ui-elements</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-icons</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-dialog</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-menu</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-floating</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-split</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-splitgrid</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-docking</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-panes</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-preferences</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-panzoom</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-focus</artifactId>
+            <version>${homing.components.version}</version>
         </dependency>
 
-        <!-- The workspace: its widgets' contract, the parties they share, the grouped page. -->
+        <!-- The widgets' contract and the parties they meet in. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
             <artifactId>homing-workspace-widgets</artifactId>
@@ -57,28 +113,6 @@
             <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
             <artifactId>homing-workspace-parties</artifactId>
             <version>${homing.ws.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
-            <artifactId>homing-workspace-site</artifactId>
-            <version>${homing.ws.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
-            <artifactId>homing-workspace-groups-core-models</artifactId>
-            <version>${homing.ws.version}</version>
-        </dependency>
-
-        <!-- The tree: a relation tree, its cells the tree's stock ones, its fold questions the protocol's. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
-            <artifactId>rel-tree</artifactId>
-            <version>${homing.relgrid.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
-            <artifactId>rel-grid</artifactId>
-            <version>${homing.relgrid.version}</version>
         </dependency>
 
         <dependency>

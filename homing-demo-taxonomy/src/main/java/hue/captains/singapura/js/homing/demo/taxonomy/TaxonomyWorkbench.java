@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.demo.taxonomy;
 
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.demo.components.ComponentControl;
+import hue.captains.singapura.js.homing.demo.components.ComponentLog;
 import hue.captains.singapura.js.homing.workspace.groups.core.models.ArrangedWidget;
 import hue.captains.singapura.js.homing.workspace.groups.core.models.Arrangement;
 import hue.captains.singapura.js.homing.workspace.groups.core.models.GroupedWorkspace;
@@ -21,8 +23,10 @@ import java.util.List;
 /**
  * The taxonomy workbench: two workspaces filed in one group. {@code taxonomy} - the house's
  * components as a tree, their parts in a table, the picked node's details, and the role catalogue
- * with each role's uses; and {@code in-action} - the same tree, the picked component built live by
- * its specimen, and its details. Each workspace's widgets meet in its {@code node-selection} party.
+ * with each role's uses; and {@code in-action} - the same tree, the picked component in action in
+ * a demo of its own, what it is controlled by, the demo's log and the control's, and its details.
+ * Each workspace's widgets meet in its {@code node-selection} party; in action, the demo and its
+ * controls meet in {@code component-control}, and each log in its own.
  */
 public final class TaxonomyWorkbench {
 
@@ -57,11 +61,40 @@ public final class TaxonomyWorkbench {
         @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new RoleTreeModule.RoleTree()), RoleTreeModule.INSTANCE); }
     }
 
-    public record Specimens() implements Kind {
-        public static final Specimens INSTANCE = new Specimens();
-        @Override public String kind() { return "taxonomy-specimen"; }
-        @Override public String title() { return "In action"; }
-        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new SpecimenWidgetModule.SpecimenWidget()), SpecimenWidgetModule.INSTANCE); }
+    /** The picked component in action: its demo mounted, and handed the parties that control and log it. */
+    public record DemoPanel() implements Kind {
+        public static final DemoPanel INSTANCE = new DemoPanel();
+        @Override public String kind() { return "component-demo-panel"; }
+        @Override public String title() { return "Component demo"; }
+        @Override public List<PartyType<?>> parties() { return List.of(NodeSelection.TYPE, ComponentControl.TYPE, ComponentLog.DEMO); }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new ComponentDemoPanelModule.ComponentDemoPanel()), ComponentDemoPanelModule.INSTANCE); }
+    }
+
+    /** What the picked component is controlled by: its control type's panel, what is set kept by the party. */
+    public record ControlPanel() implements Kind {
+        public static final ControlPanel INSTANCE = new ControlPanel();
+        @Override public String kind() { return "component-control-panel"; }
+        @Override public String title() { return "Control panel"; }
+        @Override public List<PartyType<?>> parties() { return List.of(NodeSelection.TYPE, ComponentControl.TYPE, ComponentLog.CONTROL); }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new ComponentControlPanelModule.ComponentControlPanel()), ComponentControlPanelModule.INSTANCE); }
+    }
+
+    /** What the demos did. */
+    public record DemoLog() implements Kind {
+        public static final DemoLog INSTANCE = new DemoLog();
+        @Override public String kind() { return "component-demo-log"; }
+        @Override public String title() { return "Demo log"; }
+        @Override public List<PartyType<?>> parties() { return List.of(ComponentLog.DEMO); }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new DemoLogViewModule.ComponentDemoLog()), DemoLogViewModule.INSTANCE); }
+    }
+
+    /** What was set, done and asked. */
+    public record ControlLog() implements Kind {
+        public static final ControlLog INSTANCE = new ControlLog();
+        @Override public String kind() { return "component-control-log"; }
+        @Override public String title() { return "Control log"; }
+        @Override public List<PartyType<?>> parties() { return List.of(ComponentLog.CONTROL); }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new ControlLogViewModule.ComponentControlLog()), ControlLogViewModule.INSTANCE); }
     }
 
     public record Details() implements Kind {
@@ -78,11 +111,16 @@ public final class TaxonomyWorkbench {
         @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Parts.INSTANCE, Details.INSTANCE, Roles.INSTANCE); }
     }
 
-    /** The workspace: {@code in-action} - the same tree, the picked component built live, and what it is beside it. */
+    /**
+     * The workspace: {@code in-action} - the same tree; the picked component in action, what it is
+     * controlled by, and the two logs; and what it is beside them.
+     */
     public record InAction() implements WorkspaceDeclaration {
         public static final InAction INSTANCE = new InAction();
         @Override public String name() { return "in-action"; }
-        @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Specimens.INSTANCE, Details.INSTANCE); }
+        @Override public List<WidgetDeclaration<?>> kinds() {
+            return List.of(Tree.INSTANCE, DemoPanel.INSTANCE, ControlPanel.INSTANCE, ControlLog.INSTANCE, DemoLog.INSTANCE, Details.INSTANCE);
+        }
     }
 
     /** The first time: the tree; beside it, the parts over the details; and the roles, beside them. */
@@ -98,15 +136,26 @@ public final class TaxonomyWorkbench {
                     ArrangedWidget.of("node", Details.INSTANCE.kind()),
                     ArrangedWidget.of("roles", Roles.INSTANCE.kind())));
 
-    /** In action, the first time: the tree; the picked component live, the widest; and what it is, beside it. */
+    /**
+     * In action, the first time: the tree; in the middle, the widest, the picked component in action
+     * above, and below it what controls it and the two logs, side by side; and what it is, beside them.
+     */
     public static final WorkspaceArrangements<InAction> ARRANGED_IN_ACTION = WorkspaceArrangements.of(InAction.INSTANCE,
             Arrangement.of(InAction.INSTANCE,
                     SplitGrid.of(SplitGrid.row(
                             SplitGrid.Part.of(SplitGrid.region("tree", "tree"), 3),
-                            SplitGrid.Part.of(SplitGrid.region("specimen", "specimen"), 5),
+                            SplitGrid.Part.of(SplitGrid.column(
+                                    SplitGrid.Part.of(SplitGrid.region("demo", "demo"), 3),
+                                    SplitGrid.Part.of(SplitGrid.row(
+                                            SplitGrid.Part.of(SplitGrid.region("control", "control"), 2),
+                                            SplitGrid.Part.of(SplitGrid.region("control-log", "control-log"), 1),
+                                            SplitGrid.Part.of(SplitGrid.region("demo-log", "demo-log"), 1)), 2)), 6),
                             SplitGrid.Part.of(SplitGrid.region("node", "node"), 3))),
                     ArrangedWidget.of("tree", Tree.INSTANCE.kind()),
-                    ArrangedWidget.of("specimen", Specimens.INSTANCE.kind()),
+                    ArrangedWidget.of("demo", DemoPanel.INSTANCE.kind()),
+                    ArrangedWidget.of("control", ControlPanel.INSTANCE.kind()),
+                    ArrangedWidget.of("control-log", ControlLog.INSTANCE.kind()),
+                    ArrangedWidget.of("demo-log", DemoLog.INSTANCE.kind()),
                     ArrangedWidget.of("node", Details.INSTANCE.kind())));
 
     /** The one group: the taxonomy read, and its components in action. */
