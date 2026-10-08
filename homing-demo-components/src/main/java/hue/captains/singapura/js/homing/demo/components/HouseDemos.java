@@ -43,7 +43,39 @@ public record HouseDemos() implements StatelessFunctionalObject {
                         new ModuleImports<>(List.of(new SliderGroupDemoModule.SliderGroupDemo()), SliderGroupDemoModule.INSTANCE)),
                 new Demo(HouseContainers.Panel.INSTANCE, new ModuleImports<>(List.of(new PanelDemoModule.PanelDemo()), PanelDemoModule.INSTANCE)),
                 new Demo(HouseContainers.EdgeStrip.INSTANCE,
-                        new ModuleImports<>(List.of(new EdgeStripDemoModule.EdgeStripDemo()), EdgeStripDemoModule.INSTANCE)));
+                        new ModuleImports<>(List.of(new EdgeStripDemoModule.EdgeStripDemo()), EdgeStripDemoModule.INSTANCE)),
+                // overlays, menus and splits
+                new Demo(HouseContainers.Dialog.INSTANCE, new ModuleImports<>(List.of(new DialogDemoModule.DialogDemo()), DialogDemoModule.INSTANCE)),
+                new Demo(HouseContainers.ContextMenu.INSTANCE,
+                        new ModuleImports<>(List.of(new ContextMenuDemoModule.ContextMenuDemo()), ContextMenuDemoModule.INSTANCE)),
+                new Demo(HouseContainers.ContextMenuSteward.INSTANCE,
+                        new ModuleImports<>(List.of(new ContextMenuStewardDemoModule.ContextMenuStewardDemo()), ContextMenuStewardDemoModule.INSTANCE)),
+                new Demo(HouseContainers.FloatingPane.INSTANCE,
+                        new ModuleImports<>(List.of(new FloatingPaneDemoModule.FloatingPaneDemo()), FloatingPaneDemoModule.INSTANCE)),
+                new Demo(HouseContainers.FloatLayer.INSTANCE,
+                        new ModuleImports<>(List.of(new FloatLayerDemoModule.FloatLayerDemo()), FloatLayerDemoModule.INSTANCE)),
+                new Demo(HouseContainers.SplitPane.INSTANCE,
+                        new ModuleImports<>(List.of(new SplitPaneDemoModule.SplitPaneDemo()), SplitPaneDemoModule.INSTANCE)),
+                new Demo(HouseContainers.SplitGrid.INSTANCE,
+                        new ModuleImports<>(List.of(new SplitGridDemoModule.SplitGridDemo()), SplitGridDemoModule.INSTANCE)),
+                new Demo(HouseContainers.SplitGridMirror.INSTANCE,
+                        new ModuleImports<>(List.of(new SplitGridMirrorDemoModule.SplitGridMirrorDemo()), SplitGridMirrorDemoModule.INSTANCE)),
+                // what the page around them does not show: the tab controls, the list master, the pictures, the monitors
+                new Demo(HouseContainers.TabOpener.INSTANCE,
+                        new ModuleImports<>(List.of(new TabOpenerDemoModule.TabOpenerDemo()), TabOpenerDemoModule.INSTANCE)),
+                new Demo(HouseContainers.AddTab.INSTANCE, new ModuleImports<>(List.of(new AddTabDemoModule.AddTabDemo()), AddTabDemoModule.INSTANCE)),
+                new Demo(HouseContainers.PaneThumbs.INSTANCE,
+                        new ModuleImports<>(List.of(new PaneThumbsDemoModule.PaneThumbsDemo()), PaneThumbsDemoModule.INSTANCE)),
+                new Demo(HouseContainers.ListMasterWidget.INSTANCE,
+                        new ModuleImports<>(List.of(new ListMasterWidgetDemoModule.ListMasterWidgetDemo()), ListMasterWidgetDemoModule.INSTANCE)),
+                new Demo(HouseContainers.SvgPanZoom.INSTANCE,
+                        new ModuleImports<>(List.of(new SvgPanZoomDemoModule.SvgPanZoomDemo()), SvgPanZoomDemoModule.INSTANCE)),
+                new Demo(HouseContainers.PanZoomBar.INSTANCE,
+                        new ModuleImports<>(List.of(new PanZoomBarDemoModule.PanZoomBarDemo()), PanZoomBarDemoModule.INSTANCE)),
+                new Demo(HouseContainers.FocusMonitor.INSTANCE,
+                        new ModuleImports<>(List.of(new FocusMonitorDemoModule.FocusMonitorDemo()), FocusMonitorDemoModule.INSTANCE)),
+                new Demo(HouseContainers.StewardMonitor.INSTANCE,
+                        new ModuleImports<>(List.of(new StewardMonitorDemoModule.StewardMonitorDemo()), StewardMonitorDemoModule.INSTANCE)));
     }
 
     /** Shown by the page around the demos - the workspace they stand in, the page's chrome, the preferences it opens - and where. */
@@ -70,16 +102,8 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new ShownAround(HouseContainers.ToggleWidget.INSTANCE, "a setting in the preferences that is on or off"));
     }
 
-    /** Realized, their demos still to come: the overlays, menus and splits, and what the page around does not show. */
-    public List<Component<?>> pending() {
-        return List.of(
-                HouseContainers.Dialog.INSTANCE, HouseContainers.ContextMenu.INSTANCE, HouseContainers.ContextMenuSteward.INSTANCE,
-                HouseContainers.FloatingPane.INSTANCE, HouseContainers.FloatLayer.INSTANCE,
-                HouseContainers.SplitPane.INSTANCE, HouseContainers.SplitGrid.INSTANCE, HouseContainers.SplitGridMirror.INSTANCE,
-                HouseContainers.TabOpener.INSTANCE, HouseContainers.AddTab.INSTANCE, HouseContainers.PaneThumbs.INSTANCE,
-                HouseContainers.ListMasterWidget.INSTANCE, HouseContainers.SvgPanZoom.INSTANCE, HouseContainers.PanZoomBar.INSTANCE,
-                HouseContainers.FocusMonitor.INSTANCE, HouseContainers.StewardMonitor.INSTANCE);
-    }
+    /** Realized, their demos still to come: none now. */
+    public List<Component<?>> pending() { return List.of(); }
 
     /** Realized by nothing yet: an owner mints them, or nothing does. What they mean is all there is to show. */
     public List<Component<?>> unrealized() {

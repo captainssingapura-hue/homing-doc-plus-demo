@@ -30,10 +30,10 @@ class HouseDemosTest {
     }
 
     @Test
-    void theElements_areShown_theRestStillToCome() {
-        assertEquals(12, HOUSE.demos().size(), "twelve elements");
+    void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
+        assertEquals(28, HOUSE.demos().size(), "twelve elements; eight overlays, menus and splits; eight the page around does not show");
         assertEquals(16, HOUSE.aroundIt().size(), "the workspace's six, the chrome's two, the preferences' eight");
-        assertEquals(16, HOUSE.pending().size(), "eight overlays, menus and splits; eight the page around does not show");
+        assertEquals(List.of(), HOUSE.pending(), "none still to come");
         assertEquals(41, HOUSE.unrealized().size());
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)
                 .map(Demo::className).toList(), "the six buttons are one button");
@@ -45,8 +45,10 @@ class HouseDemosTest {
         assertTrue(js.contains("\"danger-button\": ButtonDemo"), js);
         assertTrue(js.contains("\"summary-card\": SummaryCardDemo"), js);
         assertTrue(js.contains("\"dock-grid\": \"the workspace itself"), js);
-        assertTrue(js.contains("\"dialog\""), "a pending leaf: " + js);
+        assertTrue(js.contains("\"dialog\": DialogDemo"), js);
+        assertTrue(js.contains("\"add-tab\": AddTabDemo"), js);
+        assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([]);"), js);
         assertTrue(js.contains("\"heading\""), "an unrealized leaf: " + js);
-        assertEquals(7, HouseDemosModule.INSTANCE.imports().getAllImports().size(), "each demo's module imported once, whatever it shows");
+        assertEquals(23, HouseDemosModule.INSTANCE.imports().getAllImports().size(), "each demo's module imported once, whatever it shows");
     }
 }
