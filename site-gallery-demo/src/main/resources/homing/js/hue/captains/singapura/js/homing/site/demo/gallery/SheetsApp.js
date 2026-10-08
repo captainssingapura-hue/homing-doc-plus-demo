@@ -76,7 +76,7 @@ class SheetsWidget {
         // the mark is a toggle, and the house has no toggle button yet: a plain one, its label saying the state
         var mark = new PlainButton(branch.createElement("mark", PlainButton.TAG), {
             label: yours.isHighlighted() ? "marked" : "not marked", size: -0.4,
-            onClick: function () { yours.highlight(!yours.isHighlighted()); mark.label(yours.isHighlighted() ? "marked" : "not marked"); } });
+            onClick: function () { yours.highlight(!yours.isHighlighted()); mark.label = yours.isHighlighted() ? "marked" : "not marked"; } });
         controls.appendChild(mark.el);
 
         // ── a sheet on a sheet: the cast falls on paper, not on the table ─

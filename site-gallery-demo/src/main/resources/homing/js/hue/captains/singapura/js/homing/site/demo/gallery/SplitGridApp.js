@@ -118,7 +118,7 @@ class SplitGridWidget {
         var seamButton = new PlainButton(branch.createElement("seam", PlainButton.TAG), { label: seamLabel(), size: -1, onClick: function () {
             seamOn = !seamOn;
             grid.seam(seamOn);
-            seamButton.label(seamLabel());
+            seamButton.label = seamLabel();
             say("Seam       the splitters " + (seamOn ? "keep the design's line at rest" : "have no presence at rest"));
         } });
         mirrorRow.appendChild(seamButton.el);

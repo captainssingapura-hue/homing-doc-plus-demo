@@ -70,7 +70,7 @@ class ButtonsWidget {
         var extent = new Slider(branch.createBranch("extent"), {
             keyboard: kb, keyboardId: "buttons/extent", label: "extent", icon: "extent", labelWidth: "12em",
             min: -1, max: 1, step: 0.05, detents: [0], value: 1,
-            onInput: function (v) { self._extent = v; self._buttons.forEach(function (b) { b.extent(v); }); },
+            onInput: function (v) { self._extent = v; self._buttons.forEach(function (b) { if ("extent" in b) b.extent = v; }); },
             format: function (v) { return v.toFixed(2) + (v === 1 ? "  the word" : v === 0 ? "  neutral" : v === -1 ? "  the other meaning" : ""); }
         }).root;
         el.appendChild(extent);
@@ -93,7 +93,7 @@ class ButtonsWidget {
         var size = new Slider(branch.createBranch("size"), {
             keyboard: kb, keyboardId: "buttons/size", label: "size, for all of them", icon: "size", labelWidth: "12em",
             min: -1, max: 1, step: 0.05, detents: [0], value: 0,
-            onInput: function (v) { self._size = v; self._buttons.forEach(function (b) { b.size(v); }); if (self._delete) self._delete.size(v); },
+            onInput: function (v) { self._size = v; self._buttons.forEach(function (b) { b.size = v; }); if (self._delete) self._delete.size = v; },
             format: function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); }
         }).root;
         el.appendChild(size);
@@ -109,7 +109,7 @@ class ButtonsWidget {
             extent: -1, onClick: function () { say("deleted " + self._rows + " rows"); } });
         liveRow.appendChild(this._delete.el);
         el.appendChild(liveRow);
-        this._delete.size(this._size);
+        this._delete.size = this._size;
         this._rows = 0;
         var rows = new Slider(branch.createBranch("rows"), {
             keyboard: kb, keyboardId: "buttons/rows", label: "rows the action touches", icon: "level", labelWidth: "12em",
@@ -117,8 +117,8 @@ class ButtonsWidget {
             onInput: function (n) {
                 self._rows = n;
                 var t = (n - 50) / 50;                    // none: safe (−1); half: neutral (0); all: danger (1)
-                self._delete.label(n === 0 ? "Nothing to delete" : "Delete " + n + " row" + (n === 1 ? "" : "s"));
-                self._delete.extent(t);
+                self._delete.label = n === 0 ? "Nothing to delete" : "Delete " + n + " row" + (n === 1 ? "" : "s");
+                self._delete.extent = t;
             },
             format: function (n) { return n + "  →  extent " + ((n - 50) / 50).toFixed(2); }
         }).root;
@@ -132,10 +132,10 @@ class ButtonsWidget {
             label: "Switch them all off",
             onClick: function () {
                 on = !on;
-                self._buttons.forEach(function (b) { b.setOn(on); });
-                self._sized.forEach(function (b) { b.setOn(on); });
-                self._delete.setOn(on);
-                toggleBtn.label(on ? "Switch them all off" : "Switch them all on");
+                self._buttons.forEach(function (b) { b.enabled = on; });
+                self._sized.forEach(function (b) { b.enabled = on; });
+                self._delete.enabled = on;
+                toggleBtn.label = on ? "Switch them all off" : "Switch them all on";
             }
         });
         offRow.appendChild(toggleBtn.el);

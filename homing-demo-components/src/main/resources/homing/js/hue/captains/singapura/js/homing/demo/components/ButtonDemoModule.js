@@ -37,15 +37,15 @@ class ButtonDemo extends ComponentDemo {
     }
 
     /** colour: how much of its word's meaning it wears. */
-    extent(v) { this._button.extent(v); }
+    extent(v) { this._button.extent = v; }
 
-    size(v) { this._button.size(v); }
+    size(v) { this._button.size = v; }
 
     /** enabled: off, inert, and saying so. */
     setOn(on) {
         if (on === this._on) return;
         this._on = on;
-        this._button.setOn(on);
+        this._button.enabled = on;
         this.say(on ? "on again: a press acts" : "off: inert, and it says so - a press does nothing");
     }
 }
