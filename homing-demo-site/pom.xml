@@ -49,6 +49,12 @@
             <artifactId>homing-demo-workspace</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- RFC 0067: the taxonomy of the house's components, in its workbench: placed in the catalogue, opened beside it. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>homing-demo-taxonomy</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- The gallery: its tree, grafted at /gallery, its apps, and the preferences the site's MPA offers. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>

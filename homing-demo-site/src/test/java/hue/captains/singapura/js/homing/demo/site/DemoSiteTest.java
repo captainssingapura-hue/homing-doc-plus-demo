@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.demo.site;
 
 import hue.captains.singapura.js.homing.catalogue.site.CatalogueListingApp;
 import hue.captains.singapura.js.homing.catalogue.site.EntryGetAction;
+import hue.captains.singapura.js.homing.demo.taxonomy.TaxonomyWorkbenchApp;
 import hue.captains.singapura.js.homing.demo.workspace.DemoWorkspaceApp;
 import hue.captains.singapura.js.homing.docview.app.DocViewApp;
 import hue.captains.singapura.js.homing.docview.site.DocViews;
@@ -44,11 +45,13 @@ class DemoSiteTest {
         assertTrue(root.contains("label:\"Homing · demo\""), "the demo's brand on the chrome");
         JsonObject e = entry("/");
         assertEquals("Homing demo", e.getString("name"));
-        assertEquals(List.of("/docs", "/workspaces", "/gallery"), children(e, "to"), "three catalogues, nothing loose: its own two, then the gallery grafted");
-        assertEquals(List.of("catalogue", "catalogue", "catalogue"), children(e, "kind"));
+        assertEquals(List.of("/docs", "/workspaces", "/taxonomy", "/gallery"), children(e, "to"), "four catalogues, nothing loose: its own three, then the gallery grafted");
+        assertEquals(List.of("catalogue", "catalogue", "catalogue", "catalogue"), children(e, "kind"));
         assertEquals(List.of("/docs/composed-doc"), children(entry("/docs"), "to"));
         assertEquals(List.of("/workspaces/demo"), children(entry("/workspaces"), "to"));
         assertEquals(List.of("new-tab"), children(entry("/workspaces"), "opens"), "a workspace beside the listing, a place of work of its own");
+        assertEquals(List.of("/taxonomy/components"), children(entry("/taxonomy"), "to"));
+        assertEquals(List.of("new-tab"), children(entry("/taxonomy"), "opens"), "the workbench beside the listing too");
     }
 
     @Test
@@ -67,6 +70,15 @@ class DemoSiteTest {
         assertTrue(html.contains("\"ws_server\":\"on\""), "the route says the server keeps its states");
         assertTrue(html.contains("\"ws_under\":\"\\/workspaces\""), "where the site placed the groups: the addresses the page makes of them are there");
         assertFalse(DemoSite.INSTANCE.router().resolve(Path.parse("/demo")).isPresent(), "the root is not where the groups are");
+        assertTrue(html.contains("label:\"Homing · demo\""), "under the demo's brand, as every page of the site");
+    }
+
+    @Test
+    void theTaxonomy_theWorkbenchsPageUnderTheTaxonomy_toldWhereItIs() {
+        String html = page("/taxonomy/components");
+        assertTrue(html.contains(TaxonomyWorkbenchApp.class.getCanonicalName()), "the page imports the workbench's app and calls its appMain");
+        assertTrue(html.contains("\"ws_group\":\"components\""), "the route's group");
+        assertTrue(html.contains("\"ws_under\":\"\\/taxonomy\""), "where the site placed the group");
         assertTrue(html.contains("label:\"Homing · demo\""), "under the demo's brand, as every page of the site");
     }
 

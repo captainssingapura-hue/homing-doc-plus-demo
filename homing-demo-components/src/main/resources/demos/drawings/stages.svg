@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="100" cy="100" r="60"/>
+    <circle cx="300" cy="100" r="60"/>
+    <path d="M160 100 H240"/>
+  </g>
+  <g fill="currentColor" font-size="14" text-anchor="middle">
+    <text x="100" y="105">Draft</text>
+    <text x="300" y="105">Published</text>
+  </g>
+</svg>
