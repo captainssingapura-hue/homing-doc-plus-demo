@@ -74,6 +74,7 @@ public final class DemoComponentsCrate implements Crate {
                 CrateEntry.of(ComponentDemoModule.INSTANCE),
                 CrateEntry.of(ButtonDemoModule.INSTANCE),
                 CrateEntry.of(TextDemoModule.INSTANCE),
+                CrateEntry.of(LinkDemoModule.INSTANCE),
                 CrateEntry.of(IconDemoModule.INSTANCE),
                 CrateEntry.of(SummaryCardDemoModule.INSTANCE),
                 CrateEntry.of(SliderDemoModule.INSTANCE),

@@ -49,6 +49,8 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new Demo(HouseText.Badge.INSTANCE, text),
                 new Demo(HouseText.Pill.INSTANCE, text),
                 new Demo(HouseText.Wordmark.INSTANCE, text),
+                // a way to somewhere else
+                new Demo(HouseControls.Link.INSTANCE, new ModuleImports<>(List.of(new LinkDemoModule.LinkDemo()), LinkDemoModule.INSTANCE)),
                 new Demo(HouseMarks.Icon.INSTANCE, new ModuleImports<>(List.of(new IconDemoModule.IconDemo()), IconDemoModule.INSTANCE)),
                 new Demo(HouseContainers.SummaryCard.INSTANCE,
                         new ModuleImports<>(List.of(new SummaryCardDemoModule.SummaryCardDemo()), SummaryCardDemoModule.INSTANCE)),
@@ -105,8 +107,10 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // the page's chrome
                 new ShownAround(HouseContainers.MpaChrome.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
                 new ShownAround(HouseControls.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
+                new ShownAround(HouseControls.Crumb.INSTANCE, "each step of the trail in the bar at the top of the page: the ways back, the last the page itself, set heavier"),
                 // the preferences it opens
                 new ShownAround(HouseContainers.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
+                new ShownAround(HouseContainers.Scrim.INSTANCE, "the veil over the page behind the preferences, opened from the bar: a press on it closes them"),
                 new ShownAround(HouseRegions.WidgetSlot.INSTANCE, "the preferences' list and the setting beside it: each a slot a widget is loaded into"),
                 new ShownAround(HouseContainers.PreferenceField.INSTANCE, "every setting in the preferences: where it belongs, its title, a note, the way back to its default"),
                 new ShownAround(HouseContainers.OverviewWidget.INSTANCE, "a group of settings in the preferences: each setting listed with its value"),
@@ -123,13 +127,13 @@ public record HouseDemos() implements StatelessFunctionalObject {
     public List<Component<?>> unrealized() {
         return List.of(
                 // controls
-                HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE, HouseControls.Link.INSTANCE,
-                HouseControls.Crumb.INSTANCE, HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
+                HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE,
+                HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseControls.Brand.INSTANCE,
                 // items
                 HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HouseItems.SettingRow.INSTANCE,
                 // containers and regions
-                HouseContainers.PlainCard.INSTANCE, HouseContainers.Scrim.INSTANCE, HouseContainers.ActionBar.INSTANCE,
+                HouseContainers.PlainCard.INSTANCE, HouseContainers.ActionBar.INSTANCE,
                 HouseContainers.Trail.INSTANCE, HouseRegions.Section.INSTANCE, HouseRegions.GridCell.INSTANCE,
                 // marks and tracks
                 HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE, HouseMarks.Lamp.INSTANCE,

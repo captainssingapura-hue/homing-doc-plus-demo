@@ -32,10 +32,10 @@ class HouseDemosTest {
 
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
-        assertEquals(40, HOUSE.demos().size(), "twenty-four elements - nine of them texts; eight overlays, menus and splits; eight the page around does not show");
-        assertEquals(16, HOUSE.aroundIt().size(), "the workspace's six, the chrome's two, the preferences' eight");
+        assertEquals(41, HOUSE.demos().size(), "twenty-five elements - nine of them texts, one a link; eight overlays, menus and splits; eight the page around does not show");
+        assertEquals(18, HOUSE.aroundIt().size(), "the workspace's six, the chrome's three, the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
-        assertEquals(29, HOUSE.unrealized().size());
+        assertEquals(26, HOUSE.unrealized().size());
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)
                 .map(Demo::className).toList(), "the nine buttons are one button");
         assertEquals(List.of("TextDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseText.Pill.INSTANCE)
@@ -53,6 +53,6 @@ class HouseDemosTest {
         assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([]);"), js);
         assertTrue(js.contains("\"heading\": TextDemo"), js);
         assertTrue(js.contains("\"lamp\""), "an unrealized leaf: " + js);
-        assertEquals(24, HouseDemosModule.INSTANCE.imports().getAllImports().size(), "each demo's module imported once, whatever it shows");
+        assertEquals(25, HouseDemosModule.INSTANCE.imports().getAllImports().size(), "each demo's module imported once, whatever it shows");
     }
 }
