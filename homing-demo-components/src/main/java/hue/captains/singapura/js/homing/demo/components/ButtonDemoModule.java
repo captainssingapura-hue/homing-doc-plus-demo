@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.elements.CloseButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.DangerButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.IconButtonModule;
@@ -30,16 +31,17 @@ public record ButtonDemoModule() implements DomModule<ButtonDemoModule> {
     @Override
     public ImportsFor<ButtonDemoModule> imports() {
         return ImportsFor.<ButtonDemoModule>builder()
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ComponentDemoModule.ComponentDemo()), ComponentDemoModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PrimaryButtonModule.PrimaryButton()), PrimaryButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SecondaryButtonModule.SecondaryButton()), SecondaryButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DangerButtonModule.DangerButton()), DangerButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new WarningButtonModule.WarningButton()), WarningButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SuccessButtonModule.SuccessButton()), SuccessButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ToggleButtonModule.ToggleButton()), ToggleButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton()), CloseButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton()), IconButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PrimaryButtonModule.PrimaryButton(), new PrimaryButtonModule.PrimaryButtonFactory()), PrimaryButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SecondaryButtonModule.SecondaryButton(), new SecondaryButtonModule.SecondaryButtonFactory()), SecondaryButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DangerButtonModule.DangerButton(), new DangerButtonModule.DangerButtonFactory()), DangerButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WarningButtonModule.WarningButton(), new WarningButtonModule.WarningButtonFactory()), WarningButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SuccessButtonModule.SuccessButton(), new SuccessButtonModule.SuccessButtonFactory()), SuccessButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ToggleButtonModule.ToggleButton(), new ToggleButtonModule.ToggleButtonFactory()), ToggleButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton(), new CloseButtonModule.CloseButtonFactory()), CloseButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton(), new IconButtonModule.IconButtonFactory()), IconButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DemoStyles.dm_row()), DemoStyles.INSTANCE))
                 .build();

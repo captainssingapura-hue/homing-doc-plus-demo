@@ -13,36 +13,53 @@
 
 // each leaf, the class that is it - the rank is the class - and its word and label
 var _BUTTON_KINDS = Object.freeze({
-    "plain-button":     Object.freeze({ Leaf: PlainButton,     word: "plain",     label: "Open the report" }),
-    "primary-button":   Object.freeze({ Leaf: PrimaryButton,   word: "primary",   label: "Save" }),
-    "secondary-button": Object.freeze({ Leaf: SecondaryButton, word: "secondary", label: "Preview" }),
-    "danger-button":    Object.freeze({ Leaf: DangerButton,    word: "danger",    label: "Delete the project" }),
-    "warning-button":   Object.freeze({ Leaf: WarningButton,   word: "warning",   label: "Overwrite the draft" }),
-    "success-button":   Object.freeze({ Leaf: SuccessButton,   word: "success",   label: "Finish" }),
-    "toggle-button":    Object.freeze({ Leaf: ToggleButton,    word: "toggle",    label: "Bold", toggles: true }),
-    "close-button":     Object.freeze({ Leaf: CloseButton,     word: "close",     label: "Close the note" }),
-    "icon-button":      Object.freeze({ Leaf: IconButton,      word: "icon",      label: "Add a note", icon: "add" })
+    "plain-button":     Object.freeze({ Leaf: PlainButton,     Factory: PlainButtonFactory,     word: "plain",     label: "Open the report" }),
+    "primary-button":   Object.freeze({ Leaf: PrimaryButton,   Factory: PrimaryButtonFactory,   word: "primary",   label: "Save" }),
+    "secondary-button": Object.freeze({ Leaf: SecondaryButton, Factory: SecondaryButtonFactory, word: "secondary", label: "Preview" }),
+    "danger-button":    Object.freeze({ Leaf: DangerButton,    Factory: DangerButtonFactory,    word: "danger",    label: "Delete the project" }),
+    "warning-button":   Object.freeze({ Leaf: WarningButton,   Factory: WarningButtonFactory,   word: "warning",   label: "Overwrite the draft" }),
+    "success-button":   Object.freeze({ Leaf: SuccessButton,   Factory: SuccessButtonFactory,   word: "success",   label: "Finish" }),
+    "toggle-button":    Object.freeze({ Leaf: ToggleButton,    Factory: ToggleButtonFactory,    word: "toggle",    label: "Bold", toggles: true }),
+    "close-button":     Object.freeze({ Leaf: CloseButton,     Factory: CloseButtonFactory,     word: "close",     label: "Close the note" }),
+    "icon-button":      Object.freeze({ Leaf: IconButton,      Factory: IconButtonFactory,      word: "icon",      label: "Add a note", icon: "add" })
 });
+
+/** What the demo's button tells it: a press, or a toggle turned over - each said. */
+class ButtonDemoTold {
+    constructor(demo) { this._demo = demo; }
+    canHandle(type) { return type === EVENT.CLICK || type === STATE.PRESSED.changed; }
+    handle(event) { this._demo._told(event); }
+}
 
 class ButtonDemo extends ComponentDemo {
     constructor(container, params) {
         super(container, "button-demo", params);
-        var self = this, kind = _BUTTON_KINDS[this.leaf];
+        var kind = _BUTTON_KINDS[this.leaf];
         if (!kind) throw new Error("[ButtonDemo] no button for the leaf '" + this.leaf + "'; one of " + Object.keys(_BUTTON_KINDS).join(", "));
         var row = this.el("row", "div", dm_row, this.stage);
-        var presses = 0, props = { label: kind.label };
+        var props = { label: kind.label };
         if (kind.icon) props.icon = new Icon(this.branch.createElement("icon", Icon.TAG), { name: kind.icon });   // its face, made here and handed in
-        if (kind.toggles) props.onToggle = function (on) { self.say("\"" + kind.label + "\" turned " + (on ? "on: it stays pressed" : "off")); };
-        else props.onClick = function () {
-            presses++;
-            self.say("\"" + kind.label + "\" pressed - " + presses + (presses === 1 ? " time" : " times"));
-        };
-        this._button = new kind.Leaf(this.branch.createElement("button", kind.Leaf.TAG), props);
+        this._kind = kind;
+        this._presses = 0;
+        this._button = new kind.Leaf(kind.Factory.create(this.branch, "button"), props);
+        if (kind.toggles) this._button.setOnPressedChanged(new ButtonDemoTold(this));
+        else this._button.setOnClick(new ButtonDemoTold(this));
         row.appendChild(this._button.el);
         this._on = true;
         this.intro = kind.toggles ? "a toggle button: press it to turn it on, again to turn it off; switch it off in the controls and it does nothing"
             : kind.icon ? "an icon button: its face is the icon it is handed, its name is for whoever cannot see it; press it, or switch it off in the controls"
             : "a " + kind.word + " button: press it, or switch it off in the controls and press it again";
+    }
+
+    /** What its button told it: a press counted, or the toggle turned over - by a press, or by nothing else a toggle has. */
+    _told(event) {
+        var label = "\"" + this._kind.label + "\"";
+        if (event.type === STATE.PRESSED.changed) {
+            this.say(label + " turned " + (this._button.pressed ? "on: it stays pressed" : "off") + " - it was " + (event.previous ? "on" : "off"));
+            return;
+        }
+        this._presses++;
+        this.say(label + " pressed - " + this._presses + (this._presses === 1 ? " time" : " times"));
     }
 
     /** colour: how much of its word's meaning it wears. */

@@ -14,6 +14,16 @@ const _owner = Object.freeze({ toString: () => "buttonsPage" });
 /** Each colour word, and the leaf that wears it: the rank is the class. */
 var WORDS = ["plain", "primary", "secondary", "danger", "warning", "success"];
 var KINDS = { plain: PlainButton, primary: PrimaryButton, secondary: SecondaryButton, danger: DangerButton, warning: WarningButton, success: SuccessButton };
+/** Each word's companion: what makes the element its button takes. */
+var MAKERS = { plain: PlainButtonFactory, primary: PrimaryButtonFactory, secondary: SecondaryButtonFactory, danger: DangerButtonFactory,
+               warning: WarningButtonFactory, success: SuccessButtonFactory };
+
+/** A press on one of the page's buttons: the page told which, and what about. */
+class ButtonsPress {
+    constructor(page, act, about) { this._page = page; this._act = act; this._about = about; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._page._pressed(this._act, this._about); }
+}
 
 class ButtonsWidget {
     constructor(branch, params) {
@@ -48,6 +58,7 @@ class ButtonsWidget {
         el.appendChild(log);
         var clicks = 0;
         function say(what) { clicks++; log.textContent = clicks + ": " + what; }
+        this._say = say;
         say("nothing pressed yet");
 
         // ── every word, one extent ────────────────────────────────────────
@@ -59,8 +70,8 @@ class ButtonsWidget {
         css.addClass(row, ga_buttons);
         this._buttons = WORDS.map(function (word) {
             var Kind = KINDS[word];
-            var btn = new Kind(branch.createElement("btn-" + word, Kind.TAG), {
-                label: word, onClick: function () { say(word + " pressed at extent " + self._extent.toFixed(2)); } });
+            var btn = new Kind(MAKERS[word].create(branch, "btn-" + word), { label: word });
+            btn.setOnClick(new ButtonsPress(self, "word", word));
             row.appendChild(btn.el);
             return btn;
         });
@@ -83,8 +94,9 @@ class ButtonsWidget {
         var sizeRow = branch.createElement("sizeRow", "div");
         css.addClass(sizeRow, ga_buttons);
         this._sized = [-1, -0.5, 0, 0.5, 1].map(function (s) {
-            var btn = new PrimaryButton(branch.createElement("size-" + String(s).replace("-", "m").replace(".", "_"), PrimaryButton.TAG), {
-                label: s === 0 ? "regular" : (s > 0 ? "+" : "−") + Math.abs(s), size: s, onClick: function () { say("size " + s + " pressed"); } });
+            var btn = new PrimaryButton(PrimaryButtonFactory.create(branch, "size-" + String(s).replace("-", "m").replace(".", "_")), {
+                label: s === 0 ? "regular" : (s > 0 ? "+" : "−") + Math.abs(s), size: s });
+            btn.setOnClick(new ButtonsPress(self, "size", s));
             sizeRow.appendChild(btn.el);
             return btn;
         });
@@ -105,8 +117,8 @@ class ButtonsWidget {
         el.appendChild(live);
         var liveRow = branch.createElement("liveRow", "div");
         css.addClass(liveRow, ga_buttons);
-        this._delete = new DangerButton(branch.createElement("delete", DangerButton.TAG), {
-            extent: -1, onClick: function () { say("deleted " + self._rows + " rows"); } });
+        this._delete = new DangerButton(DangerButtonFactory.create(branch, "delete"), { extent: -1 });
+        this._delete.setOnClick(new ButtonsPress(self, "delete"));
         liveRow.appendChild(this._delete.el);
         el.appendChild(liveRow);
         this._delete.size = this._size;
@@ -127,21 +139,27 @@ class ButtonsWidget {
         // ── off ───────────────────────────────────────────────────────────
         var offRow = branch.createElement("offRow", "div");
         css.addClass(offRow, ga_buttons);
-        var on = true, toggleBtn = null;
-        toggleBtn = new PlainButton(branch.createElement("toggle", PlainButton.TAG), {
-            label: "Switch them all off",
-            onClick: function () {
-                on = !on;
-                self._buttons.forEach(function (b) { b.enabled = on; });
-                self._sized.forEach(function (b) { b.enabled = on; });
-                self._delete.enabled = on;
-                toggleBtn.label = on ? "Switch them all off" : "Switch them all on";
-            }
-        });
-        offRow.appendChild(toggleBtn.el);
+        this._allOn = true;
+        this._switchAll = new PlainButton(PlainButtonFactory.create(branch, "toggle"), { label: "Switch them all off" });
+        this._switchAll.setOnClick(new ButtonsPress(self, "all"));
+        offRow.appendChild(this._switchAll.el);
         el.appendChild(offRow);
 
         this.root = el;
+    }
+
+    /** One of its buttons pressed: said, or every button switched off or on again. */
+    _pressed(act, about) {
+        if (act === "word") this._say(about + " pressed at extent " + this._extent.toFixed(2));
+        else if (act === "size") this._say("size " + about + " pressed");
+        else if (act === "delete") this._say("deleted " + this._rows + " rows");
+        else if (act === "all") {
+            var on = this._allOn = !this._allOn;
+            this._buttons.forEach(function (b) { b.enabled = on; });
+            this._sized.forEach(function (b) { b.enabled = on; });
+            this._delete.enabled = on;
+            this._switchAll.label = on ? "Switch them all off" : "Switch them all on";
+        }
     }
 
     dispose() {}

@@ -38,6 +38,7 @@ class CardTab {
 
 class CounterTab {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         this._value = params.start || 0;
         var root = branch.createElement("counter", "div");
@@ -46,8 +47,8 @@ class CounterTab {
         this._count.setAttribute("aria-live", "polite");
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
-        row.appendChild(new PlainButton(branch.createElement("dec", PlainButton.TAG), { label: "−", onClick: function () { self._value--; self._draw(); } }).el);
-        this._inc = new PrimaryButton(branch.createElement("inc", PrimaryButton.TAG), { label: "+", onClick: function () { self._value++; self._draw(); } });
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "dec"), { label: "−" }), function () { self._value--; self._draw(); }).el);
+        this._inc = self._press(new PrimaryButton(PrimaryButtonFactory.create(branch, "inc"), { label: "+" }), function () { self._value++; self._draw(); });
         row.appendChild(this._inc.el);
         this._draw();
         root.appendChild(this._count);
@@ -55,6 +56,15 @@ class CounterTab {
         this.root = root;
         _join(this, branch, params);
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
     _draw() { this._count.textContent = String(this._value); }
     activate() { Keys.claim(this.focus); }
     /** While the counter holds: ↑ and ↓ count, Escape yields to the pane. */
@@ -97,6 +107,8 @@ var NOTES = [
 
 class PanesWidget {
     constructor(branch, params) {
+        var self = this;
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         branch.activate(_owner);
         var dialogs = 0;   // each picker is a branch of its own
         var el = branch.createElement("root", "div");
@@ -224,19 +236,28 @@ class PanesWidget {
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
         el.appendChild(row);
-        row.appendChild(new PlainButton(branch.createElement("moveFirst", PlainButton.TAG), { label: "Move the active tab first", onClick: function () {
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "moveFirst"), { label: "Move the active tab first" }), function () {
             var id = pane.activeTab(); if (id) pane.moveTab(id, 0);
-        } }).el);
-        row.appendChild(new PlainButton(branch.createElement("moveLast", PlainButton.TAG), { label: "Move it last", onClick: function () {
+        }).el);
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "moveLast"), { label: "Move it last" }), function () {
             var id = pane.activeTab(); if (id) pane.moveTab(id, pane.count() - 1);
-        } }).el);
-        row.appendChild(new PlainButton(branch.createElement("closeAll", PlainButton.TAG), { label: "Close every tab", onClick: function () {
+        }).el);
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "closeAll"), { label: "Close every tab" }), function () {
             pane.getState().tabs.forEach(function (t) { if (!t.pinned) pane.removeTab(t.id); });
-        } }).el);
+        }).el);
         this.root = el;
         this._pane = pane;
         this._desk = desk;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
 
     dispose() { this._steward.dispose(); this._monitor.dispose(); this._desk.dispose(); this._pane.dispose(); }   // the desk first: a pane is disposed only empty
 }

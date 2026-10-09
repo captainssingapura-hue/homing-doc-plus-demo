@@ -75,6 +75,7 @@ class Platformer {
 
 class KeyboardWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
@@ -182,11 +183,11 @@ class KeyboardWidget {
             self._game = new Platformer(own.createBranch("game"), stageHost, kb, "keyboard/platformer", say);
             var row = own.createElement("row", "div");
             css.addClass(row, ga_buttons);
-            row.appendChild(new PrimaryButton(own.createElement("play", PrimaryButton.TAG), { label: "Play", onClick: function () { self._game.play(); } }).el);
-            row.appendChild(new PlainButton(own.createElement("bug", PlainButton.TAG), { label: "A modal, then the platformer claims by call — the bug, shown", onClick: function () {
+            row.appendChild(self._press(new PrimaryButton(PrimaryButtonFactory.create(own, "play"), { label: "Play" }), function () { self._game.play(); }).el);
+            row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(own, "bug"), { label: "A modal, then the platformer claims by call — the bug, shown" }), function () {
                 openDialog("A modal is up");
                 setTimeout(function () { self._game.play(); say("the platformer claimed by call from behind the modal: the party is blind, so it holds — and the dialog no longer hears Escape; close it by its cross"); }, 600);
-            } }).el);
+            }).el);
             box.appendChild(row);
         });
         var dialogs = 0;
@@ -206,12 +207,21 @@ class KeyboardWidget {
         section("dialog", "a dialog — claims by call on open, evicting the holder; on close the keys go back to who held before", function (box, own) {
             var row = own.createElement("row", "div");
             css.addClass(row, ga_buttons);
-            row.appendChild(new PrimaryButton(own.createElement("open", PrimaryButton.TAG), { label: "Open a modal", onClick: function () { openDialog("A modal dialog"); } }).el);
+            row.appendChild(self._press(new PrimaryButton(PrimaryButtonFactory.create(own, "open"), { label: "Open a modal" }), function () { openDialog("A modal dialog"); }).el);
             box.appendChild(row);
         });
         say("five members; no one holds the keys yet");
         this.root = el;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
 
     dispose() { this._offKb(); this._game.dispose(); this._strip.dispose(); this._card.dispose(); this._group.dispose(); }
 }

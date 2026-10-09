@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.demo.components.ComponentControlModule;
 import hue.captains.singapura.js.homing.demo.components.ComponentControlLogModule;
 import hue.captains.singapura.js.homing.ui.controlpanel.ControlPanelModule;
 import hue.captains.singapura.js.homing.ui.controlpanel.ControlsModule;
+import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
@@ -35,10 +36,11 @@ public record ComponentControlPanelModule() implements DomModule<ComponentContro
     @Override
     public ImportsFor<ComponentControlPanelModule> imports() {
         return ImportsFor.<ComponentControlPanelModule>builder()
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyWidgetModule.TaxonomyWidget()), TaxonomyWidgetModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ControlsModule.Controls()), ControlsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ControlPanelModule.ControlPanel()), ControlPanelModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ComponentControlModule.COMPONENT_CONTROL()), ComponentControlModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ComponentControlLogModule.COMPONENT_CONTROL_LOG()), ComponentControlLogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyStyles.tx_title(), new TaxonomyStyles.tx_hint(), new TaxonomyStyles.tx_line(),

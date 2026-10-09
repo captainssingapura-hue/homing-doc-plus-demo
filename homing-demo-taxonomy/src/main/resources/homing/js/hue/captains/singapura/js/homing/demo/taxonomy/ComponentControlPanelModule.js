@@ -16,6 +16,13 @@
 //   (the rest is a TaxonomyWidget's)
 // =============================================================================
 
+/** Back to rest pressed: the component told to reset, and the panel notes it. */
+class ComponentControlPanelRest {
+    constructor(panel) { this._panel = panel; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._panel._backToRest(); }
+}
+
 class ComponentControlPanel extends TaxonomyWidget {
     constructor(container, params) {
         super(container, "component-control-panel", "Control panel");
@@ -68,12 +75,16 @@ class ComponentControlPanel extends TaxonomyWidget {
             onInvoke: function (option) { self._invoke(option); }
         });
         scroll.appendChild(this._panel.root);
-        var rest = new PlainButton(v.createElement("rest", PlainButton.TAG), { label: "Back to rest", size: -1, onClick: function () {
-            if (self._control) self._control.tell({ kind: "Reset" });
-            self._note("everything back to rest");
-        } });
+        var rest = new PlainButton(PlainButtonFactory.create(v, "rest"), { label: "Back to rest", size: -1 });
+        rest.setOnClick(new ComponentControlPanelRest(self));
         line.appendChild(rest.el);
         if (this._control) this._control.tell({ kind: "StateRequested" });
+    }
+
+    /** Back to rest: the component told, the panel's note said. */
+    _backToRest() {
+        if (this._control) this._control.tell({ kind: "Reset" });
+        this._note("everything back to rest");
     }
 
     /** A degree moved, or a switch switched: told to the party; logged when it settles. */

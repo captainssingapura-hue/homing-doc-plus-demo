@@ -15,6 +15,7 @@ const _owner = Object.freeze({ toString: () => "splitGridPage" });
 /** What the page puts in a cell: its name and the five ways it can change the grid. A widget by the base's contract. */
 class CellWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         branch.activate(_owner);
         var root = branch.createElement("cell", "div");
         css.addClass(root, ga_grid_cell);
@@ -26,17 +27,27 @@ class CellWidget {
         css.addClass(row, ga_buttons);
         var self = this;
         [["←", "left"], ["↑", "top"], ["→", "right"], ["↓", "bottom"]].forEach(function (s) {
-            row.appendChild(new PlainButton(branch.createElement("split-" + s[1], PlainButton.TAG), { label: s[0], size: -1, onClick: function () { params.onSplit(params.id, s[1]); } }).el);
+            row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "split-" + s[1]), { label: s[0], size: -1 }), function () { params.onSplit(params.id, s[1]); }).el);
         });
-        row.appendChild(new DangerButton(branch.createElement("remove", DangerButton.TAG), { label: "×", extent: 0.6, size: -1, onClick: function () { params.onRemove(params.id); } }).el);
+        row.appendChild(self._press(new DangerButton(DangerButtonFactory.create(branch, "remove"), { label: "×", extent: 0.6, size: -1 }), function () { params.onRemove(params.id); }).el);
         root.appendChild(row);
         this.root = root;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
     current(on) { css.toggleClass(this.root, ga_grid_cell_current, !!on); }
 }
 
 class SplitGridWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
@@ -115,12 +126,12 @@ class SplitGridWidget {
         // toggle button yet: a plain one, its label saying the state
         var seamOn = true;
         function seamLabel() { return "the seam at rest: " + (seamOn ? "on" : "off"); }
-        var seamButton = new PlainButton(branch.createElement("seam", PlainButton.TAG), { label: seamLabel(), size: -1, onClick: function () {
+        var seamButton = self._press(new PlainButton(PlainButtonFactory.create(branch, "seam"), { label: seamLabel(), size: -1 }), function () {
             seamOn = !seamOn;
             grid.seam(seamOn);
             seamButton.label = seamLabel();
             say("Seam       the splitters " + (seamOn ? "keep the design's line at rest" : "have no presence at rest"));
-        } });
+        });
         mirrorRow.appendChild(seamButton.el);
 
         var hint = branch.createElement("hint", "span");
@@ -142,6 +153,15 @@ class SplitGridWidget {
         requestAnimationFrame(reflect);
         this.root = el;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
 
     dispose() { window.removeEventListener("resize", this._onResize); this._mirror.dispose(); this._grid.dispose(); }
 }

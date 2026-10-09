@@ -8,6 +8,8 @@ const _owner = Object.freeze({ toString: () => "dialogPage" });
 
 class DialogWidget {
     constructor(branch, params) {
+        var self = this;
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         branch.activate(_owner);
         var dialogs = 0;   // each open is a branch of its own
         var el = branch.createElement("root", "div");
@@ -44,7 +46,7 @@ class DialogWidget {
         el.appendChild(row);
 
         // 1. Modal, with actions. OK is primary; Enter anywhere but a form control fires it.
-        row.appendChild(new PrimaryButton(branch.createElement("openModal", PrimaryButton.TAG), { label: "Open a modal", onClick: function () {
+        row.appendChild(self._press(new PrimaryButton(PrimaryButtonFactory.create(branch, "openModal"), { label: "Open a modal" }), function () {
             new Dialog(branch.createBranch("dialog" + (++dialogs)), {
                 title: "A modal dialog", keyboard: kb, keyboardId: "dialog/modal",
                 content: function (b, body) {
@@ -60,10 +62,10 @@ class DialogWidget {
                 ],
                 onClose: function () { if (!/confirmed|cancelled/.test(status.textContent)) say("dismissed"); }
             });
-        } }).el);
+        }).el);
 
         // 2. Non-modal: the page stays live, keys reach the dialog only while focus is inside.
-        row.appendChild(new PlainButton(branch.createElement("openLoose", PlainButton.TAG), { label: "Open a non-modal", onClick: function () {
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "openLoose"), { label: "Open a non-modal" }), function () {
             new Dialog(branch.createBranch("dialog" + (++dialogs)), {
                 title: "A non-modal dialog", keyboard: kb, keyboardId: "dialog/loose-" + dialogs,
                 modal: false,
@@ -77,11 +79,11 @@ class DialogWidget {
                 },
                 onClose: function () { say("non-modal closed"); }
             });
-        } }).el);
+        }).el);
 
         // 3. A control inside that takes its own keys: a counter on the arrows,
         //    and Escape resets it before the dialog is asked.
-        row.appendChild(new PlainButton(branch.createElement("openKeys", PlainButton.TAG), { label: "Open one with keys inside", onClick: function () {
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "openKeys"), { label: "Open one with keys inside" }), function () {
             var n = 0, dlg;
             dlg = new Dialog(branch.createBranch("dialog" + (++dialogs)), {
                 title: "The content is asked first", keyboard: kb, keyboardId: "dialog/keys",
@@ -105,9 +107,18 @@ class DialogWidget {
                 onClose: function () { if (!/applied/.test(status.textContent)) say("keys dialog dismissed at " + n); }
             });
             dlg.setAction("apply", { enabled: false });
-        } }).el);
+        }).el);
         this.root = el;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
 
     dispose() {}
 }

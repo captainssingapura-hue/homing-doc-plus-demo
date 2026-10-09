@@ -31,6 +31,7 @@ const REGISTERS = [
 class SheetsWidget {
 
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         branch.activate(_sheetsOwner);
         var el = branch.createElement("root", "div");
 
@@ -74,9 +75,8 @@ class SheetsWidget {
             onInput: function (v) { yours.elevation(SITS[Math.abs(v) + (v > 0 ? 1 : 0)]); }
         }).root);
         // the mark is a toggle, and the house has no toggle button yet: a plain one, its label saying the state
-        var mark = new PlainButton(branch.createElement("mark", PlainButton.TAG), {
-            label: yours.isHighlighted() ? "marked" : "not marked", size: -0.4,
-            onClick: function () { yours.highlight(!yours.isHighlighted()); mark.label = yours.isHighlighted() ? "marked" : "not marked"; } });
+        var mark = self._press(new PlainButton(PlainButtonFactory.create(branch, "mark"), {
+            label: yours.isHighlighted() ? "marked" : "not marked", size: -0.4 }), function () { yours.highlight(!yours.isHighlighted()); mark.label = yours.isHighlighted() ? "marked" : "not marked"; });
         controls.appendChild(mark.el);
 
         // ── a sheet on a sheet: the cast falls on paper, not on the table ─
@@ -98,6 +98,15 @@ class SheetsWidget {
 
         this.root = el;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
 
     /** One sheet in its room on the ground, with a caption under it saying what register it is at. */
     _lay(branch, ground, name, label, note) {

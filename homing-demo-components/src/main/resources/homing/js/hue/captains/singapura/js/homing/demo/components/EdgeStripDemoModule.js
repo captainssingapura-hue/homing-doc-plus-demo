@@ -9,6 +9,13 @@
 //   (the rest is a ComponentDemo's)
 // =============================================================================
 
+/** A tool on the strip pressed: the demo says which. */
+class EdgeStripDemoTool {
+    constructor(demo, name) { this._demo = demo; this._name = name; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._demo.say(this._name + " pressed, on the strip"); }
+}
+
 class EdgeStripDemo extends ComponentDemo {
     constructor(container, params) {
         super(container, "edge-strip-demo", params);
@@ -17,8 +24,9 @@ class EdgeStripDemo extends ComponentDemo {
         this.el("text", "p", dm_text, host, "Bring the pointer to the foot of this box: its tools lie there, out of the way until asked for.");
         this._strip = new EdgeStrip(this.branch.createBranch("strip"), { label: "The box's tools", host: host });
         ["Copy", "Share", "Archive"].forEach(function (name) {
-            self._strip.root.appendChild(new PlainButton(self.branch.createElement("tool-" + name.toLowerCase(), PlainButton.TAG), {
-                label: name, size: -1, onClick: function () { self.say(name + " pressed, on the strip"); } }).el);
+            var tool = new PlainButton(PlainButtonFactory.create(self.branch, "tool-" + name.toLowerCase()), { label: name, size: -1 });
+            tool.setOnClick(new EdgeStripDemoTool(self, name));
+            self._strip.root.appendChild(tool.el);
         });
         this._held = false;
         this.intro = "bring the pointer to the box's foot, or hold the strip shown in the controls";

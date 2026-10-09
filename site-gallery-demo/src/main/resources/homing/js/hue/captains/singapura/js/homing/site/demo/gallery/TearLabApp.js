@@ -16,6 +16,7 @@ var _SAYS = { rail: "on the rail: along the row only", flight: "torn: the window
 
 class TearLabWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         branch.activate(_owner);
         var kb = params && params.keyboard;
@@ -63,8 +64,8 @@ class TearLabWidget {
         controls.appendChild(this._pick(branch, "measure", "the measure", "what counts as a change",
             [["speed", "the speed, either way"], ["slowdown", "the speed, falling only"], ["velocity", "the vector: a turn counts"]], tear.options().measure,
             function (v) { tear.set({ measure: v }); }));
-        controls.appendChild(new SecondaryButton(branch.createElement("reset", SecondaryButton.TAG), {
-            label: "Put them back", onClick: function () { self._stage.reset(); say("Reset     every chip back on the strip"); } }).el);
+        controls.appendChild(self._press(new SecondaryButton(SecondaryButtonFactory.create(branch, "reset"), {
+            label: "Put them back" }), function () { self._stage.reset(); say("Reset     every chip back on the strip"); }).el);
 
         var readout = branch.createElement("readout", "div");
         css.addClass(readout, tl_readout);
@@ -89,6 +90,15 @@ class TearLabWidget {
         readout.textContent = "Press a chip and drag it.";
         say("five chips on the strip; the escape " + d.escape + " px either side of it, the capture " + d.capture);
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
 
     /** A choice among a few, labelled: the flight, and what counts as a change in it. */
     _pick(branch, id, text, aria, choices, value, onPick) {

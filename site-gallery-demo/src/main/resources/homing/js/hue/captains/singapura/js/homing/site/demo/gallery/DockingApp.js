@@ -51,6 +51,7 @@ var _NOTE = "A tab is one record — id, title, widget — and has one placement
 
 class DockingWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
@@ -201,8 +202,8 @@ class DockingWidget {
         var census = branch.createElement("census", "span");
         css.addClass(census, ga_strip_census);
         edge.root.appendChild(census);
-        var goTo = new PlainButton(branch.createElement("go", PlainButton.TAG), {
-            label: "Go to a region…", size: -1, onClick: function () { if (!switcher) openSwitcher(); } });
+        var goTo = self._press(new PlainButton(PlainButtonFactory.create(branch, "go"), {
+            label: "Go to a region…", size: -1 }), function () { if (!switcher) openSwitcher(); });
         edge.root.appendChild(goTo.el);
         function countRoom() {
             var regions = docks.regions(), held = 0, afloat = desk.floats().length;
@@ -292,6 +293,15 @@ class DockingWidget {
 
         this.root = el;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
 
     dispose() { this._offMenus(); this._offF6(); this._edge.dispose(); this._desk.dispose(); this._instruments.dispose();   // the desks first: a dock is disposed only empty
                 if (this._ownMenus) this._ownMenus.dispose(); this._tabs.dispose();
