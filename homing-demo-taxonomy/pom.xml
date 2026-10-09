@@ -25,6 +25,17 @@
             <artifactId>homing-ui-taxonomy</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
+        <!-- The house styles and palettes, and the Look manager: the coverage matrix is derived from what they answer and what wears it. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-styles</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-elements</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
         <!-- The house's components in action - each a demo of its own - and what controls them. -->
         <dependency>
             <groupId>${project.groupId}</groupId>

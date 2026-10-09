@@ -58,6 +58,8 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 // The taxonomy as data, written when served, and the index the widgets ask it through.
                 CrateEntry.of(TaxonomyDataModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(TaxonomyIndexModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                // What each house style and palette says of each component, derived from the answers when served.
+                CrateEntry.of(StyleCoverageModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 // The pick the widgets share: its type and its secretary.
                 CrateEntry.of(NodeSelectionModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(NodeSelectionSecretaryModule.INSTANCE, StandardJsModuleType.SECRETARY),
@@ -65,6 +67,7 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 CrateEntry.of(TaxonomyWidgetModule.INSTANCE),
                 CrateEntry.of(TaxonomyTreeModule.INSTANCE),
                 CrateEntry.of(PartsTableModule.INSTANCE),
+                CrateEntry.of(StyleCoverageMatrixModule.INSTANCE),
                 CrateEntry.of(RoleTreeModule.INSTANCE),
                 CrateEntry.of(ComponentDemoPanelModule.INSTANCE),
                 CrateEntry.of(ComponentControlPanelModule.INSTANCE),
