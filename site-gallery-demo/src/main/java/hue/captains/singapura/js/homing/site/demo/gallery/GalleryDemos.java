@@ -127,8 +127,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "on one attribute the design answers as a state — and whether it is MARKED as the current one, which is colour "
                     + "and moves nothing. What either stands for is the app's, in the app's own code; this page sets them because it "
                     + "is a page about registers, and the fourth sheet is on the two controls. A design answers the registers in "
-                    + "whatever plane it honestly uses for depth: flat-morphism casts a hard offset with no blur for the lifted one "
-                    + "and takes a darker face for the sunk one — two registers, two planes — neumorphism moulds the clay out or "
+                    + "whatever plane it honestly uses for depth: neo-brutalism casts a hard offset with no blur, out for the lifted one "
+                    + "and in for the sunk one, neumorphism moulds the clay out or "
                     + "presses it in, and sketchy declines both outright, because ink casts no shadow and a design should not express "
                     + "depth in a plane it does not otherwise use. Beneath them a sheet lies on a sheet: the same word, a different "
                     + "colour beneath it, and nothing had to be told which.",
