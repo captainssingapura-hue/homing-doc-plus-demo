@@ -35,6 +35,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new Demo(HouseControls.DangerButton.INSTANCE, button),
                 new Demo(HouseControls.WarningButton.INSTANCE, button),
                 new Demo(HouseControls.SuccessButton.INSTANCE, button),
+                new Demo(HouseControls.ToggleButton.INSTANCE, button),
                 new Demo(HouseMarks.Icon.INSTANCE, new ModuleImports<>(List.of(new IconDemoModule.IconDemo()), IconDemoModule.INSTANCE)),
                 new Demo(HouseContainers.SummaryCard.INSTANCE,
                         new ModuleImports<>(List.of(new SummaryCardDemoModule.SummaryCardDemo()), SummaryCardDemoModule.INSTANCE)),
@@ -109,7 +110,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
     public List<Component<?>> unrealized() {
         return List.of(
                 // controls
-                HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE,
+                HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE,
                 HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE, HouseControls.Link.INSTANCE,
                 HouseControls.Crumb.INSTANCE, HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseControls.Brand.INSTANCE,

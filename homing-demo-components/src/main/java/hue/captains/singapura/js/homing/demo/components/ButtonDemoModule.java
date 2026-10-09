@@ -9,18 +9,19 @@ import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.PrimaryButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SecondaryButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SuccessButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.ToggleButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.WarningButtonModule;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 
 import java.util.List;
 
-/** {@code ButtonDemo}: one of the house's six buttons in action - pressed and counted; switched, sized and coloured by its options. */
+/** {@code ButtonDemo}: one of the house's seven buttons in action - pressed and counted, or turned over; switched, sized and coloured by its options. */
 public record ButtonDemoModule() implements DomModule<ButtonDemoModule> {
 
     public static final ButtonDemoModule INSTANCE = new ButtonDemoModule();
 
     public record ButtonDemo() implements SelfContainedWidget<ButtonDemoModule> {
-        @Override public String summary() { return "One of the house's six buttons, as its leaf says, in action: pressed and counted; switched off and inert, sized, and a coloured one's colour set, by its options."; }
+        @Override public String summary() { return "One of the house's seven buttons, as its leaf says, in action: pressed and counted, or a toggle turned over; switched off and inert, sized, and a coloured one's colour set, by its options."; }
     }
 
     @Override
@@ -33,6 +34,7 @@ public record ButtonDemoModule() implements DomModule<ButtonDemoModule> {
                 .add(new ModuleImports<>(List.of(new DangerButtonModule.DangerButton()), DangerButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WarningButtonModule.WarningButton()), WarningButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SuccessButtonModule.SuccessButton()), SuccessButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ToggleButtonModule.ToggleButton()), ToggleButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DemoStyles.dm_row()), DemoStyles.INSTANCE))
                 .build();
     }

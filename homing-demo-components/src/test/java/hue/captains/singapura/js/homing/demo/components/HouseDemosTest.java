@@ -31,12 +31,12 @@ class HouseDemosTest {
 
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
-        assertEquals(28, HOUSE.demos().size(), "twelve elements; eight overlays, menus and splits; eight the page around does not show");
+        assertEquals(29, HOUSE.demos().size(), "thirteen elements; eight overlays, menus and splits; eight the page around does not show");
         assertEquals(16, HOUSE.aroundIt().size(), "the workspace's six, the chrome's two, the preferences' eight");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
-        assertEquals(41, HOUSE.unrealized().size());
+        assertEquals(40, HOUSE.unrealized().size());
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)
-                .map(Demo::className).toList(), "the six buttons are one button");
+                .map(Demo::className).toList(), "the seven buttons are one button");
     }
 
     @Test
