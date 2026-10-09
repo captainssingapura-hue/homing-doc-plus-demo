@@ -1,6 +1,9 @@
 package hue.captains.singapura.js.homing.demo.components;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.core.EsModule;
+import hue.captains.singapura.js.homing.core.ModuleNameResolver;
+import hue.captains.singapura.js.homing.core.util.SimplePrefixResolver;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
@@ -44,15 +47,23 @@ class HouseDemosTest {
 
     @Test
     void theRegistry_generatedFromTheDeclaration() {
-        String js = String.join("\n", HouseDemosModule.INSTANCE.selfContent(null));
-        assertTrue(js.contains("\"danger-button\": ButtonDemo"), js);
-        assertTrue(js.contains("\"summary-card\": SummaryCardDemo"), js);
+        String js = String.join("\n", HouseDemosModule.INSTANCE.selfContent(RESOLVER));
+        assertTrue(js.contains(where("danger-button", ButtonDemoModule.INSTANCE, "ButtonDemo")), js);
+        assertTrue(js.contains(where("summary-card", SummaryCardDemoModule.INSTANCE, "SummaryCardDemo")), js);
+        assertTrue(js.contains(where("dialog", DialogDemoModule.INSTANCE, "DialogDemo")), js);
+        assertTrue(js.contains(where("add-tab", AddTabDemoModule.INSTANCE, "AddTabDemo")), js);
+        assertTrue(js.contains(where("heading", TextDemoModule.INSTANCE, "TextDemo")), "the nine texts, one module: " + js);
         assertTrue(js.contains("\"dock-grid\": \"the workspace itself"), js);
-        assertTrue(js.contains("\"dialog\": DialogDemo"), js);
-        assertTrue(js.contains("\"add-tab\": AddTabDemo"), js);
         assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([]);"), js);
-        assertTrue(js.contains("\"heading\": TextDemo"), js);
         assertTrue(js.contains("\"lamp\""), "an unrealized leaf: " + js);
-        assertEquals(25, HouseDemosModule.INSTANCE.imports().getAllImports().size(), "each demo's module imported once, whatever it shows");
+        assertEquals(0, HouseDemosModule.INSTANCE.imports().getAllImports().size(),
+                "no demo imported: a page loads each when a leaf it shows is first picked");
+    }
+
+    private static final ModuleNameResolver RESOLVER = new SimplePrefixResolver("/m/");
+
+    /** A leaf's entry as the page has it: the demo module's address, and the class it exports. */
+    private static String where(String leaf, EsModule<?> module, String export) {
+        return "\"" + leaf + "\": Object.freeze({ module: \"" + RESOLVER.resolve(module).basePath() + "\", export: \"" + export + "\" })";
     }
 }
