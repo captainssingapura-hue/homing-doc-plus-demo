@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The coverage matrix, derived from the answers: a style's cell counts what it answers itself of a
  * component's looks at rest and of its treatments, Base's what it answers above the root, a
- * palette's the colours; only the seven buttons wear the new sheet; a style's looks reach the buttons
+ * palette's the colours; only the nine buttons wear the new sheet; a style's looks reach the buttons
  * alone, its treatments every control.
  */
 class StyleCoverageTest {
@@ -48,9 +48,10 @@ class StyleCoverageTest {
     }
 
     @Test
-    void onlyTheSevenButtonsWearTheNewSheet_andOnlyTheButtonBranchIsStyled() {
+    void onlyTheNineButtonsWearTheNewSheet_andOnlyTheButtonBranchIsStyled() {
         var worn = HOUSE.rows().stream().filter(r -> r.worn().equals("look")).map(StyleCoverage.Row::id).collect(Collectors.toSet());
-        assertEquals(Set.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "toggle-button"), worn);
+        assertEquals(Set.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "toggle-button",
+                "close-button", "icon-button"), worn);
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");
         assertEquals(under(HouseBranches.Button.INSTANCE), answeredBySomeStyle(true),
