@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.demo.components;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import org.junit.jupiter.api.Test;
 
@@ -31,12 +32,14 @@ class HouseDemosTest {
 
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
-        assertEquals(31, HOUSE.demos().size(), "fifteen elements; eight overlays, menus and splits; eight the page around does not show");
+        assertEquals(40, HOUSE.demos().size(), "twenty-four elements - nine of them texts; eight overlays, menus and splits; eight the page around does not show");
         assertEquals(16, HOUSE.aroundIt().size(), "the workspace's six, the chrome's two, the preferences' eight");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
-        assertEquals(38, HOUSE.unrealized().size());
+        assertEquals(29, HOUSE.unrealized().size());
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)
                 .map(Demo::className).toList(), "the nine buttons are one button");
+        assertEquals(List.of("TextDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseText.Pill.INSTANCE)
+                .map(Demo::className).toList(), "the nine texts are one text");
     }
 
     @Test
@@ -48,7 +51,8 @@ class HouseDemosTest {
         assertTrue(js.contains("\"dialog\": DialogDemo"), js);
         assertTrue(js.contains("\"add-tab\": AddTabDemo"), js);
         assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([]);"), js);
-        assertTrue(js.contains("\"heading\""), "an unrealized leaf: " + js);
-        assertEquals(23, HouseDemosModule.INSTANCE.imports().getAllImports().size(), "each demo's module imported once, whatever it shows");
+        assertTrue(js.contains("\"heading\": TextDemo"), js);
+        assertTrue(js.contains("\"lamp\""), "an unrealized leaf: " + js);
+        assertEquals(24, HouseDemosModule.INSTANCE.imports().getAllImports().size(), "each demo's module imported once, whatever it shows");
     }
 }

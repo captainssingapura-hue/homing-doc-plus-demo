@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The coverage matrix, derived from the answers: a style's cell counts what it answers itself of a
  * component's looks at rest and of its treatments, Base's what it answers above the root, a
- * palette's the colours; only the nine buttons wear the new sheet; a style's looks reach the buttons
- * alone, its treatments every control.
+ * palette's the colours; the nine buttons and the nine texts wear the new sheet; a style's
+ * looks reach the buttons and the texts alone, its treatments every control.
  */
 class StyleCoverageTest {
 
@@ -48,14 +48,17 @@ class StyleCoverageTest {
     }
 
     @Test
-    void onlyTheNineButtonsWearTheNewSheet_andOnlyTheButtonBranchIsStyled() {
+    void theNineButtonsAndTheNineTextsWearTheNewSheet_andOnlyTheirBranchesAreStyled() {
         var worn = HOUSE.rows().stream().filter(r -> r.worn().equals("look")).map(StyleCoverage.Row::id).collect(Collectors.toSet());
         assertEquals(Set.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "toggle-button",
-                "close-button", "icon-button"), worn);
+                "close-button", "icon-button",
+                "heading", "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark"), worn);
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");
-        assertEquals(under(HouseBranches.Button.INSTANCE), answeredBySomeStyle(true),
-                "a style's looks are the button's alone: every button's, and nothing else's");
+        var styled = new java.util.HashSet<>(under(HouseBranches.Button.INSTANCE));
+        styled.addAll(under(HouseBranches.Text.INSTANCE));
+        assertEquals(styled, answeredBySomeStyle(true),
+                "a style's looks are the buttons' and the texts' alone: every one's, and nothing else's");
         assertEquals(under(HouseBranches.Control.INSTANCE), answeredBySomeStyle(false),
                 "its treatments reach every control: the ring, and how a control is when it cannot be used");
         assertEquals(HOUSE.rows().size(), HOUSE.json().split("\"worn\"").length - 1, "a row each in what the page is handed");

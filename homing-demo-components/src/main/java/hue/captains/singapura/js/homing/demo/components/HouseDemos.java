@@ -27,6 +27,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
     /** The leaves seen in action, each with the demo that shows it live. */
     public List<Demo> demos() {
         var button = new ModuleImports<>(List.of(new ButtonDemoModule.ButtonDemo()), ButtonDemoModule.INSTANCE);
+        var text = new ModuleImports<>(List.of(new TextDemoModule.TextDemo()), TextDemoModule.INSTANCE);
         return List.of(
                 // the elements: the nine buttons are one button, each as its leaf says
                 new Demo(HouseControls.PlainButton.INSTANCE, button),
@@ -38,6 +39,16 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new Demo(HouseControls.ToggleButton.INSTANCE, button),
                 new Demo(HouseControls.CloseButton.INSTANCE, button),
                 new Demo(HouseControls.IconButton.INSTANCE, button),
+                // the nine texts are one text, each as its leaf says
+                new Demo(HouseText.Heading.INSTANCE, text),
+                new Demo(HouseText.Kicker.INSTANCE, text),
+                new Demo(HouseText.Caption.INSTANCE, text),
+                new Demo(HouseText.Lede.INSTANCE, text),
+                new Demo(HouseText.Label.INSTANCE, text),
+                new Demo(HouseText.Readout.INSTANCE, text),
+                new Demo(HouseText.Badge.INSTANCE, text),
+                new Demo(HouseText.Pill.INSTANCE, text),
+                new Demo(HouseText.Wordmark.INSTANCE, text),
                 new Demo(HouseMarks.Icon.INSTANCE, new ModuleImports<>(List.of(new IconDemoModule.IconDemo()), IconDemoModule.INSTANCE)),
                 new Demo(HouseContainers.SummaryCard.INSTANCE,
                         new ModuleImports<>(List.of(new SummaryCardDemoModule.SummaryCardDemo()), SummaryCardDemoModule.INSTANCE)),
@@ -120,10 +131,6 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // containers and regions
                 HouseContainers.PlainCard.INSTANCE, HouseContainers.Scrim.INSTANCE, HouseContainers.ActionBar.INSTANCE,
                 HouseContainers.Trail.INSTANCE, HouseRegions.Section.INSTANCE, HouseRegions.GridCell.INSTANCE,
-                // text
-                HouseText.Label.INSTANCE, HouseText.Heading.INSTANCE, HouseText.Kicker.INSTANCE, HouseText.Caption.INSTANCE,
-                HouseText.Lede.INSTANCE, HouseText.Readout.INSTANCE, HouseText.Badge.INSTANCE, HouseText.Pill.INSTANCE,
-                HouseText.Wordmark.INSTANCE,
                 // marks and tracks
                 HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE, HouseMarks.Lamp.INSTANCE,
                 HouseMarks.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
