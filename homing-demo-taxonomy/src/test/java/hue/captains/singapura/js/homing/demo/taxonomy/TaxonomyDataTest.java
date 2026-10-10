@@ -157,8 +157,8 @@ class TaxonomyDataTest extends JsModuleTestBase {
         load(HouseTaxonomy.INSTANCE.read());
         assertEquals("role-root", eval("t.roleRoot().id").asString());
         assertEquals(21, eval("t.roleCount('branch')").asInt(), "three at level 1, eighteen at level 2");
-        assertEquals(67, eval("t.roleCount('role')").asInt());
-        assertEquals(67, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
+        assertEquals(91, eval("t.roleCount('role')").asInt(), "the catalogue whole, said by a component or not");
+        assertEquals(91, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
         assertEquals("saying,doing,shaping", eval("t.roleChildren('role-root').map(function (n) { return n.id; }).join()").asString());
         assertEquals("title,subtitle,name,category,symbol", eval("t.roleChildren('naming').map(function (n) { return n.id; }).join()").asString());
         assertEquals(2, eval("t.roleNode('naming').level").asInt());
