@@ -29,7 +29,8 @@ class StyleCoverageTest {
 
     @Test
     void theColumns_areBase_theSevenStyles_andThePalettes() {
-        assertEquals(List.of("base", "editorial", "neo-brutalism", "neo-futurism", "neumorphism", "glassmorphism", "retro-futurism", "sketchy", "harbour", "forest"),
+        assertEquals(List.of("base", "editorial", "neo-brutalism", "neo-futurism", "neumorphism", "glassmorphism", "retro-futurism", "sketchy",
+                        "palette-harbour", "palette-neo-brutalism", "palette-neo-futurism", "palette-clay", "palette-frost", "palette-synthwave", "palette-marker", "palette-forest"),
                 HOUSE.columns().stream().map(StyleCoverage.Column::id).toList());
         assertEquals(24, HOUSE.looks(), "the CSS targets that are not colour");
         assertEquals(9, HOUSE.colours(), "the semantic colours");
@@ -43,8 +44,9 @@ class StyleCoverageTest {
         assertEquals(new StyleCoverage.Cell(7, 2, 8, 2), cell("primary-button", "sketchy"), "ink casts no shadow: no shadow at rest, no lift's shadow");
         assertEquals(new StyleCoverage.Cell(7, 2, 9, 2), cell("primary-button", "neumorphism"), "no border; a hover's lift but no press");
         assertEquals(new StyleCoverage.Cell(2, 0, 2, 0), cell("primary-button", "base"), "what Base answers above the root: every style inherits it");
-        assertEquals(new StyleCoverage.Cell(3, 0, 4, 0), cell("primary-button", "harbour"), "its background, ink and border; the ring's four states");
-        assertEquals(cell("primary-button", "harbour"), cell("primary-button", "forest"), "one rule, two sets of seeds");
+        assertEquals(new StyleCoverage.Cell(3, 0, 4, 0), cell("primary-button", "palette-harbour"), "its background, ink and border; the ring's four states");
+        for (String p : List.of("forest", "frost", "neo-brutalism"))
+            assertEquals(cell("primary-button", "palette-harbour"), cell("primary-button", "palette-" + p), "one rule, eight sets of seeds: " + p);
     }
 
     @Test

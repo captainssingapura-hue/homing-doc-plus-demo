@@ -87,8 +87,9 @@ record StyleCoverage(int looks, int colours, List<Column> columns, List<Row> row
             themes.put(s.token(), new Dressed(s, any));
         }
         for (ColorPalette p : palettes) {
-            columns.add(new Column(p.token(), label(p.token()), "palette"));
-            themes.put(p.token(), new Dressed(styles.get(0), p));
+            // a palette's column has an id of its own: Neo-brutalism's and Neo-futurism's own colours share their styles' tokens
+            columns.add(new Column("palette-" + p.token(), label(p.token()), "palette"));
+            themes.put("palette-" + p.token(), new Dressed(styles.get(0), p));
         }
         var treatments = new HashMap<String, List<Treatment>>();
         themes.forEach((id, theme) -> treatments.put(id, DeriveTreatments.INSTANCE.of(taxonomy, theme)));
