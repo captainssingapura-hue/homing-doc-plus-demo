@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.demo.conformance;
 
 import hue.captains.singapura.js.homing.conformance.engine.ConformanceEngine;
 import hue.captains.singapura.js.homing.conformance.engine.ServedModuleRenderer;
+import hue.captains.singapura.js.homing.conformance.rules.DeclaredDebts;
 import hue.captains.singapura.js.homing.conformance.rules.Finding;
 import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.conformance.GameLoopModuleType;
@@ -22,11 +23,10 @@ class DemoConformanceTest {
     @Test
     void everyServedModuleKeepsItsLane_strictly() {
         List<Finding> raw = new ConformanceEngine(DemoConformance.POLICY, new ServedModuleRenderer()).checkCrates(DemoConformance.TOP_LEVEL);
-        DemoConformance.WIDGETS.recordIfAsked(raw, "src/main/resources");
-        assertEquals(List.of(), DemoConformance.WIDGETS.stale(DemoConformance.class, raw), "the widget ledger names debt that is paid: strike these lines");
+        assertEquals(List.of(), DeclaredDebts.INSTANCE.paid(DemoConformance.TOP_LEVEL, raw), "a debt that is paid: remove its @ConformanceDebt");
         List<GradedFinding> errors = DemoConformance.grader().grade(raw).stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors.stream().map(g -> describe(g.finding())).toList(),
-                "the demo carries no debt - fix these; the one ledger is the widget rule's, and it only shrinks");
+                "the demo carries no debt but what its modules declare - fix these");
     }
 
     @Test

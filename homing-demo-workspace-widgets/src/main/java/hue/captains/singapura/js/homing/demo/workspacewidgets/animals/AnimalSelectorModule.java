@@ -6,6 +6,8 @@ import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
 import hue.captains.singapura.js.homing.component.keyboard.focusParties;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -22,6 +24,8 @@ import java.util.List;
  * - the six animals, one chosen, as the animal choice party says; a press asks the
  * party to choose, and every widget that meets there follows.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes its own elements, places elements, wears classes of its own, writes attributes, writes styles and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record AnimalSelectorModule() implements DomModule<AnimalSelectorModule> {
 
     public record AnimalSelector() implements SelfContainedWidget<AnimalSelectorModule>, NeedKeyboard {

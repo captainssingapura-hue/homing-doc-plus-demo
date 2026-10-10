@@ -1,5 +1,7 @@
 package hue.captains.singapura.js.homing.demo.components;
 
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -11,6 +13,8 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code LinkDemo}: the house's link in action - its click told, the way not followed; sized by its options. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes elements by a companion, places elements and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record LinkDemoModule() implements DomModule<LinkDemoModule> {
 
     public static final LinkDemoModule INSTANCE = new LinkDemoModule();

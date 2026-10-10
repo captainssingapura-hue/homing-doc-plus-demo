@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.demo.taxonomy;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -20,6 +22,8 @@ import java.util.List;
  * component and a column a style or a palette, in a relation grid - the matrix derived on the Java
  * side ({@link StyleCoverageModule}); a view of the pick, never a picker.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record StyleCoverageMatrixModule() implements DomModule<StyleCoverageMatrixModule> {
 
     public static final StyleCoverageMatrixModule INSTANCE = new StyleCoverageMatrixModule();

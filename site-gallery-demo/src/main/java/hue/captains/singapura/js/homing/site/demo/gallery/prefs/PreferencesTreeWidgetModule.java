@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.site.demo.gallery.prefs;
 
 import hue.captains.singapura.js.homing.component.Widget;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -17,6 +19,8 @@ import java.util.List;
  * {@code select(path)} — and nothing else; the tree's own keys move the
  * cursor, and moving the cursor is choosing.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes its own elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record PreferencesTreeWidgetModule() implements Widget<Widget._None, PreferencesTreeWidgetModule> {
 
     /** The class. */

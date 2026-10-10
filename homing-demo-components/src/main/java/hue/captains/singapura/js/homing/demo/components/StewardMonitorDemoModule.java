@@ -1,5 +1,7 @@
 package hue.captains.singapura.js.homing.demo.components;
 
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -10,6 +12,8 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code StewardMonitorDemo}: the house's steward monitor in action - this page's keys as one lamp; asked what the lamp says by its option. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record StewardMonitorDemoModule() implements DomModule<StewardMonitorDemoModule> {
 
     public static final StewardMonitorDemoModule INSTANCE = new StewardMonitorDemoModule();

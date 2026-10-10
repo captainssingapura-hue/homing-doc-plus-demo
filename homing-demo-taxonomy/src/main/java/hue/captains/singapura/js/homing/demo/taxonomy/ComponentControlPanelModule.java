@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.demo.taxonomy;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code ComponentControlPanel}: what the picked component is controlled by - its control type found, its panel mounted, what is set kept by the party. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes elements by a companion and places elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ComponentControlPanelModule() implements DomModule<ComponentControlPanelModule> {
 
     public static final ComponentControlPanelModule INSTANCE = new ComponentControlPanelModule();

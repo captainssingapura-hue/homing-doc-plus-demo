@@ -6,6 +6,8 @@ import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
 import hue.captains.singapura.js.homing.component.keyboard.focusParties;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -24,6 +26,8 @@ import java.util.List;
  * again when it is seen only if it was the one that paused it - by the state
  * the player says - so it never starts audio you did not.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record EmbeddedVideoModule() implements DomModule<EmbeddedVideoModule> {
 
     public record EmbeddedVideo() implements SelfContainedWidget<EmbeddedVideoModule>, NeedKeyboard {

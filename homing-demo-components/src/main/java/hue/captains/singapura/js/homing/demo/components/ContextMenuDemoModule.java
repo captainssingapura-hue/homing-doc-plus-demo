@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.demo.components;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code ContextMenuDemo}: the house's context menu in action - shown where the user asks, walked by the keys; opened and closed by its options. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It reaches the document, places elements and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ContextMenuDemoModule() implements DomModule<ContextMenuDemoModule> {
 
     public static final ContextMenuDemoModule INSTANCE = new ContextMenuDemoModule();
