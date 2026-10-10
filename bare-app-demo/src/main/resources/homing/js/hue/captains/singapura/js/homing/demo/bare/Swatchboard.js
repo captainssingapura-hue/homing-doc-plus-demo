@@ -3,8 +3,8 @@
 // appMain(root) draws every colour word the board reads as a swatch, the
 // chip painted with the word itself and the caption showing what the browser
 // computed for it, plus a picker over the palettes the registry offers. Picking
-// writes the preference; the CSS manager follows the store and swaps the
-// design's sheets; onThemeApplied is when the captions are re-read.
+// writes the preference; the theme's owner (ThemeSheets) follows the store and
+// swaps the design's sheets; onThemeApplied is when the captions are re-read.
 //
 // Nothing here names a variable or a theme — TOKENS and THEMES are generated
 // from the Java that owns them (SwatchboardData). The framework's
@@ -95,13 +95,13 @@ function appMain(root) {
     css.addClass(footMuted, sb_foot_muted);
     footMuted.textContent = "core + core-js + server + design-core: one design, two palettes. "
         + "The classes wear design words and the registry binds them; the picker writes the "
-        + "preference and the CSS manager follows it.";
+        + "preference and the theme's owner follows it.";
     foot.appendChild(footMuted);
     root.appendChild(foot);
 
     // ── Wiring ───────────────────────────────────────────────────────────────
     function refresh() {
-        var worn = css.theme();
+        var worn = ThemeSheetsInstance.theme();
         var theme = null;
         for (var k = 0; k < THEMES.length; k++) if (THEMES[k].slug === worn) theme = THEMES[k];
         sub.textContent = theme ? theme.label + " — " + theme.inspiration : "";
@@ -111,6 +111,6 @@ function appMain(root) {
     select.addEventListener("change", function () {
         PreferenceStewardInstance.remember("theme", select.value);
     });
-    css.onThemeApplied(function () { refresh(); });
+    ThemeSheetsInstance.onThemeApplied(function () { refresh(); });
     refresh();
 }

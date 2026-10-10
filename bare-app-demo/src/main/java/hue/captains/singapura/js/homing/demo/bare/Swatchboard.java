@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.server.PreferenceSteward;
+import hue.captains.singapura.js.homing.server.ThemeSheets;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public record Swatchboard() implements AppModule<AppModule._None, Swatchboard> {
                         new PreferenceSteward.PreferenceStewardInstance(),
                         new PreferenceSteward.PreferenceViewInstance()
                 ), PreferenceSteward.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ThemeSheets.ThemeSheetsInstance()), ThemeSheets.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new SwatchboardStyles.sb_root(),
                         new SwatchboardStyles.sb_head(),
