@@ -92,8 +92,6 @@ public final class DemoComponentsCrate implements Crate {
                 // the tab controls in a room of their own, the list master, the pictures and their drawings, the monitors
                 CrateEntry.of(DemoDocksModule.INSTANCE),
                 CrateEntry.of(TabOpenerDemoModule.INSTANCE),
-                CrateEntry.of(AddTabDemoModule.INSTANCE),
-                CrateEntry.of(PaneThumbsDemoModule.INSTANCE),
                 CrateEntry.of(ListMasterWidgetDemoModule.INSTANCE),
                 CrateEntry.of(DemoDrawingsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(SvgPanZoomDemoModule.INSTANCE),

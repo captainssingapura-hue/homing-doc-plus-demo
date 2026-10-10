@@ -10,7 +10,6 @@ import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.elements.SecondaryButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
-import hue.captains.singapura.js.homing.ui.panes.PaneStyles;
 import hue.captains.singapura.js.homing.ui.panes.TabTearModule;
 
 import java.util.List;
@@ -43,7 +42,6 @@ public record TearLabApp() implements AppModule<AppModule._None, TearLabApp> {
                 .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SecondaryButtonModule.SecondaryButton(), new SecondaryButtonModule.SecondaryButtonFactory()), SecondaryButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TearLabSceneModule.TearStage(), new TearLabSceneModule.TearChart()), TearLabSceneModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_new_pick()), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TearLabStyles.tl_readout()), TearLabStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
@@ -52,7 +50,8 @@ public record TearLabApp() implements AppModule<AppModule._None, TearLabApp> {
                         new GalleryStyles.ga_buttons(),
                         new GalleryStyles.ga_log(),
                         new GalleryStyles.ga_control(),
-                        new GalleryStyles.ga_control_label()
+                        new GalleryStyles.ga_control_label(),
+                        new GalleryStyles.ga_pick()
                 ), GalleryStyles.INSTANCE))
                 .build();
     }

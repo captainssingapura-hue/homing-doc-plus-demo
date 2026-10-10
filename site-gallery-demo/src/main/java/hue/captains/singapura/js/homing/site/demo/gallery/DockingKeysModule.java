@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.ui.panes.PaneKeysModule;
-import hue.captains.singapura.js.homing.ui.panes.PaneStyles;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -33,8 +32,7 @@ public record DockingKeysModule() implements DomModule<DockingKeysModule> {
     public ImportsFor<DockingKeysModule> imports() {
         return ImportsFor.<DockingKeysModule>builder()
                 .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys(), new PaneKeysModule.BrowserKeys()), PaneKeysModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_new_pick()), PaneStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new GalleryStyles.ga_control(), new GalleryStyles.ga_control_label(), new GalleryStyles.ga_control_readout()), GalleryStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new GalleryStyles.ga_pick(), new GalleryStyles.ga_control(), new GalleryStyles.ga_control_label(), new GalleryStyles.ga_control_readout()), GalleryStyles.INSTANCE))
                 .build();
     }
 

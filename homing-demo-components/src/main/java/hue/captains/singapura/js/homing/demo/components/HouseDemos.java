@@ -89,9 +89,6 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // what the page around them does not show: the tab controls, the list master, the pictures, the monitors
                 new Demo(HousePanes.TabOpener.INSTANCE,
                         new ModuleImports<>(List.of(new TabOpenerDemoModule.TabOpenerDemo()), TabOpenerDemoModule.INSTANCE)),
-                new Demo(HousePanes.AddTab.INSTANCE, new ModuleImports<>(List.of(new AddTabDemoModule.AddTabDemo()), AddTabDemoModule.INSTANCE)),
-                new Demo(HousePanes.PaneThumbs.INSTANCE,
-                        new ModuleImports<>(List.of(new PaneThumbsDemoModule.PaneThumbsDemo()), PaneThumbsDemoModule.INSTANCE)),
                 new Demo(HousePreferences.ListMasterWidget.INSTANCE,
                         new ModuleImports<>(List.of(new ListMasterWidgetDemoModule.ListMasterWidgetDemo()), ListMasterWidgetDemoModule.INSTANCE)),
                 new Demo(HousePanZoom.SvgPanZoom.INSTANCE,
@@ -149,6 +146,8 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // containers and regions
                 HouseContainers.PlainCard.INSTANCE, HouseContainers.ActionBar.INSTANCE,
                 HouseContainers.Trail.INSTANCE, HouseRegions.Section.INSTANCE, HouseSplitGrid.GridCell.INSTANCE,
+                // retired for now: adding a tab from outside a pane - which pane, and what - comes back on the panes' logical model
+                HousePanes.AddTab.INSTANCE, HousePanes.PaneThumbs.INSTANCE,
                 // marks and tracks
                 HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Lamp.INSTANCE,
                 HousePanes.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);

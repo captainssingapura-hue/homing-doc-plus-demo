@@ -101,8 +101,7 @@ class DockingWidget {
         var controls = branch.createElement("controls", "div");
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
-        // the new-tab control's own row, above the workspace it points at: its picture of the panes is the same
-        // arrangement you are looking at, so it wants to be read next to it rather than tucked among the sliders
+        // the keys picker's own row, above the workspace whose docks it sets, rather than tucked among the sliders
         var newRow = branch.createElement("new-row", "div");
         css.addClass(newRow, ga_buttons);
         el.appendChild(newRow);
@@ -120,7 +119,7 @@ class DockingWidget {
         function labelOf(tab) { return tab.id + (typeof tab.title === "function" ? " \u201c" + tab.title() + "\u201d" : ""); }   // which tab, and what it says it is
         function sink(ev) {
             if (domopsOf()) domopsOf().refresh();   // the party changes with every one of these
-            if (tabs) tabs.refresh();             // and so does how full each dock is, and where the panes are, which is what the new-tab control shows
+            if (tabs) tabs.refresh();             // and so do the docks the keys picker offers
             if (edge) countRoom();                // and what the strip on the room's edge says it holds
             switch (ev.kind) {
                 case "Subdivided":   say("Split     " + nameOf(ev.cellId) + " " + ev.side + " - " + nameOf(ev.newCellId)); break;
@@ -274,16 +273,15 @@ class DockingWidget {
         var store = new BooksStore();
         var domain = branch.createBranch("domain");
         domain.activate(_owner);
-        // WHERE THE TABS COME FROM, all of them: DockingTabs holds the source and the new-tab control, and the four
+        // WHERE THE TABS COME FROM, all of them: DockingTabs holds the source and the keys picker, and the four
         // this page opens with are asked for exactly the way a later one is.
         tabs = new DockingTabs(branch.createBranch("tabs"), { host: newRow, store: store, domain: domain, note: _NOTE,
             desk: desk,
-            panes: function () { return docks.regions().map(function (r) { return r.dock; }); },
-            onAdded: function (pane, tab) { var r = docks.regionOf(pane); say("Added     " + tab.id + "  to " + (r ? nameOf(r.id) : pane.slotId)); } });
+            panes: function () { return docks.regions().map(function (r) { return r.dock; }); } });
         this._tabs = tabs;
         // QUIET: a page seeding its own workspace is not answering anybody, so nothing is brought forward and
         // nothing takes the keys - the pane's own rule leaves the first of each pair showing, which is all that is
-        // wanted. The plus and the control say otherwise, each in its own way.
+        // wanted. The plus says otherwise.
         tabs.addTo(left, "books", "quiet");
         tabs.addTo(left, "shelves", "quiet");
         tabs.addTo(right, "plate", "quiet");

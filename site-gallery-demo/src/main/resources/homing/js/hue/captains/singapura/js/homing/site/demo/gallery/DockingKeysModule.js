@@ -41,7 +41,7 @@ class KeysPicker {
         row.appendChild(label);
 
         var pick = branch.createElement("scheme", "select");
-        css.addClass(pick, mtp_new_pick);
+        css.addClass(pick, ga_pick);
         pick.setAttribute("aria-label", "which keys the docks answer");
         this._ways = [
             { id: "arrows",  label: "the arrows",        schemes: [PaneKeys] },

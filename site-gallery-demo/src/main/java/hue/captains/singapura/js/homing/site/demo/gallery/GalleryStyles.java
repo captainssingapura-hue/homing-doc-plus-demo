@@ -89,6 +89,13 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return "display: flex; flex-wrap: wrap; align-items: center; gap: 10px;"; }
     }
 
+    /** A page's own native list - which keys the docks answer, the tear's settings - dressed as the controls beside it. */
+    public record ga_pick() implements CssClass<GalleryStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Raised.class, Color.Edge.class),
+                                                                          of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Interactive.class, Affordance.Cursor.class)); }
+        @Override public String body() { return "font: inherit; padding: 3px 6px;"; }
+    }
+
     /** The box a grid or a tree is given: a raised edge, its own scroll. */
     public record ga_host() implements CssClass<GalleryStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
@@ -921,7 +928,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
-        return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
+        return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(), new ga_pick(),
                        new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_census(), new ga_strip_box(), new ga_shelf(), new ga_menu_cells(), new ga_cell(), new ga_cell_face(), new ga_cell_caption(),
                        new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_specimens(), new ga_specimen_name(), new ga_log(), new ga_status(),
                        new ga_holders(), new ga_holder(), new ga_holder_on(), new ga_stage(), new ga_sprite(),
