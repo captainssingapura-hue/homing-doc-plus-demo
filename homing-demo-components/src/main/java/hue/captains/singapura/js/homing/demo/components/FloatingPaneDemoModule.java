@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code FloatingPaneDemo}: the house's floating pane in action - moved and sized by the hand; moved, sized, ringed and opened again by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 6,
         reason = "It makes its own elements, places elements, wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record FloatingPaneDemoModule() implements DomModule<FloatingPaneDemoModule> {
 

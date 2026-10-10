@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code IconDemo}: the house's icon in action - stepped through its vocabulary, cleared, and refusing a word it lacks, by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 5,
         reason = "It makes its own elements, places elements, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record IconDemoModule() implements DomModule<IconDemoModule> {
 

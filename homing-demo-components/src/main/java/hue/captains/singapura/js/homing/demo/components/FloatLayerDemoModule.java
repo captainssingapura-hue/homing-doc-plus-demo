@@ -15,7 +15,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code FloatLayerDemo}: the house's float layer in action - notes cascading and stacking; opened, and the one in front closed, by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
         reason = "It makes its own elements, wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record FloatLayerDemoModule() implements DomModule<FloatLayerDemoModule> {
 

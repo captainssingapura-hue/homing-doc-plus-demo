@@ -26,7 +26,7 @@ import java.util.List;
  * again when it is seen only if it was the one that paused it - by the state
  * the player says - so it never starts audio you did not.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 26,
         reason = "It makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record EmbeddedVideoModule() implements DomModule<EmbeddedVideoModule> {
 

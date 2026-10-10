@@ -13,7 +13,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code LinkDemo}: the house's link in action - its click told, the way not followed; sized by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 3,
         reason = "It makes elements by a companion, places elements and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record LinkDemoModule() implements DomModule<LinkDemoModule> {
 

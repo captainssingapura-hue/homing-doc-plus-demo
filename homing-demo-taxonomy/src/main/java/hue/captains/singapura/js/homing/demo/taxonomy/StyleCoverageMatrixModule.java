@@ -22,7 +22,7 @@ import java.util.List;
  * component and a column a style or a palette, in a relation grid - the matrix derived on the Java
  * side ({@link StyleCoverageModule}); a view of the pick, never a picker.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 5,
         reason = "It wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record StyleCoverageMatrixModule() implements DomModule<StyleCoverageMatrixModule> {
 

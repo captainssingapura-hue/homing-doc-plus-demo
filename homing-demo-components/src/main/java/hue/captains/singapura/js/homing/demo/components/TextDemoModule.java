@@ -20,7 +20,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code TextDemo}: one of the house's nine texts, as its leaf says, in the words such a text holds; sized by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 2,
         reason = "It places elements and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record TextDemoModule() implements DomModule<TextDemoModule> {
 

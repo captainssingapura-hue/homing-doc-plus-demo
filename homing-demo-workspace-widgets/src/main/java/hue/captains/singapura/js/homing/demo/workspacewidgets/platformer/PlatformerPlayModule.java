@@ -28,7 +28,7 @@ import java.util.List;
  * Tick a frame to the platformer party, in order; its animal the animal choice
  * party's; its keys through the keyboard's party.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 16,
         reason = "It makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record PlatformerPlayModule() implements DomModule<PlatformerPlayModule> {
 

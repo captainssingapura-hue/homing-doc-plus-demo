@@ -17,7 +17,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code RoleTree}: the house's role catalogue in a relation tree, and the uses of the role the cursor is on; a view, not a picker. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
         reason = "It writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record RoleTreeModule() implements DomModule<RoleTreeModule> {
 

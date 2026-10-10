@@ -17,7 +17,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code TaxonomyTree}: the house's components in a relation tree - the root, the kinds, the components at its leaves; the node the cursor is on is picked. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 6,
         reason = "It wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record TaxonomyTreeModule() implements DomModule<TaxonomyTreeModule> {
 

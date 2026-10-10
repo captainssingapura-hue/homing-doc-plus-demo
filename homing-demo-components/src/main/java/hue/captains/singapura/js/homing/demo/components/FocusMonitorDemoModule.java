@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code FocusMonitorDemo}: the house's focus monitor in action, on this very page - its focus tree, the holder lit; asked who holds the keys by its option. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 3,
         reason = "It writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record FocusMonitorDemoModule() implements DomModule<FocusMonitorDemoModule> {
 

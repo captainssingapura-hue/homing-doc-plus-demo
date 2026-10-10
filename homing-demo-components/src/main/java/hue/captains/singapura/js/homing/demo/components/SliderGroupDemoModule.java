@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code SliderGroupDemo}: the house's slider group in action - three faders holding the keys as one. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 1,
         reason = "It places elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record SliderGroupDemoModule() implements DomModule<SliderGroupDemoModule> {
 

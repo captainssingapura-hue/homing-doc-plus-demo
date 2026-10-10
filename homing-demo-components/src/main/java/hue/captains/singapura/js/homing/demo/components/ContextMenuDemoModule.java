@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code ContextMenuDemo}: the house's context menu in action - shown where the user asks, walked by the keys; opened and closed by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 8,
         reason = "It reaches the document, places elements and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ContextMenuDemoModule() implements DomModule<ContextMenuDemoModule> {
 

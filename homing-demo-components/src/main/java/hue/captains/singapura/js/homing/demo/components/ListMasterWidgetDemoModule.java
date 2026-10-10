@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code ListMasterWidgetDemo}: the house's list master in action - settings listed by where they belong, chosen by a press or the keys. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 1,
         reason = "It places elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ListMasterWidgetDemoModule() implements DomModule<ListMasterWidgetDemoModule> {
 

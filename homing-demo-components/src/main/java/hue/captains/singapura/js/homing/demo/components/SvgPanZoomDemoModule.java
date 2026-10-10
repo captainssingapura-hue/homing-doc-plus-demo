@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code SvgPanZoomDemo}: the house's pan-zoom view in action - a drawing zoomed by the wheel, a pinch or the keys; zoomed and fitted by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 3,
         reason = "It places elements, wears classes of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record SvgPanZoomDemoModule() implements DomModule<SvgPanZoomDemoModule> {
 

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code SplitGridMirrorDemo}: the house's split-grid mirror in action - a grid drawn small, its cursor moved by press or keys; the grid arranged by its options at the cursor. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 5,
         reason = "It touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record SplitGridMirrorDemoModule() implements DomModule<SplitGridMirrorDemoModule> {
 

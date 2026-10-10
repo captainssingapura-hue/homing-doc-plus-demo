@@ -24,7 +24,7 @@ import java.util.List;
  * - the six animals, one chosen, as the animal choice party says; a press asks the
  * party to choose, and every widget that meets there follows.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 23,
         reason = "It makes its own elements, places elements, wears classes of its own, writes attributes, writes styles and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record AnimalSelectorModule() implements DomModule<AnimalSelectorModule> {
 

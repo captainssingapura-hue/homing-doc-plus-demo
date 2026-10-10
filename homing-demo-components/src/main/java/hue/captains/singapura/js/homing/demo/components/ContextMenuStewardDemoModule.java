@@ -13,7 +13,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code ContextMenuStewardDemo}: the house's context-menu steward in action - one menu active at a time; asked what is open by its option. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
         reason = "It touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ContextMenuStewardDemoModule() implements DomModule<ContextMenuStewardDemoModule> {
 

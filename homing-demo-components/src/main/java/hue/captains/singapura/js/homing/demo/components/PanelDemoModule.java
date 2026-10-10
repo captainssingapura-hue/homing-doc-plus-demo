@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code PanelDemo}: the house's panel in action - one concern, named, filling its box; made current and raised by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 2,
         reason = "It touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record PanelDemoModule() implements DomModule<PanelDemoModule> {
 

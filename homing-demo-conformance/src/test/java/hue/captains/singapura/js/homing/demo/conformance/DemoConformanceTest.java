@@ -23,7 +23,7 @@ class DemoConformanceTest {
     @Test
     void everyServedModuleKeepsItsLane_strictly() {
         List<Finding> raw = new ConformanceEngine(DemoConformance.POLICY, new ServedModuleRenderer()).checkCrates(DemoConformance.TOP_LEVEL);
-        assertEquals(List.of(), DeclaredDebts.INSTANCE.paid(DemoConformance.TOP_LEVEL, raw), "a debt that is paid: remove its @ConformanceDebt");
+        assertEquals(List.of(), DeclaredDebts.INSTANCE.unbalanced(DemoConformance.TOP_LEVEL, raw), "a debt not as declared - owed exactly, never more");
         List<GradedFinding> errors = DemoConformance.grader().grade(raw).stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors.stream().map(g -> describe(g.finding())).toList(),
                 "the demo carries no debt but what its modules declare - fix these");

@@ -14,7 +14,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code NodeDetails}: the picked node - what it is, how it falls back, its parts or where it is a part, and its semantic classes. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 6,
         reason = "It wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record NodeDetailsModule() implements DomModule<NodeDetailsModule> {
 

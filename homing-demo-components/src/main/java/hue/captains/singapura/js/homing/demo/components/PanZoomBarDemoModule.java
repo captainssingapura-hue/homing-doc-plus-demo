@@ -13,7 +13,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code PanZoomBarDemo}: the house's pan-zoom bar in action - the controls of a drawing's view, driving it and following it. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 6,
         reason = "It places elements, wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record PanZoomBarDemoModule() implements DomModule<PanZoomBarDemoModule> {
 

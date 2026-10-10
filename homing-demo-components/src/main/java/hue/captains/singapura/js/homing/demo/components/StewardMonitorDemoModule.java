@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code StewardMonitorDemo}: the house's steward monitor in action - this page's keys as one lamp; asked what the lamp says by its option. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 1,
         reason = "It touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record StewardMonitorDemoModule() implements DomModule<StewardMonitorDemoModule> {
 

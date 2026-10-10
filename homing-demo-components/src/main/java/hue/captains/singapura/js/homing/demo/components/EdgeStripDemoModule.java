@@ -14,7 +14,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code EdgeStripDemo}: the house's edge strip in action - tools at a box's foot, shown by the hand, held shown by its option. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
         reason = "It makes elements by a companion, places elements and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record EdgeStripDemoModule() implements DomModule<EdgeStripDemoModule> {
 

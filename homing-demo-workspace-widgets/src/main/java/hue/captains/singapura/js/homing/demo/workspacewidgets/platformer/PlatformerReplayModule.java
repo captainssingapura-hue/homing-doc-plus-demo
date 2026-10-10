@@ -27,7 +27,7 @@ import java.util.List;
  * joining mid-run, handed the world as it stands, a snapshot of records inside
  * records. It makes nothing of its own: no terrain, no keys, no sound.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 14,
         reason = "It makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record PlatformerReplayModule() implements DomModule<PlatformerReplayModule> {
 

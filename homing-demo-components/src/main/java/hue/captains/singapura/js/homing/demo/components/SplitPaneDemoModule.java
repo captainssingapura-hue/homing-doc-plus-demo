@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code SplitPaneDemo}: the house's split pane in action - regions re-shared by the hand; evened out and put back by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 2,
         reason = "It touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record SplitPaneDemoModule() implements DomModule<SplitPaneDemoModule> {
 

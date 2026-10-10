@@ -50,7 +50,7 @@ class WidgetsConformanceTest {
     @Test
     void everyServedModuleKeepsItsLane_strictly() {
         List<Finding> raw = new ConformanceEngine(GameLoopConformance.POLICY, new ServedModuleRenderer()).checkCrates(TOP);
-        assertEquals(List.of(), DeclaredDebts.INSTANCE.paid(TOP, raw), "a debt that is paid: remove its @ConformanceDebt");
+        assertEquals(List.of(), DeclaredDebts.INSTANCE.unbalanced(TOP, raw), "a debt not as declared - owed exactly, never more");
         List<GradedFinding> errors = FindingGrader.STRICT.grade(raw).stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors.stream().map(g -> describe(g.finding())).toList(),
                 "the ported widgets carry no debt - fix these, there is no ledger to file them in");

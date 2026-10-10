@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code SliderDemo}: the house's slider in action - a value on a scale, moved by the hand or the keys; switched off by its option. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 1,
         reason = "It places elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record SliderDemoModule() implements DomModule<SliderDemoModule> {
 

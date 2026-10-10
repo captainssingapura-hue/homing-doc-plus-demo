@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code SummaryCardDemo}: the house's summary card in action - opened by the pointer or the keys; sized and shaped by its options. */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 2,
         reason = "It places elements and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record SummaryCardDemoModule() implements DomModule<SummaryCardDemoModule> {
 
