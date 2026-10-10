@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
-import hue.captains.singapura.js.homing.ui.focus.UiFocusCrate;
+import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
@@ -54,7 +54,7 @@ public final class DemoComponentsCrate implements Crate {
                 UiPanesCrate.INSTANCE,
                 UiPreferencesCrate.INSTANCE,
                 UiPanZoomCrate.INSTANCE,
-                UiFocusCrate.INSTANCE,
+                UiMonitorsCrate.INSTANCE,
                 UiControlPanelCrate.INSTANCE,
                 // The widgets' contract.
                 WorkspaceWidgetsCrate.INSTANCE);

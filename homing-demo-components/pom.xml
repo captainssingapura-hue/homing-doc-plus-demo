@@ -99,7 +99,13 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-focus</artifactId>
+            <artifactId>homing-ui-monitors</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <!-- The standard site's chrome, whose leaves the page around the demos shows: declared there. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa-standard</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
 

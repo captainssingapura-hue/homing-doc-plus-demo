@@ -15,8 +15,8 @@ import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.relgrid.RelGridModule;
 import hue.captains.singapura.js.homing.reltree.RelTreeModule;
-import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
-import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.FocusMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.StewardMonitorModule;
 
 import java.util.List;
 

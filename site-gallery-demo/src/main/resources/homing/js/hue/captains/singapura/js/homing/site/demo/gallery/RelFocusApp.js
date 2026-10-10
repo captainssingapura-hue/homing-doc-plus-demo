@@ -44,7 +44,7 @@ class RelFocusWidget {
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-rel-grid · homing-ui-focus";
+        kicker.textContent = "homing-rel-grid · homing-ui-monitors";
         el.appendChild(kicker);
         var title = branch.createElement("title", "h1");
         css.addClass(title, ga_title);

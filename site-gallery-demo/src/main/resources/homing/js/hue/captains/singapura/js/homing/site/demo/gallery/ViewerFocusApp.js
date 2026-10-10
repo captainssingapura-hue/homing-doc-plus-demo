@@ -23,7 +23,7 @@ class ViewerFocusWidget {
 
         var kicker = branch.createElement("kicker", "div");
         css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-panzoom · homing-ui-focus · a case board";
+        kicker.textContent = "homing-ui-panzoom · homing-ui-monitors · a case board";
         el.appendChild(kicker);
         var title = branch.createElement("title", "h1");
         css.addClass(title, ga_title);

@@ -2,6 +2,15 @@ package hue.captains.singapura.js.homing.demo.components;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.preferences.HousePreferences;
+import hue.captains.singapura.js.homing.site.mpa.HouseSite;
+import hue.captains.singapura.js.homing.ui.docking.HouseDocking;
+import hue.captains.singapura.js.homing.ui.floating.HouseFloating;
+import hue.captains.singapura.js.homing.ui.monitors.HouseMonitors;
+import hue.captains.singapura.js.homing.ui.menu.HouseMenus;
+import hue.captains.singapura.js.homing.ui.panes.HousePanes;
+import hue.captains.singapura.js.homing.ui.panzoom.HousePanZoom;
+import hue.captains.singapura.js.homing.ui.splitgrid.HouseSplitGrid;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
@@ -64,33 +73,33 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new Demo(HouseContainers.Dialog.INSTANCE, new ModuleImports<>(List.of(new DialogDemoModule.DialogDemo()), DialogDemoModule.INSTANCE)),
                 new Demo(HouseContainers.ContextMenu.INSTANCE,
                         new ModuleImports<>(List.of(new ContextMenuDemoModule.ContextMenuDemo()), ContextMenuDemoModule.INSTANCE)),
-                new Demo(HouseContainers.ContextMenuSteward.INSTANCE,
+                new Demo(HouseMenus.ContextMenuSteward.INSTANCE,
                         new ModuleImports<>(List.of(new ContextMenuStewardDemoModule.ContextMenuStewardDemo()), ContextMenuStewardDemoModule.INSTANCE)),
                 new Demo(HouseContainers.FloatingPane.INSTANCE,
                         new ModuleImports<>(List.of(new FloatingPaneDemoModule.FloatingPaneDemo()), FloatingPaneDemoModule.INSTANCE)),
-                new Demo(HouseContainers.FloatLayer.INSTANCE,
+                new Demo(HouseFloating.FloatLayer.INSTANCE,
                         new ModuleImports<>(List.of(new FloatLayerDemoModule.FloatLayerDemo()), FloatLayerDemoModule.INSTANCE)),
                 new Demo(HouseContainers.SplitPane.INSTANCE,
                         new ModuleImports<>(List.of(new SplitPaneDemoModule.SplitPaneDemo()), SplitPaneDemoModule.INSTANCE)),
-                new Demo(HouseContainers.SplitGrid.INSTANCE,
+                new Demo(HouseSplitGrid.SplitGrid.INSTANCE,
                         new ModuleImports<>(List.of(new SplitGridDemoModule.SplitGridDemo()), SplitGridDemoModule.INSTANCE)),
-                new Demo(HouseContainers.SplitGridMirror.INSTANCE,
+                new Demo(HouseSplitGrid.SplitGridMirror.INSTANCE,
                         new ModuleImports<>(List.of(new SplitGridMirrorDemoModule.SplitGridMirrorDemo()), SplitGridMirrorDemoModule.INSTANCE)),
                 // what the page around them does not show: the tab controls, the list master, the pictures, the monitors
-                new Demo(HouseContainers.TabOpener.INSTANCE,
+                new Demo(HousePanes.TabOpener.INSTANCE,
                         new ModuleImports<>(List.of(new TabOpenerDemoModule.TabOpenerDemo()), TabOpenerDemoModule.INSTANCE)),
-                new Demo(HouseContainers.AddTab.INSTANCE, new ModuleImports<>(List.of(new AddTabDemoModule.AddTabDemo()), AddTabDemoModule.INSTANCE)),
-                new Demo(HouseContainers.PaneThumbs.INSTANCE,
+                new Demo(HousePanes.AddTab.INSTANCE, new ModuleImports<>(List.of(new AddTabDemoModule.AddTabDemo()), AddTabDemoModule.INSTANCE)),
+                new Demo(HousePanes.PaneThumbs.INSTANCE,
                         new ModuleImports<>(List.of(new PaneThumbsDemoModule.PaneThumbsDemo()), PaneThumbsDemoModule.INSTANCE)),
-                new Demo(HouseContainers.ListMasterWidget.INSTANCE,
+                new Demo(HousePreferences.ListMasterWidget.INSTANCE,
                         new ModuleImports<>(List.of(new ListMasterWidgetDemoModule.ListMasterWidgetDemo()), ListMasterWidgetDemoModule.INSTANCE)),
-                new Demo(HouseContainers.SvgPanZoom.INSTANCE,
+                new Demo(HousePanZoom.SvgPanZoom.INSTANCE,
                         new ModuleImports<>(List.of(new SvgPanZoomDemoModule.SvgPanZoomDemo()), SvgPanZoomDemoModule.INSTANCE)),
-                new Demo(HouseContainers.PanZoomBar.INSTANCE,
+                new Demo(HousePanZoom.PanZoomBar.INSTANCE,
                         new ModuleImports<>(List.of(new PanZoomBarDemoModule.PanZoomBarDemo()), PanZoomBarDemoModule.INSTANCE)),
-                new Demo(HouseContainers.FocusMonitor.INSTANCE,
+                new Demo(HouseMonitors.FocusMonitor.INSTANCE,
                         new ModuleImports<>(List.of(new FocusMonitorDemoModule.FocusMonitorDemo()), FocusMonitorDemoModule.INSTANCE)),
-                new Demo(HouseContainers.StewardMonitor.INSTANCE,
+                new Demo(HouseMonitors.StewardMonitor.INSTANCE,
                         new ModuleImports<>(List.of(new StewardMonitorDemoModule.StewardMonitorDemo()), StewardMonitorDemoModule.INSTANCE)));
     }
 
@@ -98,28 +107,28 @@ public record HouseDemos() implements StatelessFunctionalObject {
     public List<ShownAround> aroundIt() {
         return List.of(
                 // the workspace
-                new ShownAround(HouseContainers.DockGrid.INSTANCE, "the workspace itself: its regions, each a dock, the lines between them dragged to re-share"),
-                new ShownAround(HouseContainers.MultiTabPane.INSTANCE, "each region of the workspace: its tabs, one in front"),
-                new ShownAround(HouseContainers.TabStrip.INSTANCE, "the bar of tabs atop each region: its chips, its plus, the count of those out of sight"),
-                new ShownAround(HouseContainers.TabPane.INSTANCE, "every tab of the workspace: its chip and what it holds, which travel together"),
+                new ShownAround(HouseDocking.DockGrid.INSTANCE, "the workspace itself: its regions, each a dock, the lines between them dragged to re-share"),
+                new ShownAround(HousePanes.MultiTabPane.INSTANCE, "each region of the workspace: its tabs, one in front"),
+                new ShownAround(HousePanes.TabStrip.INSTANCE, "the bar of tabs atop each region: its chips, its plus, the count of those out of sight"),
+                new ShownAround(HousePanes.TabPane.INSTANCE, "every tab of the workspace: its chip and what it holds, which travel together"),
                 new ShownAround(HouseMarks.Separator.INSTANCE, "between the sections of a tab's menu, opened by a right-click on its chip"),
-                new ShownAround(HouseContainers.TabPicker.INSTANCE, "a region with no tab left: what it offers to open"),
-                new ShownAround(HouseContainers.SingleTabPane.INSTANCE, "a tab torn off its bar: the float that carries it"),
+                new ShownAround(HousePanes.TabPicker.INSTANCE, "a region with no tab left: what it offers to open"),
+                new ShownAround(HousePanes.SingleTabPane.INSTANCE, "a tab torn off its bar: the float that carries it"),
                 // the page's chrome
-                new ShownAround(HouseContainers.MpaChrome.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
-                new ShownAround(HouseControls.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
+                new ShownAround(HouseSite.MpaChrome.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
+                new ShownAround(HouseSite.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
                 new ShownAround(HouseControls.Crumb.INSTANCE, "each step of the trail in the bar at the top of the page: the ways back, the last the page itself, set heavier"),
                 new ShownAround(HouseMarks.Delimiter.INSTANCE, "between the steps of the trail in the bar at the top of the page: a sign, a slash unless the style draws another"),
                 // the preferences it opens
-                new ShownAround(HouseContainers.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
+                new ShownAround(HousePreferences.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
                 new ShownAround(HouseContainers.Scrim.INSTANCE, "the veil over the page behind the preferences, opened from the bar: a press on it closes them"),
                 new ShownAround(HouseRegions.WidgetSlot.INSTANCE, "the preferences' list and the setting beside it: each a slot a widget is loaded into"),
-                new ShownAround(HouseContainers.PreferenceField.INSTANCE, "every setting in the preferences: where it belongs, its title, a note, the way back to its default"),
-                new ShownAround(HouseContainers.OverviewWidget.INSTANCE, "a group of settings in the preferences: each setting listed with its value"),
-                new ShownAround(HouseContainers.ThemeWidget.INSTANCE, "the theme in the preferences: a style, and a palette to wear it in"),
-                new ShownAround(HouseContainers.ChoiceWidget.INSTANCE, "a setting in the preferences chosen from a few options"),
-                new ShownAround(HouseContainers.ScaleWidget.INSTANCE, "a setting in the preferences set along a scale"),
-                new ShownAround(HouseContainers.ToggleWidget.INSTANCE, "a setting in the preferences that is on or off"));
+                new ShownAround(HousePreferences.PreferenceField.INSTANCE, "every setting in the preferences: where it belongs, its title, a note, the way back to its default"),
+                new ShownAround(HousePreferences.OverviewWidget.INSTANCE, "a group of settings in the preferences: each setting listed with its value"),
+                new ShownAround(HouseSite.ThemeWidget.INSTANCE, "the theme in the preferences: a style, and a palette to wear it in"),
+                new ShownAround(HousePreferences.ChoiceWidget.INSTANCE, "a setting in the preferences chosen from a few options"),
+                new ShownAround(HousePreferences.ScaleWidget.INSTANCE, "a setting in the preferences set along a scale"),
+                new ShownAround(HousePreferences.ToggleWidget.INSTANCE, "a setting in the preferences that is on or off"));
     }
 
     /** Realized, their demos still to come: none now. */
@@ -130,15 +139,15 @@ public record HouseDemos() implements StatelessFunctionalObject {
         return List.of(
                 // controls
                 HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE,
-                HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
-                HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseControls.Brand.INSTANCE,
+                HousePanes.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
+                HouseControls.Switch.INSTANCE, HousePanes.PaneThumb.INSTANCE, HouseSite.Brand.INSTANCE,
                 // items
-                HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HouseItems.SettingRow.INSTANCE,
+                HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HousePreferences.SettingRow.INSTANCE,
                 // containers and regions
                 HouseContainers.PlainCard.INSTANCE, HouseContainers.ActionBar.INSTANCE,
-                HouseContainers.Trail.INSTANCE, HouseRegions.Section.INSTANCE, HouseRegions.GridCell.INSTANCE,
+                HouseContainers.Trail.INSTANCE, HouseRegions.Section.INSTANCE, HouseSplitGrid.GridCell.INSTANCE,
                 // marks and tracks
                 HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Lamp.INSTANCE,
-                HouseMarks.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
+                HousePanes.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
     }
 }
