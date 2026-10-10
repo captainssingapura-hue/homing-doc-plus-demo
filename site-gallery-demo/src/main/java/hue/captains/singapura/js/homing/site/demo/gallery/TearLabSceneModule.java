@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -39,10 +41,10 @@ public record TearLabSceneModule() implements DomModule<TearLabSceneModule> {
         return ImportsFor.<TearLabSceneModule>builder()
                 .add(new ModuleImports<>(List.of(new TabChipModule.TabChip()), TabChipModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabDragModule.TabDrag()), TabDragModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_strip(),
-                        new PaneStyles.mtp_chip_seated(),
-                        new PaneStyles.mtp_chip_dragging(),
                         new PaneStyles.mtp_chip_shifted()
                 ), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(

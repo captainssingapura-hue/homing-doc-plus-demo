@@ -24,6 +24,8 @@
 // =============================================================================
 
 const _labOwner = Object.freeze({ toString: () => "tearLab" });
+/** The strip's leaf: a tab strip, drawn here as the lab's own row of chips. */
+const _LAB_STRIP = Object.freeze({ LEAF: "tab-strip" });
 var _DOTS = 240, _BARS = 120, _CHART_H = 90;
 var _PHASE = { rail: tl_rail, flight: tl_flight, follow: tl_follow, done: tl_follow };
 
@@ -41,6 +43,7 @@ class TearStage {
         css.addClass(stage, tl_stage);
         this._strip = branch.createElement("strip", "div");
         css.addClass(this._strip, mtp_strip, tl_strip);
+        new Look(_LAB_STRIP, ROLE.STANDALONE).wear(this._strip);
         this._strip.setAttribute("role", "tablist");
         stage.appendChild(this._strip);
         this._edge = ["escape-top", "escape-bottom", "capture-top", "capture-bottom"].map(function (n, i) {
@@ -111,8 +114,7 @@ class TearStage {
         this.root.setPointerCapture(ev.pointerId);
         ev.preventDefault();
         this._clearTrail();
-        css.removeClass(c, mtp_chip_seated);
-        if (!afloat) { this._measure(); css.addClass(c, mtp_chip_dragging); c.style.setProperty("--mtp-drag-x", "0px"); }
+        if (!afloat) { this._measure(); TabChip.grip(c, true); c.style.setProperty("--mtp-drag-x", "0px"); }
         this._step(this._tear.press(p.x, p.y, ev.timeStamp, this._band(), { centre: centre, afloat: afloat }), p, "press");
         this._frame();
     }
@@ -181,7 +183,7 @@ class TearStage {
     _lift(s) {
         var c = this._g.chip;
         this._unshift();
-        css.removeClass(c, mtp_chip_dragging);
+        TabChip.grip(c, false);
         css.addClass(c, tl_free);
         this.root.appendChild(c);
         this._g.tears++;
@@ -196,7 +198,7 @@ class TearStage {
         var at = this._row().filter(function (o) { var r = this._rect(o); return r.left + r.width / 2 < x; }, this).length;
         css.removeClass(c, tl_free, tl_waiting);
         this._strip.insertBefore(c, this._row()[at] || null);
-        css.addClass(c, mtp_chip_dragging);
+        TabChip.grip(c, true);
         c.style.setProperty("--mtp-drag-x", "0px");
         this._measure();
         g.captures++;
@@ -230,8 +232,8 @@ class TearStage {
 
     /** At rest: seated, out of the hand; on the stage still, when it is loose. */
     _seat(c, loose) {
-        css.removeClass(c, mtp_chip_dragging, tl_waiting);
-        css.addClass(c, mtp_chip_seated);
+        TabChip.grip(c, false);
+        css.removeClass(c, tl_waiting);
         c.style.removeProperty("--mtp-drag-x");
         if (!loose) css.removeClass(c, tl_free);
     }
