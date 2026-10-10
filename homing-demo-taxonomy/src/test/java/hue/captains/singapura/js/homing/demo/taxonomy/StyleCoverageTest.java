@@ -50,20 +50,20 @@ class StyleCoverageTest {
     }
 
     @Test
-    void theNineButtonsTheNineTextsAndTheMirrorWearTheNewSheet_andOnlyTheirBranchesAreStyled() {
+    void theNineButtonsTheNineTextsAndTheTwoCompositesWearTheNewSheet_andOnlyTheirBranchesAreStyled() {
         var worn = HOUSE.rows().stream().filter(r -> r.worn().equals("look")).map(StyleCoverage.Row::id).collect(Collectors.toSet());
         assertEquals(Set.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "toggle-button",
                 "close-button", "icon-button",
                 "heading", "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark",
                 "link", "crumb", "scrim", "separator", "delimiter",
-                "split-grid-mirror"), worn, "the buttons, the texts, the ways, the marks, the veil; and the split grid's mirror, the first composite");
+                "split-grid-mirror", "slider"), worn, "the buttons, the texts, the ways, the marks, the veil; and the composites so far, the split grid's mirror and the slider");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");
         var styled = new java.util.HashSet<>(under(HouseBranches.Button.INSTANCE));
         styled.addAll(under(HouseBranches.Text.INSTANCE));
-        styled.addAll(Set.of("link", "crumb", "scrim", "separator", "pane-thumb"));
+        styled.addAll(Set.of("link", "crumb", "scrim", "separator", "pane-thumb", "slider", "groove", "knob", "detent", "tick"));
         assertEquals(styled, answeredBySomeStyle(true),
-                "a style's looks are the buttons', the texts', the ways', the separator's, the veil's and a pane thumbnail's rule alone: every one's, and nothing else's");
+                "a style's looks are the buttons', the texts', the ways', the separator's, the veil's, a pane thumbnail's rule and the slider's parts alone: every one's, and nothing else's");
         assertEquals(under(HouseBranches.Control.INSTANCE), answeredBySomeStyle(false),
                 "its treatments reach every control: the ring, and how a control is when it cannot be used");
         assertEquals(HOUSE.rows().size(), HOUSE.json().split("\"worn\"").length - 1, "a row each in what the page is handed");
