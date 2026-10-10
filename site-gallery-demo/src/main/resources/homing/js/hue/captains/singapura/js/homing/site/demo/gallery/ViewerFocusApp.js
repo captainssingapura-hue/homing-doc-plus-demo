@@ -138,8 +138,14 @@ class ViewerFocusWidget {
             toggled();
         });
 
-        this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
-        this._steward = new StewardMonitor(branch.createBranch("steward"), { host: monitorBox });
+        // the tree and the lamp under it, each a widget in a slot of its own over the box
+        this._monitors = [["monitor", FocusMonitor], ["steward", StewardMonitor]].map(function (m) {
+            var shown = branch.createBranch(m[0]);
+            shown.activate(_owner);
+            var slot = new WidgetSlot({ branch: shown, host: monitorBox });
+            slot.show(m[0], m[1], {});
+            return slot;
+        });
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
         el.appendChild(log);
@@ -169,7 +175,7 @@ class ViewerFocusWidget {
     dispose() {
         Keys.home(null);
         this._offTrace(); this._offKb(); this._board.dispose();
-        this._steward.dispose(); this._monitor.dispose();
+        this._monitors.forEach(function (s) { s.disposeAll(); });
         this._viewers.forEach(function (v) { v.dispose(); });
         this._parts.forEach(function (p) { p.dispose(); });
     }

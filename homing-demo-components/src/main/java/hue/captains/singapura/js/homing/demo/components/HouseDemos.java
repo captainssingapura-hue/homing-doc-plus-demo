@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.preferences.HousePreferences;
 import hue.captains.singapura.js.homing.site.mpa.HouseSite;
+import hue.captains.singapura.js.homing.ui.controlpanel.HouseControlPanel;
 import hue.captains.singapura.js.homing.ui.docking.HouseDocking;
 import hue.captains.singapura.js.homing.ui.floating.HouseFloating;
 import hue.captains.singapura.js.homing.ui.monitors.HouseMonitors;
@@ -103,7 +104,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                         new ModuleImports<>(List.of(new StewardMonitorDemoModule.StewardMonitorDemo()), StewardMonitorDemoModule.INSTANCE)));
     }
 
-    /** Shown by the page around the demos - the workspace they stand in, the page's chrome, the preferences it opens - and where. */
+    /** Shown by the page around the demos - the workspace they stand in, the panel beside them, the page's chrome, the preferences it opens - and where. */
     public List<ShownAround> aroundIt() {
         return List.of(
                 // the workspace
@@ -114,6 +115,8 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new ShownAround(HouseMarks.Separator.INSTANCE, "between the sections of a tab's menu, opened by a right-click on its chip"),
                 new ShownAround(HousePanes.TabPicker.INSTANCE, "a region with no tab left: what it offers to open"),
                 new ShownAround(HousePanes.SingleTabPane.INSTANCE, "a tab torn off its bar: the float that carries it"),
+                // the panel beside the demos
+                new ShownAround(HouseControlPanel.ControlPanel.INSTANCE, "the control panel beside the demos: a slider for each degree the picked component varies by, a button for each switch, action and question"),
                 // the page's chrome
                 new ShownAround(HouseSite.MpaChrome.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
                 new ShownAround(HouseSite.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),

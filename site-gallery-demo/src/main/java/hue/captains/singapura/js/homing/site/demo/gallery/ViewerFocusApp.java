@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
@@ -48,6 +49,7 @@ public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocus
                 .add(new ModuleImports<>(List.of(new ViewerCasesModule.ViewerCase(), new ViewerCasesModule.CaseBoard()), ViewerCasesModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ViewerDrawings.focusTree(), new ViewerDrawings.specimen()), ViewerDrawings.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),

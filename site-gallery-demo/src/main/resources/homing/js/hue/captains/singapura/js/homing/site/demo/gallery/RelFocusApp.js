@@ -112,8 +112,14 @@ class RelFocusWidget {
         var leaf = new Leaf(branch.createBranch("x"), scene, top, "x");
         this._parts = [panelT, panelG, leaf];
 
-        this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
-        this._steward = new StewardMonitor(branch.createBranch("steward"), { host: monitorBox });
+        // the tree and the lamp under it, each a widget in a slot of its own over the box
+        this._monitors = [["monitor", FocusMonitor], ["steward", StewardMonitor]].map(function (m) {
+            var shown = branch.createBranch(m[0]);
+            shown.activate(_owner);
+            var slot = new WidgetSlot({ branch: shown, host: monitorBox });
+            slot.show(m[0], m[1], {});
+            return slot;
+        });
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
@@ -136,7 +142,7 @@ class RelFocusWidget {
     }
 
     dispose() {
-        this._offKb(); this._steward.dispose(); this._monitor.dispose();
+        this._offKb(); this._monitors.forEach(function (s) { s.disposeAll(); });
         this._parts.forEach(function (p) { p.dispose(); });
         this._widgets.forEach(function (w) { w.destroy(); });
         this._relations.forEach(function (r) { r.dispose(); });

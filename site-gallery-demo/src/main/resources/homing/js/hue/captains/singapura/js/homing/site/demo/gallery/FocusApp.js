@@ -112,8 +112,14 @@ class FocusWidget {
         this._parts = [panelA, panelB, panelC, loose];
         this._leaves = [a1, a2, b1, c1, c2, c3, loose];
 
-        this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
-        this._steward = new StewardMonitor(branch.createBranch("steward"), { host: monitorBox });
+        // the tree and the lamp under it, each a widget in a slot of its own over the box
+        this._monitors = [["monitor", FocusMonitor], ["steward", StewardMonitor]].map(function (m) {
+            var shown = branch.createBranch(m[0]);
+            shown.activate(_owner);
+            var slot = new WidgetSlot({ branch: shown, host: monitorBox });
+            slot.show(m[0], m[1], {});
+            return slot;
+        });
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
@@ -135,7 +141,7 @@ class FocusWidget {
         this.root = el;
     }
 
-    dispose() { this._offKb(); this._steward.dispose(); this._monitor.dispose(); this._parts.forEach(function (p) { p.dispose(); }); }
+    dispose() { this._offKb(); this._monitors.forEach(function (s) { s.disposeAll(); }); this._parts.forEach(function (p) { p.dispose(); }); }
 }
 
 function appMain(el, params) {

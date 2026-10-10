@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.site.demo.gallery.prefs;
 
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.Exportable;
@@ -36,6 +37,7 @@ public record PreferencesApp() implements AppModule<AppModule._None, Preferences
         return ImportsFor.<PreferencesApp>builder()
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesViewModule.PreferencesView()), PreferencesViewModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesRegistry.PREFERENCES()), GalleryPreferences.INSTANCE))
                 .add(new ModuleImports<>(List.of(

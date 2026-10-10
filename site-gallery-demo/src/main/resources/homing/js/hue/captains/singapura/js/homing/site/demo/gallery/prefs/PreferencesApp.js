@@ -1,6 +1,6 @@
 // =============================================================================
-// PreferencesApp — the preferences as a page. The view is mounted in the
-// slot with the gallery's stamped registry; the widgets arrive as nodes are
+// PreferencesApp — the preferences as a page. The view is a widget, shown in
+// a slot over the page's host with the gallery's stamped registry for params; the widgets arrive as nodes are
 // chosen. Nothing else on this page.
 // =============================================================================
 
@@ -30,7 +30,10 @@ class PreferencesWidget {
 
         var host = branch.createElement("host", "div");
         el.appendChild(host);
-        var view = new PreferencesView(branch.createBranch("view"), host, PREFERENCES);
+        var shown = branch.createBranch("view");
+        shown.activate(_owner);
+        this._slot = new WidgetSlot({ branch: shown, host: host });
+        var view = this._slot.show("preferences", PreferencesView, PREFERENCES);
         // the keys, through the party: the page holds them for the view — a press or the focus arriving in it claims — and the view hands them on
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
@@ -38,10 +41,9 @@ class PreferencesWidget {
         this._kbId = kb.join("preferences/view", { keyDown: function (ev) { return view.key(ev); } });
         this._offKeys = Keys.claimOn(host, kb, this._kbId);
         this.root = el;
-        this._view = view;
     }
 
-    dispose() { this._offKeys(); this._kb.leave(this._kbId); this._view.dispose(); }
+    dispose() { this._offKeys(); this._kb.leave(this._kbId); this._slot.disposeAll(); }
 }
 
 function appMain(el, params) {

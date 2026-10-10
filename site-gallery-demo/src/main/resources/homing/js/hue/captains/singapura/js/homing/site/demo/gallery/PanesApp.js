@@ -230,8 +230,14 @@ class PanesWidget {
         add(KINDS[2], { title: "About", text: NOTES[0] + " " + NOTES[1] }, { pinned: true });
         add(KINDS[0], { title: "Card 2", badge: "TAB", text: NOTES[2] });
         add(KINDS[1], { start: 7 });
-        this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
-        this._steward = new StewardMonitor(branch.createBranch("steward"), { host: monitorBox });
+        // the tree and the lamp under it, each a widget in a slot of its own over the box
+        this._monitors = [["monitor", FocusMonitor], ["steward", StewardMonitor]].map(function (m) {
+            var shown = branch.createBranch(m[0]);
+            shown.activate(_owner);
+            var slot = new WidgetSlot({ branch: shown, host: monitorBox });
+            slot.show(m[0], m[1], {});
+            return slot;
+        });
 
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
@@ -259,7 +265,7 @@ class PanesWidget {
     /** A press: what the page keeps for the button pressed. */
     handle(event) { this._acts.get(event.source)(event); }
 
-    dispose() { this._steward.dispose(); this._monitor.dispose(); this._desk.dispose(); this._pane.dispose(); }   // the desk first: a pane is disposed only empty
+    dispose() { this._monitors.forEach(function (s) { s.disposeAll(); }); this._desk.dispose(); this._pane.dispose(); }   // the desk first: a pane is disposed only empty
 }
 
 function appMain(el, params) {
