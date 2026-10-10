@@ -36,9 +36,9 @@ class HouseDemosTest {
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
         assertEquals(41, HOUSE.demos().size(), "twenty-five elements - nine of them texts, one a link; eight overlays, menus and splits; eight the page around does not show");
-        assertEquals(18, HOUSE.aroundIt().size(), "the workspace's six, the chrome's three, the preferences' nine");
+        assertEquals(20, HOUSE.aroundIt().size(), "the workspace's seven, the chrome's four, the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
-        assertEquals(26, HOUSE.unrealized().size());
+        assertEquals(25, HOUSE.unrealized().size());
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)
                 .map(Demo::className).toList(), "the nine buttons are one button");
         assertEquals(List.of("TextDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseText.Pill.INSTANCE)

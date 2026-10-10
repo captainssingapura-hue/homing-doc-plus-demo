@@ -102,12 +102,14 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new ShownAround(HouseContainers.MultiTabPane.INSTANCE, "each region of the workspace: its tabs, one in front"),
                 new ShownAround(HouseContainers.TabStrip.INSTANCE, "the bar of tabs atop each region: its chips, its plus, the count of those out of sight"),
                 new ShownAround(HouseContainers.TabPane.INSTANCE, "every tab of the workspace: its chip and what it holds, which travel together"),
+                new ShownAround(HouseMarks.Separator.INSTANCE, "between the sections of a tab's menu, opened by a right-click on its chip"),
                 new ShownAround(HouseContainers.TabPicker.INSTANCE, "a region with no tab left: what it offers to open"),
                 new ShownAround(HouseContainers.SingleTabPane.INSTANCE, "a tab torn off its bar: the float that carries it"),
                 // the page's chrome
                 new ShownAround(HouseContainers.MpaChrome.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
                 new ShownAround(HouseControls.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
                 new ShownAround(HouseControls.Crumb.INSTANCE, "each step of the trail in the bar at the top of the page: the ways back, the last the page itself, set heavier"),
+                new ShownAround(HouseMarks.Delimiter.INSTANCE, "between the steps of the trail in the bar at the top of the page: a sign, a slash unless the style draws another"),
                 // the preferences it opens
                 new ShownAround(HouseContainers.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
                 new ShownAround(HouseContainers.Scrim.INSTANCE, "the veil over the page behind the preferences, opened from the bar: a press on it closes them"),
@@ -136,7 +138,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 HouseContainers.PlainCard.INSTANCE, HouseContainers.ActionBar.INSTANCE,
                 HouseContainers.Trail.INSTANCE, HouseRegions.Section.INSTANCE, HouseRegions.GridCell.INSTANCE,
                 // marks and tracks
-                HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE, HouseMarks.Lamp.INSTANCE,
+                HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Lamp.INSTANCE,
                 HouseMarks.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
     }
 }

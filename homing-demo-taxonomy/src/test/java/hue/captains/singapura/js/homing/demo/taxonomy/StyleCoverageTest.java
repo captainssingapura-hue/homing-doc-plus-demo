@@ -53,14 +53,14 @@ class StyleCoverageTest {
         assertEquals(Set.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "toggle-button",
                 "close-button", "icon-button",
                 "heading", "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark",
-                "link", "crumb", "scrim"), worn);
+                "link", "crumb", "scrim", "separator", "delimiter"), worn);
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");
         var styled = new java.util.HashSet<>(under(HouseBranches.Button.INSTANCE));
         styled.addAll(under(HouseBranches.Text.INSTANCE));
-        styled.addAll(Set.of("link", "crumb", "scrim"));
+        styled.addAll(Set.of("link", "crumb", "scrim", "separator"));
         assertEquals(styled, answeredBySomeStyle(true),
-                "a style's looks are the buttons', the texts', the ways' and the veil's alone: every one's, and nothing else's");
+                "a style's looks are the buttons', the texts', the ways', the separator's and the veil's alone: every one's, and nothing else's");
         assertEquals(under(HouseBranches.Control.INSTANCE), answeredBySomeStyle(false),
                 "its treatments reach every control: the ring, and how a control is when it cannot be used");
         assertEquals(HOUSE.rows().size(), HOUSE.json().split("\"worn\"").length - 1, "a row each in what the page is handed");
