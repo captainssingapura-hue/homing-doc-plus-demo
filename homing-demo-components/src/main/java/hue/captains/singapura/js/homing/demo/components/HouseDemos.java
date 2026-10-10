@@ -143,7 +143,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // controls
                 HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE,
                 HousePanes.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
-                HouseControls.Switch.INSTANCE, HousePanes.PaneThumb.INSTANCE, HouseSite.Brand.INSTANCE,
+                HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseSite.Brand.INSTANCE,
                 // items
                 HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HousePreferences.SettingRow.INSTANCE,
                 // containers and regions
