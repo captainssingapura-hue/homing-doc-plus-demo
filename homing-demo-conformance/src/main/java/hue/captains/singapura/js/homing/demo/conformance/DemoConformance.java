@@ -2,6 +2,8 @@ package hue.captains.singapura.js.homing.demo.conformance;
 
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
+import hue.captains.singapura.js.homing.conformance.rules.RuleLedger;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.demo.bare.BareAppCrate;
 import hue.captains.singapura.js.homing.demo.components.DemoComponentsCrate;
@@ -53,6 +55,9 @@ public final class DemoConformance {
 
     /** Strict, with no allowances and no baseline: a finding is fixed, never filed. */
     public static FindingGrader grader() {
-        return FindingGrader.STRICT;
+        return WIDGETS.grader(DemoConformance.class);
     }
+
+    /** The demo's widgets' debt under widget-draws-only-components, recorded when the rule came: only shrinks. */
+    public static final RuleLedger WIDGETS = new RuleLedger(WidgetDrawsOnlyComponentsRule.INSTANCE.id(), "demo-widget-ledger.txt");
 }

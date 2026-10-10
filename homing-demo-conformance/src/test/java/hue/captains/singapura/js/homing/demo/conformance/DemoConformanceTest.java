@@ -22,9 +22,11 @@ class DemoConformanceTest {
     @Test
     void everyServedModuleKeepsItsLane_strictly() {
         List<Finding> raw = new ConformanceEngine(DemoConformance.POLICY, new ServedModuleRenderer()).checkCrates(DemoConformance.TOP_LEVEL);
+        DemoConformance.WIDGETS.recordIfAsked(raw, "src/main/resources");
+        assertEquals(List.of(), DemoConformance.WIDGETS.stale(DemoConformance.class, raw), "the widget ledger names debt that is paid: strike these lines");
         List<GradedFinding> errors = DemoConformance.grader().grade(raw).stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors.stream().map(g -> describe(g.finding())).toList(),
-                "the demo carries no debt - fix these, there is no ledger to file them in");
+                "the demo carries no debt - fix these; the one ledger is the widget rule's, and it only shrinks");
     }
 
     @Test
