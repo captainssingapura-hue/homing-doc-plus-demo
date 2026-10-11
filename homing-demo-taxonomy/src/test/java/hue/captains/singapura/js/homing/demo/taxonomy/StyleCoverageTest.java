@@ -56,9 +56,9 @@ class StyleCoverageTest {
                 "close-button", "icon-button",
                 "heading", "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark",
                 "link", "crumb", "scrim", "separator", "delimiter",
-                "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane"), worn,
+                "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "toggle-widget"), worn,
                 "the buttons, the texts, the ways, the marks, the veil; and the composites so far, the split grid's mirror, the slider, the context menu"
-                + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip");
+                + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip - and the toggle widget's switch");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");
         var styled = new java.util.HashSet<>(under(HouseBranches.Button.INSTANCE));
