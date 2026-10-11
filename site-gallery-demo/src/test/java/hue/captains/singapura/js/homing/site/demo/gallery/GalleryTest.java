@@ -130,7 +130,7 @@ class GalleryTest {
         assertEquals(List.of(), ComponentTrees.validate(List.of(GalleryCrate.INSTANCE)));
         var composed = ComponentTrees.compose("gallery", List.of(GalleryCrate.INSTANCE));
         assertEquals("gallery", composed.root().children().get(0).segment().value(), "the site's own catalogue first in the closure, then the crates it requires");
-        assertEquals(15, composed.root().children().size(), "the gallery and the fourteen vehicles in its closure, the base (the keyboard steward), the focus monitor, docking's dock grid and the viewer's pan and zoom among them, and the split crate - the preferences' view is laid out by a split");
+        assertEquals(14, composed.root().children().size(), "the gallery and the thirteen vehicles in its closure, the base (the keyboard steward), the focus monitor, docking's dock grid, the split grid the preferences' view is laid out by, and the viewer's pan and zoom among them");
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of("animal", "counter", "swatch", "tab", "split"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three; the pane in the panes crate names the tab menu, the dock grid in the docking crate the split menu; nothing lists them");
         // the keys likewise: the slider and its group declare theirs; the page's map is derived, and no declared component listens for itself
