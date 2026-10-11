@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.preferences.HousePreferences;
 import hue.captains.singapura.js.homing.site.mpa.HouseSite;
 import hue.captains.singapura.js.homing.ui.controlpanel.HouseControlPanel;
-import hue.captains.singapura.js.homing.ui.floating.HouseFloating;
 import hue.captains.singapura.js.homing.ui.monitors.HouseMonitors;
 import hue.captains.singapura.js.homing.ui.menu.HouseMenus;
 import hue.captains.singapura.js.homing.ui.panes.HousePanes;
@@ -77,7 +76,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                         new ModuleImports<>(List.of(new ContextMenuStewardDemoModule.ContextMenuStewardDemo()), ContextMenuStewardDemoModule.INSTANCE)),
                 new Demo(HouseContainers.FloatingPane.INSTANCE,
                         new ModuleImports<>(List.of(new FloatingPaneDemoModule.FloatingPaneDemo()), FloatingPaneDemoModule.INSTANCE)),
-                new Demo(HouseFloating.FloatLayer.INSTANCE,
+                new Demo(HouseContainers.FloatLayer.INSTANCE,
                         new ModuleImports<>(List.of(new FloatLayerDemoModule.FloatLayerDemo()), FloatLayerDemoModule.INSTANCE)),
                 new Demo(HouseSplitGrid.SplitGrid.INSTANCE,
                         new ModuleImports<>(List.of(new SplitGridDemoModule.SplitGridDemo()), SplitGridDemoModule.INSTANCE)),

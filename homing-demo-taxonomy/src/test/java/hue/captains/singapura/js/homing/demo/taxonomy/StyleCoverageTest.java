@@ -58,7 +58,7 @@ class StyleCoverageTest {
                 "link", "crumb", "scrim", "separator", "delimiter",
                 "split-grid", "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "toggle-widget",
                 "choice-widget", "list-master-widget", "overview-widget", "focus-monitor", "scale-widget", "steward-monitor", "dialog",
-                "summary-card", "slider-group", "ground", "site-bar", "brand", "trail", "floating-pane"), worn,
+                "summary-card", "slider-group", "ground", "site-bar", "brand", "trail", "floating-pane", "float-layer"), worn,
                 "the buttons, the texts, the ways, the marks, the veil; and the composites so far, the split grid - its lines boundary lines - and its mirror, the slider, the context menu"
                 + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip - the toggle widget's switch, the items the choice, list-master and overview widgets and the focus monitor draw, the scale widget's range, the steward monitor's lamp, the dialog's row of actions, and the cards - a summary card, a group of sliders; and the page - its ground, the site's bar, its brand and its trail; and a floating pane, a dialog's window");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
