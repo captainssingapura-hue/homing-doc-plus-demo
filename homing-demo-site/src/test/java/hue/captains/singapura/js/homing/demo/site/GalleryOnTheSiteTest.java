@@ -43,7 +43,8 @@ class GalleryOnTheSiteTest {
     void theTourImportsTheChromeThenTheShell_andOpensOnTheDemoAskedFor() {
         var body = page("/gallery/tour");
         assertTrue(body.contains("<title>Tour · Homing · demo</title>"), body);
-        assertTrue(body.contains("preferences: Object.freeze({module:\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences\"})"), body);
+        assertTrue(body.contains("preferences: Object.freeze({module:\"\\/module?class=hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences\""
+                + ",view:\"\\/module?class=hue.captains.singapura.js.homing.preferences.PreferencesViewModule\"})"), body);
         int chrome = body.indexOf("site.mpa.MpaChrome");
         int app    = body.indexOf("demo.gallery.GalleryShellApp");
         assertTrue(chrome > 0 && app > chrome, "chrome import before app import: " + body);

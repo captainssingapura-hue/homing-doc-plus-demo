@@ -120,7 +120,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new ShownAround(HouseControls.Crumb.INSTANCE, "each step of the trail in the bar at the top of the page: the ways back, the last the page itself, set heavier"),
                 new ShownAround(HouseMarks.Delimiter.INSTANCE, "between the steps of the trail in the bar at the top of the page: a sign, a slash unless the style draws another"),
                 // the preferences it opens
-                new ShownAround(HouseContainers.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
+                new ShownAround(HousePreferences.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
                 new ShownAround(HouseContainers.Scrim.INSTANCE, "the veil over the page behind the preferences, opened from the bar: a press on it closes them"),
                 new ShownAround(HouseRegions.WidgetSlot.INSTANCE, "the preferences' list and the setting beside it: each a slot a widget is loaded into"),
                 new ShownAround(HousePreferences.PreferenceField.INSTANCE, "every setting in the preferences: where it belongs, its title, a note, the way back to its default"),
