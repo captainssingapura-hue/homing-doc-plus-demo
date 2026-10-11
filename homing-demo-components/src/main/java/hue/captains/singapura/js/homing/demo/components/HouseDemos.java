@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.preferences.HousePreferences;
 import hue.captains.singapura.js.homing.site.mpa.HouseSite;
 import hue.captains.singapura.js.homing.ui.controlpanel.HouseControlPanel;
-import hue.captains.singapura.js.homing.ui.docking.HouseDocking;
 import hue.captains.singapura.js.homing.ui.floating.HouseFloating;
 import hue.captains.singapura.js.homing.ui.monitors.HouseMonitors;
 import hue.captains.singapura.js.homing.ui.menu.HouseMenus;
@@ -103,7 +102,6 @@ public record HouseDemos() implements StatelessFunctionalObject {
     public List<ShownAround> aroundIt() {
         return List.of(
                 // the workspace
-                new ShownAround(HouseDocking.DockGrid.INSTANCE, "the workspace itself: its regions, each a dock, the lines between them dragged to re-share"),
                 new ShownAround(HousePanes.MultiTabPane.INSTANCE, "each region of the workspace: its tabs, one in front"),
                 new ShownAround(HouseContainers.TabStrip.INSTANCE, "the bar of tabs atop each region: its chips, its plus, the count of those out of sight"),
                 new ShownAround(HousePanes.TabPane.INSTANCE, "every tab of the workspace: its chip and what it holds, which travel together"),

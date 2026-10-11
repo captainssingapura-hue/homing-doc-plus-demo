@@ -36,7 +36,7 @@ class HouseDemosTest {
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
         assertEquals(38, HOUSE.demos().size(), "twenty-five elements - nine of them texts, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
-        assertEquals(21, HOUSE.aroundIt().size(), "the workspace's seven, the control panel, the chrome's four, the preferences' nine");
+        assertEquals(20, HOUSE.aroundIt().size(), "the workspace's six - the dock grid retired, its regions a split grid's cells and the docks residing in them - the control panel, the chrome's four, the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
         assertEquals(27, HOUSE.unrealized().size(), "the parts nothing realizes, and the new-tab control and its picture, retired for now");
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)
@@ -53,7 +53,7 @@ class HouseDemosTest {
         assertTrue(js.contains(where("dialog", DialogDemoModule.INSTANCE, "DialogDemo")), js);
         assertTrue(js.contains(where("tab-opener", TabOpenerDemoModule.INSTANCE, "TabOpenerDemo")), js);
         assertTrue(js.contains(where("heading", TextDemoModule.INSTANCE, "TextDemo")), "the nine texts, one module: " + js);
-        assertTrue(js.contains("\"dock-grid\": \"the workspace itself"), js);
+        assertTrue(js.contains("\"multi-tab-pane\": \"each region of the workspace"), js);
         assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([]);"), js);
         assertTrue(js.contains("\"lamp\""), "an unrealized leaf: " + js);
         assertEquals(0, HouseDemosModule.INSTANCE.imports().getAllImports().size(),

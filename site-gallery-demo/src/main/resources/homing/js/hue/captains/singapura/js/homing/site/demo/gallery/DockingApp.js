@@ -172,24 +172,25 @@ class DockingWidget {
         // life - its focus branch, where a widget rests while no dock holds it, its floats, and every move between them
         this._desk = new Desk(branch.createBranch("desk"), { host: box, budget: 16, onEvent: sink, keyboard: kb, keyboardId: "docking/desk", menus: menus, focusName: "afloat" });
         var desk = this._desk;
-        // THE REGIONS ARE THE DOCK GRID'S: a region is a cell of the grid and a dock in it, nothing between, and parting,
-        // merging and closing one is said once, in the component - the workspace is built from the same one (RFC 0066 E3,
-        // the workspace detour). The grid draws every line and nothing else draws any; the room being worked in is said on
-        // its tab bar, lit a shade, by the dock itself. The page names the regions for its log and its switcher, and asks
-        // which region a merge goes into.
+        // THE LAYOUT IS A SPLIT GRID, THE DOCKS ITS RESIDENTS: a region is a cell of the grid and the dock residing in it,
+        // nothing between; parting, merging and closing one is the desk's docking, said once - the workspace is built the
+        // same way (RFC 0066 E3, the workspace detour; RFC 0068). The grid draws every line and nothing else draws any; the
+        // room being worked in is said on its tab bar, lit a shade, by the dock itself. The page names the regions for its
+        // log and its switcher, and asks which region a merge goes into.
         var names = {}, named = 0;
         function nameOf(id) { return names[id] || (names[id] = "region " + (++named)); }
-        var docks = new DockGrid(branch.createBranch("docks"), { host: box, desk: desk, menus: menus, onEvent: sink, dock: { addable: true },
+        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, seam: true, onEvent: sink,
+            layout: { kind: "split", orientation: "horizontal", children: [
+                { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
+        var docks = desk.dock(branch.createBranch("docks"), grid, { menus: menus, onEvent: sink, dock: { addable: true },
             chooseRegion: function (from, others, pick) {
                 askRegion("Merge " + nameOf(from.id) + " into", others, 0, function (to) {
                     var plan = pick(to);
                     if (!plan.ok) say("Refused   " + nameOf(from.id) + " into " + nameOf(to.id) + " - " + plan.says);
                 });
-            },
-            layout: { kind: "split", orientation: "horizontal", children: [
-                { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
+            } });
         this._docks = docks;
-        var grid = docks.grid;
+        this._grid = grid;
         var left = docks.region("left").dock, right = docks.region("right").dock;
         nameOf("left"); nameOf("right");
 
@@ -303,7 +304,7 @@ class DockingWidget {
 
     dispose() { this._offMenus(); this._offF6(); this._edge.dispose(); this._desk.dispose(); this._instruments.dispose();   // the desks first: a dock is disposed only empty
                 if (this._ownMenus) this._ownMenus.dispose(); this._tabs.dispose();
-                this._docks.dispose(); }
+                this._docks.dispose(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {

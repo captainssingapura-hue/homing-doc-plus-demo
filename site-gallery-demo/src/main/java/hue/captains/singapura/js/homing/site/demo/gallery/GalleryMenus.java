@@ -25,8 +25,8 @@ import java.util.List;
  * of that handler at bind. Three kinds for three hypothetical cells, each
  * with a peculiarity: the animal's second level, the swatch's checked colour
  * and toggle, the counter's disabled reset and checked step. The split menu a
- * dock's tab bar opens is the docking crate's now, declared by the DockGrid
- * that answers it, and derived here like the pane's tab menu. A row's icon is
+ * dock's tab bar opens on its own ground is the pane's, beside its tab menu,
+ * answered by the desk's docking, and derived here like the tab menu. A row's icon is
  * a word of the design's vocabulary; the design draws it.
  */
 public record GalleryMenus() implements EsModule<GalleryMenus>, SelfContent {

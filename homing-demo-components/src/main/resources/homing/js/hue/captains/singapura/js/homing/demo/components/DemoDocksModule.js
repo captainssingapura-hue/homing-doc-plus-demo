@@ -1,13 +1,14 @@
 // =============================================================================
 // DemoDocks — a room of the tab controls' own, for the demos that open tabs:
-// a desk, a dock grid of two regions on it - left and right - and a source of
+// a desk, a split grid of two regions - left and right - its docks residing in
+// them, and a source of
 // tabs on the desk, offering a note and a memo, and whatever kinds the demo
 // adds. The docks' focus branches hang under the desk's own, named for this
 // room alone - never at the page's root, where the workspace's docks are named
 // as these would be.
 //
 //   new DemoDocks(branch, { host, kinds?, onBecame? })
-//   room.desk  room.grid  room.source  room.docks()  room.dock(id)  room.dispose()
+//   room.desk  room.grid (the layout)  room.docking (the docks in it)  room.source  room.docks()  room.dock(id)  room.dispose()
 // =============================================================================
 
 const _demoDocks = Object.freeze({ toString: () => "demoDocks" });
@@ -35,9 +36,10 @@ class DemoDocks {
         branch.activate(_demoDocks);
         this.branch = branch;
         this.desk = new Desk(branch.createBranch("desk"), { host: o.host, budget: 6, focusName: "demo-desk-" + (++_demoDesks) });
-        this.grid = new DockGrid(branch.createBranch("docks"), { host: o.host, desk: this.desk, dock: { focus: this.desk.focus },
+        this.grid = new SplitGrid(branch.createBranch("grid"), { host: o.host, minCellPx: 160, seam: true,
             layout: { kind: "split", orientation: "horizontal", children: [
                 { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 }] } });
+        this.docking = this.desk.dock(branch.createBranch("docks"), this.grid, { dock: { focus: this.desk.focus } });
         var kinds = [
             { id: "note", label: "A note", title: "Note", make: function (b, p) { return new _DemoNote(b, { focus: p.focus, text: "A note: the budget is due on Friday." }); } },
             { id: "memo", label: "A memo", title: "Memo", make: function (b, p) { return new _DemoNote(b, { focus: p.focus, text: "A memo: the spring launch moves a week." }); } }
@@ -45,11 +47,12 @@ class DemoDocks {
         this.source = new TabSource(branch.createBranch("source"), { desk: this.desk, kinds: kinds, onBecame: o.onBecame });
     }
 
-    docks() { return this.grid.regions().map(function (r) { return r.dock; }); }
+    docks() { return this.docking.regions().map(function (r) { return r.dock; }); }
 
-    dock(id) { var r = this.grid.region(id); return r ? r.dock : null; }
+    dock(id) { var r = this.docking.region(id); return r ? r.dock : null; }
 
     dispose() {
+        try { this.docking.dispose(); } catch (e) {}
         try { this.grid.dispose(); } catch (e) {}
         try { this.desk.dispose(); } catch (e) {}
         try { this.branch.dissolve(); } catch (e) {}

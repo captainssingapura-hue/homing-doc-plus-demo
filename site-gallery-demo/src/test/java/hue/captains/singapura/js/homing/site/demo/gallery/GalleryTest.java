@@ -130,9 +130,9 @@ class GalleryTest {
         assertEquals(List.of(), ComponentTrees.validate(List.of(GalleryCrate.INSTANCE)));
         var composed = ComponentTrees.compose("gallery", List.of(GalleryCrate.INSTANCE));
         assertEquals("gallery", composed.root().children().get(0).segment().value(), "the site's own catalogue first in the closure, then the crates it requires");
-        assertEquals(14, composed.root().children().size(), "the gallery and the thirteen vehicles in its closure, the base (the keyboard steward), the focus monitor, docking's dock grid, the split grid the preferences' view is laid out by, and the viewer's pan and zoom among them");
+        assertEquals(13, composed.root().children().size(), "the gallery and the twelve vehicles in its closure, the base (the keyboard steward), the focus monitor, the split grid the preferences' view and the docks are laid out by, and the viewer's pan and zoom among them - docking catalogues nothing now, the desk's docking a static");
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
-        assertEquals(List.of("animal", "counter", "swatch", "tab", "split"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three; the pane in the panes crate names the tab menu, the dock grid in the docking crate the split menu; nothing lists them");
+        assertEquals(List.of("animal", "counter", "swatch", "split", "tab"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three; the pane in the panes crate names the split menu and the tab menu, by name - the strip's ground and a chip - answered by the desk; nothing lists them");
         // the keys likewise: the slider and its group declare theirs; the page's map is derived, and no declared component listens for itself
         // no capture left in the closure: the grid's header drag hears its Escape on its own handle
         assertEquals(List.of(), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));

@@ -7,12 +7,12 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.docking.DeskModule;
-import hue.captains.singapura.js.homing.ui.docking.DockGridModule;
+import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.ui.panes.TabSourceModule;
 
 import java.util.List;
 
-/** {@code DemoDocks}: a room of the tab controls' own - a desk, two regions of a dock grid, and a source of tabs - for the demos that open tabs to stand in. */
+/** {@code DemoDocks}: a room of the tab controls' own - a desk, its docks in the two regions of a split grid, and a source of tabs - for the demos that open tabs to stand in. */
 public record DemoDocksModule() implements DomModule<DemoDocksModule> {
 
     public static final DemoDocksModule INSTANCE = new DemoDocksModule();
@@ -23,7 +23,7 @@ public record DemoDocksModule() implements DomModule<DemoDocksModule> {
     public ImportsFor<DemoDocksModule> imports() {
         return ImportsFor.<DemoDocksModule>builder()
                 .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DockGridModule.DockGrid()), DockGridModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabSourceModule.TabSource()), TabSourceModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DemoStyles.dm_text()), DemoStyles.INSTANCE))
