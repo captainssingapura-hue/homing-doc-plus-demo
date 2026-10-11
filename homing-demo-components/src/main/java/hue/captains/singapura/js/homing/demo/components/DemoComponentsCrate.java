@@ -17,7 +17,6 @@ import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
 import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomCrate;
-import hue.captains.singapura.js.homing.ui.split.UiSplitCrate;
 import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceWidgetsCrate;
 
@@ -48,7 +47,6 @@ public final class DemoComponentsCrate implements Crate {
                 UiDialogCrate.INSTANCE,
                 UiMenuCrate.INSTANCE,
                 UiFloatingCrate.INSTANCE,
-                UiSplitCrate.INSTANCE,
                 UiSplitGridCrate.INSTANCE,
                 UiDockingCrate.INSTANCE,
                 UiPanesCrate.INSTANCE,
@@ -86,7 +84,6 @@ public final class DemoComponentsCrate implements Crate {
                 CrateEntry.of(ContextMenuStewardDemoModule.INSTANCE),
                 CrateEntry.of(FloatingPaneDemoModule.INSTANCE),
                 CrateEntry.of(FloatLayerDemoModule.INSTANCE),
-                CrateEntry.of(SplitPaneDemoModule.INSTANCE),
                 CrateEntry.of(SplitGridDemoModule.INSTANCE),
                 CrateEntry.of(SplitGridMirrorDemoModule.INSTANCE),
                 // the tab controls in a room of their own, the list master, the pictures and their drawings, the monitors

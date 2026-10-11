@@ -80,8 +80,6 @@ public record HouseDemos() implements StatelessFunctionalObject {
                         new ModuleImports<>(List.of(new FloatingPaneDemoModule.FloatingPaneDemo()), FloatingPaneDemoModule.INSTANCE)),
                 new Demo(HouseFloating.FloatLayer.INSTANCE,
                         new ModuleImports<>(List.of(new FloatLayerDemoModule.FloatLayerDemo()), FloatLayerDemoModule.INSTANCE)),
-                new Demo(HouseContainers.SplitPane.INSTANCE,
-                        new ModuleImports<>(List.of(new SplitPaneDemoModule.SplitPaneDemo()), SplitPaneDemoModule.INSTANCE)),
                 new Demo(HouseSplitGrid.SplitGrid.INSTANCE,
                         new ModuleImports<>(List.of(new SplitGridDemoModule.SplitGridDemo()), SplitGridDemoModule.INSTANCE)),
                 new Demo(HouseSplitGrid.SplitGridMirror.INSTANCE,

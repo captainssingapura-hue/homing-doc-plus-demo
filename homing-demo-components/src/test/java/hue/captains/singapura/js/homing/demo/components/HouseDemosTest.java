@@ -35,7 +35,7 @@ class HouseDemosTest {
 
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
-        assertEquals(39, HOUSE.demos().size(), "twenty-five elements - nine of them texts, one a link; eight overlays, menus and splits; six the page around does not show");
+        assertEquals(38, HOUSE.demos().size(), "twenty-five elements - nine of them texts, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
         assertEquals(21, HOUSE.aroundIt().size(), "the workspace's seven, the control panel, the chrome's four, the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
         assertEquals(27, HOUSE.unrealized().size(), "the parts nothing realizes, and the new-tab control and its picture, retired for now");

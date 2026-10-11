@@ -104,10 +104,10 @@ class TaxonomyDataTest extends JsModuleTestBase {
         assertEquals(house.nodes().size(), eval("t.nodes().length").asInt());
         assertEquals("root", eval("t.root().id").asString());
         assertEquals(17, eval("t.count('branch')").asInt());
-        assertEquals(87, eval("t.count('component')").asInt());
-        assertEquals(111, eval("t.count('part')").asInt(), "its slots, declared over the role catalogue: the action bar's optional primary button, its Go, and the icon an icon button holds, among them");
+        assertEquals(86, eval("t.count('component')").asInt());
+        assertEquals(110, eval("t.count('part')").asInt(), "its slots, declared over the role catalogue: the action bar's optional primary button, its Go, and the icon an icon button holds, among them");
         assertEquals("dialog-veil,dialog-window,dialog-actions", eval("t.partsOf('dialog').map(function (p) { return p.id; }).join()").asString());
-        assertEquals(87, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
+        assertEquals(86, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
         assertEquals("container", eval("t.node('pane').parent").asString(), "a level-2 branch under its level-1 parent");
     }
 
