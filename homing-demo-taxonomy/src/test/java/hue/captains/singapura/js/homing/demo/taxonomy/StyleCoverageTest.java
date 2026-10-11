@@ -67,9 +67,9 @@ class StyleCoverageTest {
         styled.addAll(under(HouseBranches.Text.INSTANCE));
         styled.addAll(Set.of("link", "crumb", "scrim", "separator", "pane-thumb", "slider", "groove", "knob", "detent", "tick", "context-menu", "menu-item", "tab", "tab-strip",
                 "choice-option", "list-row", "setting-row", "lamp", "action-bar",
-                "plain-card", "summary-card", "slider-group"));
+                "plain-card", "summary-card", "slider-group", "preferences-button"));
         assertEquals(styled, answeredBySomeStyle(true),
-                "a style's looks are the buttons', the texts', the ways', the separator's, the veil's, a pane thumbnail's rule, the slider's parts, the menu's frame and rows, a tab and its strip, and the items - a choice, a listed row, a setting's row - and a lamp, whose corners are a button's; a row of actions, capped as the style rules groups apart; the cards, and a group of sliders framed as one: every one's, and nothing else's");
+                "a style's looks are the buttons', the texts', the ways', the separator's, the veil's, a pane thumbnail's rule, the slider's parts, the menu's frame and rows, a tab and its strip, and the items - a choice, a listed row, a setting's row - and a lamp, whose corners are a button's; a row of actions, capped as the style rules groups apart; the cards, and a group of sliders framed as one; a preferences button, framed as a button is: every one's, and nothing else's");
         var treated = new java.util.HashSet<>(under(HouseBranches.Control.INSTANCE));
         treated.addAll(under(HouseBranches.Item.INSTANCE));
         treated.addAll(under(HouseBranches.Card.INSTANCE));

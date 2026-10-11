@@ -116,11 +116,11 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new ShownAround(HouseControlPanel.ControlPanel.INSTANCE, "the control panel beside the demos: a slider for each degree the picked component varies by, a button for each switch, action and question"),
                 // the page's chrome
                 new ShownAround(HouseSite.MpaChrome.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
-                new ShownAround(HouseSite.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
+                new ShownAround(HouseControls.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
                 new ShownAround(HouseControls.Crumb.INSTANCE, "each step of the trail in the bar at the top of the page: the ways back, the last the page itself, set heavier"),
                 new ShownAround(HouseMarks.Delimiter.INSTANCE, "between the steps of the trail in the bar at the top of the page: a sign, a slash unless the style draws another"),
                 // the preferences it opens
-                new ShownAround(HousePreferences.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
+                new ShownAround(HouseContainers.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
                 new ShownAround(HouseContainers.Scrim.INSTANCE, "the veil over the page behind the preferences, opened from the bar: a press on it closes them"),
                 new ShownAround(HouseRegions.WidgetSlot.INSTANCE, "the preferences' list and the setting beside it: each a slot a widget is loaded into"),
                 new ShownAround(HousePreferences.PreferenceField.INSTANCE, "every setting in the preferences: where it belongs, its title, a note, the way back to its default"),
@@ -140,7 +140,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // controls
                 HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE,
                 HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
-                HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseSite.Brand.INSTANCE,
+                HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseControls.Brand.INSTANCE,
                 // items
                 HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HousePreferences.SettingRow.INSTANCE,
                 // containers and regions
