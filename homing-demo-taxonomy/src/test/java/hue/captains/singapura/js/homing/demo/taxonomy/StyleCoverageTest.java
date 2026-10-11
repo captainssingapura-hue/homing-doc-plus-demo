@@ -57,17 +57,17 @@ class StyleCoverageTest {
                 "heading", "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark",
                 "link", "crumb", "scrim", "separator", "delimiter",
                 "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "toggle-widget",
-                "choice-widget", "list-master-widget", "overview-widget", "focus-monitor"), worn,
+                "choice-widget", "list-master-widget", "overview-widget", "focus-monitor", "scale-widget", "steward-monitor"), worn,
                 "the buttons, the texts, the ways, the marks, the veil; and the composites so far, the split grid's mirror, the slider, the context menu"
-                + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip - the toggle widget's switch, and the items the choice, list-master and overview widgets and the focus monitor draw");
+                + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip - the toggle widget's switch, the items the choice, list-master and overview widgets and the focus monitor draw, the scale widget's range and the steward monitor's lamp");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");
         var styled = new java.util.HashSet<>(under(HouseBranches.Button.INSTANCE));
         styled.addAll(under(HouseBranches.Text.INSTANCE));
         styled.addAll(Set.of("link", "crumb", "scrim", "separator", "pane-thumb", "slider", "groove", "knob", "detent", "tick", "context-menu", "menu-item", "tab", "tab-strip",
-                "choice-option", "list-row", "setting-row"));
+                "choice-option", "list-row", "setting-row", "lamp"));
         assertEquals(styled, answeredBySomeStyle(true),
-                "a style's looks are the buttons', the texts', the ways', the separator's, the veil's, a pane thumbnail's rule, the slider's parts, the menu's frame and rows, a tab and its strip, and the items - a choice, a listed row, a setting's row - whose corner and rule are a button's: every one's, and nothing else's");
+                "a style's looks are the buttons', the texts', the ways', the separator's, the veil's, a pane thumbnail's rule, the slider's parts, the menu's frame and rows, a tab and its strip, and the items - a choice, a listed row, a setting's row - and a lamp, whose corners are a button's: every one's, and nothing else's");
         var treated = new java.util.HashSet<>(under(HouseBranches.Control.INSTANCE));
         treated.addAll(under(HouseBranches.Item.INSTANCE));
         assertEquals(treated, answeredBySomeStyle(false),
