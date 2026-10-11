@@ -39,7 +39,7 @@ function appMain(el, params) {
     el.appendChild(shell);
 
     var grid = new SplitGrid(branch.createBranch("grid"), {
-        host: shell, minCellPx: 160,
+        host: shell, minCellPx: 160, resizable: true,
         layout: { kind: "split", orientation: "horizontal", children: [
             { node: { kind: "cell", id: "nav" }, ratio: 1 },
             { node: { kind: "split", orientation: "vertical", children: [

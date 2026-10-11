@@ -105,7 +105,7 @@ class TaxonomyDataTest extends JsModuleTestBase {
         assertEquals("root", eval("t.root().id").asString());
         assertEquals(17, eval("t.count('branch')").asInt());
         assertEquals(85, eval("t.count('component')").asInt());
-        assertEquals(108, eval("t.count('part')").asInt(), "its slots, declared over the role catalogue: the action bar's optional primary button, its Go, and the icon an icon button holds, among them");
+        assertEquals(109, eval("t.count('part')").asInt(), "its slots, declared over the role catalogue: the action bar's optional primary button, its Go, the icon an icon button holds, and a split grid's line as a splitter and as a seam, among them");
         assertEquals("dialog-veil,dialog-window,dialog-actions", eval("t.partsOf('dialog').map(function (p) { return p.id; }).join()").asString());
         assertEquals(85, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
         assertEquals("container", eval("t.node('pane').parent").asString(), "a level-2 branch under its level-1 parent");
@@ -157,8 +157,8 @@ class TaxonomyDataTest extends JsModuleTestBase {
         load(HouseTaxonomy.INSTANCE.read());
         assertEquals("role-root", eval("t.roleRoot().id").asString());
         assertEquals(21, eval("t.roleCount('branch')").asInt(), "three at level 1, eighteen at level 2");
-        assertEquals(91, eval("t.roleCount('role')").asInt(), "the catalogue whole, said by a component or not");
-        assertEquals(91, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
+        assertEquals(92, eval("t.roleCount('role')").asInt(), "the catalogue whole, said by a component or not");
+        assertEquals(92, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
         assertEquals("saying,doing,shaping", eval("t.roleChildren('role-root').map(function (n) { return n.id; }).join()").asString());
         assertEquals("title,subtitle,name,category,symbol", eval("t.roleChildren('naming').map(function (n) { return n.id; }).join()").asString());
         assertEquals(2, eval("t.roleNode('naming').level").asInt());

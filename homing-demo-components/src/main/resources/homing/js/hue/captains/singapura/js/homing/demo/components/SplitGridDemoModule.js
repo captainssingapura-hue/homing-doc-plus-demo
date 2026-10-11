@@ -31,7 +31,7 @@ class SplitGridDemo extends ComponentDemo {
         var label = function (id) { self.el("room-" + n + "-" + id, "p", dm_text, self._grid.cell(id), "Room " + id); };
         var shares = function (rs) { return rs.map(function (r) { return Math.round(r * 100) + "%"; }).join(" : "); };
         this._grid = new SplitGrid(b, {
-            host: this._host, seam: true, layout: JSON.parse(JSON.stringify(_SPLIT_GRID_START)),
+            host: this._host, resizable: true, layout: JSON.parse(JSON.stringify(_SPLIT_GRID_START)),
             onEvent: function (ev) {
                 if (ev.kind === "TracksChanged") self.say("re-shared: " + shares(ev.ratios));
                 else if (ev.kind === "Subdivided") { label(ev.newCellId); self.say("room " + ev.cellId + " split: room " + ev.newCellId + " on its " + ev.side); }

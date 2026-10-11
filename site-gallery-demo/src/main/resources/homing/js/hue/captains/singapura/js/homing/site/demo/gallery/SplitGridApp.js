@@ -47,7 +47,6 @@ class CellWidget {
 
 class SplitGridWidget {
     constructor(branch, params) {
-        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
@@ -67,7 +66,7 @@ class SplitGridWidget {
         var lede = branch.createElement("lede", "p");
         css.addClass(lede, ga_lede);
         lede.textContent = "A tree of rows and columns of cells, sharing their space by ratio. The grid arranges; what is in a cell is the "
-            + "page's — here, a card that asks the grid to split beside it or remove it. Drag the dividers. The last cell cannot go.";
+            + "page's — here, a card that asks the grid to split beside it or remove it. The grid is resizable: drag the lines between the cells. The last cell cannot go.";
         el.appendChild(lede);
 
         var box = branch.createElement("box", "div");
@@ -98,7 +97,7 @@ class SplitGridWidget {
         function reflect() { self._mirror.reflect(self._grid.layout(), self._grid.box()); }
 
         this._grid = new SplitGrid(branch.createBranch("grid"), {
-            host: box, minCellPx: 90, layout: { kind: "cell", id: "a" }, seam: true,
+            host: box, minCellPx: 90, layout: { kind: "cell", id: "a" }, resizable: true,
             onEvent: function (ev) {
                 switch (ev.kind) {
                     case "TracksChanged": say("Tracks     " + (ev.path || "root") + "  " + ev.ratios.map(function (r) { return r.toFixed(2); }).join(" : ")); break;
@@ -121,19 +120,6 @@ class SplitGridWidget {
         var scale = new Slider(branch.createBranch("scale"), { keyboard: kb, keyboardId: "split-grid/scale", label: "the mirror's scale", icon: "size", min: 0.1, max: 0.5, step: 0.05, value: 0.25,
             onInput: function (v) { self._mirror.scale(v); }, format: function (v) { return v.toFixed(2); } }).root;
         mirrorRow.appendChild(scale);
-        // the seam: a splitter has no presence of its own, but a grid whose cells bring no edges needs the line -
-        // so it is the owner's to ask for, and here you can see it both ways; the button is a toggle, and the house has no
-        // toggle button yet: a plain one, its label saying the state
-        var seamOn = true;
-        function seamLabel() { return "the seam at rest: " + (seamOn ? "on" : "off"); }
-        var seamButton = self._press(new PlainButton(PlainButtonFactory.create(branch, "seam"), { label: seamLabel(), size: -1 }), function () {
-            seamOn = !seamOn;
-            grid.seam(seamOn);
-            seamButton.label = seamLabel();
-            say("Seam       the splitters " + (seamOn ? "keep the design's line at rest" : "have no presence at rest"));
-        });
-        mirrorRow.appendChild(seamButton.el);
-
         var hint = branch.createElement("hint", "span");
         css.addClass(hint, ga_control_readout);
         hint.textContent = "click the mirror, then the arrows move the cursor";
@@ -153,15 +139,6 @@ class SplitGridWidget {
         requestAnimationFrame(reflect);
         this.root = el;
     }
-
-    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
-    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
-
-    /** A page handles its buttons' presses. */
-    canHandle(type) { return type === EVENT.CLICK; }
-
-    /** A press: what the page keeps for the button pressed. */
-    handle(event) { this._acts.get(event.source)(event); }
 
     dispose() { window.removeEventListener("resize", this._onResize); this._mirror.dispose(); this._grid.dispose(); }
 }

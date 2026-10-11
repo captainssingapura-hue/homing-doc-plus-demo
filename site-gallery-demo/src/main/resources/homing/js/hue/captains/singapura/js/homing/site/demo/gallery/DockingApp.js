@@ -124,7 +124,7 @@ class DockingWidget {
             switch (ev.kind) {
                 case "Subdivided":   say("Split     " + nameOf(ev.cellId) + " " + ev.side + " - " + nameOf(ev.newCellId)); break;
                 case "Removed":      say("Merged    " + nameOf(ev.cellId) + " - its tabs and its room gone to a neighbour"); break;
-                case "TracksChanged": say("Tracks    " + ev.path.join(".") + "  " + ev.ratios.map(function (r) { return r.toFixed(2); }).join(" : ")); break;
+                case "TracksChanged": say("Tracks    " + (ev.path || "root") + "  " + ev.ratios.map(function (r) { return r.toFixed(2); }).join(" : ")); break;
                 case "Opened":       say("Opened    " + ev.id + "  at " + ev.x + "," + ev.y); break;
                 case "Released":     say("Released  " + ev.id + "  (left the desk for a dock)"); break;
                 case "Moved":        say("Moved     " + ev.id + "  to " + ev.x + "," + ev.y); break;
@@ -179,7 +179,7 @@ class DockingWidget {
         // log and its switcher, and asks which region a merge goes into.
         var names = {}, named = 0;
         function nameOf(id) { return names[id] || (names[id] = "region " + (++named)); }
-        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, seam: true, onEvent: sink,
+        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, resizable: true, onEvent: sink,
             layout: { kind: "split", orientation: "horizontal", children: [
                 { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
         var docks = desk.dock(branch.createBranch("docks"), grid, { menus: menus, onEvent: sink, dock: { addable: true },
@@ -248,10 +248,6 @@ class DockingWidget {
         }
         var switches = 0;
         function domopsOf() { return instruments ? instruments.domops() : null; }
-        controls.appendChild(new Slider(branch.createBranch("lines"), {
-            keyboard: kb, keyboardId: "docking/lines", label: "the lines", min: 0, max: 6, step: 1, detents: [1], value: 1, icon: "size", labelWidth: "6em",
-            format: function (v) { return v === 0 ? "none" : v + "px"; },
-            onInput: function (v) { grid.thickness(v); } }).root);
         controls.appendChild(new Slider(branch.createBranch("size"), {
             keyboard: kb, keyboardId: "docking/size", label: "the tabs' size", axis: true, icon: "size", labelWidth: "9em",
             onInput: function (v) { docks.regions().forEach(function (r) { r.dock.size(v); }); },

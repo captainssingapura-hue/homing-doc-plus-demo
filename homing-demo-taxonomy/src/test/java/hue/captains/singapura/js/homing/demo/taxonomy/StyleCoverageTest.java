@@ -56,10 +56,10 @@ class StyleCoverageTest {
                 "close-button", "icon-button",
                 "heading", "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark",
                 "link", "crumb", "scrim", "separator", "delimiter",
-                "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "toggle-widget",
+                "split-grid", "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "toggle-widget",
                 "choice-widget", "list-master-widget", "overview-widget", "focus-monitor", "scale-widget", "steward-monitor", "dialog",
                 "summary-card", "slider-group"), worn,
-                "the buttons, the texts, the ways, the marks, the veil; and the composites so far, the split grid's mirror, the slider, the context menu"
+                "the buttons, the texts, the ways, the marks, the veil; and the composites so far, the split grid - its lines boundary lines - and its mirror, the slider, the context menu"
                 + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip - the toggle widget's switch, the items the choice, list-master and overview widgets and the focus monitor draw, the scale widget's range, the steward monitor's lamp, the dialog's row of actions, and the cards - a summary card, a group of sliders");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");

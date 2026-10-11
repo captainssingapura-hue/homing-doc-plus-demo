@@ -36,7 +36,7 @@ class DemoDocks {
         branch.activate(_demoDocks);
         this.branch = branch;
         this.desk = new Desk(branch.createBranch("desk"), { host: o.host, budget: 6, focusName: "demo-desk-" + (++_demoDesks) });
-        this.grid = new SplitGrid(branch.createBranch("grid"), { host: o.host, minCellPx: 160, seam: true,
+        this.grid = new SplitGrid(branch.createBranch("grid"), { host: o.host, minCellPx: 160, resizable: true,
             layout: { kind: "split", orientation: "horizontal", children: [
                 { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 }] } });
         this.docking = this.desk.dock(branch.createBranch("docks"), this.grid, { dock: { focus: this.desk.focus } });

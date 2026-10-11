@@ -134,7 +134,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
     public List<Component<?>> unrealized() {
         return List.of(
                 // controls
-                HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE,
+                HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE,
                 HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseControls.Brand.INSTANCE,
                 // items
@@ -145,7 +145,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // retired for now: adding a tab from outside a pane - which pane, and what - comes back on the panes' logical model
                 HousePanes.AddTab.INSTANCE, HousePanes.PaneThumbs.INSTANCE,
                 // marks and tracks
-                HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Lamp.INSTANCE,
+                HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Lamp.INSTANCE, HouseMarks.BoundaryLine.INSTANCE,
                 HouseMarks.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
     }
 }
