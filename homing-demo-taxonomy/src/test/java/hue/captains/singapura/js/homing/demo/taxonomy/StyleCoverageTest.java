@@ -58,24 +58,25 @@ class StyleCoverageTest {
                 "link", "crumb", "scrim", "separator", "delimiter",
                 "split-grid", "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "toggle-widget",
                 "choice-widget", "list-master-widget", "overview-widget", "focus-monitor", "scale-widget", "steward-monitor", "dialog",
-                "summary-card", "slider-group", "ground", "site-bar", "brand", "trail"), worn,
+                "summary-card", "slider-group", "ground", "site-bar", "brand", "trail", "floating-pane"), worn,
                 "the buttons, the texts, the ways, the marks, the veil; and the composites so far, the split grid - its lines boundary lines - and its mirror, the slider, the context menu"
-                + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip - the toggle widget's switch, the items the choice, list-master and overview widgets and the focus monitor draw, the scale widget's range, the steward monitor's lamp, the dialog's row of actions, and the cards - a summary card, a group of sliders; and the page - its ground, the site's bar, its brand and its trail");
+                + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip - the toggle widget's switch, the items the choice, list-master and overview widgets and the focus monitor draw, the scale widget's range, the steward monitor's lamp, the dialog's row of actions, and the cards - a summary card, a group of sliders; and the page - its ground, the site's bar, its brand and its trail; and a floating pane, a dialog's window");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");
         var styled = new java.util.HashSet<>(under(HouseBranches.Button.INSTANCE));
         styled.addAll(under(HouseBranches.Text.INSTANCE));
         styled.addAll(Set.of("link", "crumb", "scrim", "separator", "pane-thumb", "slider", "groove", "knob", "detent", "tick", "context-menu", "menu-item", "tab", "tab-strip",
                 "choice-option", "list-row", "setting-row", "lamp", "action-bar",
-                "plain-card", "summary-card", "slider-group", "preferences-button", "ground", "site-bar"));
+                "plain-card", "summary-card", "slider-group", "preferences-button", "ground", "site-bar", "floating-pane", "title-bar"));
         assertEquals(styled, answeredBySomeStyle(true),
-                "a style's looks are the buttons', the texts', the ways', the separator's, the veil's, a pane thumbnail's rule, the slider's parts, the menu's frame and rows, a tab and its strip, and the items - a choice, a listed row, a setting's row - and a lamp, whose corners are a button's; a row of actions, capped as the style rules groups apart; the cards, and a group of sliders framed as one; a preferences button, framed as a button is; the page's face, and the site bar's rule and backdrop: every one's, and nothing else's");
+                "a style's looks are the buttons', the texts', the ways', the separator's, the veil's, a pane thumbnail's rule, the slider's parts, the menu's frame and rows, a tab and its strip, and the items - a choice, a listed row, a setting's row - and a lamp, whose corners are a button's; a row of actions, capped as the style rules groups apart; the cards, and a group of sliders framed as one; a preferences button, framed as a button is; the page's face, and the site bar's rule and backdrop; a floating pane's shadows and lift, its title bar's face, room and rule: every one's, and nothing else's");
         var treated = new java.util.HashSet<>(under(HouseBranches.Control.INSTANCE));
         treated.addAll(under(HouseBranches.Item.INSTANCE));
         treated.addAll(under(HouseBranches.Card.INSTANCE));
         treated.add("slider-group");
+        treated.add("floating-pane");
         assertEquals(treated, answeredBySomeStyle(false),
-                "its treatments reach every control - the ring - and every control and item when it cannot be used; every card, lifted under the hand and pressed, and a group of sliders ringed while it holds the keys");
+                "its treatments reach every control - the ring - and every control and item when it cannot be used; every card, lifted under the hand and pressed, and a group of sliders ringed while it holds the keys; a floating pane lit, lifted and ringed");
         assertEquals(HOUSE.rows().size(), HOUSE.json().split("\"worn\"").length - 1, "a row each in what the page is handed");
     }
 
