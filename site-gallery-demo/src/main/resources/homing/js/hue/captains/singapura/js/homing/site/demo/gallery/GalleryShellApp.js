@@ -32,7 +32,6 @@ function _load(entry) {
 function appMain(el, params) {
     var branch = domOpsParty.createBranch("galleryShell");
     branch.activate(_owner);
-    css.addClass(el, mpa_main_full);
 
     var shell = branch.createElement("shell", "div");
     css.addClass(shell, ga_shell);

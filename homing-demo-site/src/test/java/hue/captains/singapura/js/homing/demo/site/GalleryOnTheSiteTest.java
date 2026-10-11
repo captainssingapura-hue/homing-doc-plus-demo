@@ -62,7 +62,7 @@ class GalleryOnTheSiteTest {
             assertFalse(DemoSite.INSTANCE.router().resolve(Path.parse(d.page() + "/more")).isPresent(), d.page() + ": a demo is a leaf");
         }
         var buttons = page("/gallery/controls/buttons");
-        assertTrue(buttons.contains("appMain(page.main, Object.freeze(Object.assign({}, {}, { keyboard: page.keyboard, trail: page.trail })));"), buttons);   // paramless: the page's own alone
+        assertTrue(buttons.contains("appMain(page.main, Object.freeze(Object.assign({}, {}, { keyboard: page.keyboard, trail: trail })));"), buttons);   // paramless: the page's own alone
         for (String old : List.of("/buttons", "/grid", "/gallery/buttons", "/plain")) {
             assertFalse(DemoSite.INSTANCE.router().resolve(Path.parse(old)).isPresent(), old + ": the gallery's old addresses are nobody's");
         }

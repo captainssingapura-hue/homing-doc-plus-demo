@@ -71,7 +71,7 @@ public record DemoCatalogue() implements L0_Catalogue<DemoCatalogue> {
         public List<Leaf<Workspaces>> leaves(Mpa mpa) {
             var group = DemoGroups.SITE.home();   // the demo's one group
             return List.of(Leaf.of(this, new NodeName(group.id().value()), group.title(), "The video room under Media, the animal platformer under Games",
-                                    mpa.page(DemoWorkspaceApp.INSTANCE, new GroupedWorkspacePageModule.Params(group.id().value(), true, UNDER)))
+                                    mpa.fillingPage(DemoWorkspaceApp.INSTANCE, new GroupedWorkspacePageModule.Params(group.id().value(), true, UNDER)))
                             .badge("WORKSPACE").icon("🧩").opens(Leaf.Opening.NEW_TAB));
         }
     }
@@ -93,7 +93,7 @@ public record DemoCatalogue() implements L0_Catalogue<DemoCatalogue> {
         public List<Leaf<Taxonomy>> leaves(Mpa mpa) {
             var group = TaxonomyWorkbench.SITE.home();   // the workbench's one group
             return List.of(Leaf.of(this, new NodeName(group.id().value()), group.title(), "The tree of the house's components: a node's parts, what it falls back to, its semantic classes",
-                                    mpa.page(TaxonomyWorkbenchApp.INSTANCE, new GroupedWorkspacePageModule.Params(group.id().value(), true, UNDER)))
+                                    mpa.fillingPage(TaxonomyWorkbenchApp.INSTANCE, new GroupedWorkspacePageModule.Params(group.id().value(), true, UNDER)))
                             .badge("WORKBENCH").icon("🌳").opens(Leaf.Opening.NEW_TAB));
         }
     }

@@ -48,7 +48,7 @@ public record GalleryCatalogue() implements L0_Catalogue<GalleryCatalogue> {
     public List<Leaf<GalleryCatalogue>> leaves(Mpa mpa) {
         return List.of(
                 Leaf.of(this, new NodeName("tour"), "Tour", "Every demo beside what it shows and what it explains",
-                        mpa.page(GalleryShellApp.INSTANCE, new GalleryShellApp.Params(""))),
+                        mpa.fillingPage(GalleryShellApp.INSTANCE, new GalleryShellApp.Params(""))),
                 Leaf.of(this, new NodeName("plain"), "A plain page", "Served beside the others, but not under the chrome", PLAIN));
     }
 

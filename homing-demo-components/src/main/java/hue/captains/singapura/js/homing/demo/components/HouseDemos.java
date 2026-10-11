@@ -111,7 +111,11 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // the panel beside the demos
                 new ShownAround(HouseControlPanel.ControlPanel.INSTANCE, "the control panel beside the demos: a slider for each degree the picked component varies by, a button for each switch, action and question"),
                 // the page's chrome
-                new ShownAround(HouseSite.MpaChrome.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
+                new ShownAround(HouseContainers.Ground.INSTANCE, "the page itself: what everything on it stands on, its ink and its face"),
+                new ShownAround(HouseSite.MpaChrome.INSTANCE, "the page's chrome: its bar at the top, over the page's own room"),
+                new ShownAround(HouseContainers.SiteBar.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
+                new ShownAround(HouseControls.Brand.INSTANCE, "the site's mark and name at the start of the bar at the top of the page: the way home"),
+                new ShownAround(HouseContainers.Trail.INSTANCE, "the way to this page, across the bar at the top of the page"),
                 new ShownAround(HouseControls.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
                 new ShownAround(HouseControls.Crumb.INSTANCE, "each step of the trail in the bar at the top of the page: the ways back, the last the page itself, set heavier"),
                 new ShownAround(HouseMarks.Delimiter.INSTANCE, "between the steps of the trail in the bar at the top of the page: a sign, a slash unless the style draws another"),
@@ -136,12 +140,12 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // controls
                 HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE,
                 HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
-                HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseControls.Brand.INSTANCE,
+                HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE,
                 // items
                 HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HousePreferences.SettingRow.INSTANCE,
                 // containers and regions
                 HouseContainers.PlainCard.INSTANCE, HouseContainers.ActionBar.INSTANCE,
-                HouseContainers.Trail.INSTANCE, HouseRegions.Section.INSTANCE, HouseSplitGrid.GridCell.INSTANCE,
+                HouseRegions.Section.INSTANCE, HouseSplitGrid.GridCell.INSTANCE,
                 // retired for now: adding a tab from outside a pane - which pane, and what - comes back on the panes' logical model
                 HousePanes.AddTab.INSTANCE, HousePanes.PaneThumbs.INSTANCE,
                 // marks and tracks
