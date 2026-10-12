@@ -58,7 +58,7 @@ class BooksTab extends RelTab {
         super(branch, params);
         this._relation = new BooksRelation(params.store, { branch: params.domain.createBranch("cells-" + branch.name) });
         this._widget = new RelGrid({ container: this.box, branch: branch.createBranch("grid"), relation: this._relation,
-                                     header: { show: true, sticky: true }, label: "Books" });
+                                     design: HouseGrid, header: { show: true, sticky: true }, label: "Books" });
         this._widget.setColumnWidths({ title: 170, author: 120, year: 56, rating: 56 });
         _join(this, branch, params);
     }

@@ -47,6 +47,7 @@ class GridWidget {
             container: host,
             branch: gridB,
             relation: relation,
+            design: HouseGrid,
             header: { show: true, sticky: true },
             label: "Books",
             onArranged: report,

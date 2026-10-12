@@ -13,6 +13,7 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.relgrid.RelGridModule;
+import hue.captains.singapura.js.homing.relgrid.house.HouseGridModule;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public record GridApp() implements AppModule<AppModule._None, GridApp> {
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RelGridModule.RelGrid()), RelGridModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new HouseGridModule.HouseGrid()), HouseGridModule.INSTANCE))   // the design its grid is made with
                 .add(new ModuleImports<>(List.of(
                         new GalleryRelations.BooksStore(),
                         new GalleryRelations.BooksRelation()

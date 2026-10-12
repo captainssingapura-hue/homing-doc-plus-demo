@@ -11,8 +11,8 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.relgrid.RelGridModule;
 import hue.captains.singapura.js.homing.relgrid.RelGridStockCellsModule;
-import hue.captains.singapura.js.homing.relgrid.RelGridStyles;
 import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolModule;
+import hue.captains.singapura.js.homing.relgrid.house.HouseGridModule;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
  * component and a column a style or a palette, in a relation grid - the matrix derived on the Java
  * side ({@link StyleCoverageModule}); a view of the pick, never a picker.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 5,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
         reason = "It wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record StyleCoverageMatrixModule() implements DomModule<StyleCoverageMatrixModule> {
 
@@ -42,9 +42,9 @@ public record StyleCoverageMatrixModule() implements DomModule<StyleCoverageMatr
                 .add(new ModuleImports<>(List.of(new TaxonomyWidgetModule.TaxonomyWidget()), TaxonomyWidgetModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StyleCoverageModule.STYLE_COVERAGE()), StyleCoverageModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RelGridModule.RelGrid()), RelGridModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new HouseGridModule.HouseGrid()), HouseGridModule.INSTANCE))   // the design its grid is made with
                 .add(new ModuleImports<>(List.of(new RelGridStockCellsModule.RelGridTextCell()), RelGridStockCellsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RelGridProtocolModule.RelGridViewChanged()), RelGridProtocolModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new RelGridStyles.hrg_frame(), new RelGridStyles.hrg_lit()), RelGridStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyStyles.tx_hint(), new TaxonomyStyles.tx_frame(), new TaxonomyStyles.tx_port()), TaxonomyStyles.INSTANCE))
                 .build();
     }

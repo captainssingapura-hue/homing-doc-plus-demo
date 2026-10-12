@@ -81,7 +81,7 @@ class RelFocusWidget {
         function grid(box, b) {
             var relation = new BooksRelation(store, { branch: domain.createBranch("cells-" + b.name) });
             self._relations.push(relation);
-            var g = new RelGrid({ container: box, branch: b, relation: relation, header: { show: true, sticky: true }, label: "Books" });
+            var g = new RelGrid({ container: box, branch: b, relation: relation, design: HouseGrid, header: { show: true, sticky: true }, label: "Books" });
             g.setColumnWidths({ title: 180, author: 120, year: 56, rating: 56 });
             return g;
         }

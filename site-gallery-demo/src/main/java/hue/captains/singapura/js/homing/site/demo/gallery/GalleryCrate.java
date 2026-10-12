@@ -9,6 +9,7 @@ import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
 import hue.captains.singapura.js.homing.relgrid.RelGridCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolCrate;
+import hue.captains.singapura.js.homing.relgrid.house.RelGridHouseCrate;
 import hue.captains.singapura.js.homing.reltree.RelTreeCrate;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences;
@@ -48,7 +49,7 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
     @Override public List<Crate> requires() {
         return List.of(MpaCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiDockingCrate.INSTANCE, UiSplitGridCrate.INSTANCE, UiMenuCrate.INSTANCE, UiMonitorsCrate.INSTANCE, UiPanZoomCrate.INSTANCE,
                        CoreJsCrate.INSTANCE, ServerCrate.INSTANCE,
-                       RelGridCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
+                       RelGridCrate.INSTANCE, RelGridHouseCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return GalleryComponents.INSTANCE; }

@@ -20,6 +20,7 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.relgrid.RelGridModule;
+import hue.captains.singapura.js.homing.relgrid.house.HouseGridModule;
 import hue.captains.singapura.js.homing.reltree.RelTreeModule;
 import hue.captains.singapura.js.homing.ui.monitors.FocusMonitorModule;
 import hue.captains.singapura.js.homing.ui.monitors.StewardMonitorModule;
@@ -68,6 +69,7 @@ public record RelFocusApp() implements AppModule<AppModule._None, RelFocusApp> {
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RelGridModule.RelGrid()), RelGridModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new HouseGridModule.HouseGrid()), HouseGridModule.INSTANCE))   // the design its grid is made with
                 .add(new ModuleImports<>(List.of(new RelTreeModule.RelTree()), RelTreeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryRelations.BooksStore(),
