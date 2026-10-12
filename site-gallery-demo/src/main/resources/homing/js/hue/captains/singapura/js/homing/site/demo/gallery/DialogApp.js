@@ -33,6 +33,7 @@ class DialogWidget {
 
         var status = branch.createElement("status", "div");
         css.addClass(status, ga_status);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(status);   // the house's block of code: a console's lines
         el.appendChild(status);
         var answers = 0;
         function say(what) { answers++; status.textContent = answers + ": " + what; }

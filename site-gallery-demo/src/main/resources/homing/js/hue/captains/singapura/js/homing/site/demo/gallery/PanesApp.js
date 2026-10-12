@@ -144,6 +144,7 @@ class PanesWidget {
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         el.appendChild(log);
         var lines = 0;
@@ -155,6 +156,7 @@ class PanesWidget {
 
         var status = branch.createElement("status", "div");
         css.addClass(status, ga_status);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(status);   // the house's block of code: a console's lines
         el.appendChild(status);
 
         var seq = 0;

@@ -78,10 +78,12 @@ class SplitGridWidget {
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         el.appendChild(log);
         var shown = branch.createElement("layout", "pre");
         css.addClass(shown, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(shown);   // the house's block of code: a console's lines
         el.appendChild(shown);
         var lines = 0;
         function say(line) {

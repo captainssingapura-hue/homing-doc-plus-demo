@@ -153,6 +153,7 @@ class ViewerFocusWidget {
         });
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         el.appendChild(log);
         var lines = 0;
         function say(line) {

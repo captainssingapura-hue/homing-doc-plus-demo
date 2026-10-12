@@ -70,6 +70,7 @@ class TearLabWidget {
         css.addClass(readout, tl_readout);
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         var lines = 0;
         function say(line) { lines++; log.textContent += (lines > 1 ? "\n" : "") + lines + "  " + line; log.scrollTop = log.scrollHeight; }

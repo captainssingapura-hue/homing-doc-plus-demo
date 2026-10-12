@@ -154,6 +154,7 @@ class EventsTab extends MonitorTab {
         super(branch, params);
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         this.root.appendChild(log);
         this._log = log;

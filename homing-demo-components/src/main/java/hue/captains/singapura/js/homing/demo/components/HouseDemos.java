@@ -147,6 +147,9 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE,
                 HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
                 HouseControls.TextBox.INSTANCE, HouseControls.Checkbox.INSTANCE,
+                // a document's content, realized by the doc's widgets on its own elements: code, a quote, a table, a badge per tone
+                HouseText.Code.INSTANCE, HouseText.SuccessBadge.INSTANCE, HouseText.WarningBadge.INSTANCE, HouseText.DangerBadge.INSTANCE,
+                HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE, HouseRegions.Table.INSTANCE, HouseRegions.HeaderCell.INSTANCE, HouseRegions.DataCell.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE,
                 // items
                 HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HousePreferences.SettingRow.INSTANCE,

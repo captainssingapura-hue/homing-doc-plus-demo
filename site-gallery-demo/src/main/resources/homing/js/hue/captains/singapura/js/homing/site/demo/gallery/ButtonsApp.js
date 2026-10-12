@@ -52,6 +52,7 @@ class ButtonsWidget {
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_status);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         el.appendChild(log);
         var clicks = 0;
         function say(what) { clicks++; log.textContent = clicks + ": " + what; }
