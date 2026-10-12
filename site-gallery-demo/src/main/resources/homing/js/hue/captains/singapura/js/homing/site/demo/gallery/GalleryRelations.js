@@ -83,6 +83,12 @@ class BooksRelation {
     }
     view(intent) { return intent ? null : this._store.pks(); }
     columns() { return this._store.columns(); }
+
+    /** The header cell for a column: a stock label header, made once on a branch of the relation's own. */
+    headerFor(col) {
+        if (!this._heads) this._heads = new RelGridLabels({ branch: this._branch.createBranch("heads"), labels: {} });
+        return this._heads.headerFor(col);
+    }
     readOnlyColumns() {
         var store = this._store;
         return store.columns().filter(function (c) { return store.writableColumns().indexOf(c) < 0; });

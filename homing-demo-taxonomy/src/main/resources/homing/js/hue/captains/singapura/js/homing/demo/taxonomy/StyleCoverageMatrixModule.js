@@ -39,10 +39,11 @@ class StyleCoverageMatrix extends TaxonomyWidget {
         var made = new Map(), seq = 0;
         this._rows = [];
         this._shown = "";
+        var heads = new RelGridLabels({ branch: this.branch.createBranch("heads"), labels: self._labels });
         var relation = {
             view: function () { return self._rows.slice(); },
             columns: function () { return self._columns.slice(); },
-            labels: function () { return self._labels; },
+            headerFor: function (col) { return heads.headerFor(col); },   // what a column is called: its label header
             readOnlyColumns: function () { return self._columns.slice(); },
             cellFor: function (pk, column) {
                 var key = pk + "\n" + column, cell = made.get(key);

@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
 import hue.captains.singapura.js.homing.relgrid.RelGridCrate;
 import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolCrate;
 import hue.captains.singapura.js.homing.relgrid.house.RelGridHouseCrate;
+import hue.captains.singapura.js.homing.relgrid.cells.RelGridCellsCrate;
 import hue.captains.singapura.js.homing.reltree.RelTreeCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
@@ -39,7 +40,7 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 ServerCrate.INSTANCE,
                 // The tree: a relation tree; the parts: a relation grid; their questions and notices the protocol's.
                 RelTreeCrate.INSTANCE,
-                RelGridCrate.INSTANCE, RelGridHouseCrate.INSTANCE,
+                RelGridCrate.INSTANCE, RelGridHouseCrate.INSTANCE, RelGridCellsCrate.INSTANCE,
                 RelGridProtocolCrate.INSTANCE,
                 // The house's components in action: their demos and the parties they meet in, and what controls them.
                 DemoComponentsCrate.INSTANCE,

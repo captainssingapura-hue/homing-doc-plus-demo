@@ -26,10 +26,11 @@ class PartsTable extends TaxonomyWidget {
         var made = new Map(), seq = 0;
         this._owner = "";
         this._rows = [];
+        var heads = new RelGridLabels({ branch: this.branch.createBranch("heads"), labels: _PT_LABELS });
         var relation = {
             view: function () { return self._rows.slice(); },
             columns: function () { return _PT_COLUMNS.slice(); },
-            labels: function () { return _PT_LABELS; },
+            headerFor: function (col) { return heads.headerFor(col); },   // what a column is called: its label header
             readOnlyColumns: function () { return _PT_COLUMNS.slice(); },
             cellFor: function (pk, column) {
                 var key = pk + "\n" + column, cell = made.get(key);

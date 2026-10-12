@@ -97,6 +97,12 @@
             <artifactId>rel-grid-house</artifactId>
             <version>${homing.relgrid.version}</version>
         </dependency>
+        <!-- the stock cells, out of the box: a text cell and a label header -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>rel-grid-cells</artifactId>
+            <version>${homing.relgrid.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
