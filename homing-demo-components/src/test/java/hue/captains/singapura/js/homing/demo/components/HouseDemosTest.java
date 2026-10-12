@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.demo.components;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.util.SimplePrefixResolver;
@@ -30,7 +31,8 @@ class HouseDemosTest {
         placed.addAll(HOUSE.pending());
         placed.addAll(HOUSE.unrealized());
         assertEquals(placed.size(), new HashSet<>(placed).size(), "a leaf placed twice");
-        assertEquals(Set.copyOf(HouseTaxonomy.INSTANCE.read().components()), Set.copyOf(placed), "every leaf of the house, and nothing else");
+        var leaves = HouseTaxonomy.INSTANCE.read().components().stream().filter(c -> !(c instanceof VirtualComponent<?>)).toList();   // a design draws a virtual leaf
+        assertEquals(Set.copyOf(leaves), Set.copyOf(placed), "every leaf of the house but a virtual one, and nothing else");
     }
 
     @Test

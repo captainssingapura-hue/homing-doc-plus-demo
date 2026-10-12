@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.demo.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
+import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import org.junit.jupiter.api.Test;
@@ -96,6 +97,6 @@ class StyleCoverageTest {
     /** The components whose lineage holds a branch. */
     private static Set<String> under(ComponentBranch branch) {
         var taxonomy = HouseTaxonomy.INSTANCE.read();
-        return taxonomy.components().stream().filter(c -> taxonomy.fallback(c).contains(branch)).map(Component::token).collect(Collectors.toSet());
+        return taxonomy.components().stream().filter(c -> !(c instanceof VirtualComponent<?>) && taxonomy.fallback(c).contains(branch)).map(Component::token).collect(Collectors.toSet());
     }
 }

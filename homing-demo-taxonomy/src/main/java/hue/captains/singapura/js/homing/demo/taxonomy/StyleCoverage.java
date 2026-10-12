@@ -6,6 +6,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
+import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.EsModule;
@@ -97,6 +98,7 @@ record StyleCoverage(int looks, int colours, List<Column> columns, List<Row> row
 
         var rows = new ArrayList<Row>();
         for (Component<?> c : taxonomy.components()) {
+            if (c instanceof VirtualComponent<?>) continue;   // a design draws it, never a style
             var cells = new LinkedHashMap<String, Cell>();
             for (Column col : columns) {
                 Dressed theme = themes.get(col.id());
