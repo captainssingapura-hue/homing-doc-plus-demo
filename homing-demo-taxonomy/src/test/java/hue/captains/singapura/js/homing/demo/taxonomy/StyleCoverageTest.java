@@ -56,11 +56,11 @@ class StyleCoverageTest {
                 "close-button", "icon-button",
                 "heading", "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark",
                 "link", "crumb", "scrim", "separator", "delimiter",
-                "split-grid", "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "toggle-widget",
+                "split-grid", "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "multi-tab-pane", "toggle-widget",
                 "choice-widget", "list-master-widget", "overview-widget", "focus-monitor", "scale-widget", "steward-monitor", "dialog",
                 "summary-card", "slider-group", "ground", "site-bar", "brand", "trail", "floating-pane", "float-layer", "edge-strip"), worn,
                 "the buttons, the texts, the ways, the marks, the veil; and the composites so far, the split grid - its lines boundary lines - and its mirror, the slider, the context menu"
-                + " and the tab strip - with the tab-pane whose chip is a tab, and the single-tab pane whose bar is a strip - the toggle widget's switch, the items the choice, list-master and overview widgets and the focus monitor draw, the scale widget's range, the steward monitor's lamp, the dialog's row of actions, and the cards - a summary card, a group of sliders; and the page - its ground, the site's bar, its brand and its trail; and a floating pane, a dialog's window; and the edge strip at a host's foot");
+                + " and the tab strip - with the tab-pane whose chip is a tab, and the panes of one tab and of many, their frames ringed while the keys are on them - the toggle widget's switch, the items the choice, list-master and overview widgets and the focus monitor draw, the scale widget's range, the steward monitor's lamp, the dialog's row of actions, and the cards - a summary card, a group of sliders; and the page - its ground, the site's bar, its brand and its trail; and a floating pane, a dialog's window; and the edge strip at a host's foot");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("old")), "the realized components still on the old design's classes");
         assertTrue(HOUSE.rows().stream().anyMatch(r -> r.worn().equals("none")), "the leaves with no implementation yet");
         var styled = new java.util.HashSet<>(under(HouseBranches.Button.INSTANCE));
@@ -76,8 +76,9 @@ class StyleCoverageTest {
         treated.add("slider-group");
         treated.add("floating-pane");
         treated.add("edge-strip");
+        treated.addAll(Set.of("multi-tab-pane", "single-tab-pane", "tab-pane"));
         assertEquals(treated, answeredBySomeStyle(false),
-                "its treatments reach every control - the ring - and every control and item when it cannot be used; every card, lifted under the hand and pressed, and a group of sliders ringed while it holds the keys; a floating pane lit, lifted and ringed, and an edge strip shadowed as a floating pane is");
+                "its treatments reach every control - the ring - and every control and item when it cannot be used; every card, lifted under the hand and pressed, and a group of sliders ringed while it holds the keys; a floating pane lit, lifted and ringed, and an edge strip shadowed as a floating pane is; every tabbed pane ringed while the keys are on it, and washed while a tab is offered to it");
         assertEquals(HOUSE.rows().size(), HOUSE.json().split("\"worn\"").length - 1, "a row each in what the page is handed");
     }
 
