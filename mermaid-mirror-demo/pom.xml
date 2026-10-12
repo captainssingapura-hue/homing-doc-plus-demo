@@ -87,11 +87,6 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-designs</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-server</artifactId>
             <version>${homing.core.version}</version>
         </dependency>

@@ -11,11 +11,8 @@ import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.conformance.rules.OrphanCheck;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.Theme;
-import hue.captains.singapura.js.homing.design.Deployment;
-import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.server.ServedModules;
 import hue.captains.singapura.js.homing.site.mpa.ThemesGetAction;
-import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import org.junit.jupiter.api.Test;
 
@@ -91,37 +88,6 @@ class GalleryTest {
             checked++;
         }
         assertTrue(checked >= 10, "the apps, the shell, the relations, the tree widget; checked " + checked);
-    }
-
-    @Test
-    void themesListsSevenDesignsWithTheirOffers() {
-        String json = new ThemesGetAction(HomingDesigns.REGISTRY).serialize();
-        assertTrue(json.startsWith("{\"default\":\"editorial\""), json.substring(0, 60));
-        assertTrue(json.contains("\"slug\":\"neo-brutalism\",\"label\":"), json);
-        assertTrue(json.contains("{\"palette\":\"forest\",\"slug\":\"editorial_forest\",\"fits\":true}"), json);
-        assertTrue(json.contains("{\"palette\":\"harbour\",\"slug\":\"editorial\",\"own\":true,\"fits\":true}"), json);
-        assertTrue(json.contains("\"anchor\":\"editorial\""), json);
-    }
-
-    @Test
-    void everyDesignBindsEveryPairTheChromeTheAppsTheGridAndTheTreeWear() {
-        var served = ServedModules.of(List.of(GalleryCrate.INSTANCE));
-        var groups = new ArrayList<CssGroup<?>>();
-        for (var m : served.byName().values()) if (m instanceof CssGroup<?> g) groups.add(g);
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("RelGridStyles")), "the grid's styles are served");
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("RelTreeStyles")), "the tree's styles are served");
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("DialogStyles")), "the dialog's styles are served");
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("PreferencesStyles")), "the preferences' styles are served");
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("PaneStyles")), "the panes' styles are served");
-        var worn = Deployment.wornBy(groups);
-        assertTrue(worn.size() > 60, "the chrome, the apps, the grid and the tree wear many pairs; found " + worn.size());
-        var scaled = Deployment.scaledBy(groups);
-        var grown = Deployment.grownBy(groups);
-        for (Theme t : HomingDesigns.REGISTRY.themes()) {
-            Design d = (Design) t;
-            var r = Deployment.of(worn, scaled, grown, d).resolve();
-            assertEquals(List.of(), r.findings(), () -> d.slug() + ": " + r.findings());
-        }
     }
 
     /** The gallery is a vehicle: its widgets catalogued, and the page's menus derived from what the catalogued components need. */

@@ -55,13 +55,6 @@
             <artifactId>homing-workspace-groups-core-models</artifactId>
             <version>${homing.ws.version}</version>
         </dependency>
-        <!-- The designs the tests hold the sheets to; the site that serves the page brings its own. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-designs</artifactId>
-            <version>${homing.core.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

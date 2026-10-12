@@ -3,24 +3,10 @@ package hue.captains.singapura.js.homing.demo.workspacewidgets.platformer;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Feedback.Danger;
-import static hue.captains.singapura.js.homing.design.Feedback.Success;
-import static hue.captains.singapura.js.homing.design.Layer.Base;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Layer.Recessed;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Heading;
-import static hue.captains.singapura.js.homing.design.Text.Numeral;
 
 /**
  * The platformer's sheet, in the design's words and nothing of its own: the
@@ -59,7 +45,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
     /** The game's name, in the design's heading voice. */
     public record pf_title() implements CssClass<PlatformerStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return """
             margin: 0;
             min-width: 0;
@@ -72,7 +57,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
     /** How far the run has come: a numeral, its figures of one width so the head never moves as it counts. */
     public record pf_score() implements CssClass<PlatformerStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Numeral.class, Type.Face.class), of(Numeral.class, Type.Scale.class), of(Numeral.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return """
             flex: 0 0 auto;
             font-variant-numeric: tabular-nums;
@@ -82,7 +66,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
     /** The keys and what they do, quietly. */
     public record pf_hint() implements CssClass<PlatformerStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
             flex: 0 0 auto;
             margin: 0;
@@ -118,7 +101,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
     /** The stage: the game's own size, scaled by {@code --pf-scale} to fit, the ground the design's recess. */
     public record pf_stage() implements CssClass<PlatformerStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pf-scale")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Recessed.class, Shape.Corner.class)); }
         @Override public String body() { return """
             flex: 0 0 auto;
             position: relative;
@@ -134,7 +116,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
     /** The sky: a band along the top, the design's base. */
     public record pf_sky() implements CssClass<PlatformerStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Base.class, Color.Surface.class)); }
         @Override public String body() { return """
             position: absolute;
             left: 0;
@@ -160,7 +141,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
     /** A platform, raised: at {@code --pf-x}, {@code --pf-y}, {@code --pf-w} wide. */
     public record pf_platform() implements CssClass<PlatformerStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pf-x"), new CssVar("--pf-y"), new CssVar("--pf-w")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return """
             position: absolute;
             left: calc(var(--pf-x, 0) * 1px);
@@ -174,7 +154,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
     /** The platform underfoot: a success. */
     public record pf_platform_under() implements CssClass<PlatformerStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Success.class, Color.Surface.class), of(Success.class, Color.Edge.class)); }
         @Override public String body() { return ""; }
     }
 
@@ -204,7 +183,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
     /** The lava: along the foot, the design's danger. */
     public record pf_lava() implements CssClass<PlatformerStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Danger.class, Color.Surface.class), of(Danger.class, Color.Edge.class)); }
         @Override public String body() { return """
             position: absolute;
             left: 0;
@@ -219,8 +197,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
     /** The run over: a card in the middle of the stage. */
     public record pf_over() implements CssClass<PlatformerStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class),
-                                                                           of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return """
             position: absolute;
             left: 50%;
@@ -237,7 +213,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
     /** "Game over", in the heading voice. */
     public record pf_over_title() implements CssClass<PlatformerStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 0;"; }
     }
 

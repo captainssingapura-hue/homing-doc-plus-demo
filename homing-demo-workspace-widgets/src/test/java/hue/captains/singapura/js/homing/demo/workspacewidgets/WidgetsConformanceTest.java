@@ -13,9 +13,6 @@ import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.conformance.GameLoopConformance;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.design.Deployment;
-import hue.captains.singapura.js.homing.design.Design;
-import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -29,8 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The ported widgets' gate: the framework's conformance over {@code homing-demo-workspace-widgets},
  * as the workspace repo's widget sets have it - crate integrity; every served
- * module graded strictly, with no baseline; the CSS graph laws; every design
- * binding what the widgets' sheet wears; and the keys, through the party.
+ * module graded strictly, with no baseline; the CSS graph laws; and the keys, through the party.
  */
 class WidgetsConformanceTest {
 
@@ -62,18 +58,6 @@ class WidgetsConformanceTest {
         List<Finding> css = CssConformance.check(new ArrayList<>(CrateClosure.of(TOP)))
                 .stream().filter(f -> own.contains(f.moduleClass())).toList();
         assertEquals(List.of(), css.stream().map(WidgetsConformanceTest::describe).toList());
-    }
-
-    @Test
-    void everyDesignBindsEveryPairTheWidgetsWear() {
-        var groups = new ArrayList<CssGroup<?>>();
-        for (var e : DemoWorkspaceWidgetsCrate.INSTANCE.entries()) if (e.module() instanceof CssGroup<?> g) groups.add(g);
-        assertTrue(groups.size() >= 1, "the widgets' sheet; found " + groups.size());
-        var worn = Deployment.wornBy(groups);
-        for (var t : HomingDesigns.REGISTRY.themes()) {
-            var r = Deployment.of(worn, Deployment.scaledBy(groups), Deployment.grownBy(groups), (Design) t).resolve();
-            assertEquals(List.of(), r.findings(), () -> ((Design) t).slug() + ": " + r.findings());
-        }
     }
 
     /** The widgets take their keys through the party: none listens undeclared, none captures on the document. */

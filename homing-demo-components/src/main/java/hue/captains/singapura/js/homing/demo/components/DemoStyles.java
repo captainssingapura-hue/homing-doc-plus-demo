@@ -2,16 +2,9 @@ package hue.captains.singapura.js.homing.demo.components;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Body;
 
 /**
  * The demos' layout: the stage a demo stands its component on, a row of what sits side by side, a
@@ -35,13 +28,11 @@ public record DemoStyles() implements CssGroup<DemoStyles> {
 
     /** A framed box of its own height, for a component that fills what holds it or floats in it. */
     public record dm_host() implements CssClass<DemoStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return "position: relative;\ndisplay: flex;\nflex-direction: column;\nflex: none;\nheight: 180px;\noverflow: hidden;\n"; }
     }
 
     /** Words in a demo: what a box holds, what a mark is called. */
     public record dm_text() implements CssClass<DemoStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Body.class, Type.Face.class), of(Body.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 0;\npadding: 8px 12px;\n"; }
     }
 
@@ -57,7 +48,6 @@ public record DemoStyles() implements CssGroup<DemoStyles> {
 
     /** A framed box of its own height that scrolls what it holds: a tree too long for it. */
     public record dm_scroll() implements CssClass<DemoStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
         @Override public String body() { return "flex: none;\nheight: 220px;\noverflow: auto;\npadding: 8px 12px;\n"; }
     }
 

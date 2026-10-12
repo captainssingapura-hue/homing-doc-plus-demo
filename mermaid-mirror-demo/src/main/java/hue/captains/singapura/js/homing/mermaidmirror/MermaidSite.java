@@ -1,12 +1,12 @@
 package hue.captains.singapura.js.homing.mermaidmirror;
 
 import hue.captains.singapura.js.homing.catalogue.site.AppListing;
-import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import hue.captains.singapura.js.homing.site.Path;
 import hue.captains.singapura.js.homing.site.Router;
 import hue.captains.singapura.js.homing.site.Site;
 import hue.captains.singapura.js.homing.site.catalogue.CatalogueRouter;
 import hue.captains.singapura.js.homing.site.mpa.Brand;
+import hue.captains.singapura.js.homing.site.mpa.HouseThemes;
 import hue.captains.singapura.js.homing.site.mpa.StandardMpa;
 
 /**
@@ -19,7 +19,7 @@ public record MermaidSite() implements Site {
     public static final MermaidSite INSTANCE = new MermaidSite();
 
     /** The site's one MPA: its brand, the designs it offers, the crate it serves. */
-    public static final StandardMpa MPA = StandardMpa.of(Brand.of("Mermaid Mirror Demo"), HomingDesigns.REGISTRY, MermaidSiteCrate.INSTANCE);
+    public static final StandardMpa MPA = StandardMpa.of(Brand.of("Mermaid Mirror Demo"), HouseThemes.INSTANCE, MermaidSiteCrate.INSTANCE);
 
     /** Read once: the tree is checked when the site is made, not when a request arrives. */
     public static final CatalogueRouter ROUTER = CatalogueRouter.at(Path.ROOT, MermaidDemoCatalogue.INSTANCE, MPA).listing(AppListing.INSTANCE);

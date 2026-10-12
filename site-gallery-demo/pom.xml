@@ -108,14 +108,6 @@
             <artifactId>homing-component-base</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- The designs the gallery wears - the framework's, nothing legacy - which its tests hold
-             every sheet to; the site that serves it brings its own. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-designs</artifactId>
-            <version>${homing.core.version}</version>
-            <scope>test</scope>
-        </dependency>
         <!-- The relation grid and its tree, from their own repo: layer-2 components
              on core and design-core alone; the page hands each a branch and a
              relation. The protocol is named for the tree's questions. -->

@@ -2,22 +2,9 @@ package hue.captains.singapura.js.homing.demo.workspacewidgets.video;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 
-import static hue.captains.singapura.js.homing.design.Box.Control;
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Interaction.Selectable;
-import static hue.captains.singapura.js.homing.design.Layer.Recessed;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Heading;
 
 /**
  * The video playlist's sheet, in the design's words and nothing of its own: the
@@ -54,7 +41,6 @@ public record EmbeddedVideoStyles() implements CssGroup<EmbeddedVideoStyles> {
 
     /** The dish, in the design's heading voice. */
     public record vd_title() implements CssClass<EmbeddedVideoStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return """
             margin: 0;
             min-width: 0;
@@ -67,7 +53,6 @@ public record EmbeddedVideoStyles() implements CssGroup<EmbeddedVideoStyles> {
 
     /** "3 / 5", quietly; its figures of one width, so the heading beside it never moves as it counts. */
     public record vd_count() implements CssClass<EmbeddedVideoStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
             flex: 0 0 auto;
             font-variant-numeric: tabular-nums;
@@ -77,7 +62,6 @@ public record EmbeddedVideoStyles() implements CssGroup<EmbeddedVideoStyles> {
 
     /** Which take is on the stage, in words, quietly. */
     public record vd_note() implements CssClass<EmbeddedVideoStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
             flex: 0 0 auto;
             margin: 0;
@@ -109,7 +93,6 @@ public record EmbeddedVideoStyles() implements CssGroup<EmbeddedVideoStyles> {
      * clipping it. Set a layer back until the player paints over it.
      */
     public record vd_frame() implements CssClass<EmbeddedVideoStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Recessed.class, Shape.Corner.class)); }
         @Override public String body() { return """
             aspect-ratio: 16 / 9;
             width: min(100%, calc(100cqh * 16 / 9));
@@ -140,12 +123,6 @@ public record EmbeddedVideoStyles() implements CssGroup<EmbeddedVideoStyles> {
      * the keys' focus alone. One line, clipped rather than wrapped.
      */
     public record vd_take() implements CssClass<EmbeddedVideoStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Tab.class, Shape.Rule.class), of(Control.Tab.class, Shape.Corner.class), of(Control.class, Color.Edge.class),
-                           of(Selectable.Tab.class, Color.Surface.class), of(Selectable.Tab.class, Color.Ink.class), of(Selectable.Tab.class, Color.Edge.class),
-                           of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class),
-                           of(Caption.class, Type.Scale.class));
-        }
         @Override public String body() { return """
             flex: 0 0 auto;
             max-width: 180px;
