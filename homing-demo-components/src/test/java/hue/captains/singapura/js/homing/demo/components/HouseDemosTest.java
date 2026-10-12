@@ -36,7 +36,7 @@ class HouseDemosTest {
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
         assertEquals(38, HOUSE.demos().size(), "twenty-five elements - nine of them texts, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
-        assertEquals(25, HOUSE.aroundIt().size(), "the workspace's seven - a floating pane's title bar among them - the dock grid retired, its regions a split grid's cells and the docks residing in them - the control panel, the chrome's eight - its ground, its bar, the brand and the trail among them - the preferences' nine");
+        assertEquals(26, HOUSE.aroundIt().size(), "a panel's bar, in the panel's demo; the workspace's seven - a floating pane's title bar among them - the dock grid retired, its regions a split grid's cells and the docks residing in them - the control panel, the chrome's eight - its ground, its bar, the brand and the trail among them - the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
         assertEquals(25, HOUSE.unrealized().size(), "the parts nothing realizes, and the new-tab control and its picture, retired for now - the brand and the trail realized now, on the site's bar");
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)

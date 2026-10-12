@@ -108,6 +108,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new ShownAround(HousePanes.TabPicker.INSTANCE, "a region with no tab left: what it offers to open"),
                 new ShownAround(HousePanes.SingleTabPane.INSTANCE, "a tab torn off its bar: the float that carries it"),
                 new ShownAround(HouseContainers.TitleBar.INSTANCE, "the head of a pane that floats - a dialog's window, the preferences' among them: its title and its close, where the hand takes it"),
+                new ShownAround(HouseContainers.PanelBar.INSTANCE, "the head of a panel, in the panel's demo: its title, the line under it, and what acts on the panel at its end"),
                 // the panel beside the demos
                 new ShownAround(HouseControlPanel.ControlPanel.INSTANCE, "the control panel beside the demos: a slider for each degree the picked component varies by, a button for each switch, action and question"),
                 // the page's chrome
