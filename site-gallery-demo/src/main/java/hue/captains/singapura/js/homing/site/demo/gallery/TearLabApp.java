@@ -8,6 +8,8 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 import hue.captains.singapura.js.homing.ui.elements.SecondaryButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 import hue.captains.singapura.js.homing.ui.panes.TabTearModule;
@@ -50,9 +52,11 @@ public record TearLabApp() implements AppModule<AppModule._None, TearLabApp> {
                         new GalleryStyles.ga_buttons(),
                         new GalleryStyles.ga_log(),
                         new GalleryStyles.ga_control(),
-                        new GalleryStyles.ga_control_label(),
-                        new GalleryStyles.ga_pick()
+                        new GalleryStyles.ga_control_label()
                 ), GalleryStyles.INSTANCE))
+                // its lists in the house's select look
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();
     }
 

@@ -109,7 +109,7 @@ class TearLabWidget {
         label.textContent = text;
         row.appendChild(label);
         var pick = branch.createElement(id + "-pick", "select");
-        css.addClass(pick, ga_pick);
+        new Look(Object.freeze({ LEAF: "select" }), ROLE.STANDALONE).wear(pick);   // the house's select, on the lab's own list
         pick.setAttribute("aria-label", aria);
         choices.forEach(function (m) {
             var opt = branch.createElement(id + "-" + m[0], "option");

@@ -20,6 +20,22 @@
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "focusPage" });
+/** The tools' fields: the house's text box, realized on the page's own native fields. */
+const _FOCUS_TEXT_BOX = Object.freeze({ LEAF: "text-box" });
+
+/** The tools' reset: every leaf's count back to nothing. */
+class FocusReset {
+    constructor(page) { this._page = page; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._page._leaves.forEach(function (l) { l.reset(); }); }
+}
+
+/** Panel B's button, wired to nothing but its own count. */
+class FocusBeep {
+    constructor() { this._beeps = 0; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle(event) { event.source.label = "beep " + (++this._beeps); }
+}
 
 class FocusWidget {
     constructor(branch, params) {
@@ -69,11 +85,13 @@ class FocusWidget {
         var search = branch.createElement("search", "input");
         search.type = "search";
         css.addClass(search, ga_field);
+        new Look(_FOCUS_TEXT_BOX, ROLE.STANDALONE).wear(search);
         search.setAttribute("aria-label", "search");
         search.placeholder = "search — outside every container";
         tools.appendChild(search);
         var notes = branch.createElement("notes", "textarea");
         css.addClass(notes, ga_field);
+        new Look(_FOCUS_TEXT_BOX, ROLE.STANDALONE).wear(notes);
         notes.setAttribute("aria-label", "notes");
         notes.rows = 1;
         notes.placeholder = "notes — keeps its Tab";
@@ -86,12 +104,10 @@ class FocusWidget {
             ev.stopPropagation();
         });
         tools.appendChild(notes);
-        var reset = branch.createElement("reset", "button");
-        reset.type = "button";
-        css.addClass(reset, ga_button);
-        reset.textContent = "reset counts";
-        reset.addEventListener("click", function () { self._leaves.forEach(function (l) { l.reset(); }); });
-        tools.appendChild(reset);
+        var reset = new PlainButton(PlainButtonFactory.create(branch, "reset"), { label: "reset counts" });
+        css.addClass(reset.el, ga_button);
+        reset.setOnClick(new FocusReset(self));
+        tools.appendChild(reset.el);
 
         // the scene: three panels holding branches under the party's root, and a loose leaf beside them
         var top = focusParty.root;
@@ -102,8 +118,7 @@ class FocusWidget {
         panelA.field(branch.createBranch("a-note"), "a note in panel A — Escape lets go");
         var panelB = new Panel(branch.createBranch("panel-b"), scene, top, "panel B", false);
         var b1 = panelB.leaf(branch.createBranch("b1"), "b1");
-        var beeps = 0;
-        var beep = panelB.button(branch.createBranch("b-beep"), "beep 0", function () { beep.textContent = "beep " + (++beeps); });
+        panelB.button(branch.createBranch("b-beep"), "beep 0", new FocusBeep());
         var panelC = new ListPanel(branch.createBranch("panel-c"), scene, top, "panel C");
         var c1 = panelC.leaf(branch.createBranch("c1"), "c1");
         var c2 = panelC.leaf(branch.createBranch("c2"), "c2");

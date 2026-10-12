@@ -9,6 +9,11 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.ElementStyles;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -55,14 +60,18 @@ public record FocusSceneModule() implements DomModule<FocusSceneModule> {
     public ImportsFor<FocusSceneModule> imports() {
         return ImportsFor.<FocusSceneModule>builder()
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
+                // its native controls on the house's look: the plain button, and a text box's, a select's and a checkbox's look
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ElementStyles.el_checkbox()), ElementStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_panel(),
                         new GalleryStyles.ga_panel_header(),
                         new GalleryStyles.ga_panel_note(),
-                        new GalleryStyles.ga_panel_list(),
                         new GalleryStyles.ga_leaf(),
                         new GalleryStyles.ga_leaf_count(),
-                        new GalleryStyles.ga_leaf_yield(),
                         new GalleryStyles.ga_field(),
                         new GalleryStyles.ga_button()
                 ), GalleryStyles.INSTANCE))

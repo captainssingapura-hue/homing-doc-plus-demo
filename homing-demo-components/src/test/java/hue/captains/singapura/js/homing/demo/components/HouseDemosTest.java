@@ -38,7 +38,7 @@ class HouseDemosTest {
         assertEquals(38, HOUSE.demos().size(), "twenty-five elements - nine of them texts, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
         assertEquals(26, HOUSE.aroundIt().size(), "a panel's bar, in the panel's demo; the workspace's seven - a floating pane's title bar among them - the dock grid retired, its regions a split grid's cells and the docks residing in them - the control panel, the chrome's eight - its ground, its bar, the brand and the trail among them - the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
-        assertEquals(25, HOUSE.unrealized().size(), "the parts nothing realizes, and the new-tab control and its picture, retired for now - the brand and the trail realized now, on the site's bar");
+        assertEquals(27, HOUSE.unrealized().size(), "the parts nothing realizes, and the new-tab control and its picture, retired for now - the brand and the trail realized now, on the site's bar; the browser's own text box and checkbox, realized by their owners on native ones");
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)
                 .map(Demo::className).toList(), "the nine buttons are one button");
         assertEquals(List.of("TextDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseText.Pill.INSTANCE)

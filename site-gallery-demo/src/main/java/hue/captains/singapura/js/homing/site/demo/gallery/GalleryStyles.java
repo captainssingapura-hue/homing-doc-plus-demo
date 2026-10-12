@@ -53,11 +53,6 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return "display: flex; flex-wrap: wrap; align-items: center; gap: 10px;"; }
     }
 
-    /** A page's own native list - which keys the docks answer, the tear's settings - dressed as the controls beside it. */
-    public record ga_pick() implements CssClass<GalleryStyles> {
-        @Override public String body() { return "font: inherit; padding: 3px 6px;"; }
-    }
-
     /** The box a grid or a tree is given: a raised edge, its own scroll. */
     public record ga_host() implements CssClass<GalleryStyles> {
         @Override public String body() { return """
@@ -620,12 +615,12 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     /** A native text field, in the tools or inside a panel. */
     public record ga_field() implements CssClass<GalleryStyles> {
-        @Override public String body() { return "font: inherit; padding: 4px 8px; min-width: 0; flex: 1 1 12em;"; }
+        @Override public String body() { return "min-width: 0; flex: 1 1 12em;"; }
     }
 
-    /** A native button, in the tools or inside a panel. */
+    /** A button - the house's plain button - in the tools or inside a panel: where it sits. */
     public record ga_button() implements CssClass<GalleryStyles> {
-        @Override public String body() { return "font: inherit; padding: 4px 10px; align-self: flex-start;"; }
+        @Override public String body() { return "align-self: flex-start;"; }
     }
 
     /** The relations page: the unwrapped tree and grid, grouped under a header, outside every container. */
@@ -674,19 +669,9 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
         @Override public String body() { return "margin-inline-start: auto;"; }
     }
 
-    /** The leaf's yield button: a small control after the count. */
-    public record ga_leaf_yield() implements CssClass<GalleryStyles> {
-        @Override public String body() { return "font: inherit; padding: 1px 8px;"; }
-    }
-
     /** The note beside a panel's name: what it does with a yield. */
     public record ga_panel_note() implements CssClass<GalleryStyles> {
         @Override public String body() { return "margin-inline-start: 10px; text-transform: none; letter-spacing: normal; font-weight: normal;"; }
-    }
-
-    /** Panel C's native list: which leaf holds the keys. */
-    public record ga_panel_list() implements CssClass<GalleryStyles> {
-        @Override public String body() { return "font: inherit; padding: 4px;"; }
     }
 
     // ── The keyboard page ─────────────────────────────────────────────────────
@@ -808,11 +793,11 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
 
     @Override
     public List<CssClass<GalleryStyles>> cssClasses() {
-        return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(), new ga_pick(),
+        return List.of(new ga_kicker(), new ga_title(), new ga_lede(), new ga_cards(), new ga_card_list(), new ga_count(), new ga_buttons(),
                        new ga_host(), new ga_pane_host(), new ga_dock_box(), new ga_strip_census(), new ga_strip_box(), new ga_shelf(), new ga_menu_cells(), new ga_cell(), new ga_cell_face(), new ga_cell_caption(),
                        new ga_swatch_primary(), new ga_swatch_success(), new ga_swatch_warning(), new ga_swatch_danger(), new ga_swatch_inverted(), new ga_grid_cell(), new ga_grid_cell_current(), new ga_specimens(), new ga_specimen_name(), new ga_log(), new ga_status(),
                        new ga_holders(), new ga_holder(), new ga_holder_on(), new ga_stage(), new ga_sprite(),
-                       new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_leaf_count(), new ga_leaf_yield(), new ga_panel_note(), new ga_panel_list(),
+                       new ga_focus(), new ga_focus_scene(), new ga_focus_monitor(), new ga_focus_column(), new ga_focus_tools(), new ga_field(), new ga_button(), new ga_rel_group(), new ga_rel_host(), new ga_panel(), new ga_panel_header(), new ga_leaf(), new ga_leaf_count(), new ga_panel_note(),
                        new ga_tab_fill(), new ga_tab_host(), new ga_picture(), new ga_picture_note(),
                        new ga_switch_list(), new ga_switch_row(), new ga_switch_row_at(), new ga_switch_hint(),
                        new ga_monitor(), new ga_domops_row(), new ga_domops_count(), new ga_floor(), new ga_region(),

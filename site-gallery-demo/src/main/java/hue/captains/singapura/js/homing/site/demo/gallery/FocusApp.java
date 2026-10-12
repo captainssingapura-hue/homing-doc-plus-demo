@@ -14,6 +14,10 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.monitors.FocusMonitorModule;
 import hue.captains.singapura.js.homing.ui.monitors.StewardMonitorModule;
 
@@ -52,6 +56,11 @@ public record FocusApp() implements AppModule<AppModule._None, FocusApp> {
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
+                // its tools: the house's plain button, and its fields in the text box's look
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusSceneModule.Leaf(), new FocusSceneModule.Panel(), new FocusSceneModule.ListPanel()), FocusSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))

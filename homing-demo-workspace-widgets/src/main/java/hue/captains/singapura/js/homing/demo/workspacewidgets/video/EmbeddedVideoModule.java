@@ -12,6 +12,8 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParties;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
@@ -55,6 +57,9 @@ public record EmbeddedVideoModule() implements DomModule<EmbeddedVideoModule> {
                 .add(new ModuleImports<>(List.of(new focusParties()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WidgetStyles.wg_fill()), WidgetStyles.INSTANCE))
+                // the strip and its takes in the house's tab look
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new EmbeddedVideoStyles.vd_root(), new EmbeddedVideoStyles.vd_head(), new EmbeddedVideoStyles.vd_title(),
                         new EmbeddedVideoStyles.vd_count(), new EmbeddedVideoStyles.vd_note(), new EmbeddedVideoStyles.vd_stage(),
                         new EmbeddedVideoStyles.vd_frame(), new EmbeddedVideoStyles.vd_rail(), new EmbeddedVideoStyles.vd_take()), EmbeddedVideoStyles.INSTANCE))

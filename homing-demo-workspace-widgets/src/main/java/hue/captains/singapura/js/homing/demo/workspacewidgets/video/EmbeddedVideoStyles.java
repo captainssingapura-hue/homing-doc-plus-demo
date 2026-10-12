@@ -125,9 +125,6 @@ public record EmbeddedVideoStyles() implements CssGroup<EmbeddedVideoStyles> {
     public record vd_take() implements CssClass<EmbeddedVideoStyles> {
         @Override public String body() { return """
             flex: 0 0 auto;
-            max-width: 180px;
-            padding: 4px 12px;
-            font-family: inherit;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

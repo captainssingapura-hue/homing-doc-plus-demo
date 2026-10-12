@@ -10,6 +10,8 @@ import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.monitors.FocusMonitorModule;
@@ -44,6 +46,9 @@ public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocus
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
+                // case 7's toggle: the house's plain button, told through a handler
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusSceneModule.Leaf(), new FocusSceneModule.Panel()), FocusSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ViewerSceneModule.SvgViewer(), new ViewerSceneModule.EscapeLayer()), ViewerSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ViewerCasesModule.ViewerCase(), new ViewerCasesModule.CaseBoard()), ViewerCasesModule.INSTANCE))

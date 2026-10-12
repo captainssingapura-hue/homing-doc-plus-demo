@@ -27,7 +27,8 @@
 // THE KEYS. The strip is a tablist with MANUAL activation: arrows move the
 // focus among the takes, Enter or Space puts one on the stage — one player per
 // choice, not one per keystroke. The takes are native buttons, the native
-// world's; the widget is a logical member of the keyboard's party. Holding the
+// world's, each in the house's tab look on the strip's - the take on the stage
+// the chosen tab; the widget is a logical member of the keyboard's party. Holding the
 // keys with nothing natively focused, an arrow takes you into the strip, Enter
 // or Space plays the take the strip is on, and Escape gives the keys back.
 //
@@ -40,6 +41,9 @@
 // =============================================================================
 
 const _videoOwner = Object.freeze({ toString: () => "embeddedVideo" });
+/** The strip of takes and a take: the house's tab strip and its tab, realized here on the widget's own native elements. */
+const _VIDEO_STRIP = Object.freeze({ LEAF: "tab-strip" });
+const _VIDEO_TAKE = Object.freeze({ LEAF: "tab" });
 var _videos = 0;
 
 /** The player's origin: the frame's host, and the only one a command is posted to. youtube-nocookie sets no cookie until play is pressed. */
@@ -76,6 +80,8 @@ class EmbeddedVideo {
         // the stage is labelled with the take instead.
         var rail = EmbeddedVideo._el(d, "rail", "div", vd_rail, root);
         rail.setAttribute("role", "tablist");
+        new Look(_VIDEO_STRIP, ROLE.STANDALONE).wear(rail);
+        this._take = new Look(_VIDEO_TAKE, ROLE.STANDALONE);
         rail.setAttribute("aria-label", "Takes");
         this._tabs = _VIDEO_TAKES.map(function (t, i) { return self._tab(rail, t, i); });
         rail.addEventListener("keydown", function (ev) { if (self._railKey(ev.key)) ev.preventDefault(); });
@@ -152,6 +158,7 @@ class EmbeddedVideo {
         b.title = take.note;
         b.setAttribute("role", "tab");
         css.addClass(b, vd_take);
+        this._take.wear(b);   // a tab: chosen while it is on the stage (aria-selected), ringed on the keys' focus
         // The pointer's way to choose; the keys' is the strip's own, so one choice comes from one place.
         b.addEventListener("click", function () { self._focused = i; self.show(i); });
         rail.appendChild(b);

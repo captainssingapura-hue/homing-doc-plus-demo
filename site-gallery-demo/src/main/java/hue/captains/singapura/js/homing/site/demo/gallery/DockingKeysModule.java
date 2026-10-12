@@ -6,6 +6,8 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 
 import java.util.List;
 
@@ -32,7 +34,10 @@ public record DockingKeysModule() implements DomModule<DockingKeysModule> {
     public ImportsFor<DockingKeysModule> imports() {
         return ImportsFor.<DockingKeysModule>builder()
                 .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys(), new PaneKeysModule.BrowserKeys()), PaneKeysModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new GalleryStyles.ga_pick(), new GalleryStyles.ga_control(), new GalleryStyles.ga_control_label(), new GalleryStyles.ga_control_readout()), GalleryStyles.INSTANCE))
+                // its list in the house's select look
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new GalleryStyles.ga_control(), new GalleryStyles.ga_control_label(), new GalleryStyles.ga_control_readout()), GalleryStyles.INSTANCE))
                 .build();
     }
 
