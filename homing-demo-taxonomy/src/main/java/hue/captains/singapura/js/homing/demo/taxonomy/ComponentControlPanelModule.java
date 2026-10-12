@@ -14,7 +14,7 @@ import hue.captains.singapura.js.homing.demo.components.ComponentControlModule;
 import hue.captains.singapura.js.homing.demo.components.ComponentControlLogModule;
 import hue.captains.singapura.js.homing.ui.controlpanel.ControlPanelModule;
 import hue.captains.singapura.js.homing.ui.controlpanel.ControlsModule;
-import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;

@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
-import hue.captains.singapura.js.homing.ui.elements.LookModule;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
 import hue.captains.singapura.js.homing.ui.elements.LedeModule;

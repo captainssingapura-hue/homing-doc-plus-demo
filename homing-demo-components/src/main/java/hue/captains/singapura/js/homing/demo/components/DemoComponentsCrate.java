@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
@@ -40,6 +41,7 @@ public final class DemoComponentsCrate implements Crate {
                 CoreJsCrate.INSTANCE,
                 ServerCrate.INSTANCE,
                 // What is shown, and what of it is controlled.
+                UiLookCrate.INSTANCE,
                 UiElementsCrate.INSTANCE,
                 UiIconsCrate.INSTANCE,
                 UiDialogCrate.INSTANCE,

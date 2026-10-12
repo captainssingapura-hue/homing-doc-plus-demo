@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
-import hue.captains.singapura.js.homing.ui.elements.LookModule;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
 import hue.captains.singapura.js.homing.ui.elements.LedeModule;
@@ -13,7 +13,7 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.floating.FloatLayerModule;
-import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.PrimaryButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SummaryCardModule;

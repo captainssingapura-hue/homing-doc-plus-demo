@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.SelfContent;
 import hue.captains.singapura.js.homing.demo.components.DemoComponentsCrate;
-import hue.captains.singapura.js.homing.ui.elements.LookModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;

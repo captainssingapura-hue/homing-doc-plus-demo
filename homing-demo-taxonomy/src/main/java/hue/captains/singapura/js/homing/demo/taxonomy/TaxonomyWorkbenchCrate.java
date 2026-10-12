@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.demo.components.DemoComponentsCrate;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import hue.captains.singapura.js.homing.workspace.parties.WorkspacePartiesCrate;
 import hue.captains.singapura.js.homing.workspace.site.WorkspaceSiteCrate;
 import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceWidgetsCrate;
@@ -42,6 +43,7 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 // The house's components in action: their demos and the parties they meet in, and what controls them.
                 DemoComponentsCrate.INSTANCE,
                 UiControlPanelCrate.INSTANCE,
+                UiLookCrate.INSTANCE,
                 UiElementsCrate.INSTANCE,
                 // The workspace: its widgets' contract, their parties, the grouped page.
                 WorkspaceWidgetsCrate.INSTANCE,

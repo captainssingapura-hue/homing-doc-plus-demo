@@ -30,6 +30,7 @@ import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVide
 import hue.captains.singapura.js.homing.libs.LibsCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import hue.captains.singapura.js.homing.workspace.widgets.WidgetDeclaration;
 import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceWidgetsCrate;
 
@@ -68,6 +69,7 @@ public final class DemoWorkspaceWidgetsCrate implements Crate {
                 // the focus party, the keys' convention, the css manager
                 ServerCrate.INSTANCE,
                 // the design's slider and button: the platformer's gravity, its music, its Play again
+                UiLookCrate.INSTANCE,
                 UiElementsCrate.INSTANCE,
                 // Tone.js, served from the classpath: the platformer's sound
                 LibsCrate.INSTANCE,
