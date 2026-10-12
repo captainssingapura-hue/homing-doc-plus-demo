@@ -80,10 +80,9 @@ class CounterTab {
 
 class NoteTab {
     constructor(branch, params) {
-        var root = branch.createElement("note", "p");
-        css.addClass(root, ga_lede);
-        root.textContent = params.text;
-        this.root = root;
+        var root = new Lede(LedeFactory.create(branch, "note"), { text: params.text });
+        css.addClass(root.el, ga_lede);
+        this.root = root.el;
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }
@@ -116,25 +115,22 @@ class PanesWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-panes";
-        el.appendChild(kicker);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-panes" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
 
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Panes";
-        el.appendChild(title);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Panes" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
 
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "One pane of tabs - a desk with one host. Each tab holds a widget by the base's contract, made on a branch "
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "One pane of tabs - a desk with one host. Each tab holds a widget by the base's contract, made on a branch "
             + "of the tab's own and a member of the dock's focus branch — the law; the plus asks the page, the page asks you. Switch by "
             + "click, reorder by drag, close on the cross; or press a chip and the pane holds the keys: ← → walk the tabs, Home and "
             + "End the ends, Shift+← → move the active tab along the rail, Shift+↓ asks to detach, Enter enters the widget — the "
             + "counter then counts ↑ ↓ — and Escape comes back up to the pane, and from the pane to no one. Every event the pane "
-            + "reports is written below it, as the data it is; the tree and the lamp beside it show who holds.";
-        el.appendChild(lede);
+            + "reports is written below it, as the data it is; the tree and the lamp beside it show who holds." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var row0 = branch.createElement("row0", "div");
         css.addClass(row0, ga_focus);
@@ -209,10 +205,9 @@ class PanesWidget {
                 title: "Add a tab", keyboard: kb, keyboardId: "panes/picker",
                 size: { w: 420, h: 220 },
                 content: function (b, body) {
-                    var p = b.createElement("text", "p");
-                    css.addClass(p, ga_lede);
-                    p.textContent = "Which widget goes in the new tab?";
-                    body.appendChild(p);
+                    var p = new Lede(LedeFactory.create(b, "text"), { text: "Which widget goes in the new tab?" });
+                    css.addClass(p.el, ga_lede);
+                    body.appendChild(p.el);
                     return {};
                 },
                 actions: KINDS.map(function (kind, i) {

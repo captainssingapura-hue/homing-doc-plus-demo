@@ -48,10 +48,9 @@ class CounterWidget {
 class NoteWidget {
     constructor(branch, params) {
         branch.activate(_owner);
-        var root = branch.createElement("note", "p");
-        css.addClass(root, ga_lede);
-        root.textContent = params.text;
-        this.root = root;
+        var root = new Lede(LedeFactory.create(branch, "note"), { text: params.text });
+        css.addClass(root.el, ga_lede);
+        this.root = root.el;
     }
 }
 
@@ -71,19 +70,16 @@ class FloatingWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-floating";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Floating panes";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A desk, and the panes that float on it: open a few, drag them by the head, size them by the corner, "
-            + "press one to raise it, close with the cross or Escape. Every mutation the desk reports is a line on the log.";
-        el.appendChild(lede);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-floating" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Floating panes" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A desk, and the panes that float on it: open a few, drag them by the head, size them by the corner, "
+            + "press one to raise it, close with the cross or Escape. Every mutation the desk reports is a line on the log." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);

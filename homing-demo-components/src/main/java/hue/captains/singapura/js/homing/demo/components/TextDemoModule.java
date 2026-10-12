@@ -8,7 +8,12 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.BadgeModule;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
-import hue.captains.singapura.js.homing.ui.elements.HeadingModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
+import hue.captains.singapura.js.homing.ui.elements.Heading2Module;
+import hue.captains.singapura.js.homing.ui.elements.Heading3Module;
+import hue.captains.singapura.js.homing.ui.elements.Heading4Module;
+import hue.captains.singapura.js.homing.ui.elements.Heading5Module;
+import hue.captains.singapura.js.homing.ui.elements.Heading6Module;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.LabelModule;
 import hue.captains.singapura.js.homing.ui.elements.LedeModule;
@@ -27,14 +32,19 @@ public record TextDemoModule() implements DomModule<TextDemoModule> {
     public static final TextDemoModule INSTANCE = new TextDemoModule();
 
     public record TextDemo() implements SelfContainedWidget<TextDemoModule> {
-        @Override public String summary() { return "One of the house's nine texts, as its leaf says - a heading, a kicker, a caption, a lede, a label, a readout, a badge, a pill or a wordmark - in the words such a text holds, in the look the style gives it; sized by its options."; }
+        @Override public String summary() { return "One of the house's fourteen texts, as its leaf says - a heading of any of six levels, a kicker, a caption, a lede, a label, a readout, a badge, a pill or a wordmark - in the words such a text holds, in the look the style gives it; sized by its options."; }
     }
 
     @Override
     public ImportsFor<TextDemoModule> imports() {
         return ImportsFor.<TextDemoModule>builder()
                 .add(new ModuleImports<>(List.of(new ComponentDemoModule.ComponentDemo()), ComponentDemoModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new HeadingModule.Heading(), new HeadingModule.HeadingFactory()), HeadingModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading1Module.Heading1(), new Heading1Module.Heading1Factory()), Heading1Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading2Module.Heading2(), new Heading2Module.Heading2Factory()), Heading2Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading3Module.Heading3(), new Heading3Module.Heading3Factory()), Heading3Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading4Module.Heading4(), new Heading4Module.Heading4Factory()), Heading4Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading5Module.Heading5(), new Heading5Module.Heading5Factory()), Heading5Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading6Module.Heading6(), new Heading6Module.Heading6Factory()), Heading6Module.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))

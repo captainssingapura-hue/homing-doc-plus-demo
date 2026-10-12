@@ -39,22 +39,19 @@ class ViewerFocusWidget {
         var self = this, steward = KeyboardStewardInstance;
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-panzoom · homing-ui-monitors · a case board";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Viewers in focus";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "Where the keys go when a widget's native control lets them go. Each viewer is a widget, a member of its own "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-panzoom · homing-ui-monitors · a case board" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Viewers in focus" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "Where the keys go when a widget's native control lets them go. Each viewer is a widget, a member of its own "
             + "focus party; the viewport inside it is the native world: a press puts the browser's focus there, + and − zoom, 0 fits, "
             + "the arrows pan. One Escape it has no use for lets it go - a yield: the viewer is asked first and, with nothing "
             + "designed for holding the keys, passed by; the keys reach the first that would hold them, else the root's default, "
-            + "the home. Every case says what to do and what to expect, and its lamps say what happened.";
-        el.appendChild(lede);
+            + "the home. Every case says what to do and what to expect, and its lamps say what happened." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
         var chain = new DOMParser().parseFromString(focusTree, "image/svg+xml").documentElement;   // served as text by ViewerDrawings
         css.addClass(chain, ga_case_figure);
         chain.setAttribute("role", "img");

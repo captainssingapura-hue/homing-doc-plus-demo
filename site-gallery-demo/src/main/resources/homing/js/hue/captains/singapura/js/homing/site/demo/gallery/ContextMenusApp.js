@@ -130,21 +130,18 @@ class ContextMenusWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-menu";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Context menus";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "Right-click a cell, or focus it and press Shift+F10. One steward holds the page's menus, declared once in "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-menu" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Context menus" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "Right-click a cell, or focus it and press Shift+F10. One steward holds the page's menus, declared once in "
             + "Java; a cell asks for its kind and is bound to the menu while it is open. Arrows move, Right opens a second level, "
             + "Enter picks, Escape closes; a press outside closes and is swallowed. Each kind is a typed tree in Java, a class per row, "
-            + "its marks icon words the design draws; under the cells, each kind as a specimen with every level open.";
-        el.appendChild(lede);
+            + "its marks icon words the design draws; under the cells, each kind as a specimen with every level open." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var cells = branch.createElement("cells", "div");
         css.addClass(cells, ga_menu_cells);

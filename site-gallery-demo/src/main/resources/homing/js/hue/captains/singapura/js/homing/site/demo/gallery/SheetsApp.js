@@ -35,22 +35,19 @@ class SheetsWidget {
         branch.activate(_sheetsOwner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-elements";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Sheets";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A panel is a sheet, and a sheet sits somewhere: cut into the ground, lying on it, or lifted off it. The design says what each of "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-elements" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Sheets" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A panel is a sheet, and a sheet sits somewhere: cut into the ground, lying on it, or lifted off it. The design says what each of "
             + "those looks like, in whatever plane it honestly uses for depth — a cast shadow, a face a shade darker, two shadows swapping sides — and a "
             + "design with no idiom for depth says nothing and leaves the sheet where it is. Nothing here links a register to a state: this page sets them "
             + "because it is a page about registers. The fourth sheet is yours, on two controls that are two because the axes are — where it sits, and "
-            + "whether it is marked as the current one.";
-        el.appendChild(lede);
+            + "whether it is marked as the current one." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         // ── the ground, and the three registers read against each other ──
         var ground = branch.createElement("ground", "div");
@@ -80,11 +77,10 @@ class SheetsWidget {
         controls.appendChild(mark.el);
 
         // ── a sheet on a sheet: the cast falls on paper, not on the table ─
-        var stackNote = branch.createElement("stack-note", "p");
-        css.addClass(stackNote, ga_lede);
-        stackNote.textContent = "And a sheet may lie on a sheet. The cast below falls on paper rather than on the table — the same word, a different colour, "
-            + "because a cast is what lies beneath it in shadow and nothing has to be told which that is.";
-        el.appendChild(stackNote);
+        var stackNote = new Lede(LedeFactory.create(branch, "stack-note"), { text: "And a sheet may lie on a sheet. The cast below falls on paper rather than on the table — the same word, a different colour, "
+            + "because a cast is what lies beneath it in shadow and nothing has to be told which that is." });
+        css.addClass(stackNote.el, ga_lede);
+        el.appendChild(stackNote.el);
         var stackGround = branch.createElement("stack-ground", "div");
         css.addClass(stackGround, ga_sheet_ground);
         el.appendChild(stackGround);

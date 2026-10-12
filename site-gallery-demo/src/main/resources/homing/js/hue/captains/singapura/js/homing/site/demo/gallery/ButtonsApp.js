@@ -35,23 +35,20 @@ class ButtonsWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-elements";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Buttons";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A button is one of six leaves, each its own class: the class says which element to mint, the caller "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-elements" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Buttons" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A button is one of six leaves, each its own class: the class says which element to mint, the caller "
             + "mints it on its own branch and hands it in with the properties, and the leaf dresses it. A colour word is a "
             + "semantic surface complete — the surface, the ink on it, the edge — and one number, the extent, moves them all "
             + "together along the anchors each design gives them. A second number, the size, grows every length the design "
             + "gives a button — the inset, the gap, the least width, the type — each by its own ratio: 0 is regular, 1 the "
-            + "biggest, −1 the smallest, and the way between is exponential, so both ends are the same step.";
-        el.appendChild(lede);
+            + "biggest, −1 the smallest, and the way between is exponential, so both ends are the same step." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_status);
@@ -62,10 +59,9 @@ class ButtonsWidget {
         say("nothing pressed yet");
 
         // ── every word, one extent ────────────────────────────────────────
-        var words = branch.createElement("words", "div");
-        css.addClass(words, ga_kicker);
-        words.textContent = "the colour words";
-        el.appendChild(words);
+        var words = new Kicker(KickerFactory.create(branch, "words"), { text: "the colour words" });
+        css.addClass(words.el, ga_kicker);
+        el.appendChild(words.el);
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
         this._buttons = WORDS.map(function (word) {
@@ -87,10 +83,9 @@ class ButtonsWidget {
         el.appendChild(extent);
 
         // ── one size for all, and one word at five ────────────────────────
-        var sizes = branch.createElement("sizes", "div");
-        css.addClass(sizes, ga_kicker);
-        sizes.textContent = "the size";
-        el.appendChild(sizes);
+        var sizes = new Kicker(KickerFactory.create(branch, "sizes"), { text: "the size" });
+        css.addClass(sizes.el, ga_kicker);
+        el.appendChild(sizes.el);
         var sizeRow = branch.createElement("sizeRow", "div");
         css.addClass(sizeRow, ga_buttons);
         this._sized = [-1, -0.5, 0, 0.5, 1].map(function (s) {
@@ -111,10 +106,9 @@ class ButtonsWidget {
         el.appendChild(size);
 
         // ── a live one ────────────────────────────────────────────────────
-        var live = branch.createElement("live", "div");
-        css.addClass(live, ga_kicker);
-        live.textContent = "live: the extent follows the data";
-        el.appendChild(live);
+        var live = new Kicker(KickerFactory.create(branch, "live"), { text: "live: the extent follows the data" });
+        css.addClass(live.el, ga_kicker);
+        el.appendChild(live.el);
         var liveRow = branch.createElement("liveRow", "div");
         css.addClass(liveRow, ga_buttons);
         this._delete = new DangerButton(DangerButtonFactory.create(branch, "delete"), { extent: -1 });

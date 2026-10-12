@@ -19,10 +19,9 @@ class CellWidget {
         branch.activate(_owner);
         var root = branch.createElement("cell", "div");
         css.addClass(root, ga_grid_cell);
-        var name = branch.createElement("name", "div");
-        css.addClass(name, ga_kicker);
-        name.textContent = params.id;
-        root.appendChild(name);
+        var name = new Kicker(KickerFactory.create(branch, "name"), { text: params.id });
+        css.addClass(name.el, ga_kicker);
+        root.appendChild(name.el);
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
         var self = this;
@@ -55,19 +54,16 @@ class SplitGridWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-splitgrid";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Split grid";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A tree of rows and columns of cells, sharing their space by ratio. The grid arranges; what is in a cell is the "
-            + "page's — here, a card that asks the grid to split beside it or remove it. The grid is resizable: drag the lines between the cells. The last cell cannot go.";
-        el.appendChild(lede);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-splitgrid" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Split grid" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A tree of rows and columns of cells, sharing their space by ratio. The grid arranges; what is in a cell is the "
+            + "page's — here, a card that asks the grid to split beside it or remove it. The grid is resizable: drag the lines between the cells. The last cell cannot go." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var box = branch.createElement("box", "div");
         css.addClass(box, ga_pane_host);

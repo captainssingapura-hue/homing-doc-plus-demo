@@ -41,6 +41,8 @@
 // =============================================================================
 
 const _videoOwner = Object.freeze({ toString: () => "embeddedVideo" });
+/** Its title: the house's heading of a widget's title - the fourth level - on its own tag. */
+const _TITLE_HEADING = Object.freeze({ LEAF: "heading4" });
 /** The strip of takes and a take: the house's tab strip and its tab, realized here on the widget's own native elements. */
 const _VIDEO_STRIP = Object.freeze({ LEAF: "tab-strip" });
 const _VIDEO_TAKE = Object.freeze({ LEAF: "tab" });
@@ -72,7 +74,9 @@ class EmbeddedVideo {
         root.setAttribute("role", "region");
         root.setAttribute("aria-label", "Video: " + _VIDEO_DISH);
         var head = EmbeddedVideo._el(d, "head", "div", vd_head, root);
-        EmbeddedVideo._el(d, "title", "h2", vd_title, head).textContent = _VIDEO_DISH;
+        var heading = EmbeddedVideo._el(d, "title", "h4", vd_title, head);
+        new Look(_TITLE_HEADING, ROLE.STANDALONE).wear(heading);
+        heading.textContent = _VIDEO_DISH;
         this._count = EmbeddedVideo._el(d, "count", "span", vd_count, head);
         this._note = EmbeddedVideo._el(d, "note", "p", vd_note, root);
         this._stage = EmbeddedVideo._el(d, "stage", "div", vd_stage, root);

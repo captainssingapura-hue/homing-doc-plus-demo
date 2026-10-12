@@ -11,23 +11,20 @@ class TreeWidget {
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-rel-grid · rel-tree";
-        el.appendChild(kicker);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-rel-grid · rel-tree" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
 
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Tree";
-        el.appendChild(title);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Tree" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
 
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "The same twelve books as shelf → book in the relation tree. The shelves start closed; "
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "The same twelve books as shelf → book in the relation tree. The shelves start closed; "
             + "→ or Space unfolds, ← folds, ↑↓ move, Enter activates. An unfold is a question on "
             + "the ask channel, answered by the relation with the whole view; the tree owns the rows, the "
-            + "carets and the cursor, and the relation owns every cell and its fold state.";
-        el.appendChild(lede);
+            + "carets and the cursor, and the relation owns every cell and its fold state." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var host = branch.createElement("host", "div");
         css.addClass(host, ga_host);

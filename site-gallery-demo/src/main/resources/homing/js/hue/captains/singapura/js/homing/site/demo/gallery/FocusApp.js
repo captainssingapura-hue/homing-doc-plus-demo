@@ -43,17 +43,13 @@ class FocusWidget {
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-monitors";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Who is in focus";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "The logical-focus tree, as the focus party keeps it and the monitor shows it, in two worlds. The panels, "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-monitors" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Who is in focus" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "The logical-focus tree, as the focus party keeps it and the monitor shows it, in two worlds. The panels, "
             + "panel A's and B's leaves and the loose leaf are logical: never natively focused, a press claims for the innermost, "
             + "the arrows go to whoever holds and a leaf counts them, Escape yields up the tree — panel A catches, panel B lets "
             + "pass to no one. Tab is not bound for now: the native Tab walks the native controls, a press reaches a member. Panel C picks "
@@ -62,8 +58,9 @@ class FocusWidget {
             + "which puts the focus back in its list. More of the native world "
             + "stresses the line: a search field and a notes field outside every container — the notes keep their Tab — a note "
             + "field in panel A that lets go on Escape, a button in panel B wired to nothing, a checkbox inside the logical leaf a2. "
-            + "The steward monitor shows whether the steward is routing keys, and where every key went.";
-        el.appendChild(lede);
+            + "The steward monitor shows whether the steward is routing keys, and where every key went." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_focus);

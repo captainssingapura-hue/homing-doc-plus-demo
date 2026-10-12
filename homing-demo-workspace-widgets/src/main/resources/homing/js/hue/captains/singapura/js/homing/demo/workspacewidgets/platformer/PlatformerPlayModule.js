@@ -37,6 +37,8 @@
 // =============================================================================
 
 const _platformerOwner = Object.freeze({ toString: () => "platformerPlay" });
+/** Its title: the house's heading of a widget's title - the fourth level - on its own tag. */
+const _TITLE_HEADING = Object.freeze({ LEAF: "heading4" });
 var _platformers = 0;
 
 class PlatformerPlay {
@@ -58,7 +60,9 @@ class PlatformerPlay {
         root.setAttribute("role", "region");
         root.setAttribute("aria-label", "Animal platformer");
         var head = PlatformerPlay._el(d, "head", "div", pf_head, root);
-        PlatformerPlay._el(d, "title", "h2", pf_title, head).textContent = "Animal platformer";
+        var heading = PlatformerPlay._el(d, "title", "h4", pf_title, head);
+        new Look(_TITLE_HEADING, ROLE.STANDALONE).wear(heading);
+        heading.textContent = "Animal platformer";
         this._score = PlatformerPlay._el(d, "score", "span", pf_score, head);
         PlatformerPlay._el(d, "hint", "p", pf_hint, root).textContent = "Press the stage, then ← → to run and Space to jump. Keep out of the lava!";
         var controls = PlatformerPlay._el(d, "controls", "div", pf_controls, root);

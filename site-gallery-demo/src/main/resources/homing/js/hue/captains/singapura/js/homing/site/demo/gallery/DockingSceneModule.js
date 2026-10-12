@@ -187,10 +187,9 @@ class RegionList {
 class NoteTab {
     constructor(branch, params) {
         branch.activate(_sceneOwner);
-        var root = branch.createElement("note", "p");
-        css.addClass(root, ga_lede);
-        root.textContent = (params && params.text) || "";
-        this.root = root;
+        var root = new Lede(LedeFactory.create(branch, "note"), { text: (params && params.text) || "" });
+        css.addClass(root.el, ga_lede);
+        this.root = root.el;
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }

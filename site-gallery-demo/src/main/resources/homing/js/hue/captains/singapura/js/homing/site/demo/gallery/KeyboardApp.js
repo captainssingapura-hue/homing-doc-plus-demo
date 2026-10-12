@@ -83,20 +83,17 @@ class KeyboardWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-component-base";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Who has the keys";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "One keyboard party per page, one holder or none. Every component that takes keys is a member; a press in it, "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-component-base" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Who has the keys" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "One keyboard party per page, one holder or none. Every component that takes keys is a member; a press in it, "
             + "or the focus arriving, claims — and a claim evicts whoever held. The strip below shows the holder live, and the "
-            + "log says who took the keys from whom. The platformer holds keys down: keyup travels through the party as keydown does.";
-        el.appendChild(lede);
+            + "log says who took the keys from whom. The platformer holds keys down: keyup travels through the party as keydown does." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         // the strip: one chip per member, the holder lit
         var holders = branch.createElement("holders", "div");
@@ -195,10 +192,9 @@ class KeyboardWidget {
             new Dialog(branch.createBranch("dialog" + (++dialogs)), {
                 title: t, keyboard: kb, keyboardId: "keyboard/dialog", size: { w: 420, h: 200 },
                 content: function (b, body) {
-                    var p = b.createElement("text", "p");
-                    css.addClass(p, ga_lede);
-                    p.textContent = "The dialog claimed the keys on open, by call; whoever held was told. Escape closes it and gives the keys back.";
-                    body.appendChild(p);
+                    var p = new Lede(LedeFactory.create(b, "text"), { text: "The dialog claimed the keys on open, by call; whoever held was told. Escape closes it and gives the keys back." });
+                    css.addClass(p.el, ga_lede);
+                    body.appendChild(p.el);
                     return {};
                 },
                 actions: [{ id: "ok", label: "OK", primary: true, onClick: function (h) { h.close(); } }]

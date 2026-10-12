@@ -22,8 +22,8 @@ class TearLabWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
         var el = this.root = branch.createElement("root", "div");
-        [["kicker", "div", ga_kicker, "homing-ui-panes · TabTear"], ["title", "h1", ga_title, "Tearing a tab off"],
-         ["lede", "p", ga_lede, "Drag a chip. The ring is its centre, and the lines measure the ring, not your hand. While the "
+        [[Kicker, KickerFactory, "kicker", ga_kicker, "homing-ui-panes · TabTear"], [Heading1, Heading1Factory, "title", ga_title, "Tearing a tab off"],
+         [Lede, LedeFactory, "lede", ga_lede, "Drag a chip. The ring is its centre, and the lines measure the ring, not your hand. While the "
             + "ring is between the dashed lines the chip stays on its rail, sliding along the row however far your hand wanders "
             + "sideways. Past a dashed line it tears: the chip is the window, made where you crossed — the breach — and it follows "
             + "your hand from there. Turn the flight on for the other model: the faded window waits at the breach while your hand "
@@ -33,10 +33,9 @@ class TearLabWidget {
             + "hand. The gap between the two pairs of lines is what keeps a chip on the edge from tearing and landing by turns. "
             + "Let go anywhere else and it stays; dragged again, it is a window from the start, captured the same way. The dots "
             + "are your hand's path, in the phase's colour; B is the breach, S the settle, C the capture."]].forEach(function (d) {
-            var e = branch.createElement(d[0], d[1]);
-            css.addClass(e, d[2]);
-            e.textContent = d[3];
-            el.appendChild(e);
+            var text = new d[0](d[1].create(branch, d[2]), { text: d[4] });   // the house's text, placed by the page
+            css.addClass(text.el, d[3]);
+            el.appendChild(text.el);
         });
 
         var tear = this._tear = new TabTear();

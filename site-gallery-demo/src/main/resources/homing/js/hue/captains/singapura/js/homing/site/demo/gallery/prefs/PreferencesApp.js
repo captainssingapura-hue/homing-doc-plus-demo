@@ -11,22 +11,19 @@ class PreferencesWidget {
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-preferences";
-        el.appendChild(kicker);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-preferences" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
 
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Preferences";
-        el.appendChild(title);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Preferences" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
 
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A rigid tree on the left, from the relation tree; the chosen node's widget on the right, "
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A rigid tree on the left, from the relation tree; the chosen node's widget on the right, "
             + "loaded when the node is first chosen and kept after. Every widget writes through the steward "
-            + "and follows it, so a pick here reaches the chrome, another tab, and the overview alike.";
-        el.appendChild(lede);
+            + "and follows it, so a pick here reaches the chrome, another tab, and the overview alike." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var host = branch.createElement("host", "div");
         el.appendChild(host);

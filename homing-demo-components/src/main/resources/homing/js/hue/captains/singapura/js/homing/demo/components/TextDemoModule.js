@@ -1,18 +1,28 @@
 // =============================================================================
-// TextDemo — a house text in action: one of the nine, as its leaf says -
-// heading, kicker, caption, lede, label, readout, badge, pill, wordmark -
+// TextDemo — a house text in action: one of the fourteen, as its leaf says -
+// a heading of each level, kicker, caption, lede, label, readout, badge, pill, wordmark -
 // made as the leaf's own class on the element its companion makes, holding
 // the words such a text holds, in the look the style gives it. A text does
 // nothing; what there is to see is its face, and its options: its size.
 //
-//   new TextDemo(container, { leaf })   leaf: "heading", …
+//   new TextDemo(container, { leaf })   leaf: "heading1", …
 //   (the rest is a ComponentDemo's)
 // =============================================================================
 
 // each leaf, the class that is it, and the words such a text holds - and what it is for, said
 var _TEXT_KINDS = Object.freeze({
-    "heading":  Object.freeze({ Leaf: Heading,  Factory: HeadingFactory,  words: "Quarterly report", props: { level: 2 },
-                                says: "a heading: what a container holds, read first - a heading by its role and its level, whatever element it is on" }),
+    "heading1": Object.freeze({ Leaf: Heading1, Factory: Heading1Factory, words: "Quarterly report",
+                                says: "a heading of level 1: a page's own name: the first heading of its outline" }),
+    "heading2": Object.freeze({ Leaf: Heading2, Factory: Heading2Factory, words: "Revenue",
+                                says: "a heading of level 2: a part of the page: the heading of one of its great divisions" }),
+    "heading3": Object.freeze({ Leaf: Heading3, Factory: Heading3Factory, words: "By region",
+                                says: "a heading of level 3: a section within a part" }),
+    "heading4": Object.freeze({ Leaf: Heading4, Factory: Heading4Factory, words: "Northern stores",
+                                says: "a heading of level 4: a smaller section, or what a container holds - a card's, a group's, a setting's title" }),
+    "heading5": Object.freeze({ Leaf: Heading5, Factory: Heading5Factory, words: "Weekend trading",
+                                says: "a heading of level 5: a division within a smaller section" }),
+    "heading6": Object.freeze({ Leaf: Heading6, Factory: Heading6Factory, words: "Notes",
+                                says: "a heading of level 6: the least heading: a division within that" }),
     "kicker":   Object.freeze({ Leaf: Kicker,   Factory: KickerFactory,   words: "Appearance",
                                 says: "a kicker: the small word set above or before, naming the kind of thing that follows" }),
     "caption":  Object.freeze({ Leaf: Caption,  Factory: CaptionFactory,  words: "Updated two minutes ago",

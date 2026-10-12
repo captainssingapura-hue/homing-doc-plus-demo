@@ -34,6 +34,8 @@
 // =============================================================================
 
 const _replayOwner = Object.freeze({ toString: () => "platformerReplay" });
+/** Its title: the house's heading of a widget's title - the fourth level - on its own tag. */
+const _TITLE_HEADING = Object.freeze({ LEAF: "heading4" });
 var _replays = 0;
 
 class PlatformerReplay {
@@ -48,7 +50,9 @@ class PlatformerReplay {
         root.setAttribute("role", "region");
         root.setAttribute("aria-label", "Platformer replay");
         var head = PlatformerReplay._el(d, "head", "div", pf_head, root);
-        PlatformerReplay._el(d, "title", "h2", pf_title, head).textContent = "Animal platformer - replay";
+        var heading = PlatformerReplay._el(d, "title", "h4", pf_title, head);
+        new Look(_TITLE_HEADING, ROLE.STANDALONE).wear(heading);
+        heading.textContent = "Animal platformer - replay";
         this._score = PlatformerReplay._el(d, "score", "span", pf_score, head);
         this._note = PlatformerReplay._el(d, "note", "p", pf_hint, root);
         this._stage = new PlatformerStage(d.createBranch("stage"), {});

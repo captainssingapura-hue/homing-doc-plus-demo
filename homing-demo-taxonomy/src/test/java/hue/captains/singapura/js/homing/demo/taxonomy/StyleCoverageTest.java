@@ -54,7 +54,8 @@ class StyleCoverageTest {
         var worn = HOUSE.rows().stream().filter(r -> r.worn().equals("look")).map(StyleCoverage.Row::id).collect(Collectors.toSet());
         assertEquals(Set.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "toggle-button",
                 "close-button", "icon-button",
-                "heading", "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark",
+                "heading1", "heading2", "heading3", "heading4", "heading5", "heading6",
+                "kicker", "caption", "lede", "label", "readout", "badge", "pill", "wordmark",
                 "link", "crumb", "scrim", "separator", "delimiter",
                 "split-grid", "split-grid-mirror", "slider", "context-menu", "tab-strip", "tab-pane", "single-tab-pane", "multi-tab-pane", "toggle-widget",
                 "choice-widget", "list-master-widget", "overview-widget", "focus-monitor", "scale-widget", "steward-monitor", "dialog",

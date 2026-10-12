@@ -14,7 +14,7 @@ public record GalleryStyles() implements CssGroup<GalleryStyles> {
     public static final GalleryStyles INSTANCE = new GalleryStyles();
 
     public record ga_kicker() implements CssClass<GalleryStyles> {
-        @Override public String body() { return "margin: 0 0 6px;"; }
+        @Override public String body() { return "display: block; margin: 0 0 6px;"; }
     }
 
     public record ga_title() implements CssClass<GalleryStyles> {

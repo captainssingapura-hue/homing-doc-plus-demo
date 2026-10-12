@@ -25,21 +25,18 @@ class CardsWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-elements";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Cards";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A summary card is made on a sub-branch of the caller's, with its properties: title, badge, text, link, size, "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-elements" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Cards" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A summary card is made on a sub-branch of the caller's, with its properties: title, badge, text, link, size, "
             + "and an action if it has one. It is Container.Card.Base to the design — a raised box whose measure is its own — and it "
             + "behaves as an enlarged button would: it lifts on hover, presses, and rings on focus. What a press does is the caller's. "
-            + "Two numbers shape it: the size, and the aspect — square at 0, the design's widest at 1, its tallest at −1.";
-        el.appendChild(lede);
+            + "Two numbers shape it: the size, and the aspect — square at 0, the design's widest at 1, its tallest at −1." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_status);
@@ -98,10 +95,9 @@ class CardsWidget {
         el.appendChild(aspect);
 
         // ── one card across the aspect ────────────────────────────────────
-        var across = branch.createElement("across", "div");
-        css.addClass(across, ga_kicker);
-        across.textContent = "the same card at aspect −1, −½, 0, ½ and 1, at size −½";
-        el.appendChild(across);
+        var across = new Kicker(KickerFactory.create(branch, "across"), { text: "the same card at aspect −1, −½, 0, ½ and 1, at size −½" });
+        css.addClass(across.el, ga_kicker);
+        el.appendChild(across.el);
         var aspects = branch.createElement("aspects", "div");
         css.addClass(aspects, ga_cards);
         [-1, -0.5, 0, 0.5, 1].forEach(function (a) {
@@ -112,10 +108,9 @@ class CardsWidget {
         el.appendChild(aspects);
 
         // ── one card at three sizes ───────────────────────────────────────
-        var three = branch.createElement("three", "div");
-        css.addClass(three, ga_kicker);
-        three.textContent = "the same card at −1, 0 and 1";
-        el.appendChild(three);
+        var three = new Kicker(KickerFactory.create(branch, "three"), { text: "the same card at −1, 0 and 1" });
+        css.addClass(three.el, ga_kicker);
+        el.appendChild(three.el);
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_cards);
         [-1, 0, 1].map(function (s) {

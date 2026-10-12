@@ -61,17 +61,13 @@ class DockingWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-docking";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Dock and undock";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "Docks in a split grid and a desk over them, holding what a workspace holds: the books as a relation grid, the shelves as a "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-docking" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Dock and undock" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "Docks in a split grid and a desk over them, holding what a workspace holds: the books as a relation grid, the shelves as a "
             + "relation tree, a picture zoomed by its own keys. Right-click the empty ground of a tab bar to part the room — beside or below — or to "
             + "merge one away: its tabs go to the region you name and its room to the pane across a splitter of its own. Drag a chip along a strip: it "
             + "reorders, on its rail. Pull it off the strip and it tears into a float of its own, which follows your hand from where you "
@@ -94,8 +90,9 @@ class DockingWidget {
             + "same question the other way about: it opens a tab with the chooser in it, and what you pick becomes that very tab, in the place you made it. The Tab key walks the chips, "
             + "and the region you are working in is the lit one. THE ROOM'S EDGE is a strip's: the thin lip along the foot of the box is all it takes of the room, "
             + "and the hand brought to it lays the strip over the room's foot - what the room holds, and the switcher offered to the hand as F6 offers it to the keys - "
-            + "until the hand leaves it, when the room has its foot back. The workspace's own strip is this one.";
-        el.appendChild(lede);
+            + "until the hand leaves it, when the room has its foot back. The workspace's own strip is this one." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         // ── the chips' size and aspect ────────────────────────────────────
         var controls = branch.createElement("controls", "div");

@@ -19,21 +19,18 @@ class SlidersWidget {
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-elements";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Sliders";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A number set by a knob on a track. Every part is the design's: the track sunk, the fill from the detent, "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-elements" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Sliders" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A number set by a knob on a track. Every part is the design's: the track sunk, the fill from the detent, "
             + "the knob raised and ringed when it has the focus, the notch where the knob rests. Press anywhere on a rail, or "
             + "take the knob with the keys: arrows by a step, with Shift by ten, Home and End. The same slider sets the size, "
-            + "the aspect and the extent on the other pages.";
-        el.appendChild(lede);
+            + "the aspect and the extent on the other pages." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);

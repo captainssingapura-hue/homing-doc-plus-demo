@@ -12,22 +12,19 @@ class GridWidget {
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-rel-grid";
-        el.appendChild(kicker);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-rel-grid" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
 
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Grid";
-        el.appendChild(title);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Grid" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
 
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "Twelve books as a relation in the relation grid, from its own repo. Arrow keys move the cursor, "
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "Twelve books as a relation in the relation grid, from its own repo. Arrow keys move the cursor, "
             + "Enter edits a title or a rating (the year and the author are the relation's read-only columns), "
-            + "and the grid wears the page's design because its classes wear words, not values.";
-        el.appendChild(lede);
+            + "and the grid wears the page's design because its classes wear words, not values." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var host = branch.createElement("host", "div");
         css.addClass(host, ga_host);

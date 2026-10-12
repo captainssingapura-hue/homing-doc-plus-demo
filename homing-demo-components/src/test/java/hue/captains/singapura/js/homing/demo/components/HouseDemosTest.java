@@ -35,7 +35,7 @@ class HouseDemosTest {
 
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
-        assertEquals(38, HOUSE.demos().size(), "twenty-five elements - nine of them texts, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
+        assertEquals(43, HOUSE.demos().size(), "thirty elements - fourteen of them texts, a heading for each level among them, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
         assertEquals(26, HOUSE.aroundIt().size(), "a panel's bar, in the panel's demo; the workspace's seven - a floating pane's title bar among them - the dock grid retired, its regions a split grid's cells and the docks residing in them - the control panel, the chrome's eight - its ground, its bar, the brand and the trail among them - the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
         assertEquals(27, HOUSE.unrealized().size(), "the parts nothing realizes, and the new-tab control and its picture, retired for now - the brand and the trail realized now, on the site's bar; the browser's own text box and checkbox, realized by their owners on native ones");
@@ -52,7 +52,7 @@ class HouseDemosTest {
         assertTrue(js.contains(where("summary-card", SummaryCardDemoModule.INSTANCE, "SummaryCardDemo")), js);
         assertTrue(js.contains(where("dialog", DialogDemoModule.INSTANCE, "DialogDemo")), js);
         assertTrue(js.contains(where("tab-opener", TabOpenerDemoModule.INSTANCE, "TabOpenerDemo")), js);
-        assertTrue(js.contains(where("heading", TextDemoModule.INSTANCE, "TextDemo")), "the nine texts, one module: " + js);
+        assertTrue(js.contains(where("heading1", TextDemoModule.INSTANCE, "TextDemo")), "the fourteen texts, one module: " + js);
         assertTrue(js.contains("\"multi-tab-pane\": \"each region of the workspace"), js);
         assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([]);"), js);
         assertTrue(js.contains("\"lamp\""), "an unrealized leaf: " + js);
