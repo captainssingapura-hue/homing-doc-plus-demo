@@ -9,8 +9,6 @@
     <version>VOID-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <!-- RFC 0066 - the bare app: served and themed with no studio on the classpath. -->
-        <module>bare-app-demo</module>
         <!-- RFC 0066 E3 - the gallery: JS apps under the standard MPA, and the
              relation grid and its tree as pages beside them. Its tree is grafted
              into the demo site, which serves it. -->

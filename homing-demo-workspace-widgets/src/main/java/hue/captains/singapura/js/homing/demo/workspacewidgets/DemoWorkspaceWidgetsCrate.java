@@ -27,7 +27,6 @@ import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.Platfor
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoDeclaration;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoStyles;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.libs.LibsCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
@@ -68,8 +67,6 @@ public final class DemoWorkspaceWidgetsCrate implements Crate {
                 CoreJsCrate.INSTANCE,
                 // the focus party, the keys' convention, the css manager
                 ServerCrate.INSTANCE,
-                // the design words the sheets wear
-                DesignCrate.INSTANCE,
                 // the design's slider and button: the platformer's gravity, its music, its Play again
                 UiElementsCrate.INSTANCE,
                 // Tone.js, served from the classpath: the platformer's sound

@@ -14,7 +14,7 @@
     <description>
         The demo's conformance, as a downstream of the framework's: every crate the demo
         serves - the workspace widgets, the workspaces, the gallery, the site, the mermaid
-        site, the bare app - graded by the framework's policy extended with the widgets'
+        site - graded by the framework's policy extended with the widgets'
         own game-loop rule set (RFC 0044), strictly, with no ledger; the report exported
         on every build; and the conformance studio served over them - the studio repo's
         workbench, on port 8091 (DemoConformanceStudioServer).
@@ -61,11 +61,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mermaid-mirror-demo</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>bare-app-demo</artifactId>
             <version>${project.version}</version>
         </dependency>
 
