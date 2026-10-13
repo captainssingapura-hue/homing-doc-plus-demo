@@ -104,10 +104,10 @@ class TaxonomyDataTest extends JsModuleTestBase {
         assertEquals(house.nodes().size(), eval("t.nodes().length").asInt());
         assertEquals("root", eval("t.root().id").asString());
         assertEquals(19, eval("t.count('branch')").asInt(), "the headings a branch of the text, and the grid's frame a design branch - rel-grid is on this classpath");
-        assertEquals(118, eval("t.count('component')").asInt(), "the house's 105, and the grid's frame's thirteen virtual leaves");
+        assertEquals(120, eval("t.count('component')").asInt(), "the house's 105, and the grid's frame's fifteen virtual leaves - the copied range's area and border among them");
         assertEquals(112, eval("t.count('part')").asInt(), "its slots, declared over the role catalogue: the action bar's optional primary button, its Go, the icon an icon button holds, a split grid's line as a splitter and as a seam, a panel's bar and body, and a table's header and data cells, among them");
         assertEquals("dialog-veil,dialog-window,dialog-actions", eval("t.partsOf('dialog').map(function (p) { return p.id; }).join()").asString());
-        assertEquals(118, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
+        assertEquals(120, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
         assertEquals("container", eval("t.node('pane').parent").asString(), "a level-2 branch under its level-1 parent");
     }
 
