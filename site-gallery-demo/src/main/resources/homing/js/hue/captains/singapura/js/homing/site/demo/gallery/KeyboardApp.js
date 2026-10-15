@@ -12,6 +12,13 @@
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "keyboardPage" });
+
+/** The card's press, said on the page. */
+class _CardPressed {
+    constructor(say) { this._say = say; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._say("the card's action"); }
+}
 var _MEMBERS = ["keyboard/sliders", "keyboard/card", "keyboard/strip", "keyboard/dialog", "keyboard/platformer"];
 var _STEP = 3, _JUMP = 9, _GRAVITY = 0.6;
 
@@ -156,8 +163,12 @@ class KeyboardWidget {
             box.appendChild(g.root);
         });
         section("card", "a card with an action — Tab to it, or click it; Enter or Space is the action", function (box, own) {
-            self._card = new SummaryCard(own.createBranch("card"), { title: "A card with an action", badge: "PRESS", text: "Enter or Space, through the party.", aspect: 0.6,
-                onClick: function () { say("the card's action"); }, keyboard: kb, keyboardId: "keyboard/card" });
+            var cb = own.createBranch("card");
+            cb.activate(_owner);
+            self._card = new ClickableCard(cb.createBranch("frame"), { aspect: 0.6, keyboard: kb, keyboardId: "keyboard/card" });
+            self._card.setOnClick(new _CardPressed(say));
+            self._summary = new SummaryView(cb.createBranch("summary"), { title: "A card with an action", tag: "PRESS", text: "Enter or Space, through the party." });
+            self._card.el.appendChild(self._summary.root);
             box.appendChild(self._card.root);
         });
         section("strip", "a strip of tabs — the Tab key walks the chips (the browser's), Enter or Space selects (the party's)", function (box, own) {
@@ -220,7 +231,7 @@ class KeyboardWidget {
     /** A press: what the page keeps for the button pressed. */
     handle(event) { this._acts.get(event.source)(event); }
 
-    dispose() { this._offKb(); this._game.dispose(); this._strip.dispose(); this._card.dispose(); this._group.dispose(); }
+    dispose() { this._offKb(); this._game.dispose(); this._strip.dispose(); this._summary.dispose(); this._card.dispose(); this._group.dispose(); }
 }
 
 function appMain(el, params) {

@@ -29,9 +29,9 @@ class SummaryViewDemo extends ComponentDemo {
         this.intro = "press the card, or press in the demo and use Enter or Space; size and shape it in the controls";
     }
 
-    size(v) { this._card.size(v); this._view.size(v); }
+    size(v) { this._card.size = v; this._view.size(v); }
 
-    aspect(v) { this._card.aspect(v); }
+    aspect(v) { this._card.aspect = v; }
 
     /** Enter or Space is the card's click. */
     key(ev) { return this._card.key(ev); }

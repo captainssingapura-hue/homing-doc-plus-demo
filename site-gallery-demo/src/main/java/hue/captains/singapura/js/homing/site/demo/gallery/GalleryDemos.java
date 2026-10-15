@@ -105,7 +105,7 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "exponential, and every length the design gives a button — its inset, gap, least width and type — grows by the "
                     + "ratio the design gives that length; the five sit at −1, −½, 0, ½ and 1, and the slider moves the rest.",
                     ButtonsApp.INSTANCE, "ButtonsWidget", Map.of()),
-            demo("cards", "controls", "Cards", "The summary card, made with its properties.",
+            demo("cards", "controls", "Cards", "The card, plain or clickable, holding a summary view.",
                     "A card is Container.Card.Base to the design: a raised box whose measure is its own. The design gives it its "
                     + "measure, grown by its size, and its aspect — square at 0, the design's widest at 1, its tallest at −1 — and what is "
                     + "inside fits it — the head and the foot are fixed, the body "

@@ -27,7 +27,11 @@ function _leave(w) { w._off(); if (w.focus.in) w.focus.leave(); }
 // Three kinds of tab widget, each a class by the base's contract and the law.
 class CardTab {
     constructor(branch, params) {
-        this.root = new SummaryCard(branch.createBranch("card"), { title: params.title, badge: params.badge, text: params.text }).root;
+        var own = branch.createBranch("card");
+        own.activate(_owner);
+        var card = new PlainCard(own.elementMaker("frame"), {});
+        card.el.appendChild(new SummaryView(own.createBranch("summary"), { title: params.title, tag: params.badge, text: params.text }).root);
+        this.root = card.el;
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }

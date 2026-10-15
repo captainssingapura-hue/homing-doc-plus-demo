@@ -24,7 +24,14 @@
 // =============================================================================
 
 const _labOwner = Object.freeze({ toString: () => "tearLab" });
-/** The strip's leaf: a tab strip, drawn here as the lab's own row of chips. */
+/** A tab of the lab pressed: the lab selects it. */
+class _LabTabPressed {
+    constructor(stage, tab) { this._stage = stage; this._tab = tab; }
+    canHandle(type) { return type === EVENT.PRESS; }
+    handle() { this._stage._select(this._tab.el); }
+}
+
+/** The strip's leaf: a tab strip, drawn here as the lab's own row of tabs. */
 const _LAB_STRIP = Object.freeze({ LEAF: "tab-strip" });
 var _DOTS = 240, _BARS = 120, _CHART_H = 90;
 var _PHASE = { rail: tl_rail, flight: tl_flight, follow: tl_follow, done: tl_follow };
@@ -65,11 +72,13 @@ class TearStage {
         var chips = branch.createBranch("chips");
         chips.activate(_labOwner);
         this._names = new Map();
+        this._tabs = new Map();   // the lab's tabs by their elements: the geometry moves the element, the states are the tab's
         this._first = (o.names || []).map(function (name) {
-            var id = name.toLowerCase();
-            var c = TabChip.mint(chips, { id: id, title: name, closable: false }, { onSelect: function () { self._select(c); } }, "-" + id);
-            self._names.set(c, name);
-            return c;
+            var tab = new Tab(chips.createBranch("tab-" + name.toLowerCase()), { title: name, closable: false }, ROLE.CHIP);
+            tab.setOnPress(new _LabTabPressed(self, tab));
+            self._tabs.set(tab.el, tab);
+            self._names.set(tab.el, name);
+            return tab.el;
         });
         this.reset();
         stage.addEventListener("pointerdown", function (ev) { self._down(ev); });
@@ -97,15 +106,15 @@ class TearStage {
     _at(ev) { var r = this.root.getBoundingClientRect(); return { x: ev.clientX - r.left, y: ev.clientY - r.top }; }
     _rect(el) { var r = this.root.getBoundingClientRect(), e = el.getBoundingClientRect(); return { left: e.left - r.left, top: e.top - r.top, width: e.width, height: e.height }; }
     _band() { var s = this._rect(this._strip); return { top: s.top, bottom: s.top + s.height }; }
-    _row() { return Array.prototype.filter.call(this._strip.children, function (c) { return c._chip; }); }
-    _select(c) { this._row().concat(this._loose()).forEach(function (x) { x.setAttribute("aria-selected", x === c ? "true" : "false"); }); }
+    _row() { var tabs = this._tabs; return Array.prototype.filter.call(this._strip.children, function (c) { return tabs.has(c); }); }
+    _select(c) { var tabs = this._tabs; this._row().concat(this._loose()).forEach(function (x) { tabs.get(x).selected = x === c; }); }
     _loose() { var self = this; return this._first.filter(function (c) { return c.parentNode === self.root; }); }
 
     // ── the gesture ──────────────────────────────────────────────────────
     _down(ev) {
         if (ev.button !== 0 || this._g) return;
         var c = null;
-        for (var x = ev.target; x && x !== this.root; x = x.parentNode) if (x._chip) { c = x; break; }
+        for (var x = ev.target; x && x !== this.root; x = x.parentNode) if (this._tabs.has(x)) { c = x; break; }
         if (!c) return;
         var p = this._at(ev), r = this._rect(c), afloat = this._row().indexOf(c) < 0;
         // the centre from the hand: what both bands measure, wherever on the chip it was taken
@@ -114,7 +123,7 @@ class TearStage {
         this.root.setPointerCapture(ev.pointerId);
         ev.preventDefault();
         this._clearTrail();
-        if (!afloat) { this._measure(); TabChip.grip(c, true); c.style.setProperty("--mtp-drag-x", "0px"); }
+        if (!afloat) { this._measure(); this._tabs.get(c).dragging = true; c.style.setProperty("--mtp-drag-x", "0px"); }
         this._step(this._tear.press(p.x, p.y, ev.timeStamp, this._band(), { centre: centre, afloat: afloat }), p, "press");
         this._frame();
     }
@@ -183,7 +192,7 @@ class TearStage {
     _lift(s) {
         var c = this._g.chip;
         this._unshift();
-        TabChip.grip(c, false);
+        this._tabs.get(c).dragging = false;
         css.addClass(c, tl_free);
         this.root.appendChild(c);
         this._g.tears++;
@@ -198,7 +207,7 @@ class TearStage {
         var at = this._row().filter(function (o) { var r = this._rect(o); return r.left + r.width / 2 < x; }, this).length;
         css.removeClass(c, tl_free, tl_waiting);
         this._strip.insertBefore(c, this._row()[at] || null);
-        TabChip.grip(c, true);
+        this._tabs.get(c).dragging = true;
         c.style.setProperty("--mtp-drag-x", "0px");
         this._measure();
         g.captures++;
@@ -232,7 +241,7 @@ class TearStage {
 
     /** At rest: seated, out of the hand; on the stage still, when it is loose. */
     _seat(c, loose) {
-        TabChip.grip(c, false);
+        this._tabs.get(c).dragging = false;
         css.removeClass(c, tl_waiting);
         c.style.removeProperty("--mtp-drag-x");
         if (!loose) css.removeClass(c, tl_free);

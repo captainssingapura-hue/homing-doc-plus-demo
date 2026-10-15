@@ -1,10 +1,5 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
-import hue.captains.singapura.js.homing.ui.look.LookModule;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
-import hue.captains.singapura.js.homing.ui.elements.LedeModule;
-import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -12,14 +7,22 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
+import hue.captains.singapura.js.homing.ui.elements.ClickableCardModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.LedeModule;
+import hue.captains.singapura.js.homing.ui.elements.PlainCardModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
-import hue.captains.singapura.js.homing.ui.elements.SummaryCardModule;
+import hue.captains.singapura.js.homing.ui.elements.SummaryViewModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
 /**
  * The cards page: a grid of summary cards — plain, one that scrolls, one with a caller's own body, one with an
- * action — under a size slider, and one card at three sizes. Every card is the shared {@code SummaryCard}.
+ * action — under a size slider, and one card at three sizes. Every card is the house's card - plain, or clickable for the one with an action - holding the summary view.
  */
 public record CardsApp() implements AppModule<AppModule._None, CardsApp> {
 
@@ -43,7 +46,10 @@ public record CardsApp() implements AppModule<AppModule._None, CardsApp> {
                 .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Heading1Module.Heading1(), new Heading1Module.Heading1Factory()), Heading1Module.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SummaryCardModule.SummaryCard()), SummaryCardModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainCardModule.PlainCard()), PlainCardModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ClickableCardModule.ClickableCard()), ClickableCardModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SummaryViewModule.SummaryView()), SummaryViewModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),

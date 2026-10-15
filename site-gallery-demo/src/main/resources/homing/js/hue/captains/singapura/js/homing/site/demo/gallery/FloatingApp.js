@@ -12,7 +12,9 @@ const _owner = Object.freeze({ toString: () => "floatingPage" });
 class CardWidget {
     constructor(branch, params) {
         branch.activate(_owner);
-        this.root = new SummaryCard(branch.createBranch("card"), { title: params.title, badge: params.badge, text: params.text, aspect: 0.6 }).root;
+        var card = new PlainCard(branch.elementMaker("card"), { aspect: 0.6 });
+        card.el.appendChild(new SummaryView(branch.createBranch("summary"), { title: params.title, tag: params.badge, text: params.text }).root);
+        this.root = card.el;
     }
 }
 
