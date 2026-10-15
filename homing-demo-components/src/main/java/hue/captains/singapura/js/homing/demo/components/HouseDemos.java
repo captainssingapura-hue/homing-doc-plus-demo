@@ -2,19 +2,19 @@ package hue.captains.singapura.js.homing.demo.components;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.preferences.HousePreferences;
-import hue.captains.singapura.js.homing.site.mpa.HouseSite;
-import hue.captains.singapura.js.homing.ui.controlpanel.HouseControlPanel;
-import hue.captains.singapura.js.homing.ui.monitors.HouseMonitors;
-import hue.captains.singapura.js.homing.ui.menu.HouseMenus;
-import hue.captains.singapura.js.homing.ui.panes.HousePanes;
-import hue.captains.singapura.js.homing.ui.panzoom.HousePanZoom;
-import hue.captains.singapura.js.homing.ui.splitgrid.HouseSplitGrid;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControlPanel;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMenus;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMonitors;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanZoom;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSite;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSplitGrid;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
