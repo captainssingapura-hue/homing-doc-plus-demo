@@ -7,8 +7,8 @@ import hue.captains.singapura.js.homing.site.Site;
 import hue.captains.singapura.js.homing.site.catalogue.CatalogueRouter;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences;
 import hue.captains.singapura.js.homing.site.mpa.Brand;
-import hue.captains.singapura.js.homing.site.mpa.HouseThemes;
 import hue.captains.singapura.js.homing.site.mpa.StandardMpa;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 
 /**
  * The demo as a site: its router IS the catalogue router, at the root, its tree read with the
@@ -24,7 +24,7 @@ public record DemoSite() implements Site {
      * The site's one MPA: its brand, the designs it offers, the preferences behind the bar's button
      * - the gallery's, which its preferences page shows too - and the crate it serves.
      */
-    public static final StandardMpa MPA = StandardMpa.of(Brand.of("Homing · demo"), HouseThemes.INSTANCE, GalleryPreferences.INSTANCE, DemoSiteCrate.INSTANCE);
+    public static final StandardMpa MPA = StandardMpa.of(Brand.of("Homing · demo"), HouseStyles.INSTANCE.styling(), GalleryPreferences.INSTANCE, DemoSiteCrate.INSTANCE);
 
     /** Read once: the tree is checked when the site is made, not when a request arrives. */
     public static final CatalogueRouter ROUTER = CatalogueRouter.at(Path.ROOT, DemoCatalogue.INSTANCE, MPA).listing(AppListing.INSTANCE);
