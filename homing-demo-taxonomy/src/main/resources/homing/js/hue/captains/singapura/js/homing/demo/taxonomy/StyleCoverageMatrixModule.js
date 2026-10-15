@@ -1,18 +1,18 @@
 // =============================================================================
-// StyleCoverageMatrix — what each house style and palette says of each
-// component, a row a component, a column a style or a palette, derived on the
-// Java side (STYLE_COVERAGE) from the answers.
+// StyleCoverageMatrix — how each house style draws each casting, a row a
+// casting (a component on its own, then in each role it is cast in), a column
+// a style, Base first - read on the Java side from the style manager
+// (STYLE_COVERAGE).
 //
-// A cell: the looks at rest the column answers itself · the treatments it
-// answers itself. A style's looks are counted of every target that is not
-// colour, a palette's of the colours. What a style leaves falls to Base, then
-// to the root - the element as the browser leaves it. "Worn": whether the
+// A cell: "own" - the style's own CSS for the casting; "as ..." - drawn as
+// another casting of its component, by delegation; "-" - the style leaves it,
+// and Base draws it. Base's column is never "-". "Worn": whether the
 // component wears the new sheet yet, the old design's classes, or has no
 // implementation.
 //
 // A VIEW OF THE PICK, never a picker: the root or nothing picked, every
-// component; a branch, the components under it; a component, the components
-// beside it, the cursor on its row; a part, its component's.
+// casting; a branch, its components' castings; a component, the castings of
+// the components beside it, the cursor on its own; a part, its component's.
 //
 //   new StyleCoverageMatrix(container, params)   params: none
 //   (the rest is a TaxonomyWidget's)
@@ -26,8 +26,8 @@ class StyleCoverageMatrix extends TaxonomyWidget {
         var self = this, data = STYLE_COVERAGE;
         this._data = data;
         this._byId = new Map(data.rows.map(function (r) { return [r.id, r]; }));
-        this._columns = ["component", "worn"].concat(data.columns.map(function (c) { return c.id; }));
-        var labels = { component: "Component", worn: "Worn" };
+        this._columns = ["casting", "worn"].concat(data.columns.map(function (c) { return c.id; }));
+        var labels = { casting: "Casting", worn: "Worn" };
         data.columns.forEach(function (c) { labels[c.id] = c.label; });
         this._labels = Object.freeze(labels);
         this._hint = this.el("hint", "p", tx_hint, this.body, "");
@@ -63,17 +63,26 @@ class StyleCoverageMatrix extends TaxonomyWidget {
         this.selected(this.picked());
     }
 
-    /** What a cell says: the component, whether it wears the new sheet, or a column's own looks · own treatments. */
-    _said(id, column) {
+    /** A casting by its words: its component's name, and the role it is cast in. */
+    _named(id) {
         var row = this._byId.get(id);
-        if (!row) throw new Error("[StyleCoverageMatrix] no such component: " + id);
-        if (column === "component") return this.taxonomy.label(id);
-        if (column === "worn") return _SC_WORN[row.worn];
-        var cell = row.cells[column];
-        return cell[0] === 0 && cell[2] === 0 ? "-" : cell[0] + " · " + cell[2];
+        if (!row) throw new Error("[StyleCoverageMatrix] no such casting: " + id);
+        return this.taxonomy.label(row.component) + (row.role ? " as " + row.role.replace(/-/g, " ") : "");
     }
 
-    /** Picked: the components it covers - every one, a branch's, or a component's and those beside it. */
+    /** What a cell says: the casting, whether its component wears the new sheet, or how a style draws it. */
+    _said(id, column) {
+        var row = this._byId.get(id);
+        if (!row) throw new Error("[StyleCoverageMatrix] no such casting: " + id);
+        if (column === "casting") return this._named(id);
+        if (column === "worn") return _SC_WORN[row.worn];
+        var cell = row.cells[column];
+        if (cell === "own") return "own";
+        if (cell === "base") return "-";
+        return "as " + this._named(cell.substring(3));
+    }
+
+    /** Picked: the castings it covers - every one, a branch's components', or a component's and those beside it. */
     selected(id) {
         if (!this._grid) return;
         var t = this.taxonomy, n = id ? t.node(id) : null;
@@ -81,28 +90,30 @@ class StyleCoverageMatrix extends TaxonomyWidget {
         var under = !n || n.is === "root" ? t.root().id : n.is === "branch" ? n.id : n.parent;
         if (under !== this._shown) {
             this._shown = under;
-            var self = this;
-            this._rows = t.componentsUnder(under).map(function (c) { return c.id; }).filter(function (c) { return self._byId.has(c); });
+            var components = new Set(t.componentsUnder(under).map(function (c) { return c.id; }));
+            this._rows = this._data.rows.filter(function (r) { return components.has(r.component); }).map(function (r) { return r.id; });
             this._grid.tell(new RelGridViewChanged());
         }
         var at = this._grid.cursor();
-        if (n && n.is === "component" && (!at || at.pk !== n.id)) this._grid.selectCell(n.id, "component");
+        if (n && n.is === "component" && this._byId.has(n.id) && (!at || at.pk !== n.id)) this._grid.selectCell(n.id, "casting");
         this._say();
     }
 
-    /** What the matrix covers here: how many components, how many each style answers itself, how many wear the new sheet. */
+    /** What the matrix covers here: how many castings, how many wear the new sheet, how many each style draws itself. */
     _say() {
         var self = this, d = this._data, rows = this._rows.map(function (id) { return self._byId.get(id); });
         var under = this.taxonomy.node(this._shown), k = rows.length;
-        var worn = rows.filter(function (r) { return r.worn === "look"; }).length;
+        var components = new Set(rows.map(function (r) { return r.component; }));
+        var worn = new Set(rows.filter(function (r) { return r.worn === "look"; }).map(function (r) { return r.component; })).size;
         var said = d.columns.filter(function (c) { return c.is === "style"; }).map(function (c) {
-            var n = rows.filter(function (r) { var x = r.cells[c.id]; return x[0] + x[2] > 0; }).length;
-            return c.label + " " + n;
+            var own = rows.filter(function (r) { return r.cells[c.id] === "own"; }).length;
+            var as = rows.filter(function (r) { return r.cells[c.id].indexOf("as:") === 0; }).length;
+            return c.label + " " + (own + as) + (as ? " (" + as + " as another)" : "");
         });
-        this._hint.textContent = (under ? under.name + ": " : "") + k + (k === 1 ? " component" : " components") + ", " + worn + " wearing the new sheet."
-            + " A cell: the looks at rest a column answers itself, of " + d.looks + " (a palette's of " + d.colours + " colours), and the treatments it answers itself;"
-            + " what a style leaves falls to Base, then to the root - the element as the browser leaves it."
-            + " Answering any of these components itself: " + said.join(", ") + ".";
+        this._hint.textContent = (under ? under.name + ": " : "") + k + (k === 1 ? " casting" : " castings") + " of " + components.size
+            + (components.size === 1 ? " component" : " components") + ", " + worn + " wearing the new sheet."
+            + " A cell: own - the style's own CSS; as ... - drawn as another casting of its component; - left to Base, which draws every casting."
+            + " Drawn by the style itself here: " + said.join(", ") + ".";
     }
 
     disposed() {

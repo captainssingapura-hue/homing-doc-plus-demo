@@ -65,8 +65,8 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // a way to somewhere else
                 new Demo(HouseControls.Link.INSTANCE, new ModuleImports<>(List.of(new LinkDemoModule.LinkDemo()), LinkDemoModule.INSTANCE)),
                 new Demo(HouseMarks.Icon.INSTANCE, new ModuleImports<>(List.of(new IconDemoModule.IconDemo()), IconDemoModule.INSTANCE)),
-                new Demo(HouseContainers.SummaryCard.INSTANCE,
-                        new ModuleImports<>(List.of(new SummaryCardDemoModule.SummaryCardDemo()), SummaryCardDemoModule.INSTANCE)),
+                new Demo(HouseContainers.SummaryView.INSTANCE,
+                        new ModuleImports<>(List.of(new SummaryViewDemoModule.SummaryViewDemo()), SummaryViewDemoModule.INSTANCE)),
                 new Demo(HouseControls.Slider.INSTANCE, new ModuleImports<>(List.of(new SliderDemoModule.SliderDemo()), SliderDemoModule.INSTANCE)),
                 new Demo(HouseContainers.SliderGroup.INSTANCE,
                         new ModuleImports<>(List.of(new SliderGroupDemoModule.SliderGroupDemo()), SliderGroupDemoModule.INSTANCE)),
@@ -108,12 +108,16 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 // the workspace
                 new ShownAround(HousePanes.MultiTabPane.INSTANCE, "each region of the workspace: its tabs, one in front"),
                 new ShownAround(HouseContainers.TabStrip.INSTANCE, "the bar of tabs atop each region: its chips, its plus, the count of those out of sight"),
+                new ShownAround(HouseRegions.StripTail.INSTANCE, "the room at the end of the bar of tabs: its plus, and the count of the tabs out of sight"),
                 new ShownAround(HousePanes.TabPane.INSTANCE, "every tab of the workspace: its chip and what it holds, which travel together"),
                 new ShownAround(HouseMarks.Separator.INSTANCE, "between the sections of a tab's menu, opened by a right-click on its chip"),
                 new ShownAround(HousePanes.TabPicker.INSTANCE, "a region with no tab left: what it offers to open"),
                 new ShownAround(HousePanes.SingleTabPane.INSTANCE, "a tab torn off its bar: the float that carries it"),
                 new ShownAround(HouseContainers.TitleBar.INSTANCE, "the head of a pane that floats - a dialog's window, the preferences' among them: its title and its close, where the hand takes it"),
                 new ShownAround(HouseContainers.PanelBar.INSTANCE, "the head of a panel, in the panel's demo: its title, the line under it, and what acts on the panel at its end"),
+                new ShownAround(HouseControls.Lip.INSTANCE, "the line at a host's foot, in the edge strip's demo: where the hand reveals the strip"),
+                new ShownAround(HouseRegions.SliderRack.INSTANCE, "the row a group of sliders stands in, in its demo: framed as one"),
+                new ShownAround(HouseContainers.ClickableCard.INSTANCE, "the card the summary view is shown on, in its demo: pressed by the hand, or Enter or Space"),
                 // the panel beside the demos
                 new ShownAround(HouseControlPanel.ControlPanel.INSTANCE, "the control panel beside the demos: a slider for each degree the picked component varies by, a button for each switch, action and question"),
                 // the page's chrome
@@ -121,6 +125,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new ShownAround(HouseSite.MpaChrome.INSTANCE, "the page's chrome: its bar at the top, over the page's own room"),
                 new ShownAround(HouseContainers.SiteBar.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
                 new ShownAround(HouseControls.Brand.INSTANCE, "the site's mark and name at the start of the bar at the top of the page: the way home"),
+                new ShownAround(HouseMarks.BrandMark.INSTANCE, "the site's mark beside its name, at the start of the bar at the top of the page"),
                 new ShownAround(HouseContainers.Trail.INSTANCE, "the way to this page, across the bar at the top of the page"),
                 new ShownAround(HouseControls.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
                 new ShownAround(HouseControls.Crumb.INSTANCE, "each step of the trail in the bar at the top of the page: the ways back, the last the page itself, set heavier"),
@@ -144,12 +149,13 @@ public record HouseDemos() implements StatelessFunctionalObject {
     public List<Component<?>> unrealized() {
         return List.of(
                 // controls
-                HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE,
+                HouseControls.SliderKnob.INSTANCE, HouseControls.ToggleKnob.INSTANCE, HouseControls.Grip.INSTANCE,
                 HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
                 HouseControls.TextBox.INSTANCE, HouseControls.Checkbox.INSTANCE,
                 // a document's content, realized by the doc's widgets on its own elements: code, a quote, a table, a badge per tone
                 HouseText.Code.INSTANCE, HouseText.SuccessBadge.INSTANCE, HouseText.WarningBadge.INSTANCE, HouseText.DangerBadge.INSTANCE,
                 HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE, HouseRegions.Table.INSTANCE, HouseContainers.HeaderCell.INSTANCE, HouseContainers.DataCell.INSTANCE,
+                HouseText.Strong.INSTANCE, HouseText.Muted.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE,
                 // items
                 HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HousePreferences.SettingRow.INSTANCE,
@@ -160,6 +166,6 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 HousePanes.AddTab.INSTANCE, HousePanes.PaneThumbs.INSTANCE,
                 // marks and tracks
                 HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Lamp.INSTANCE, HouseMarks.BoundaryLine.INSTANCE,
-                HouseMarks.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
+                HouseMarks.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.SliderRail.INSTANCE, HouseMarks.SliderGroove.INSTANCE, HouseMarks.ToggleGroove.INSTANCE, HouseMarks.Fill.INSTANCE);
     }
 }

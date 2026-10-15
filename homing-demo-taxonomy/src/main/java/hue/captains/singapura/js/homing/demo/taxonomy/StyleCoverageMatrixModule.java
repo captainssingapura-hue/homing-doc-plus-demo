@@ -19,9 +19,9 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /**
- * {@code StyleCoverageMatrix}: what each house style and palette says of each component, a row a
- * component and a column a style or a palette, in a relation grid - the matrix derived on the Java
- * side ({@link StyleCoverageModule}); a view of the pick, never a picker.
+ * {@code StyleCoverageMatrix}: how each house style draws each casting, a row a casting and a column a style, Base
+ * first, in a relation grid - the matrix read from the style manager on the Java side ({@link StyleCoverageModule}); a
+ * view of the pick, never a picker.
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
         reason = "It wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
@@ -31,8 +31,8 @@ public record StyleCoverageMatrixModule() implements DomModule<StyleCoverageMatr
 
     public record StyleCoverageMatrix() implements SelfContainedWidget<StyleCoverageMatrixModule>, NeedKeyboard {
         @Override public String summary() {
-            return "What each house style and palette says of each component: the looks at rest it answers itself, and the treatments;"
-                 + " whether the component wears the new sheet. The root shows every component, a branch its own, a component those beside it. It picks nothing.";
+            return "How each house style draws each casting - its own CSS, as another casting of the component, or left to Base -"
+                 + " and whether the component wears the new sheet. The root shows every casting, a branch its components', a component those beside it. It picks nothing.";
         }
         @Override public List<KeyBinding> keys() { return List.of(KeyBinding.of(Key.ESCAPE, "the keys given back, when the grid did not take it")); }
     }
