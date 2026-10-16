@@ -107,6 +107,14 @@ public final class TaxonomyWorkbench {
         @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new StyleCoverageMatrixModule.StyleCoverageMatrix()), StyleCoverageMatrixModule.INSTANCE); }
     }
 
+    /** A house style's file of the picked node's family, as the site serves it: made afresh in dev mode, built into the jar deployed. */
+    public record Families() implements Kind {
+        public static final Families INSTANCE = new Families();
+        @Override public String kind() { return "style-family-file"; }
+        @Override public String title() { return "Family CSS"; }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new StyleFamilyFileModule.StyleFamilyFile()), StyleFamilyFileModule.INSTANCE); }
+    }
+
     public record Details() implements Kind {
         public static final Details INSTANCE = new Details();
         @Override public String kind() { return "taxonomy-node"; }
@@ -137,7 +145,7 @@ public final class TaxonomyWorkbench {
     public record CoverageWorkspace() implements WorkspaceDeclaration {
         public static final CoverageWorkspace INSTANCE = new CoverageWorkspace();
         @Override public String name() { return "coverage"; }
-        @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Coverage.INSTANCE, Details.INSTANCE); }
+        @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Coverage.INSTANCE, Families.INSTANCE, Details.INSTANCE); }
     }
 
     /** The first time: the tree; beside it, the parts over the details; and the roles, beside them. */
@@ -175,14 +183,16 @@ public final class TaxonomyWorkbench {
                     ArrangedWidget.of("demo-log", DemoLog.INSTANCE.kind()),
                     ArrangedWidget.of("node", Details.INSTANCE.kind())));
 
-    /** Coverage, the first time: the tree; beside it, the widest, the matrix. */
+    /** Coverage, the first time: the tree; beside it, the widest, the matrix over the picked family's file. */
     public static final WorkspaceArrangements<CoverageWorkspace> ARRANGED_COVERAGE = WorkspaceArrangements.of(CoverageWorkspace.INSTANCE,
             Arrangement.of(CoverageWorkspace.INSTANCE,
                     SplitGrid.of(SplitGrid.row(
                             SplitGrid.Part.of(SplitGrid.region("tree", "tree"), 3),
-                            SplitGrid.Part.of(SplitGrid.region("coverage", "coverage"), 9))),
+                            SplitGrid.Part.of(SplitGrid.column(SplitGrid.Part.of(SplitGrid.region("coverage", "coverage"), 3),
+                                                               SplitGrid.Part.of(SplitGrid.region("family", "family"), 2)), 9))),
                     ArrangedWidget.of("tree", Tree.INSTANCE.kind()),
-                    ArrangedWidget.of("coverage", Coverage.INSTANCE.kind())));
+                    ArrangedWidget.of("coverage", Coverage.INSTANCE.kind()),
+                    ArrangedWidget.of("family", Families.INSTANCE.kind())));
 
     /** The one group: the taxonomy read, its components in action, and what the house styles say of them. */
     public static final WorkspaceGroups GROUPS = WorkspaceGroups.of(

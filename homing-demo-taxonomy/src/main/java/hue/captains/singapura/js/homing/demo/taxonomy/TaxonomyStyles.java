@@ -90,6 +90,11 @@ public record TaxonomyStyles() implements CssGroup<TaxonomyStyles> {
         @Override public String body() { return ""; }
     }
 
+    /** A file's text as it is: its lines kept, scrolled across rather than wrapped. */
+    public record tx_source() implements CssClass<TaxonomyStyles> {
+        @Override public String body() { return "margin: 0;\nwhite-space: pre;\nfont-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\nfont-size: 12px;\nline-height: 1.45;\ntab-size: 4;\n"; }
+    }
+
     /** The picked node's chain, lit. */
     public record tx_on() implements CssClass<TaxonomyStyles> {
         @Override public String body() { return "padding: 0 4px;"; }
@@ -103,6 +108,6 @@ public record TaxonomyStyles() implements CssGroup<TaxonomyStyles> {
     @Override
     public List<CssClass<TaxonomyStyles>> cssClasses() {
         return List.of(new tx_root(), new tx_hint(), new tx_title(), new tx_port(), new tx_frame(), new tx_scroll(), new tx_panel(), new tx_facts(),
-                       new tx_key(), new tx_code(), new tx_line(), new tx_link(), new tx_tag(), new tx_on(), new tx_prose(), new tx_slot());
+                       new tx_key(), new tx_code(), new tx_line(), new tx_link(), new tx_tag(), new tx_on(), new tx_prose(), new tx_slot(), new tx_source());
     }
 }

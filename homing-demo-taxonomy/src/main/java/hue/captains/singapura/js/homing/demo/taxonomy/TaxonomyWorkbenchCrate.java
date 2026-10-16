@@ -70,6 +70,7 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 CrateEntry.of(TaxonomyTreeModule.INSTANCE),
                 CrateEntry.of(PartsTableModule.INSTANCE),
                 CrateEntry.of(StyleCoverageMatrixModule.INSTANCE),
+                CrateEntry.of(StyleFamilyFileModule.INSTANCE),
                 CrateEntry.of(RoleTreeModule.INSTANCE),
                 CrateEntry.of(ComponentDemoPanelModule.INSTANCE),
                 CrateEntry.of(ComponentControlPanelModule.INSTANCE),
