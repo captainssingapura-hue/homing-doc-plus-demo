@@ -62,7 +62,7 @@ record StyleCoverage(List<Column> columns, List<Row> rows) {
     static StyleCoverage of(Styling styling, List<Crate> topLevel, EsModule<?> look) {
         StyleManager manager = styling.manager();
         Taxonomy taxonomy = styling.taxonomy();
-        DesignStyle<?> base = StyleManager.baseLayer(styling.defaultStyle()).orElseThrow();
+        DesignStyle<?> base = manager.base();
         var styles = new ArrayList<DesignStyle<?>>();
         var columns = new ArrayList<Column>();
         styles.add(base);
@@ -76,7 +76,7 @@ record StyleCoverage(List<Column> columns, List<Row> rows) {
         for (Casting c : taxonomy.castings()) {
             if (c.cast() instanceof VirtualComponent<?>) continue;   // a design draws it, never a style
             var cells = new LinkedHashMap<String, String>();
-            for (DesignStyle<?> s : styles) cells.put(s.token(), cell(manager.implementation(s, c)));
+            for (DesignStyle<?> s : styles) cells.put(s.token(), cell(manager, manager.implementation(s, c)));
             rows.add(new Row(c.token(), c.cast().token(), c.standalone() ? null : c.role().name().value(),
                     worn.getOrDefault(c.cast(), "none"), cells));
         }
@@ -84,10 +84,10 @@ record StyleCoverage(List<Column> columns, List<Row> rows) {
     }
 
     /** What a style's own implementation of a casting is: its own CSS, a delegation to another casting, or none. */
-    private static String cell(Optional<CastingStyle<?, ?, ?, ?>> implementation) {
+    private static String cell(StyleManager manager, Optional<CastingStyle<?, ?, ?, ?>> implementation) {
         if (implementation.isEmpty()) return "base";
         if (implementation.get().style() instanceof StylingRes.Delegation<?, ?> d)
-            return "as:" + StyleManager.casting(d.to()).map(Casting::token).orElse("?");
+            return "as:" + manager.casting(d.to()).map(Casting::token).orElse("?");
         return "own";
     }
 
