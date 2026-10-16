@@ -9,10 +9,11 @@ import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.Trees;
+import hue.captains.singapura.js.homing.relgrid.house.GridFrameBaseModule;
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.Test;
 
@@ -99,7 +100,7 @@ class TaxonomyDataTest extends JsModuleTestBase {
 
     @Test
     void theHouse_whole_itsBranchesLevelled() {
-        var house = HouseTaxonomy.INSTANCE.read();
+        var house = HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE)).taxonomy();
         load(house);
         assertEquals(house.nodes().size(), eval("t.nodes().length").asInt());
         assertEquals("root", eval("t.root().id").asString());
@@ -113,7 +114,7 @@ class TaxonomyDataTest extends JsModuleTestBase {
 
     @Test
     void everyNode_withItsMeaning_andTheAxesItVariesAlong() {
-        load(HouseTaxonomy.INSTANCE.read());
+        load(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE)).taxonomy());
         assertTrue(eval("t.node('danger-button').meaning").asString().startsWith("Does a thing that destroys"));
         assertTrue(eval("t.node('card').meaning").asString().startsWith("Stands for one thing among others"), "a branch's too");
         assertTrue(eval("t.roleNode('title').meaning").asString().startsWith("Names a container"), "and the catalogue's");
@@ -154,7 +155,7 @@ class TaxonomyDataTest extends JsModuleTestBase {
 
     @Test
     void theCatalogue_theHousesRoles_filedUnderTheirBranches() {
-        load(HouseTaxonomy.INSTANCE.read());
+        load(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE)).taxonomy());
         assertEquals("role-root", eval("t.roleRoot().id").asString());
         assertEquals(21, eval("t.roleCount('branch')").asInt(), "three at level 1, eighteen at level 2");
         assertEquals(92, eval("t.roleCount('role')").asInt(), "the catalogue whole, said by a component or not");

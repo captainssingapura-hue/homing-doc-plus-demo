@@ -70,6 +70,12 @@
             <artifactId>homing-ui-styles</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
+        <!-- The grid's frame, registered with the house's styling (D51). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>rel-grid-house</artifactId>
+            <version>${homing.relgrid.version}</version>
+        </dependency>
         <!-- The site's own substrate: the catalogue its tree is, the page and the MPA, a node's name, the designs. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

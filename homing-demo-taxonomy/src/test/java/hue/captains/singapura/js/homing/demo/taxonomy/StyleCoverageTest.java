@@ -1,6 +1,10 @@
 package hue.captains.singapura.js.homing.demo.taxonomy;
 
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
+import hue.captains.singapura.js.homing.demo.components.DemoComponentsCrate;
+import hue.captains.singapura.js.homing.design.styling.Styling;
+import hue.captains.singapura.js.homing.relgrid.house.GridFrameBaseModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,7 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class StyleCoverageTest {
 
-    private static final StyleCoverage HOUSE = StyleCoverageModule.HOUSE;
+    /** The house's styling with the grid's frame, as the demo's site registers it. */
+    private static final Styling STYLING = HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE));
+
+    private static final StyleCoverage HOUSE = StyleCoverage.of(STYLING, List.of(DemoComponentsCrate.INSTANCE), LookModule.INSTANCE);
 
     private static String cell(String casting, String column) {
         return HOUSE.rows().stream().filter(r -> r.id().equals(casting)).findFirst().orElseThrow().cells().get(column);
@@ -34,7 +41,7 @@ class StyleCoverageTest {
 
     @Test
     void aRowPerCasting_theComponentOnItsOwn_thenInItsRoles() {
-        assertEquals(HouseTaxonomy.INSTANCE.read().castings().size(), HOUSE.rows().size(), "every casting of the house");
+        assertEquals(STYLING.taxonomy().castings().size(), HOUSE.rows().size(), "every casting of the house");
         var go = HOUSE.rows().stream().filter(r -> r.id().equals("plain-button_go")).findFirst().orElseThrow();
         assertEquals("plain-button", go.component());
         assertEquals("go", go.role());
