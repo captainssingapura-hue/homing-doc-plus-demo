@@ -19,6 +19,7 @@ import hue.captains.singapura.js.homing.ui.elements.LabelModule;
 import hue.captains.singapura.js.homing.ui.elements.LedeModule;
 import hue.captains.singapura.js.homing.ui.elements.PillModule;
 import hue.captains.singapura.js.homing.ui.elements.ReadoutModule;
+import hue.captains.singapura.js.homing.ui.elements.TextCellModule;
 import hue.captains.singapura.js.homing.ui.elements.WordmarkModule;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 
@@ -50,6 +51,7 @@ public record TextDemoModule() implements DomModule<TextDemoModule> {
                 .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LabelModule.Label(), new LabelModule.LabelFactory()), LabelModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout(), new ReadoutModule.ReadoutFactory()), ReadoutModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TextCellModule.TextCell(), new TextCellModule.TextCellFactory()), TextCellModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BadgeModule.Badge(), new BadgeModule.BadgeFactory()), BadgeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PillModule.Pill(), new PillModule.PillFactory()), PillModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark(), new WordmarkModule.WordmarkFactory()), WordmarkModule.INSTANCE))

@@ -62,13 +62,13 @@ class StyleCoverageTest {
     @Test
     void baseDrawsEveryCasting_eachStyle124ItselfAndLeaves52() {
         assertEquals(0, count("base", "base"), "the base layer leaves nothing");
-        assertEquals(117, count("base", "own"));
-        assertEquals(59, count("base", "as:"));
+        assertEquals(118, count("base", "own"), "the text cell among them (D42)");
+        assertEquals(61, count("base", "as:"), "the text cell as a title and as a value among them (D42)");
         for (var c : HOUSE.columns()) {
             if (c.is().equals("base")) continue;
             assertEquals(73, count(c.id(), "own"), c.id() + "'s own CSS");
             assertEquals(51, count(c.id(), "as:"), c.id() + "'s delegations, each a role drawn as its component on its own");
-            assertEquals(52, count(c.id(), "base"), c.id() + " leaves to Base");
+            assertEquals(55, count(c.id(), "base"), c.id() + " leaves to Base - the text cell's three among them (D42)");
         }
     }
 

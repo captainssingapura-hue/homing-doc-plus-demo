@@ -1,6 +1,7 @@
 // =============================================================================
-// TextDemo — a house text in action: one of the fourteen, as its leaf says -
-// a heading of each level, kicker, caption, lede, label, readout, badge, pill, wordmark -
+// TextDemo — a house text in action: one of the fifteen, as its leaf says -
+// a heading of each level, kicker, caption, lede, label, readout, a table cell's
+// words, badge, pill, wordmark -
 // made as the leaf's own class on the element its companion makes, holding
 // the words such a text holds, in the look the style gives it. A text does
 // nothing; what there is to see is its face, and its options: its size.
@@ -33,6 +34,8 @@ var _TEXT_KINDS = Object.freeze({
                                 says: "a label: the name of the control it stands by" }),
     "readout":  Object.freeze({ Leaf: Readout,  Factory: ReadoutFactory,  words: "42 %",
                                 says: "a readout: a value read out exactly, as it stands now" }),
+    "text-cell": Object.freeze({ Leaf: TextCell, Factory: TextCellFactory, words: "1,204",
+                                says: "a text cell: a table cell's words - a fact where its row and its column meet, or the name heading its column" }),
     "badge":    Object.freeze({ Leaf: Badge,    Factory: BadgeFactory,    words: "Beta",
                                 says: "a badge: a short tag set apart, saying what kind a thing is" }),
     "pill":     Object.freeze({ Leaf: Pill,     Factory: PillFactory,     words: "+3",

@@ -37,7 +37,7 @@ class HouseDemosTest {
 
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
-        assertEquals(43, HOUSE.demos().size(), "thirty elements - fourteen of them texts, a heading for each level among them, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
+        assertEquals(44, HOUSE.demos().size(), "thirty-one elements - fifteen of them texts, a table cell's words among them (D42), a heading for each level among them, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
         assertEquals(31, HOUSE.aroundIt().size(), "a panel's bar, in the panel's demo, an edge strip's lip, a slider group's rack and the clickable card under the summary view, in theirs; the bar of tabs' tail and the brand's mark; the workspace's seven - a floating pane's title bar among them - the dock grid retired, its regions a split grid's cells and the docks residing in them - the control panel, the chrome's eight - its ground, its bar, the brand and the trail among them - the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
         assertEquals(41, HOUSE.unrealized().size(), "the parts nothing realizes - the slider's and the toggle's knobs and grooves apart, the slider's rail - and the new-tab control and its picture, retired for now - the brand and the trail realized now, on the site's bar; the browser's own text box and checkbox, realized by their owners on native ones; a document's code, quote, table, badges and its strong and muted words, realized by the doc's widgets on its own elements");

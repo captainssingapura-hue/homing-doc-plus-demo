@@ -47,7 +47,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new Demo(HouseControls.ToggleButton.INSTANCE, button),
                 new Demo(HouseControls.CloseButton.INSTANCE, button),
                 new Demo(HouseControls.IconButton.INSTANCE, button),
-                // the fourteen texts are one text, each as its leaf says - a heading for each level of a page's outline among them
+                // the fifteen texts are one text, each as its leaf says - a heading for each level of a page's outline among them, a table cell's words (D42)
                 new Demo(HouseText.Heading1.INSTANCE, text),
                 new Demo(HouseText.Heading2.INSTANCE, text),
                 new Demo(HouseText.Heading3.INSTANCE, text),
@@ -59,6 +59,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new Demo(HouseText.Lede.INSTANCE, text),
                 new Demo(HouseText.Label.INSTANCE, text),
                 new Demo(HouseText.Readout.INSTANCE, text),
+                new Demo(HouseText.TextCell.INSTANCE, text),
                 new Demo(HouseText.Badge.INSTANCE, text),
                 new Demo(HouseText.Pill.INSTANCE, text),
                 new Demo(HouseText.Wordmark.INSTANCE, text),
