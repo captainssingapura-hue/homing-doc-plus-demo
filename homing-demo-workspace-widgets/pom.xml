@@ -79,6 +79,12 @@
             <artifactId>homing-semantic-class</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <!-- The platformer's scene: a local-style branch, and the house's local style of it. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-design-local-style</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-taxonomy</artifactId>

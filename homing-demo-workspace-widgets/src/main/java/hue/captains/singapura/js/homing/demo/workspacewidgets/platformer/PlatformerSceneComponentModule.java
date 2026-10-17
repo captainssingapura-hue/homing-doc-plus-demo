@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * The platformer's scene as a component module (RFC 0067, D51): the {@link PlatformerScene} branch's virtual leaves,
  * which an instance registers beside the house's modules wherever it serves the platformer - nothing found on the
- * classpath. Its leaves are drawn by designs, never by a style: a base module of it bundles no look.
+ * classpath. Its leaves are drawn by local styles, never by a style: a base module of it bundles no look.
  */
 public record PlatformerSceneComponentModule() implements ComponentModule {
 
     public static final PlatformerSceneComponentModule INSTANCE = new PlatformerSceneComponentModule();
 
-    /** Every leaf of the scene, in the order a design draws them. */
+    /** Every leaf of the scene, in the order a local style draws them. */
     @Override public List<Component<?>> components() {
         return List.of(Backdrop.INSTANCE, Sky.INSTANCE, Platform.INSTANCE, PlatformUnderfoot.INSTANCE, Lava.INSTANCE, ScoreCard.INSTANCE);
     }

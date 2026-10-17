@@ -7,9 +7,9 @@
 //
 // IT DRAWS WHAT IT IS HANDED, and decides nothing: every place, size and the
 // scale is a custom property a typed class reads (PlatformerStyles) — never a
-// style of its own — and what each shape looks like is the scene's design: the
-// stage wears a leaf of the scene (PLATFORMER_SCENE) through the house's design
-// of it (HousePlatformerScene), in the palette worn, and never learns a class;
+// style of its own — and what each shape looks like is the scene's local style: the
+// stage wears a leaf of the scene (PLATFORMER_SCENE) through the house's local
+// style of it (HousePlatformerScene), in the palette worn, and never learns a class;
 // the platform underfoot is worn in the platform's place. The platforms are a
 // fixed set of places, each shown with
 // the platform it holds now, or hidden: the world makes and lets go platforms
