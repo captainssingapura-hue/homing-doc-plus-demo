@@ -76,7 +76,7 @@ class ButtonsWidget {
 
         this._extent = 1;
         var extent = new Slider(branch.createBranch("extent"), {
-            keyboard: kb, keyboardId: "buttons/extent", label: "extent", icon: "extent", labelWidth: "12em",
+            keyboard: kb, keyboardId: "buttons/extent", label: "extent", icon: ICON.EXTENT_ICON, labelWidth: "12em",
             min: -1, max: 1, step: 0.05, detents: [0], value: 1,
             onInput: function (v) { self._extent = v; self._buttons.forEach(function (b) { if ("extent" in b) b.extent = v; }); },
             format: function (v) { return v.toFixed(2) + (v === 1 ? "  the word" : v === 0 ? "  neutral" : v === -1 ? "  the other meaning" : ""); }
@@ -99,7 +99,7 @@ class ButtonsWidget {
         el.appendChild(sizeRow);
         this._size = 0;
         var size = new Slider(branch.createBranch("size"), {
-            keyboard: kb, keyboardId: "buttons/size", label: "size, for all of them", icon: "size", labelWidth: "12em",
+            keyboard: kb, keyboardId: "buttons/size", label: "size, for all of them", icon: ICON.SIZE_ICON, labelWidth: "12em",
             min: -1, max: 1, step: 0.05, detents: [0], value: 0,
             onInput: function (v) { self._size = v; self._buttons.forEach(function (b) { b.size = v; }); if (self._delete) self._delete.size = v; },
             format: function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); }
@@ -119,7 +119,7 @@ class ButtonsWidget {
         this._delete.size = this._size;
         this._rows = 0;
         var rows = new Slider(branch.createBranch("rows"), {
-            keyboard: kb, keyboardId: "buttons/rows", label: "rows the action touches", icon: "level", labelWidth: "12em",
+            keyboard: kb, keyboardId: "buttons/rows", label: "rows the action touches", icon: ICON.LEVEL_ICON, labelWidth: "12em",
             min: 0, max: 100, step: 1, detents: [50], value: 0,
             onInput: function (n) {
                 self._rows = n;

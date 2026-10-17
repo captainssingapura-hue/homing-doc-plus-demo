@@ -84,7 +84,7 @@ class SlidersWidget {
             });
         });
         section("plain", "a plain range — 0 to 100 by 5, a unit in the readout, no detent", function (box, own) {
-            var s = new Slider(own.createBranch("volume"), keyed(reporting({ label: "volume", min: 0, max: 100, step: 5, icon: "level", value: 40, format: function (v) { return v + " %"; } }, "volume"), "volume"));
+            var s = new Slider(own.createBranch("volume"), keyed(reporting({ label: "volume", min: 0, max: 100, step: 5, icon: ICON.LEVEL_ICON, value: 40, format: function (v) { return v + " %"; } }, "volume"), "volume"));
             self._sliders.push(s);
             box.appendChild(s.root);
         });
@@ -96,7 +96,7 @@ class SlidersWidget {
         });
         section("sizes", "the slider at its three sizes: the track, the knob and the notch grow by the design's ratio", function (box, own) {
             [[-1, "the smallest"], [0, "the design's"], [1, "the biggest"]].forEach(function (pair) {
-                var s = new Slider(own.createBranch("size" + (pair[0] + 1)), keyed(reporting({ label: pair[1], axis: true, icon: "size", labelWidth: "8em", size: pair[0], format: function (v) { return v.toFixed(1); } }, "size " + pair[0]), "size" + (pair[0] + 1)));
+                var s = new Slider(own.createBranch("size" + (pair[0] + 1)), keyed(reporting({ label: pair[1], axis: true, icon: ICON.SIZE_ICON, labelWidth: "8em", size: pair[0], format: function (v) { return v.toFixed(1); } }, "size " + pair[0]), "size" + (pair[0] + 1)));
                 self._sliders.push(s);
                 box.appendChild(s.root);
             });
@@ -107,7 +107,7 @@ class SlidersWidget {
             var scale = [{ at: 10, label: "+10" }, { at: 5, label: "+5" }, { at: 0, label: "0" }, { at: -5, label: "-5" }, { at: -10, label: "-10" }, { at: -20, label: "-20" }, { at: -30, label: "-30" }, { at: -40, label: "-40" }, { at: -60, label: "-∞" }];
             function dB(v) { return v <= -60 ? "-∞ dB" : (v > 0 ? "+" : "") + v + " dB"; }
             [["vocals", 0], ["bass", -6], ["drums", -3], ["keys", -12]].forEach(function (ch) {
-                group.add(ch[0], reporting({ label: ch[0], vertical: true, min: -60, max: 10, step: 1, detents: [0], value: ch[1], icon: "level", ticks: scale, format: dB }, ch[0]));
+                group.add(ch[0], reporting({ label: ch[0], vertical: true, min: -60, max: 10, step: 1, detents: [0], value: ch[1], icon: ICON.LEVEL_ICON, ticks: scale, format: dB }, ch[0]));
             });
             box.appendChild(group.root);
         });

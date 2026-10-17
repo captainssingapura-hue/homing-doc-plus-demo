@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
 import hue.captains.singapura.js.homing.ui.elements.LedeModule;
@@ -42,6 +43,7 @@ public record SheetsApp() implements AppModule<AppModule._None, SheetsApp> {
     @Override
     public ImportsFor<SheetsApp> imports() {
         return ImportsFor.<SheetsApp>builder()
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 // its words the house's texts
                 .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Heading1Module.Heading1(), new Heading1Module.Heading1Factory()), Heading1Module.INSTANCE))

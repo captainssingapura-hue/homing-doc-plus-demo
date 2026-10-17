@@ -91,7 +91,7 @@ class TabStripWidget {
         draw();
         this._strip.select(order, order[0]);
 
-        controls.appendChild(new Slider(branch.createBranch("size"), { keyboard: kb, keyboardId: "tab-strip/size", label: "the chips' size", axis: true, icon: "size",
+        controls.appendChild(new Slider(branch.createBranch("size"), { keyboard: kb, keyboardId: "tab-strip/size", label: "the chips' size", axis: true, icon: ICON.SIZE_ICON,
             onInput: function (v) { self._strip.size(v); }, format: function (v) { return v.toFixed(1); } }).root);
         say("five chips, Inbox selected");
         this.root = el;

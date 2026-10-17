@@ -6,6 +6,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControlPanel;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMenus;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMonitors;
@@ -36,6 +37,7 @@ public record HouseDemos() implements StatelessFunctionalObject {
     public List<Demo> demos() {
         var button = new ModuleImports<>(List.of(new ButtonDemoModule.ButtonDemo()), ButtonDemoModule.INSTANCE);
         var text = new ModuleImports<>(List.of(new TextDemoModule.TextDemo()), TextDemoModule.INSTANCE);
+        var icon = new ModuleImports<>(List.of(new IconDemoModule.IconDemo()), IconDemoModule.INSTANCE);
         return List.of(
                 // the elements: the nine buttons are one button, each as its leaf says
                 new Demo(HouseControls.PlainButton.INSTANCE, button),
@@ -65,7 +67,27 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new Demo(HouseText.Wordmark.INSTANCE, text),
                 // a way to somewhere else
                 new Demo(HouseControls.Link.INSTANCE, new ModuleImports<>(List.of(new LinkDemoModule.LinkDemo()), LinkDemoModule.INSTANCE)),
-                new Demo(HouseMarks.Icon.INSTANCE, new ModuleImports<>(List.of(new IconDemoModule.IconDemo()), IconDemoModule.INSTANCE)),
+                // the twenty icons are one icon, each as its leaf says (D52)
+                new Demo(HouseIcons.AddIcon.INSTANCE, icon),
+                new Demo(HouseIcons.RemoveIcon.INSTANCE, icon),
+                new Demo(HouseIcons.CloseIcon.INSTANCE, icon),
+                new Demo(HouseIcons.ResetIcon.INSTANCE, icon),
+                new Demo(HouseIcons.RotateIcon.INSTANCE, icon),
+                new Demo(HouseIcons.FlipIcon.INSTANCE, icon),
+                new Demo(HouseIcons.PinIcon.INSTANCE, icon),
+                new Demo(HouseIcons.CheckIcon.INSTANCE, icon),
+                new Demo(HouseIcons.GripIcon.INSTANCE, icon),
+                new Demo(HouseIcons.DiscloseIcon.INSTANCE, icon),
+                new Demo(HouseIcons.SettingsIcon.INSTANCE, icon),
+                new Demo(HouseIcons.SizeIcon.INSTANCE, icon),
+                new Demo(HouseIcons.AspectIcon.INSTANCE, icon),
+                new Demo(HouseIcons.ExtentIcon.INSTANCE, icon),
+                new Demo(HouseIcons.LevelIcon.INSTANCE, icon),
+                new Demo(HouseIcons.ColumnIcon.INSTANCE, icon),
+                new Demo(HouseIcons.RowIcon.INSTANCE, icon),
+                new Demo(HouseIcons.MergeIcon.INSTANCE, icon),
+                new Demo(HouseIcons.DetachIcon.INSTANCE, icon),
+                new Demo(HouseIcons.WithinIcon.INSTANCE, icon),
                 new Demo(HouseContainers.SummaryView.INSTANCE,
                         new ModuleImports<>(List.of(new SummaryViewDemoModule.SummaryViewDemo()), SummaryViewDemoModule.INSTANCE)),
                 new Demo(HouseControls.Slider.INSTANCE, new ModuleImports<>(List.of(new SliderDemoModule.SliderDemo()), SliderDemoModule.INSTANCE)),

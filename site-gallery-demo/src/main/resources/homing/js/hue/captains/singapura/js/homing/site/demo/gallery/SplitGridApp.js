@@ -115,7 +115,7 @@ class SplitGridWidget {
             say("Cursor     " + ev.cellId + "  by " + ev.by);
             self._widgets.forEach(function (w, id) { w.current(id === ev.cellId); });
         } });
-        var scale = new Slider(branch.createBranch("scale"), { keyboard: kb, keyboardId: "split-grid/scale", label: "the mirror's scale", icon: "size", min: 0.1, max: 0.5, step: 0.05, value: 0.25,
+        var scale = new Slider(branch.createBranch("scale"), { keyboard: kb, keyboardId: "split-grid/scale", label: "the mirror's scale", icon: ICON.SIZE_ICON, min: 0.1, max: 0.5, step: 0.05, value: 0.25,
             onInput: function (v) { self._mirror.scale(v); }, format: function (v) { return v.toFixed(2); } }).root;
         mirrorRow.appendChild(scale);
         var hint = branch.createElement("hint", "span");

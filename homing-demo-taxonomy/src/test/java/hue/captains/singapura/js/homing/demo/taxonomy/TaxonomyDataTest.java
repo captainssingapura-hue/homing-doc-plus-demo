@@ -157,9 +157,9 @@ class TaxonomyDataTest extends JsModuleTestBase {
     void theCatalogue_theHousesRoles_filedUnderTheirBranches() {
         load(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE)).taxonomy());
         assertEquals("role-root", eval("t.roleRoot().id").asString());
-        assertEquals(21, eval("t.roleCount('branch')").asInt(), "three at level 1, eighteen at level 2");
-        assertEquals(92, eval("t.roleCount('role')").asInt(), "the catalogue whole, said by a component or not");
-        assertEquals(92, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
+        assertEquals(22, eval("t.roleCount('branch')").asInt(), "three at level 1, nineteen at level 2 - picturing among them (D52)");
+        assertEquals(95, eval("t.roleCount('role')").asInt(), "the catalogue whole, said by a component or not");
+        assertEquals(95, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
         assertEquals("saying,doing,shaping", eval("t.roleChildren('role-root').map(function (n) { return n.id; }).join()").asString());
         assertEquals("title,subtitle,name,category,symbol", eval("t.roleChildren('naming').map(function (n) { return n.id; }).join()").asString());
         assertEquals(2, eval("t.roleNode('naming').level").asInt());

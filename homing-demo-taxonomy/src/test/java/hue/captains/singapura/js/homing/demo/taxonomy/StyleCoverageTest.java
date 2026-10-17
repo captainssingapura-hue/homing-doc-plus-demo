@@ -69,14 +69,23 @@ class StyleCoverageTest {
     @Test
     void baseDrawsEveryCasting_eachStyle124ItselfAndLeaves52() {
         assertEquals(0, count("base", "base"), "the base layer leaves nothing");
-        assertEquals(118, count("base", "own"), "the text cell among them (D42)");
-        assertEquals(61, count("base", "as:"), "the text cell as a title and as a value among them (D42)");
+        assertEquals(135, count("base", "own"), "the text cell among them (D42), and every icon, each its own picture (D52)");
+        assertEquals(60, count("base", "as:"), "the text cell as a title and as a value among them (D42); an icon never: its look its own whatever it plays (D52)");
+        // each style draws its own cross but Editorial, whose is Base's, and Sketchy five icons more (D52); the rest it leaves to Base
+        var own = new java.util.TreeMap<String, Long>();
+        var as = new java.util.TreeMap<String, Long>();
+        var base = new java.util.TreeMap<String, Long>();
         for (var c : HOUSE.columns()) {
             if (c.is().equals("base")) continue;
-            assertEquals(73, count(c.id(), "own"), c.id() + "'s own CSS");
-            assertEquals(51, count(c.id(), "as:"), c.id() + "'s delegations, each a role drawn as its component on its own");
-            assertEquals(55, count(c.id(), "base"), c.id() + " leaves to Base - the text cell's three among them (D42)");
+            own.put(c.id(), count(c.id(), "own"));
+            as.put(c.id(), count(c.id(), "as:"));
+            base.put(c.id(), count(c.id(), "base"));
         }
+        assertEquals(java.util.Map.of("editorial", 73L, "neo-brutalism", 74L, "neo-futurism", 74L, "neumorphism", 74L, "glassmorphism", 74L,
+                "retro-futurism", 74L, "sketchy", 79L), own, "each style's own CSS");
+        for (var e : as.entrySet()) assertEquals(51L, e.getValue(), e.getKey() + "'s delegations, each a role drawn as its component on its own");
+        assertEquals(java.util.Map.of("editorial", 71L, "neo-brutalism", 70L, "neo-futurism", 70L, "neumorphism", 70L, "glassmorphism", 70L,
+                "retro-futurism", 70L, "sketchy", 65L), base, "what each leaves to Base - the text cell's three among them (D42), the icons it draws as Base does (D52)");
     }
 
     @Test

@@ -67,7 +67,7 @@ class SheetsWidget {
         var SITS = [null, "sunken", "elevated"];
         controls.appendChild(new Slider(branch.createBranch("sits"), {
             keyboard: params.keyboard, keyboardId: "sheets/sits", label: "the fourth sheet sits",
-            min: -1, max: 1, step: 1, detents: [-1, 0, 1], value: 1, icon: "level", labelWidth: "11em",
+            min: -1, max: 1, step: 1, detents: [-1, 0, 1], value: 1, icon: ICON.LEVEL_ICON, labelWidth: "11em",
             format: function (v) { return v < 0 ? "sunken" : v > 0 ? "elevated" : "flat"; },
             onInput: function (v) { yours.elevation(SITS[Math.abs(v) + (v > 0 ? 1 : 0)]); }
         }).root);

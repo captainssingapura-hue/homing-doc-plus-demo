@@ -21,7 +21,7 @@ var _BUTTON_KINDS = Object.freeze({
     "success-button":   Object.freeze({ Leaf: SuccessButton,   Factory: SuccessButtonFactory,   word: "success",   label: "Finish" }),
     "toggle-button":    Object.freeze({ Leaf: ToggleButton,    Factory: ToggleButtonFactory,    word: "toggle",    label: "Bold", toggles: true }),
     "close-button":     Object.freeze({ Leaf: CloseButton,     Factory: CloseButtonFactory,     word: "close",     label: "Close the note" }),
-    "icon-button":      Object.freeze({ Leaf: IconButton,      Factory: IconButtonFactory,      word: "icon",      label: "Add a note", icon: "add" })
+    "icon-button":      Object.freeze({ Leaf: IconButton,      Factory: IconButtonFactory,      word: "icon",      label: "Add a note", icon: ICON.ADD_ICON })
 });
 
 /** What the demo's button tells it: a press, or a toggle turned over - each said. */
@@ -38,7 +38,8 @@ class ButtonDemo extends ComponentDemo {
         if (!kind) throw new Error("[ButtonDemo] no button for the leaf '" + this.leaf + "'; one of " + Object.keys(_BUTTON_KINDS).join(", "));
         var row = this.el("row", "div", dm_row, this.stage);
         var props = { label: kind.label };
-        if (kind.icon) props.icon = new Icon(this.branch.createElement("icon", Icon.TAG), { name: kind.icon });   // its face, made here and handed in
+        if (kind.icon) props.icon = new Icon(this.branch.createElement("icon", Icon.TAG), kind.icon, ROLE.FACE);   // its face, made here and handed in
+        if (kind.Leaf === CloseButton) props.face = this.branch.elementMaker("face");   // the room its face, the close icon, is made on
         this._kind = kind;
         this._presses = 0;
         this._button = new kind.Leaf(kind.Factory.create(this.branch, "button"), props);

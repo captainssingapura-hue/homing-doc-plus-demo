@@ -116,14 +116,14 @@ class CardsWidget {
 
         this._size = 0;
         var size = new Slider(branch.createBranch("size"), {
-            keyboard: kb, keyboardId: "cards/size", label: "size, for the grid", icon: "size", labelWidth: "10em",
+            keyboard: kb, keyboardId: "cards/size", label: "size, for the grid", icon: ICON.SIZE_ICON, labelWidth: "10em",
             min: -1, max: 1, step: 0.05, detents: [0], value: 0,
             onInput: function (v) { self._size = v; self._cards.forEach(function (c) { c.size(v); }); },
             format: function (v) { return v.toFixed(2) + (v === 0 ? "  regular" : v === 1 ? "  the biggest" : v === -1 ? "  the smallest" : ""); }
         }).root;
         el.appendChild(size);
         var aspect = new Slider(branch.createBranch("aspect"), {
-            keyboard: kb, keyboardId: "cards/aspect", label: "aspect, for the grid", icon: "aspect", labelWidth: "10em",
+            keyboard: kb, keyboardId: "cards/aspect", label: "aspect, for the grid", icon: ICON.ASPECT_ICON, labelWidth: "10em",
             min: -1, max: 1, step: 0.05, detents: [0], value: 0.6,
             onInput: function (v) { self._cards.forEach(function (c) { c.aspect(v); }); },
             format: function (v) { return v.toFixed(2) + (v === 0 ? "  square" : v === 1 ? "  the widest" : v === -1 ? "  the tallest" : ""); }

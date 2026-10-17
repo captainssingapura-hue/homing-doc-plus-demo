@@ -3,7 +3,9 @@ package hue.captains.singapura.js.homing.demo.taxonomy;
 import hue.captains.singapura.js.homing.component.ComponentTrees;
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.Impl;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplForLeavesOf;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
 import hue.captains.singapura.js.homing.core.Crate;
@@ -98,6 +100,10 @@ record StyleCoverage(List<Column> columns, List<Row> rows) {
             for (CrateEntry e : crate.entries())
                 if (e.module() instanceof Impl impl && impl.anchor() instanceof Component<?> c)
                     out.put(c, wears(e.module(), look, Set.copyOf(taxonomy.fallback(c)), new HashSet<>()) ? "look" : "old");
+                else if (e.module() instanceof ImplForLeavesOf<?> whole && whole.anchor() instanceof ComponentBranch b)   // one class for every leaf of a branch (D52)
+                    for (Component<?> c : taxonomy.components())
+                        if (taxonomy.fallback(c).contains(b))
+                            out.put(c, wears(e.module(), look, Set.copyOf(taxonomy.fallback(c)), new HashSet<>()) ? "look" : "old");
         return out;
     }
 

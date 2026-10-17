@@ -17,10 +17,10 @@
 
 var _DOCUMENT_MENU = Object.freeze({ kind: "document", nodes: [
     { id: "open", label: "Open" },
-    { id: "pin", label: "Pin it", icon: "pin" },
+    { id: "pin", label: "Pin it", icon: "pin-icon" },
     { id: "rename", label: "Rename", hint: "F2" },
     { id: "share", label: "Share", section: 1, nodes: [{ id: "link", label: "Copy the link" }, { id: "mail", label: "Send it by mail" }] },
-    { id: "delete", label: "Delete", icon: "remove", section: 2 }
+    { id: "delete", label: "Delete", icon: "remove-icon", section: 2 }
 ] });
 
 class ContextMenuDemo extends ComponentDemo {

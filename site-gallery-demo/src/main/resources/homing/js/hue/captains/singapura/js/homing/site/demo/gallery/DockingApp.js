@@ -246,11 +246,11 @@ class DockingWidget {
         var switches = 0;
         function domopsOf() { return instruments ? instruments.domops() : null; }
         controls.appendChild(new Slider(branch.createBranch("size"), {
-            keyboard: kb, keyboardId: "docking/size", label: "the tabs' size", axis: true, icon: "size", labelWidth: "9em",
+            keyboard: kb, keyboardId: "docking/size", label: "the tabs' size", axis: true, icon: ICON.SIZE_ICON, labelWidth: "9em",
             onInput: function (v) { docks.regions().forEach(function (r) { r.dock.size(v); }); },
             format: function (v) { return v.toFixed(1); } }).root);
         controls.appendChild(new Slider(branch.createBranch("aspect"), {
-            keyboard: kb, keyboardId: "docking/aspect", label: "the tabs' aspect", axis: true, icon: "aspect", labelWidth: "9em",
+            keyboard: kb, keyboardId: "docking/aspect", label: "the tabs' aspect", axis: true, icon: ICON.ASPECT_ICON, labelWidth: "9em",
             onInput: function (v) { docks.regions().forEach(function (r) { r.dock.aspect(v); }); },
             format: function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); } }).root);
         // the tab menu's picks are the desk's, which was handed the steward: Detach floats the tab under its chip - off

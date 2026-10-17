@@ -6,11 +6,12 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.SelfContent;
-import hue.captains.singapura.js.homing.component.taxonomy.Word;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 import hue.captains.singapura.js.homing.ui.menu.tree.M1_Node;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.menu.tree.M2_Node;
 
 import java.util.List;
@@ -46,14 +47,14 @@ public record GalleryMenus() implements EsModule<GalleryMenus>, SelfContent {
             public static final Rotate INSTANCE = new Rotate();
             @Override public AnimalMenu parent() { return AnimalMenu.INSTANCE; }
             @Override public String label() { return "Rotate"; }
-            @Override public Word<?> icon() { return HouseWords.Rotate.INSTANCE; }
+            @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.RotateIcon.INSTANCE; }
             @Override public String hint() { return "a quarter turn"; }
         }
         public record Flip() implements M1_Node<AnimalMenu, Flip> {
             public static final Flip INSTANCE = new Flip();
             @Override public AnimalMenu parent() { return AnimalMenu.INSTANCE; }
             @Override public String label() { return "Flip"; }
-            @Override public Word<?> icon() { return HouseWords.Flip.INSTANCE; }
+            @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.FlipIcon.INSTANCE; }
             @Override public String hint() { return "mirror it"; }
         }
         public record Animal() implements M1_Node<AnimalMenu, Animal> {
@@ -136,20 +137,20 @@ public record GalleryMenus() implements EsModule<GalleryMenus>, SelfContent {
             public static final Add INSTANCE = new Add();
             @Override public CounterMenu parent() { return CounterMenu.INSTANCE; }
             @Override public String label() { return "Add a step"; }
-            @Override public Word<?> icon() { return HouseWords.Add.INSTANCE; }
+            @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.AddIcon.INSTANCE; }
         }
         public record Reset() implements M1_Node<CounterMenu, Reset> {
             public static final Reset INSTANCE = new Reset();
             @Override public CounterMenu parent() { return CounterMenu.INSTANCE; }
             @Override public String label() { return "Reset"; }
-            @Override public Word<?> icon() { return HouseWords.Reset.INSTANCE; }
+            @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.ResetIcon.INSTANCE; }
             @Override public String hint() { return "back to nought"; }
         }
         public record Step() implements M1_Node<CounterMenu, Step> {
             public static final Step INSTANCE = new Step();
             @Override public CounterMenu parent() { return CounterMenu.INSTANCE; }
             @Override public String label() { return "Step"; }
-            @Override public Word<?> icon() { return HouseWords.Settings.INSTANCE; }
+            @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.SettingsIcon.INSTANCE; }
             @Override public int section() { return 1; }
             @Override public List<? extends M2_Node<Step, ?>> children() { return List.of(S1.INSTANCE, S5.INSTANCE, S10.INSTANCE); }
 
