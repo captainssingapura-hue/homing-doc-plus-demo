@@ -58,7 +58,7 @@ class BooksTab extends RelTab {
         super(branch, params);
         this._relation = new BooksRelation(params.store, { branch: params.domain.createBranch("cells-" + branch.name) });
         this._widget = new RelGrid({ container: this.box, branch: branch.createBranch("grid"), relation: this._relation,
-                                     header: { show: true, sticky: true }, label: "Books" });
+                                     design: HouseGrid, header: { show: true, sticky: true }, label: "Books" });
         this._widget.setColumnWidths({ title: 170, author: 120, year: 56, rating: 56 });
         _join(this, branch, params);
     }
@@ -187,10 +187,9 @@ class RegionList {
 class NoteTab {
     constructor(branch, params) {
         branch.activate(_sceneOwner);
-        var root = branch.createElement("note", "p");
-        css.addClass(root, ga_lede);
-        root.textContent = (params && params.text) || "";
-        this.root = root;
+        var root = new Lede(LedeFactory.create(branch, "note"), { text: (params && params.text) || "" });
+        css.addClass(root.el, ga_lede);
+        this.root = root.el;
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }

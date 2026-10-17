@@ -5,7 +5,8 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 
 import java.util.List;
 
@@ -23,8 +24,9 @@ public record ComponentLogViewModule() implements DomModule<ComponentLogViewModu
     @Override
     public ImportsFor<ComponentLogViewModule> imports() {
         return ImportsFor.<ComponentLogViewModule>builder()
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyWidgetModule.TaxonomyWidget()), TaxonomyWidgetModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyStyles.tx_title(), new TaxonomyStyles.tx_hint(), new TaxonomyStyles.tx_line(),
                         new TaxonomyStyles.tx_code(), new TaxonomyStyles.tx_scroll()), TaxonomyStyles.INSTANCE))
                 .build();

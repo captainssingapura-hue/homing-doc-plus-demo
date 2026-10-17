@@ -3,22 +3,10 @@ package hue.captains.singapura.js.homing.demo.workspacewidgets.animals;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.Box.Control;
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Interaction.Selectable;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Heading;
 
 /**
  * The animal selector's sheet, in the design's words and nothing of its own:
@@ -41,7 +29,6 @@ public record AnimalStyles() implements CssGroup<AnimalStyles> {
 
     /** "Animal", in the design's heading voice. */
     public record an_title() implements CssClass<AnimalStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return """
             flex: 0 0 auto;
             margin: 0;
@@ -51,7 +38,6 @@ public record AnimalStyles() implements CssGroup<AnimalStyles> {
 
     /** Which is chosen, in words, quietly. */
     public record an_note() implements CssClass<AnimalStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
             flex: 0 0 auto;
             margin: 0;
@@ -79,12 +65,6 @@ public record AnimalStyles() implements CssGroup<AnimalStyles> {
      * drawn by the design's selected state. Its picture over its name.
      */
     public record an_option() implements CssClass<AnimalStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Tab.class, Shape.Rule.class), of(Control.Tab.class, Shape.Corner.class), of(Control.class, Color.Edge.class),
-                           of(Selectable.Tab.class, Color.Surface.class), of(Selectable.Tab.class, Color.Ink.class), of(Selectable.Tab.class, Color.Edge.class),
-                           of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class),
-                           of(Caption.class, Type.Scale.class));
-        }
         @Override public String body() { return """
             display: flex;
             flex-direction: column;

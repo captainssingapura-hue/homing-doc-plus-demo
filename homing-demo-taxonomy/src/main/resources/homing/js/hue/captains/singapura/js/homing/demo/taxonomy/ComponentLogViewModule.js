@@ -13,6 +13,13 @@
 
 var _LINES_SHOWN = 50;
 
+/** Clear pressed: the log's lines cleared. */
+class ComponentLogViewClear {
+    constructor(view) { this._view = view; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._view._lines = []; this._view._draw(); }
+}
+
 class ComponentLogView extends TaxonomyWidget {
     constructor(container, name, label, type) {
         super(container, name, label);
@@ -22,8 +29,9 @@ class ComponentLogView extends TaxonomyWidget {
         this._logMember = null;
         var head = this.el("head", "div", tx_line, this.body);
         this.el("title", "h4", tx_title, head, label);
-        var clear = new ButtonBuilder().label("Clear").plain().size(-1).onClick(function () { self._lines = []; self._draw(); });
-        head.appendChild(clear.build(this.branch.createElement("clear", clear.tag)).el);
+        var clear = new PlainButton(PlainButtonFactory.create(this.branch, "clear"), { label: "Clear", size: -1 });
+        clear.setOnClick(new ComponentLogViewClear(this));
+        head.appendChild(clear.el);
         this._box = this.el("lines", "div", tx_scroll, this.body);
         this._draw();
     }

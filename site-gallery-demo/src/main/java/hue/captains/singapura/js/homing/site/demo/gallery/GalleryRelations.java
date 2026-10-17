@@ -5,8 +5,9 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.relgrid.RelGridStockCellsModule;
 import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolModule;
+import hue.captains.singapura.js.homing.relgrid.cells.RelGridStockCellsModule;
+import hue.captains.singapura.js.homing.relgrid.cells.RelGridLabelsModule;
 import hue.captains.singapura.js.homing.reltree.RelTreeStockCellsModule;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public record GalleryRelations() implements DomModule<GalleryRelations> {
     public ImportsFor<GalleryRelations> imports() {
         return ImportsFor.<GalleryRelations>builder()
                 .add(new ModuleImports<>(List.of(new RelGridStockCellsModule.RelGridTextCell()), RelGridStockCellsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new RelGridLabelsModule.RelGridLabels()), RelGridLabelsModule.INSTANCE))   // its header: label header cells
                 .add(new ModuleImports<>(List.of(new RelTreeStockCellsModule.RelTreeTextCell()), RelTreeStockCellsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new RelGridProtocolModule.RelTreeView(),

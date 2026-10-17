@@ -1,8 +1,9 @@
 // =============================================================================
 // ComponentControlPanel — what the picked component is controlled by. For each
 // pick: controlType = its type (Controls.typeOf), and its options - a degree
-// for each axis it varies along, then its type's (Controls.forLeaf) - mounted
-// as a ControlPanel, which makes each control as the option's means calls for.
+// for each axis it varies along, then its type's (Controls.forLeaf) - shown
+// as a ControlPanel, a widget in a slot under the type, which makes each
+// control as the option's means calls for and says what was set or asked.
 // What is set goes to the component-control party, which keeps it by option -
 // a size set on one component is the size of the next - and the panel shows
 // what the party says is set, from whoever set it. Back to rest puts
@@ -16,10 +17,18 @@
 //   (the rest is a TaxonomyWidget's)
 // =============================================================================
 
+/** Back to rest pressed: the component told to reset, and the panel notes it. */
+class ComponentControlPanelRest {
+    constructor(panel) { this._panel = panel; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._panel._backToRest(); }
+}
+
 class ComponentControlPanel extends TaxonomyWidget {
     constructor(container, params) {
         super(container, "component-control-panel", "Control panel");
         this._panel = null;
+        this._slot = null;
         this._control = null;
         this._log = null;
         this._type = null;
@@ -61,19 +70,23 @@ class ComponentControlPanel extends TaxonomyWidget {
         if (this._log && this._type !== null && type !== this._type) this._log.tell({ kind: "ClearLog" });
         this._type = type;
         var scroll = this.mint(v, "controls", "div", tx_scroll, this.body);
-        this._panel = new ControlPanel(v.createBranch("panel"), {
+        this._slot = new WidgetSlot({ branch: v, host: scroll });
+        this._panel = this._slot.show("panel", ControlPanel, {
             options: Controls.forLeaf(id),
-            nothing: "Nothing to control: it varies by no degree, and its type, " + type + ", takes no option.",
-            onSet: function (option, value, settled) { self._set(option, value, settled); },
-            onInvoke: function (option) { self._invoke(option); }
+            nothing: "Nothing to control: it varies by no degree, and its type, " + type + ", takes no option."
         });
-        scroll.appendChild(this._panel.root);
-        var rest = new ButtonBuilder().label("Back to rest").plain().size(-1).onClick(function () {
-            if (self._control) self._control.tell({ kind: "Reset" });
-            self._note("everything back to rest");
-        });
-        line.appendChild(rest.build(v.createElement("rest", rest.tag)).el);
+        this._panel.onSet(function (option, value, settled) { self._set(option, value, settled); });
+        this._panel.onInvoke(function (option) { self._invoke(option); });
+        var rest = new PlainButton(PlainButtonFactory.create(v, "rest"), { label: "Back to rest", size: -1 });
+        rest.setOnClick(new ComponentControlPanelRest(self));
+        line.appendChild(rest.el);
         if (this._control) this._control.tell({ kind: "StateRequested" });
+    }
+
+    /** Back to rest: the component told, the panel's note said. */
+    _backToRest() {
+        if (this._control) this._control.tell({ kind: "Reset" });
+        this._note("everything back to rest");
     }
 
     /** A degree moved, or a switch switched: told to the party; logged when it settles. */
@@ -109,7 +122,7 @@ class ComponentControlPanel extends TaxonomyWidget {
 
     _note(words) { if (this._log) this._log.tell({ kind: "Note", words: words }); }
 
-    _drop() { if (this._panel) { this._panel.dispose(); this._panel = null; } }
+    _drop() { if (this._slot) { this._slot.disposeAll(); this._slot = null; } this._panel = null; }
 
     keyDown(ev) {
         if (this._panel && this._panel.key(ev)) return true;

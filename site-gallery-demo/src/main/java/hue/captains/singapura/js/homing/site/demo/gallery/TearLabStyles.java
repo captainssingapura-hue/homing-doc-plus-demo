@@ -3,26 +3,10 @@ package hue.captains.singapura.js.homing.site.demo.gallery;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
-import static hue.captains.singapura.js.homing.design.Emphasis.Secondary;
-import static hue.captains.singapura.js.homing.design.Feedback.Success;
-import static hue.captains.singapura.js.homing.design.Feedback.Warning;
-import static hue.captains.singapura.js.homing.design.Interaction.Inert;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Layer.Recessed;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Effect;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Code;
 
 /**
  * The tear-off lab's sheet: a sunken stage the strip sits in, the escape's and the capture's
@@ -38,9 +22,6 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
 
     /** The stage: sunken, framed, and the only thing that scrolls nothing; the hand is the lab's here, so nothing is selected. */
     public record tl_stage() implements CssClass<TearLabStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Recessed.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class));
-        }
         @Override public String body() { return """
             position: relative;
             height: 420px;
@@ -66,7 +47,6 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
     /** One edge of the band, dashed across the stage at the height the lab gives it. */
     public record tl_band() implements CssClass<TearLabStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--tl-y")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class)); }
         @Override public String body() { return """
             position: absolute;
             left: 0;
@@ -87,7 +67,6 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
     /** The chip's centre, drawn as a ring: what both bands measure, wherever the chip was taken. */
     public record tl_centre() implements CssClass<TearLabStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--tl-x"), new CssVar("--tl-y")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class)); }
         @Override public String body() { return """
             position: absolute;
             left: var(--tl-x, 0px);
@@ -119,14 +98,12 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
 
     /** The window made and waiting at the breach while the hand flies on. */
     public record tl_waiting() implements CssClass<TearLabStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Inert.class, Effect.Opacity.class)); }
         @Override public String body() { return ""; }
     }
 
     /** The hand, drawn: where the pointer is, which in flight is not where the chip is. */
     public record tl_hand() implements CssClass<TearLabStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--tl-x"), new CssVar("--tl-y")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class)); }
         @Override public String body() { return """
             position: absolute;
             left: var(--tl-x, 0px);
@@ -160,7 +137,6 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
     /** The breach or the settle, named where it happened. */
     public record tl_mark() implements CssClass<TearLabStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--tl-x"), new CssVar("--tl-y")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
             position: absolute;
             left: var(--tl-x, 0px);
@@ -174,27 +150,21 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
 
     /** On the rail. */
     public record tl_rail() implements CssClass<TearLabStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Secondary.class, Color.Surface.class)); }
         @Override public String body() { return ""; }
     }
 
     /** In flight: torn, the window waiting. */
     public record tl_flight() implements CssClass<TearLabStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Warning.class, Color.Surface.class)); }
         @Override public String body() { return ""; }
     }
 
     /** Settled: the window at the hand, following it. */
     public record tl_follow() implements CssClass<TearLabStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Success.class, Color.Surface.class)); }
         @Override public String body() { return ""; }
     }
 
     /** The speed over the gesture: a bar a frame, the newest on the right. */
     public record tl_chart() implements CssClass<TearLabStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Recessed.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class));
-        }
         @Override public String body() { return """
             position: relative;
             height: 96px;
@@ -221,7 +191,6 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
     /** A level across the chart: the breach's speed, and the change either side of it. */
     public record tl_level() implements CssClass<TearLabStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--tl-y")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class)); }
         @Override public String body() { return """
             position: absolute;
             left: 0;
@@ -236,7 +205,6 @@ public record TearLabStyles() implements CssGroup<TearLabStyles> {
 
     /** What the lab says of the gesture: its phase and its numbers. */
     public record tl_readout() implements CssClass<TearLabStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return "margin-top: 8px; white-space: pre-wrap;"; }
     }
 

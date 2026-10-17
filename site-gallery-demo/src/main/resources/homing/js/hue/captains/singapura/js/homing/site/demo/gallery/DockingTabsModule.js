@@ -1,10 +1,10 @@
 // =============================================================================
-// DockingTabs — where the docking page's tabs come from, and the control that
-// puts one somewhere. One object for the whole business, so the page that runs
-// a workspace is about the workspace.
+// DockingTabs — where the docking page's tabs come from, and the picker of
+// which keys the docks answer. One object for the whole business, so the page
+// that runs a workspace is about the workspace.
 //
-//   new DockingTabs(branch, { host, panes, store, domain, note, desk, onAdded? })
-//     host:   where the new-tab control goes
+//   new DockingTabs(branch, { host, panes, store, domain, note, desk })
+//     host:   where the keys picker goes
 //     panes:  () → [pane], asked afresh: the workspace is split and merged
 //     store, domain, note: what the KINDS need — each closes over its own, so
 //             the source hands a maker only the branch and the dock's branch
@@ -22,11 +22,11 @@
 //                              that opens a chooser you then have to go and find
 //                              has asked you a question and walked off
 //   tabs.keys                  KeysPicker: which scheme the docks answer, swapped live
-//   tabs.refresh()             the control says again what can be done
+//   tabs.refresh()             the picker says again which docks there are
 //   tabs.dispose()
 //
 // EVERY TAB ON THE PAGE COMES THROUGH THE ONE SOURCE — the four it opens with,
-// the ones the control adds, the ones the opener becomes. One counter, so no
+// the ones the opener becomes. One counter, so no
 // two tabs are ever the same name; and the page keeps no second way of making
 // a tab that could drift from this one. The first shape of this page had one,
 // and the ids collided the day a second "books" was asked for.
@@ -53,14 +53,6 @@ class DockingTabs {
             { id: "opener",  label: "Open…",      title: "Open",    listed: false,
               make: function (b, p) { return new TabOpener(b, { focus: p.focus, tab: p.tab, source: source }); } } ] });
         this.source = source;
-        // The control: a picture of the panes to say WHERE, a list to say WHAT. It is handed the docks and nothing
-        // about the grid — it measures where they are — so a region minted by a split is in the picture at once, and
-        // the instruments' float, which is not of this workspace, is not.
-        // MODES ON: this page exists to be tried, so every way a tab can arrive is reachable without an edit and a
-        // rebuild - quietly, in front, or in front with the keys. An app that had already made up its mind would
-        // leave them off and name one.
-        this.adder = new AddTab(branch.createBranch("adder"), { host: o.host, source: source, width: o.width == null ? "148px" : o.width,
-                                                                panes: o.panes, onAdded: o.onAdded, modes: true });
         // WHICH KEYS THE DOCKS ANSWER, swapped while you stand in the workspace: a pane's schemes are a list it is
         // given, so changing them is one call per dock and nothing else at all.
         this.keys = new KeysPicker(branch.createBranch("keys"), { host: o.host, panes: o.panes });
@@ -72,12 +64,11 @@ class DockingTabs {
     /** A tab holding the chooser, holding the keys: the strip's plus, and anything else that asks in the strip. */
     opener(pane) { return this.source.addTo(pane, "opener", "focus"); }
 
-    /** How full each dock is, where the panes are, and what a dock minted since answers: said again. */
-    refresh() { this.adder.refresh(); this.keys.refresh(); return this; }
+    /** Which docks there are, a dock minted since among them: said again. */
+    refresh() { this.keys.refresh(); return this; }
 
     dispose() {
         this.keys.dispose();
-        this.adder.dispose();
         this.source.dispose();
         try { this.branch.dissolve(); } catch (e) {}
     }

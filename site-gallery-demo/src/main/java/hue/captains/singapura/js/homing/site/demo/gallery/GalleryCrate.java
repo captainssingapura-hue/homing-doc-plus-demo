@@ -6,10 +6,11 @@ import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.relgrid.RelGridCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolCrate;
+import hue.captains.singapura.js.homing.relgrid.house.RelGridHouseCrate;
+import hue.captains.singapura.js.homing.relgrid.cells.RelGridCellsCrate;
 import hue.captains.singapura.js.homing.reltree.RelTreeCrate;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.demo.gallery.prefs.GalleryPreferences;
@@ -19,7 +20,8 @@ import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
-import hue.captains.singapura.js.homing.ui.focus.UiFocusCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
+import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsCrate;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
@@ -46,9 +48,9 @@ public final class GalleryCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-site-demo-gallery"; }
 
     @Override public List<Crate> requires() {
-        return List.of(MpaCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiDockingCrate.INSTANCE, UiSplitGridCrate.INSTANCE, UiMenuCrate.INSTANCE, UiFocusCrate.INSTANCE, UiPanZoomCrate.INSTANCE,
-                       CoreJsCrate.INSTANCE, DesignCrate.INSTANCE, ServerCrate.INSTANCE,
-                       RelGridCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
+        return List.of(MpaCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiPanesCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiDockingCrate.INSTANCE, UiSplitGridCrate.INSTANCE, UiMenuCrate.INSTANCE, UiMonitorsCrate.INSTANCE, UiPanZoomCrate.INSTANCE,
+                       CoreJsCrate.INSTANCE, ServerCrate.INSTANCE,
+                       RelGridCrate.INSTANCE, RelGridHouseCrate.INSTANCE, RelGridCellsCrate.INSTANCE, RelTreeCrate.INSTANCE, RelGridProtocolCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return GalleryComponents.INSTANCE; }

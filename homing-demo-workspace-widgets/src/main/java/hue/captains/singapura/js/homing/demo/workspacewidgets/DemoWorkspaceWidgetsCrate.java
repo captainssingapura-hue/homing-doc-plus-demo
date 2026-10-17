@@ -24,13 +24,16 @@ import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.Platfor
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSoundModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerStageModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerStyles;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSceneModule;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.HousePlatformerSceneSheet;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.HousePlatformerSceneModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoDeclaration;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoStyles;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.libs.LibsCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import hue.captains.singapura.js.homing.workspace.widgets.WidgetDeclaration;
 import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceWidgetsCrate;
 
@@ -68,9 +71,8 @@ public final class DemoWorkspaceWidgetsCrate implements Crate {
                 CoreJsCrate.INSTANCE,
                 // the focus party, the keys' convention, the css manager
                 ServerCrate.INSTANCE,
-                // the design words the sheets wear
-                DesignCrate.INSTANCE,
                 // the design's slider and button: the platformer's gravity, its music, its Play again
+                UiLookCrate.INSTANCE,
                 UiElementsCrate.INSTANCE,
                 // Tone.js, served from the classpath: the platformer's sound
                 LibsCrate.INSTANCE,
@@ -102,6 +104,9 @@ public final class DemoWorkspaceWidgetsCrate implements Crate {
                 CrateEntry.of(PlatformerSoundModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 // the game drawn, and played
                 CrateEntry.of(PlatformerStyles.INSTANCE),
+                CrateEntry.of(PlatformerSceneModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                CrateEntry.of(HousePlatformerSceneSheet.INSTANCE),
+                CrateEntry.of(HousePlatformerSceneModule.INSTANCE),
                 CrateEntry.of(PlatformerStageModule.INSTANCE, StandardJsModuleType.CONSUMER),
                 CrateEntry.of(PlatformerPlayModule.INSTANCE, GameLoopModuleType.GAME_LOOP),
                 // and watched: the run re-simulated, a snapshot of records inside records to join by

@@ -9,10 +9,11 @@ import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.Trees;
+import hue.captains.singapura.js.homing.relgrid.house.GridFrameBaseModule;
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.Test;
 
@@ -99,21 +100,21 @@ class TaxonomyDataTest extends JsModuleTestBase {
 
     @Test
     void theHouse_whole_itsBranchesLevelled() {
-        var house = HouseTaxonomy.INSTANCE.read();
+        var house = HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE)).taxonomy();
         load(house);
         assertEquals(house.nodes().size(), eval("t.nodes().length").asInt());
         assertEquals("root", eval("t.root().id").asString());
-        assertEquals(17, eval("t.count('branch')").asInt());
-        assertEquals(85, eval("t.count('component')").asInt());
-        assertEquals(105, eval("t.count('part')").asInt(), "its slots, declared over the role catalogue");
+        assertEquals(19, eval("t.count('branch')").asInt(), "the headings a branch of the text, and the grid's frame a design branch - rel-grid is on this classpath");
+        assertEquals(120, eval("t.count('component')").asInt(), "the house's 105, and the grid's frame's fifteen virtual leaves - the copied range's area and border among them");
+        assertEquals(112, eval("t.count('part')").asInt(), "its slots, declared over the role catalogue: the action bar's optional primary button, its Go, the icon an icon button holds, a split grid's line as a splitter and as a seam, a panel's bar and body, and a table's header and data cells, among them");
         assertEquals("dialog-veil,dialog-window,dialog-actions", eval("t.partsOf('dialog').map(function (p) { return p.id; }).join()").asString());
-        assertEquals(85, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
+        assertEquals(120, eval("t.componentsUnder('root').length").asInt(), "every component under the root");
         assertEquals("container", eval("t.node('pane').parent").asString(), "a level-2 branch under its level-1 parent");
     }
 
     @Test
     void everyNode_withItsMeaning_andTheAxesItVariesAlong() {
-        load(HouseTaxonomy.INSTANCE.read());
+        load(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE)).taxonomy());
         assertTrue(eval("t.node('danger-button').meaning").asString().startsWith("Does a thing that destroys"));
         assertTrue(eval("t.node('card').meaning").asString().startsWith("Stands for one thing among others"), "a branch's too");
         assertTrue(eval("t.roleNode('title').meaning").asString().startsWith("Names a container"), "and the catalogue's");
@@ -154,11 +155,11 @@ class TaxonomyDataTest extends JsModuleTestBase {
 
     @Test
     void theCatalogue_theHousesRoles_filedUnderTheirBranches() {
-        load(HouseTaxonomy.INSTANCE.read());
+        load(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE)).taxonomy());
         assertEquals("role-root", eval("t.roleRoot().id").asString());
-        assertEquals(21, eval("t.roleCount('branch')").asInt(), "three at level 1, eighteen at level 2");
-        assertEquals(67, eval("t.roleCount('role')").asInt());
-        assertEquals(67, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
+        assertEquals(22, eval("t.roleCount('branch')").asInt(), "three at level 1, nineteen at level 2 - picturing among them (D52)");
+        assertEquals(95, eval("t.roleCount('role')").asInt(), "the catalogue whole, said by a component or not");
+        assertEquals(95, eval("t.rolesUnder('role-root').length").asInt(), "every role under the root");
         assertEquals("saying,doing,shaping", eval("t.roleChildren('role-root').map(function (n) { return n.id; }).join()").asString());
         assertEquals("title,subtitle,name,category,symbol", eval("t.roleChildren('naming').map(function (n) { return n.id; }).join()").asString());
         assertEquals(2, eval("t.roleNode('naming').level").asInt());

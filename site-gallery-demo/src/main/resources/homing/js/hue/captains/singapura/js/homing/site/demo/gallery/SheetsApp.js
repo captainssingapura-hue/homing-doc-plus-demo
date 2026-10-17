@@ -31,25 +31,23 @@ const REGISTERS = [
 class SheetsWidget {
 
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         branch.activate(_sheetsOwner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-elements";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Sheets";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A panel is a sheet, and a sheet sits somewhere: cut into the ground, lying on it, or lifted off it. The design says what each of "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-elements" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Sheets" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A panel is a sheet, and a sheet sits somewhere: cut into the ground, lying on it, or lifted off it. The design says what each of "
             + "those looks like, in whatever plane it honestly uses for depth — a cast shadow, a face a shade darker, two shadows swapping sides — and a "
             + "design with no idiom for depth says nothing and leaves the sheet where it is. Nothing here links a register to a state: this page sets them "
             + "because it is a page about registers. The fourth sheet is yours, on two controls that are two because the axes are — where it sits, and "
-            + "whether it is marked as the current one.";
-        el.appendChild(lede);
+            + "whether it is marked as the current one." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         // ── the ground, and the three registers read against each other ──
         var ground = branch.createElement("ground", "div");
@@ -67,30 +65,29 @@ class SheetsWidget {
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
         var SITS = [null, "sunken", "elevated"];
-        controls.appendChild(new SliderBuilder().keyboard(params.keyboard, "sheets/sits").label("the fourth sheet sits")
-            .range(-1, 1, 1).detent(-1, 0, 1).value(1).icon("level").labelWidth("11em")
-            .format(function (v) { return v < 0 ? "sunken" : v > 0 ? "elevated" : "flat"; })
-            .onInput(function (v) { yours.elevation(SITS[Math.abs(v) + (v > 0 ? 1 : 0)]); })
-            .build(branch.createBranch("sits")).root);
-        var mark = new ButtonBuilder().label("marked").size(-0.4).colour("plain")
-            .onClick(function () { yours.highlight(!yours.isHighlighted()); mark.colour(yours.isHighlighted() ? "primary" : "plain"); });
-        var markEl = branch.createElement("mark", mark.tag);
-        mark = mark.build(markEl);
-        controls.appendChild(markEl);
+        controls.appendChild(new Slider(branch.createBranch("sits"), {
+            keyboard: params.keyboard, keyboardId: "sheets/sits", label: "the fourth sheet sits",
+            min: -1, max: 1, step: 1, detents: [-1, 0, 1], value: 1, icon: ICON.LEVEL_ICON, labelWidth: "11em",
+            format: function (v) { return v < 0 ? "sunken" : v > 0 ? "elevated" : "flat"; },
+            onInput: function (v) { yours.elevation(SITS[Math.abs(v) + (v > 0 ? 1 : 0)]); }
+        }).root);
+        // the mark is a toggle, and the house has no toggle button yet: a plain one, its label saying the state
+        var mark = self._press(new PlainButton(PlainButtonFactory.create(branch, "mark"), {
+            label: yours.isHighlighted() ? "marked" : "not marked", size: -0.4 }), function () { yours.highlight(!yours.isHighlighted()); mark.label = yours.isHighlighted() ? "marked" : "not marked"; });
+        controls.appendChild(mark.el);
 
         // ── a sheet on a sheet: the cast falls on paper, not on the table ─
-        var stackNote = branch.createElement("stack-note", "p");
-        css.addClass(stackNote, ga_lede);
-        stackNote.textContent = "And a sheet may lie on a sheet. The cast below falls on paper rather than on the table — the same word, a different colour, "
-            + "because a cast is what lies beneath it in shadow and nothing has to be told which that is.";
-        el.appendChild(stackNote);
+        var stackNote = new Lede(LedeFactory.create(branch, "stack-note"), { text: "And a sheet may lie on a sheet. The cast below falls on paper rather than on the table — the same word, a different colour, "
+            + "because a cast is what lies beneath it in shadow and nothing has to be told which that is." });
+        css.addClass(stackNote.el, ga_lede);
+        el.appendChild(stackNote.el);
         var stackGround = branch.createElement("stack-ground", "div");
         css.addClass(stackGround, ga_sheet_ground);
         el.appendChild(stackGround);
-        var outer = new PanelBuilder().title("on the ground").host(stackGround).build(branch.createBranch("panel-outer"));
+        var outer = new Panel(branch.createBranch("panel-outer"), { title: "on the ground", host: stackGround });
         outer.elevation("elevated");
         this._panels.push(outer);
-        var inner = new PanelBuilder().title("on the sheet").host(outer.body).build(branch.createBranch("panel-inner"));
+        var inner = new Panel(branch.createBranch("panel-inner"), { title: "on the sheet", host: outer.body });
         inner.elevation("elevated");
         this._panels.push(inner);
         this._lines(branch, "inner", inner.body, ["the same register", "a different ground"]);
@@ -98,12 +95,21 @@ class SheetsWidget {
         this.root = el;
     }
 
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
+
     /** One sheet in its room on the ground, with a caption under it saying what register it is at. */
     _lay(branch, ground, name, label, note) {
         var slot = branch.createElement("slot-" + name, "div");
         css.addClass(slot, ga_sheet_slot);
         ground.appendChild(slot);
-        var panel = new PanelBuilder().title(label).host(slot).build(branch.createBranch("panel-" + name));
+        var panel = new Panel(branch.createBranch("panel-" + name), { title: label, host: slot });
         this._panels.push(panel);
         this._lines(branch, name, panel.body, ["a sheet of card", "cut to its content"]);
         var caption = branch.createElement("note-" + name, "div");

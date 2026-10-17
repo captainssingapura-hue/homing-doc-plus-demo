@@ -9,11 +9,16 @@
 //   (the rest is a ComponentDemo's)
 // =============================================================================
 
+const _focusMonitorDemoOwner = Object.freeze({ toString: () => "focusMonitorDemo" });
+
 class FocusMonitorDemo extends ComponentDemo {
     constructor(container, params) {
         super(container, "focus-monitor-demo", params);
         var host = this.el("host", "div", dm_scroll, this.stage);
-        this._monitor = new FocusMonitor(this.branch.createBranch("monitor"), { host: host });
+        var shown = this.branch.createBranch("monitor");
+        shown.activate(_focusMonitorDemoOwner);
+        this._slot = new WidgetSlot({ branch: shown, host: host });
+        this._monitor = this._slot.show("focus", FocusMonitor, {});
         this.intro = "this page's focus tree: press anywhere on the page and the lit row follows; ask who holds the keys from the controls";
     }
 
@@ -24,5 +29,5 @@ class FocusMonitorDemo extends ComponentDemo {
         return lit ? "the lit row: " + (parts.length ? parts.join(" · ") : lit.textContent.trim()) : "nobody holds the keys";
     }
 
-    disposed() { try { this._monitor.dispose(); } catch (e) {} }
+    disposed() { try { this._slot.disposeAll(); } catch (e) {} }
 }

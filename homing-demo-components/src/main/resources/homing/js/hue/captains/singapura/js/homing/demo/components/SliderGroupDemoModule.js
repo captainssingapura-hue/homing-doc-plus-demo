@@ -13,11 +13,11 @@ class SliderGroupDemo extends ComponentDemo {
     constructor(container, params) {
         super(container, "slider-group-demo", params);
         var self = this;
-        this._group = new SliderGroupBuilder().title("Equaliser").across().build(this.branch.createBranch("group"));
+        this._group = new SliderGroup(this.branch.createBranch("group"), { title: "Equaliser", across: true });
         ["Bass", "Middle", "Treble"].forEach(function (name) {
-            self._group.add(name.toLowerCase(), new SliderBuilder().label(name).vertical().axis()
-                .format(function (v) { return (v > 0 ? "+" : "") + v.toFixed(1); })
-                .onChange(function (v) { self.say(name + " set to " + (v > 0 ? "+" : "") + v.toFixed(1)); }));
+            self._group.add(name.toLowerCase(), { label: name, vertical: true, axis: true, icon: ICON.LEVEL_ICON,
+                format: function (v) { return (v > 0 ? "+" : "") + v.toFixed(1); },
+                onChange: function (v) { self.say(name + " set to " + (v > 0 ? "+" : "") + v.toFixed(1)); } });
         });
         this.stage.appendChild(this._group.root);
         this.intro = "three faders, holding the keys as one: Tab moves between them, the arrows move the current one";

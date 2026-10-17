@@ -1,6 +1,10 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
+import hue.captains.singapura.js.homing.ui.elements.LedeModule;
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -13,8 +17,12 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
-import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.monitors.FocusMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.StewardMonitorModule;
 
 import java.util.List;
 
@@ -48,11 +56,21 @@ public record FocusApp() implements AppModule<AppModule._None, FocusApp> {
     @Override
     public ImportsFor<FocusApp> imports() {
         return ImportsFor.<FocusApp>builder()
+                // its words the house's texts
+                .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading1Module.Heading1(), new Heading1Module.Heading1Factory()), Heading1Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
+                // its tools: the house's plain button, and its fields in the text box's look
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusSceneModule.Leaf(), new FocusSceneModule.Panel(), new FocusSceneModule.ListPanel()), FocusSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),

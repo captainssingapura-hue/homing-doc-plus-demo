@@ -21,10 +21,12 @@ import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceDeclaration;
 import java.util.List;
 
 /**
- * The taxonomy workbench: two workspaces filed in one group. {@code taxonomy} - the house's
+ * The taxonomy workbench: three workspaces filed in one group. {@code taxonomy} - the house's
  * components as a tree, their parts in a table, the picked node's details, and the role catalogue
  * with each role's uses; and {@code in-action} - the same tree, the picked component in action in
- * a demo of its own, what it is controlled by, the demo's log and the control's, and its details.
+ * a demo of its own, what it is controlled by, the demo's log and the control's, and its details;
+ * and {@code coverage} - the same tree, and what each house style and palette says of the
+ * components picked in it.
  * Each workspace's widgets meet in its {@code node-selection} party; in action, the demo and its
  * controls meet in {@code component-control}, and each log in its own.
  */
@@ -97,6 +99,22 @@ public final class TaxonomyWorkbench {
         @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new ControlLogViewModule.ComponentControlLog()), ControlLogViewModule.INSTANCE); }
     }
 
+    /** What each house style and palette says of each component: the matrix, derived on the Java side. */
+    public record Coverage() implements Kind {
+        public static final Coverage INSTANCE = new Coverage();
+        @Override public String kind() { return "style-coverage"; }
+        @Override public String title() { return "Style coverage"; }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new StyleCoverageMatrixModule.StyleCoverageMatrix()), StyleCoverageMatrixModule.INSTANCE); }
+    }
+
+    /** A house style's file of the picked node's family, as the site serves it: made afresh in dev mode, built into the jar deployed. */
+    public record Families() implements Kind {
+        public static final Families INSTANCE = new Families();
+        @Override public String kind() { return "style-family-file"; }
+        @Override public String title() { return "Family CSS"; }
+        @Override public ModuleImports<?> constructs() { return new ModuleImports<>(List.of(new StyleFamilyFileModule.StyleFamilyFile()), StyleFamilyFileModule.INSTANCE); }
+    }
+
     public record Details() implements Kind {
         public static final Details INSTANCE = new Details();
         @Override public String kind() { return "taxonomy-node"; }
@@ -121,6 +139,13 @@ public final class TaxonomyWorkbench {
         @Override public List<WidgetDeclaration<?>> kinds() {
             return List.of(Tree.INSTANCE, DemoPanel.INSTANCE, ControlPanel.INSTANCE, ControlLog.INSTANCE, DemoLog.INSTANCE, Details.INSTANCE);
         }
+    }
+
+    /** The workspace: {@code coverage} - the tree, and what each house style and palette says of the components picked in it. */
+    public record CoverageWorkspace() implements WorkspaceDeclaration {
+        public static final CoverageWorkspace INSTANCE = new CoverageWorkspace();
+        @Override public String name() { return "coverage"; }
+        @Override public List<WidgetDeclaration<?>> kinds() { return List.of(Tree.INSTANCE, Coverage.INSTANCE, Families.INSTANCE, Details.INSTANCE); }
     }
 
     /** The first time: the tree; beside it, the parts over the details; and the roles, beside them. */
@@ -158,15 +183,27 @@ public final class TaxonomyWorkbench {
                     ArrangedWidget.of("demo-log", DemoLog.INSTANCE.kind()),
                     ArrangedWidget.of("node", Details.INSTANCE.kind())));
 
-    /** The one group: the taxonomy read, and its components in action. */
+    /** Coverage, the first time: the tree; beside it, the widest, the matrix over the picked family's file. */
+    public static final WorkspaceArrangements<CoverageWorkspace> ARRANGED_COVERAGE = WorkspaceArrangements.of(CoverageWorkspace.INSTANCE,
+            Arrangement.of(CoverageWorkspace.INSTANCE,
+                    SplitGrid.of(SplitGrid.row(
+                            SplitGrid.Part.of(SplitGrid.region("tree", "tree"), 3),
+                            SplitGrid.Part.of(SplitGrid.column(SplitGrid.Part.of(SplitGrid.region("coverage", "coverage"), 3),
+                                                               SplitGrid.Part.of(SplitGrid.region("family", "family"), 2)), 9))),
+                    ArrangedWidget.of("tree", Tree.INSTANCE.kind()),
+                    ArrangedWidget.of("coverage", Coverage.INSTANCE.kind()),
+                    ArrangedWidget.of("family", Families.INSTANCE.kind())));
+
+    /** The one group: the taxonomy read, its components in action, and what the house styles say of them. */
     public static final WorkspaceGroups GROUPS = WorkspaceGroups.of(
             WorkspaceGroup.of("components", "Components")
                     .section("The taxonomy", GroupedWorkspace.of(Workspace.INSTANCE.name(), "Taxonomy"))
                     .section("In action", GroupedWorkspace.of(InAction.INSTANCE.name(), "In action"))
+                    .section("Style coverage", GroupedWorkspace.of(CoverageWorkspace.INSTANCE.name(), "Style coverage"))
                     .defaultTo(WorkspaceKind.of(Workspace.INSTANCE.name()))
                     .build());
 
     /** What the site serves: the workspaces declared, filed, and arranged the first time. */
-    public static final GroupedWorkspaces SITE = new GroupedWorkspaces(GROUPS, List.of(Workspace.INSTANCE, InAction.INSTANCE))
-            .arranged(ARRANGED, ARRANGED_IN_ACTION);
+    public static final GroupedWorkspaces SITE = new GroupedWorkspaces(GROUPS, List.of(Workspace.INSTANCE, InAction.INSTANCE, CoverageWorkspace.INSTANCE))
+            .arranged(ARRANGED, ARRANGED_IN_ACTION, ARRANGED_COVERAGE);
 }

@@ -1,5 +1,9 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.ui.elements.LinkModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading2Module;
+import hue.captains.singapura.js.homing.ui.elements.LedeModule;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuStewardModule;
 import hue.captains.singapura.js.homing.core.AppModule;
@@ -10,8 +14,6 @@ import hue.captains.singapura.js.homing.core.ParamCodec;
 import hue.captains.singapura.js.homing.core.QueryString;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.server.HrefManager;
-import hue.captains.singapura.js.homing.site.mpa.MpaStyles;
 import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 
 import java.util.List;
@@ -54,14 +56,17 @@ public record GalleryShellApp() implements AppModule<GalleryShellApp.Params, Gal
     @Override
     public ImportsFor<GalleryShellApp> imports() {
         return ImportsFor.<GalleryShellApp>builder()
+                // its words the house's texts
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading2Module.Heading2(), new Heading2Module.Heading2Factory()), Heading2Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LinkModule.Link(), new LinkModule.LinkFactory()), LinkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .add(new ModuleImports<>(List.of(new GalleryDemos.DEMOS()), GalleryDemos.INSTANCE))
                 .add(new ModuleImports<>(List.of(new GalleryMenus.MENUS()), GalleryMenus.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ContextMenuStewardModule.ContextMenuSteward()), ContextMenuStewardModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new MpaStyles.mpa_main_full()), MpaStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_shell(),
                         new GalleryStyles.ga_shell_nav(),

@@ -1,5 +1,7 @@
 package hue.captains.singapura.js.homing.demo.components;
 
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -10,6 +12,8 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code FloatingPaneDemo}: the house's floating pane in action - moved and sized by the hand; moved, sized, ringed and opened again by its options. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 6,
+        reason = "It makes its own elements, places elements, wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record FloatingPaneDemoModule() implements DomModule<FloatingPaneDemoModule> {
 
     public static final FloatingPaneDemoModule INSTANCE = new FloatingPaneDemoModule();

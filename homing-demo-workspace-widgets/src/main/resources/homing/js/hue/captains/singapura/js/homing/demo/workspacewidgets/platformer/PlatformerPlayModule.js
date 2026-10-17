@@ -37,6 +37,8 @@
 // =============================================================================
 
 const _platformerOwner = Object.freeze({ toString: () => "platformerPlay" });
+/** Its title: the house's heading of a widget's title - the fourth level - on its own tag. */
+const _TITLE_HEADING = Object.freeze({ LEAF: "heading4" });
 var _platformers = 0;
 
 class PlatformerPlay {
@@ -58,18 +60,22 @@ class PlatformerPlay {
         root.setAttribute("role", "region");
         root.setAttribute("aria-label", "Animal platformer");
         var head = PlatformerPlay._el(d, "head", "div", pf_head, root);
-        PlatformerPlay._el(d, "title", "h2", pf_title, head).textContent = "Animal platformer";
+        var heading = PlatformerPlay._el(d, "title", "h4", pf_title, head);
+        new Look(_TITLE_HEADING, ROLE.STANDALONE).wear(heading);
+        heading.textContent = "Animal platformer";
         this._score = PlatformerPlay._el(d, "score", "span", pf_score, head);
         PlatformerPlay._el(d, "hint", "p", pf_hint, root).textContent = "Press the stage, then ← → to run and Space to jump. Keep out of the lava!";
         var controls = PlatformerPlay._el(d, "controls", "div", pf_controls, root);
-        this._gravity = new SliderBuilder().label("Gravity").range(0.2, 2, 0.1).value(PlatformerGame.GRAVITY)
-            .format(function (v) { return v.toFixed(1); })
-            .onInput(function (v) { self._act({ kind: "GravityChanged", value: Math.round(v * 10) / 10 }); })
-            .build(d.createBranch("gravity"));
-        this._music = new SliderBuilder().label("Music").range(0, 100, 5).value(40)
-            .format(function (v) { return Math.round(v) + "%"; })
-            .onInput(function (v) { self._sound.volume(v); })
-            .build(d.createBranch("music"));
+        this._gravity = new Slider(d.createBranch("gravity"), {
+            label: "Gravity", min: 0.2, max: 2, step: 0.1, value: PlatformerGame.GRAVITY,
+            format: function (v) { return v.toFixed(1); },
+            onInput: function (v) { self._act({ kind: "GravityChanged", value: Math.round(v * 10) / 10 }); }
+        });
+        this._music = new Slider(d.createBranch("music"), {
+            label: "Music", min: 0, max: 100, step: 5, value: 40,
+            format: function (v) { return Math.round(v) + "%"; },
+            onInput: function (v) { self._sound.volume(v); }
+        });
         controls.appendChild(this._gravity.root);
         controls.appendChild(this._music.root);
         this._stage = new PlatformerStage(d.createBranch("stage"), { onAgain: function () { self.again(); self.activate(); } });

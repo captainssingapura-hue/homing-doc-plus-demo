@@ -22,20 +22,17 @@ class TabStripWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-panes · TabStrip";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Tab strip";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "The strip alone. Press a chip: selected, and lifted. Drag it along the row: it follows your hand, held where "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-panes · TabStrip" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Tab strip" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "The strip alone. Press a chip: selected, and lifted. Drag it along the row: it follows your hand, held where "
             + "you pressed it, and the others step aside as it passes; let go and it settles onto the nearest slot. Wander up or "
-            + "down as you like — the chip stays on its rail.";
-        el.appendChild(lede);
+            + "down as you like — the chip stays on its rail." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         // ── controls ──────────────────────────────────────────────────────
         var controls = branch.createElement("controls", "div");
@@ -51,6 +48,7 @@ class TabStripWidget {
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         el.appendChild(log);
         var lines = 0;
@@ -93,7 +91,8 @@ class TabStripWidget {
         draw();
         this._strip.select(order, order[0]);
 
-        controls.appendChild(new SliderBuilder().keyboard(kb, "tab-strip/size").label("the chips' size").axis().icon("size").onInput(function (v) { self._strip.size(v); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
+        controls.appendChild(new Slider(branch.createBranch("size"), { keyboard: kb, keyboardId: "tab-strip/size", label: "the chips' size", axis: true, icon: ICON.SIZE_ICON,
+            onInput: function (v) { self._strip.size(v); }, format: function (v) { return v.toFixed(1); } }).root);
         say("five chips, Inbox selected");
         this.root = el;
     }

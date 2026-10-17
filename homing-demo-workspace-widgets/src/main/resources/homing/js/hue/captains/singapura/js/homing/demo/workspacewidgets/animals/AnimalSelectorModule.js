@@ -32,6 +32,8 @@
 // =============================================================================
 
 const _selectorOwner = Object.freeze({ toString: () => "animalSelector" });
+/** Its title: the house's heading of a widget's title - the fourth level - on its own tag. */
+const _TITLE_HEADING = Object.freeze({ LEAF: "heading4" });
 var _selectors = 0;
 
 class AnimalSelector {
@@ -45,7 +47,9 @@ class AnimalSelector {
         css.addClass(root, an_root);
         root.setAttribute("role", "region");
         root.setAttribute("aria-label", "Animal");
-        AnimalSelector._el(d, "title", "h2", an_title, root).textContent = "Animal";
+        var heading = AnimalSelector._el(d, "title", "h4", an_title, root);
+        new Look(_TITLE_HEADING, ROLE.STANDALONE).wear(heading);
+        heading.textContent = "Animal";
         this._note = AnimalSelector._el(d, "note", "p", an_note, root);
         var list = AnimalSelector._el(d, "list", "div", an_list, root);
         list.setAttribute("role", "listbox");

@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.demo.conformance;
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
 import hue.captains.singapura.js.homing.core.Crate;
-import hue.captains.singapura.js.homing.demo.bare.BareAppCrate;
 import hue.captains.singapura.js.homing.demo.components.DemoComponentsCrate;
 import hue.captains.singapura.js.homing.demo.site.DemoSiteCrate;
 import hue.captains.singapura.js.homing.demo.taxonomy.TaxonomyWorkbenchCrate;
@@ -25,8 +24,7 @@ import java.util.stream.Collectors;
  * their own rule set for it ({@link GameLoopConformance}), and the platformer's play loop is held
  * to it. Strict, with no ledger: the demo was cut on the new stack and carries no debt.
  *
- * <p>The JS rules only. The CSS graph laws stay with each crate's own gate, beside the check that
- * its designs bind every word it wears - the bare app's design is its own, not the framework's.</p>
+ * <p>The JS rules only. The CSS graph laws stay with each crate's own gate.</p>
  */
 public final class DemoConformance {
 
@@ -40,8 +38,7 @@ public final class DemoConformance {
             DemoComponentsCrate.INSTANCE,
             GalleryCrate.INSTANCE,
             DemoSiteCrate.INSTANCE,
-            MermaidSiteCrate.INSTANCE,
-            BareAppCrate.INSTANCE);
+            MermaidSiteCrate.INSTANCE);
 
     /** The framework's policy, extended with the widgets' game-loop rule set (RFC 0044). */
     public static final JsRulePolicy POLICY = GameLoopConformance.POLICY;
@@ -55,4 +52,5 @@ public final class DemoConformance {
     public static FindingGrader grader() {
         return FindingGrader.STRICT;
     }
+
 }

@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.demo.components;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code ListMasterWidgetDemo}: the house's list master in action - settings listed by where they belong, chosen by a press or the keys. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 1,
+        reason = "It places elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ListMasterWidgetDemoModule() implements DomModule<ListMasterWidgetDemoModule> {
 
     public static final ListMasterWidgetDemoModule INSTANCE = new ListMasterWidgetDemoModule();

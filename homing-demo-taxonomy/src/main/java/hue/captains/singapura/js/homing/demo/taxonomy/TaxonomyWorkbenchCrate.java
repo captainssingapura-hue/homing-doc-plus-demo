@@ -4,14 +4,16 @@ import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.relgrid.RelGridCrate;
 import hue.captains.singapura.js.homing.relgrid.protocol.RelGridProtocolCrate;
+import hue.captains.singapura.js.homing.relgrid.house.RelGridHouseCrate;
+import hue.captains.singapura.js.homing.relgrid.cells.RelGridCellsCrate;
 import hue.captains.singapura.js.homing.reltree.RelTreeCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.demo.components.DemoComponentsCrate;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import hue.captains.singapura.js.homing.workspace.parties.WorkspacePartiesCrate;
 import hue.captains.singapura.js.homing.workspace.site.WorkspaceSiteCrate;
 import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceWidgetsCrate;
@@ -36,14 +38,14 @@ public final class TaxonomyWorkbenchCrate implements Crate {
         return List.of(
                 CoreJsCrate.INSTANCE,
                 ServerCrate.INSTANCE,
-                DesignCrate.INSTANCE,
                 // The tree: a relation tree; the parts: a relation grid; their questions and notices the protocol's.
                 RelTreeCrate.INSTANCE,
-                RelGridCrate.INSTANCE,
+                RelGridCrate.INSTANCE, RelGridHouseCrate.INSTANCE, RelGridCellsCrate.INSTANCE,
                 RelGridProtocolCrate.INSTANCE,
                 // The house's components in action: their demos and the parties they meet in, and what controls them.
                 DemoComponentsCrate.INSTANCE,
                 UiControlPanelCrate.INSTANCE,
+                UiLookCrate.INSTANCE,
                 UiElementsCrate.INSTANCE,
                 // The workspace: its widgets' contract, their parties, the grouped page.
                 WorkspaceWidgetsCrate.INSTANCE,
@@ -58,6 +60,8 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 // The taxonomy as data, written when served, and the index the widgets ask it through.
                 CrateEntry.of(TaxonomyDataModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(TaxonomyIndexModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                // What each house style and palette says of each component, derived from the answers when served.
+                CrateEntry.of(StyleCoverageModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 // The pick the widgets share: its type and its secretary.
                 CrateEntry.of(NodeSelectionModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(NodeSelectionSecretaryModule.INSTANCE, StandardJsModuleType.SECRETARY),
@@ -65,6 +69,8 @@ public final class TaxonomyWorkbenchCrate implements Crate {
                 CrateEntry.of(TaxonomyWidgetModule.INSTANCE),
                 CrateEntry.of(TaxonomyTreeModule.INSTANCE),
                 CrateEntry.of(PartsTableModule.INSTANCE),
+                CrateEntry.of(StyleCoverageMatrixModule.INSTANCE),
+                CrateEntry.of(StyleFamilyFileModule.INSTANCE),
                 CrateEntry.of(RoleTreeModule.INSTANCE),
                 CrateEntry.of(ComponentDemoPanelModule.INSTANCE),
                 CrateEntry.of(ComponentControlPanelModule.INSTANCE),

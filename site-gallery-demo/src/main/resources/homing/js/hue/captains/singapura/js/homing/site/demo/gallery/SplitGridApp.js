@@ -15,25 +15,32 @@ const _owner = Object.freeze({ toString: () => "splitGridPage" });
 /** What the page puts in a cell: its name and the five ways it can change the grid. A widget by the base's contract. */
 class CellWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         branch.activate(_owner);
         var root = branch.createElement("cell", "div");
         css.addClass(root, ga_grid_cell);
-        var name = branch.createElement("name", "div");
-        css.addClass(name, ga_kicker);
-        name.textContent = params.id;
-        root.appendChild(name);
+        var name = new Kicker(KickerFactory.create(branch, "name"), { text: params.id });
+        css.addClass(name.el, ga_kicker);
+        root.appendChild(name.el);
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
         var self = this;
         [["←", "left"], ["↑", "top"], ["→", "right"], ["↓", "bottom"]].forEach(function (s) {
-            var b = new ButtonBuilder().label(s[0]).plain().size(-1).onClick(function () { params.onSplit(params.id, s[1]); });
-            row.appendChild(b.build(branch.createElement("split-" + s[1], b.tag)).el);
+            row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "split-" + s[1]), { label: s[0], size: -1 }), function () { params.onSplit(params.id, s[1]); }).el);
         });
-        var x = new ButtonBuilder().label("×").colour("danger", 0.6).size(-1).onClick(function () { params.onRemove(params.id); });
-        row.appendChild(x.build(branch.createElement("remove", x.tag)).el);
+        row.appendChild(self._press(new DangerButton(DangerButtonFactory.create(branch, "remove"), { label: "×", extent: 0.6, size: -1 }), function () { params.onRemove(params.id); }).el);
         root.appendChild(row);
         this.root = root;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
     current(on) { css.toggleClass(this.root, ga_grid_cell_current, !!on); }
 }
 
@@ -47,19 +54,16 @@ class SplitGridWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-splitgrid";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Split grid";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A tree of rows and columns of cells, sharing their space by ratio. The grid arranges; what is in a cell is the "
-            + "page's — here, a card that asks the grid to split beside it or remove it. Drag the dividers. The last cell cannot go.";
-        el.appendChild(lede);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-splitgrid" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Split grid" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A tree of rows and columns of cells, sharing their space by ratio. The grid arranges; what is in a cell is the "
+            + "page's — here, a card that asks the grid to split beside it or remove it. The grid is resizable: drag the lines between the cells. The last cell cannot go." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var box = branch.createElement("box", "div");
         css.addClass(box, ga_pane_host);
@@ -74,10 +78,12 @@ class SplitGridWidget {
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         el.appendChild(log);
         var shown = branch.createElement("layout", "pre");
         css.addClass(shown, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(shown);   // the house's block of code: a console's lines
         el.appendChild(shown);
         var lines = 0;
         function say(line) {
@@ -89,7 +95,7 @@ class SplitGridWidget {
         function reflect() { self._mirror.reflect(self._grid.layout(), self._grid.box()); }
 
         this._grid = new SplitGrid(branch.createBranch("grid"), {
-            host: box, minCellPx: 90, layout: { kind: "cell", id: "a" }, seam: true,
+            host: box, minCellPx: 90, layout: { kind: "cell", id: "a" }, resizable: true,
             onEvent: function (ev) {
                 switch (ev.kind) {
                     case "TracksChanged": say("Tracks     " + (ev.path || "root") + "  " + ev.ratios.map(function (r) { return r.toFixed(2); }).join(" : ")); break;
@@ -109,21 +115,9 @@ class SplitGridWidget {
             say("Cursor     " + ev.cellId + "  by " + ev.by);
             self._widgets.forEach(function (w, id) { w.current(id === ev.cellId); });
         } });
-        var scale = new SliderBuilder().keyboard(kb, "split-grid/scale").label("the mirror's scale").icon("size").range(0.1, 0.5, 0.05).value(0.25).onInput(function (v) { self._mirror.scale(v); }).format(function (v) { return v.toFixed(2); }).build(branch.createBranch("scale")).root;
+        var scale = new Slider(branch.createBranch("scale"), { keyboard: kb, keyboardId: "split-grid/scale", label: "the mirror's scale", icon: ICON.SIZE_ICON, min: 0.1, max: 0.5, step: 0.05, value: 0.25,
+            onInput: function (v) { self._mirror.scale(v); }, format: function (v) { return v.toFixed(2); } }).root;
         mirrorRow.appendChild(scale);
-        // the seam: a splitter has no presence of its own, but a grid whose cells bring no edges needs the line -
-        // so it is the owner's to ask for, and here you can see it both ways
-        var seamOn = true;
-        var seamButton = new ButtonBuilder().label("the seam at rest").size(-1).onClick(function () {
-            seamOn = !seamOn;
-            grid.seam(seamOn);
-            seamButton.colour(seamOn ? "primary" : "plain");
-            say("Seam       the splitters " + (seamOn ? "keep the design's line at rest" : "have no presence at rest"));
-        });
-        var seamEl = branch.createElement("seam", seamButton.tag);
-        seamButton = seamButton.build(seamEl);
-        mirrorRow.appendChild(seamEl);
-
         var hint = branch.createElement("hint", "span");
         css.addClass(hint, ga_control_readout);
         hint.textContent = "click the mirror, then the arrows move the cursor";

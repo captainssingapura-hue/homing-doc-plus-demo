@@ -1,8 +1,11 @@
 package hue.captains.singapura.js.homing.demo.taxonomy;
 
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -11,7 +14,8 @@ import hue.captains.singapura.js.homing.demo.components.ComponentControlModule;
 import hue.captains.singapura.js.homing.demo.components.ComponentControlLogModule;
 import hue.captains.singapura.js.homing.ui.controlpanel.ControlPanelModule;
 import hue.captains.singapura.js.homing.ui.controlpanel.ControlsModule;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 
@@ -19,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code ComponentControlPanel}: what the picked component is controlled by - its control type found, its panel mounted, what is set kept by the party. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 2,
+        reason = "It makes elements by a companion and places elements - its back-to-rest button, on the line of the type: it waits for the designed containers and the content components to draw only components; the panel itself is shown in a slot.")
 public record ComponentControlPanelModule() implements DomModule<ComponentControlPanelModule> {
 
     public static final ComponentControlPanelModule INSTANCE = new ComponentControlPanelModule();
@@ -35,10 +41,12 @@ public record ComponentControlPanelModule() implements DomModule<ComponentContro
     @Override
     public ImportsFor<ComponentControlPanelModule> imports() {
         return ImportsFor.<ComponentControlPanelModule>builder()
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyWidgetModule.TaxonomyWidget()), TaxonomyWidgetModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ControlsModule.Controls()), ControlsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ControlPanelModule.ControlPanel()), ControlPanelModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ComponentControlModule.COMPONENT_CONTROL()), ComponentControlModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ComponentControlLogModule.COMPONENT_CONTROL_LOG()), ComponentControlLogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TaxonomyStyles.tx_title(), new TaxonomyStyles.tx_hint(), new TaxonomyStyles.tx_line(),

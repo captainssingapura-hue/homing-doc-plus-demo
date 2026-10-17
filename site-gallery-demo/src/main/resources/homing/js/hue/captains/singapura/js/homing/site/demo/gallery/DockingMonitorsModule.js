@@ -45,14 +45,22 @@ class MonitorTab {
     activate() { Keys.claim(this.focus); }
     granted() { if (this.refresh) this.refresh(); }
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
-    dispose() { _leave(this); if (this._it && this._it.dispose) this._it.dispose(); }
+    dispose() { _leave(this); if (this._slot) this._slot.disposeAll(); }
+
+    /** What it mounts, a widget: shown in a slot over its root. */
+    _show(Widget) {
+        var shown = this.branch.createBranch("monitor");
+        shown.activate(_monitorOwner);
+        this._slot = new WidgetSlot({ branch: shown, host: this.root });
+        return this._slot.show("monitor", Widget, {});
+    }
 }
 
 /** The logical focus tree, and who holds the keys. */
 class FocusTab extends MonitorTab {
     constructor(branch, params) {
         super(branch, params);
-        this._it = new FocusMonitor(branch.createBranch("monitor"), { host: this.root });
+        this._show(FocusMonitor);
     }
 }
 
@@ -60,7 +68,7 @@ class FocusTab extends MonitorTab {
 class StewardTab extends MonitorTab {
     constructor(branch, params) {
         super(branch, params);
-        this._it = new StewardMonitor(branch.createBranch("monitor"), { host: this.root });
+        this._show(StewardMonitor);
     }
 }
 
@@ -146,6 +154,7 @@ class EventsTab extends MonitorTab {
         super(branch, params);
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         this.root.appendChild(log);
         this._log = log;

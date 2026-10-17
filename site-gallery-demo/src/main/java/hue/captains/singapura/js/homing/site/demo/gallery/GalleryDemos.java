@@ -69,7 +69,7 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
 
     /** The sub-catalogues, in the order the navigator shows them. */
     public static final List<Group> GROUPS = List.of(
-            new Group("controls", "Controls", "Small components through their builders: buttons, cards, sliders — the native world, each with its own keys."),
+            new Group("controls", "Controls", "Small components, each made with its properties: buttons, cards, sliders — the native world, each with its own keys."),
             new Group("relations", "Relations", "The relation grid and the relation tree, from their own repo, over one book store."),
             new Group("layout", "Layout", "Cells, panes, docks and the desk: where a widget sits, and how it moves."),
             new Group("dialogs", "Dialogs & menus", "What takes the screen for a moment: a dialog, the preferences, a context menu."),
@@ -96,8 +96,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "steward and follows it, so a theme picked here is worn by this shell as it is picked. The same view is "
                     + "behind the bar's Preferences button.",
                     PreferencesApp.INSTANCE, "PreferencesWidget", Map.of()),
-            demo("buttons", "controls", "Buttons", "The button, through its builder.",
-                    "Every colour word the builder knows — plain, primary, secondary, danger, warning, success — under one extent "
+            demo("buttons", "controls", "Buttons", "The button, a class for each of its six leaves.",
+                    "Every button leaf — plain, primary, secondary, danger, warning, success — under one extent "
                     + "slider: at 1 the word as the design binds it, at 0 the design's neutral, at −1 the meaning turned the other way. "
                     + "A colour word is a semantic surface complete: the surface, the ink on it and the edge move together, each along "
                     + "the anchors its design gives it. The live one is a danger button whose extent follows the rows an action would "
@@ -105,7 +105,7 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "exponential, and every length the design gives a button — its inset, gap, least width and type — grows by the "
                     + "ratio the design gives that length; the five sit at −1, −½, 0, ½ and 1, and the slider moves the rest.",
                     ButtonsApp.INSTANCE, "ButtonsWidget", Map.of()),
-            demo("cards", "controls", "Cards", "The card, through its builder.",
+            demo("cards", "controls", "Cards", "The card, plain or clickable, holding a summary view.",
                     "A card is Container.Card.Base to the design: a raised box whose measure is its own. The design gives it its "
                     + "measure, grown by its size, and its aspect — square at 0, the design's widest at 1, its tallest at −1 — and what is "
                     + "inside fits it — the head and the foot are fixed, the body "
@@ -127,8 +127,8 @@ public record GalleryDemos() implements EsModule<GalleryDemos>, SelfContent {
                     + "on one attribute the design answers as a state — and whether it is MARKED as the current one, which is colour "
                     + "and moves nothing. What either stands for is the app's, in the app's own code; this page sets them because it "
                     + "is a page about registers, and the fourth sheet is on the two controls. A design answers the registers in "
-                    + "whatever plane it honestly uses for depth: flat-morphism casts a hard offset with no blur for the lifted one "
-                    + "and takes a darker face for the sunk one — two registers, two planes — neumorphism moulds the clay out or "
+                    + "whatever plane it honestly uses for depth: neo-brutalism casts a hard offset with no blur, out for the lifted one "
+                    + "and in for the sunk one, neumorphism moulds the clay out or "
                     + "presses it in, and sketchy declines both outright, because ink casts no shadow and a design should not express "
                     + "depth in a plane it does not otherwise use. Beneath them a sheet lies on a sheet: the same word, a different "
                     + "colour beneath it, and nothing had to be told which.",

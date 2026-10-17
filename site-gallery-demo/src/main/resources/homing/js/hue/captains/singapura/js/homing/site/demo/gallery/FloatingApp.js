@@ -12,12 +12,15 @@ const _owner = Object.freeze({ toString: () => "floatingPage" });
 class CardWidget {
     constructor(branch, params) {
         branch.activate(_owner);
-        this.root = new CardBuilder().title(params.title).badge(params.badge).text(params.text).aspect(0.6).build(branch.createBranch("card")).root;
+        var card = new PlainCard(branch.elementMaker("card"), { aspect: 0.6 });
+        card.el.appendChild(new SummaryView(branch.createBranch("summary"), { title: params.title, tag: params.badge, text: params.text }).root);
+        this.root = card.el;
     }
 }
 
 class CounterWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         this._value = params.start || 0;
         branch.activate(_owner);
@@ -25,24 +28,31 @@ class CounterWidget {
         css.addClass(root, ga_buttons);
         var count = branch.createElement("count", "div");
         css.addClass(count, ga_count);
-        var b = new ButtonBuilder().label("Count").onClick(function () { self._value++; draw(); });
-        var btn = b.build(branch.createElement("btn", b.tag));
+        var btn = self._press(new PrimaryButton(PrimaryButtonFactory.create(branch, "btn"), { label: "Count" }), function () { self._value++; draw(); });
         function draw() { count.textContent = String(self._value); }
         draw();
         root.appendChild(count);
         root.appendChild(btn.el);
         this.root = root;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
     setActive(on) { this.root.setAttribute("data-active", on ? "true" : "false"); }
 }
 
 class NoteWidget {
     constructor(branch, params) {
         branch.activate(_owner);
-        var root = branch.createElement("note", "p");
-        css.addClass(root, ga_lede);
-        root.textContent = params.text;
-        this.root = root;
+        var root = new Lede(LedeFactory.create(branch, "note"), { text: params.text });
+        css.addClass(root.el, ga_lede);
+        this.root = root.el;
     }
 }
 
@@ -54,6 +64,7 @@ var _NOTE = "A floating pane is Container.Pane.Floating: a container's corner, r
 
 class FloatingWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
@@ -61,26 +72,23 @@ class FloatingWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-floating";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Floating panes";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "A desk, and the panes that float on it: open a few, drag them by the head, size them by the corner, "
-            + "press one to raise it, close with the cross or Escape. Every mutation the desk reports is a line on the log.";
-        el.appendChild(lede);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-floating" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Floating panes" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "A desk, and the panes that float on it: open a few, drag them by the head, size them by the corner, "
+            + "press one to raise it, close with the cross or Escape. Every mutation the desk reports is a line on the log." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
         var n = 0;
         function opener(label, spec) {
-            var b = new ButtonBuilder().label(label).plain().onClick(function () { n++; self._desk.open(spec(n)); });
-            row.appendChild(b.build(branch.createElement("open-" + label.replace(/\W+/g, "-"), b.tag)).el);
+            row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "open-" + label.replace(/\W+/g, "-")), {
+                label: label }), function () { n++; self._desk.open(spec(n)); }).el);
         }
         opener("Open a card", function (i) { return { title: "Card " + i, widget: CardWidget, params: { title: "A card in a pane", badge: "CARD", text: "The card keeps its own measure inside the pane's body; the pane bounds it." } }; });
         opener("Open a counter", function (i) { return { title: "Counter " + i, w: 240, h: 180, widget: CounterWidget, params: { start: i * 10 } }; });
@@ -94,6 +102,7 @@ class FloatingWidget {
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         el.appendChild(log);
         var lines = 0;
@@ -118,6 +127,15 @@ class FloatingWidget {
 
         this.root = el;
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
 
     dispose() { this._desk.dispose(); }
 }

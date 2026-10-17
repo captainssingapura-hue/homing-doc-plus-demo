@@ -1,6 +1,12 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
+import hue.captains.singapura.js.homing.ui.elements.LedeModule;
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
@@ -9,10 +15,12 @@ import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
-import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.FocusMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.StewardMonitorModule;
 
 import java.util.List;
 
@@ -39,15 +47,26 @@ public record ViewerFocusApp() implements AppModule<AppModule._None, ViewerFocus
     @Override
     public ImportsFor<ViewerFocusApp> imports() {
         return ImportsFor.<ViewerFocusApp>builder()
+                // its status and its log, the house's block of code
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                // its words the house's texts
+                .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading1Module.Heading1(), new Heading1Module.Heading1Factory()), Heading1Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
+                // case 7's toggle: the house's plain button, told through a handler
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusSceneModule.Leaf(), new FocusSceneModule.Panel()), FocusSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ViewerSceneModule.SvgViewer(), new ViewerSceneModule.EscapeLayer()), ViewerSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ViewerCasesModule.ViewerCase(), new ViewerCasesModule.CaseBoard()), ViewerCasesModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ViewerDrawings.focusTree(), new ViewerDrawings.specimen()), ViewerDrawings.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),

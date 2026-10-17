@@ -1,5 +1,9 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
+import hue.captains.singapura.js.homing.ui.elements.LedeModule;
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -11,11 +15,12 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.ui.docking.DeskModule;
-import hue.captains.singapura.js.homing.ui.docking.DockGridModule;
+import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuStewardModule;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.elements.EdgeStripModule;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 
 import java.util.List;
@@ -40,6 +45,12 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
     @Override
     public ImportsFor<DockingApp> imports() {
         return ImportsFor.<DockingApp>builder()
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
+                // its words the house's texts
+                .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading1Module.Heading1(), new Heading1Module.Heading1Factory()), Heading1Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new DockingSceneModule.PictureTab(),
@@ -48,14 +59,14 @@ public record DockingApp() implements AppModule<AppModule._None, DockingApp> {
                 .add(new ModuleImports<>(List.of(new DockingMonitorsModule.Instruments()), DockingMonitorsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new GalleryRelations.BooksStore()), GalleryRelations.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DockGridModule.DockGrid()), DockGridModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ContextMenuStewardModule.ContextMenuSteward()), ContextMenuStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new GalleryMenus.MENUS()), GalleryMenus.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new EdgeStripModule.EdgeStripBuilder()), EdgeStripModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new EdgeStripModule.EdgeStrip()), EdgeStripModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DockingTabsModule.DockingTabs()), DockingTabsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

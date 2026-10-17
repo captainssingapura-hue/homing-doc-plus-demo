@@ -69,11 +69,6 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-split</artifactId>
-            <version>${homing.components.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-splitgrid</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
@@ -99,7 +94,13 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-focus</artifactId>
+            <artifactId>homing-ui-monitors</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <!-- The standard site's chrome, whose leaves the page around the demos shows: declared there. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa-standard</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
 
@@ -157,7 +158,7 @@
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-rules</artifactId>
             <version>${homing.core.version}</version>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

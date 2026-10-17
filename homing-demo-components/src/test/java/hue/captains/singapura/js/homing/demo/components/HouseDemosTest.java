@@ -1,8 +1,13 @@
 package hue.captains.singapura.js.homing.demo.components;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
+import hue.captains.singapura.js.homing.core.EsModule;
+import hue.captains.singapura.js.homing.core.ModuleNameResolver;
+import hue.captains.singapura.js.homing.core.util.SimplePrefixResolver;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -26,29 +31,41 @@ class HouseDemosTest {
         placed.addAll(HOUSE.pending());
         placed.addAll(HOUSE.unrealized());
         assertEquals(placed.size(), new HashSet<>(placed).size(), "a leaf placed twice");
-        assertEquals(Set.copyOf(HouseTaxonomy.INSTANCE.read().components()), Set.copyOf(placed), "every leaf of the house, and nothing else");
+        var leaves = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).components().stream().filter(c -> !(c instanceof VirtualComponent<?>)).toList();   // a design draws a virtual leaf
+        assertEquals(Set.copyOf(leaves), Set.copyOf(placed), "every leaf of the house but a virtual one, and nothing else");
     }
 
     @Test
     void everyRealizedLeaf_shownInAction_byADemoOrByThePageAroundIt() {
-        assertEquals(28, HOUSE.demos().size(), "twelve elements; eight overlays, menus and splits; eight the page around does not show");
-        assertEquals(16, HOUSE.aroundIt().size(), "the workspace's six, the chrome's two, the preferences' eight");
+        assertEquals(43, HOUSE.demos().size(), "thirty elements - fifteen of them texts, a table cell's words among them (D42), a heading for each level among them, one a link; seven overlays, menus and splits - the split pane retired; six the page around does not show");
+        assertEquals(51, HOUSE.aroundIt().size(), "the twenty icons, each a part only, seen in what holds it (D52); a panel's bar, in the panel's demo, an edge strip's lip, a slider group's rack and the clickable card under the summary view, in theirs; the bar of tabs' tail and the brand's mark; the workspace's seven - a floating pane's title bar among them - the dock grid retired, its regions a split grid's cells and the docks residing in them - the control panel, the chrome's eight - its ground, its bar, the brand and the trail among them - the preferences' nine");
         assertEquals(List.of(), HOUSE.pending(), "none still to come");
-        assertEquals(41, HOUSE.unrealized().size());
+        assertEquals(41, HOUSE.unrealized().size(), "the parts nothing realizes - the slider's and the toggle's knobs and grooves apart, the slider's rail - and the new-tab control and its picture, retired for now - the brand and the trail realized now, on the site's bar; the browser's own text box and checkbox, realized by their owners on native ones; a document's code, quote, table, badges and its strong and muted words, realized by the doc's widgets on its own elements");
         assertEquals(List.of("ButtonDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseControls.DangerButton.INSTANCE)
-                .map(Demo::className).toList(), "the six buttons are one button");
+                .map(Demo::className).toList(), "the nine buttons are one button");
+        assertEquals(List.of("TextDemo"), HOUSE.demos().stream().filter(d -> d.leaf() == HouseText.Pill.INSTANCE)
+                .map(Demo::className).toList(), "the nine texts are one text");
     }
 
     @Test
     void theRegistry_generatedFromTheDeclaration() {
-        String js = String.join("\n", HouseDemosModule.INSTANCE.selfContent(null));
-        assertTrue(js.contains("\"danger-button\": ButtonDemo"), js);
-        assertTrue(js.contains("\"summary-card\": SummaryCardDemo"), js);
-        assertTrue(js.contains("\"dock-grid\": \"the workspace itself"), js);
-        assertTrue(js.contains("\"dialog\": DialogDemo"), js);
-        assertTrue(js.contains("\"add-tab\": AddTabDemo"), js);
+        String js = String.join("\n", HouseDemosModule.INSTANCE.selfContent(RESOLVER));
+        assertTrue(js.contains(where("danger-button", ButtonDemoModule.INSTANCE, "ButtonDemo")), js);
+        assertTrue(js.contains(where("summary-view", SummaryViewDemoModule.INSTANCE, "SummaryViewDemo")), js);
+        assertTrue(js.contains(where("dialog", DialogDemoModule.INSTANCE, "DialogDemo")), js);
+        assertTrue(js.contains(where("tab-opener", TabOpenerDemoModule.INSTANCE, "TabOpenerDemo")), js);
+        assertTrue(js.contains(where("heading1", TextDemoModule.INSTANCE, "TextDemo")), "the fourteen texts, one module: " + js);
+        assertTrue(js.contains("\"multi-tab-pane\": \"each region of the workspace"), js);
         assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([]);"), js);
-        assertTrue(js.contains("\"heading\""), "an unrealized leaf: " + js);
-        assertEquals(23, HouseDemosModule.INSTANCE.imports().getAllImports().size(), "each demo's module imported once, whatever it shows");
+        assertTrue(js.contains("\"lamp\""), "an unrealized leaf: " + js);
+        assertEquals(0, HouseDemosModule.INSTANCE.imports().getAllImports().size(),
+                "no demo imported: a page loads each when a leaf it shows is first picked");
+    }
+
+    private static final ModuleNameResolver RESOLVER = new SimplePrefixResolver("/m/");
+
+    /** A leaf's entry as the page has it: the demo module's address, and the class it exports. */
+    private static String where(String leaf, EsModule<?> module, String export) {
+        return "\"" + leaf + "\": Object.freeze({ module: \"" + RESOLVER.resolve(module).basePath() + "\", export: \"" + export + "\" })";
     }
 }

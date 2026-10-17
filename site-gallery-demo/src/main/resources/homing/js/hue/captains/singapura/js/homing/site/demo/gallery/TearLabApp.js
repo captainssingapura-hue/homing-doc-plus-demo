@@ -16,13 +16,14 @@ var _SAYS = { rail: "on the rail: along the row only", flight: "torn: the window
 
 class TearLabWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         branch.activate(_owner);
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
         var el = this.root = branch.createElement("root", "div");
-        [["kicker", "div", ga_kicker, "homing-ui-panes · TabTear"], ["title", "h1", ga_title, "Tearing a tab off"],
-         ["lede", "p", ga_lede, "Drag a chip. The ring is its centre, and the lines measure the ring, not your hand. While the "
+        [[Kicker, KickerFactory, "kicker", ga_kicker, "homing-ui-panes · TabTear"], [Heading1, Heading1Factory, "title", ga_title, "Tearing a tab off"],
+         [Lede, LedeFactory, "lede", ga_lede, "Drag a chip. The ring is its centre, and the lines measure the ring, not your hand. While the "
             + "ring is between the dashed lines the chip stays on its rail, sliding along the row however far your hand wanders "
             + "sideways. Past a dashed line it tears: the chip is the window, made where you crossed — the breach — and it follows "
             + "your hand from there. Turn the flight on for the other model: the faded window waits at the breach while your hand "
@@ -32,10 +33,9 @@ class TearLabWidget {
             + "hand. The gap between the two pairs of lines is what keeps a chip on the edge from tearing and landing by turns. "
             + "Let go anywhere else and it stays; dragged again, it is a window from the start, captured the same way. The dots "
             + "are your hand's path, in the phase's colour; B is the breach, S the settle, C the capture."]].forEach(function (d) {
-            var e = branch.createElement(d[0], d[1]);
-            css.addClass(e, d[2]);
-            e.textContent = d[3];
-            el.appendChild(e);
+            var text = new d[0](d[1].create(branch, d[2]), { text: d[4] });   // the house's text, placed by the page
+            css.addClass(text.el, d[3]);
+            el.appendChild(text.el);
         });
 
         var tear = this._tear = new TabTear();
@@ -43,10 +43,11 @@ class TearLabWidget {
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
         function slider(id, label, min, max, step, value, unit, to) {
-            controls.appendChild(new SliderBuilder().keyboard(kb, "tear-lab/" + id).label(label).range(min, max, step).value(value).icon(null).labelWidth("7em")
-                .format(function (v) { return (step < 1 ? v.toFixed(2) : v) + unit; })
-                .onInput(function (v) { var o = {}; o[id] = to ? to(v) : v; tear.set(o); if (id === "escape" || id === "capture") self._stage.edges(); })
-                .build(branch.createBranch(id)).root);
+            controls.appendChild(new Slider(branch.createBranch(id), {
+                keyboard: kb, keyboardId: "tear-lab/" + id, label: label, min: min, max: max, step: step, value: value, icon: null, labelWidth: "7em",
+                format: function (v) { return (step < 1 ? v.toFixed(2) : v) + unit; },
+                onInput: function (v) { var o = {}; o[id] = to ? to(v) : v; tear.set(o); if (id === "escape" || id === "capture") self._stage.edges(); }
+            }).root);
         }
         var d = TabTear.DEFAULTS;
         slider("escape", "the escape", 0, 80, 2, d.escape, " px");
@@ -62,13 +63,14 @@ class TearLabWidget {
         controls.appendChild(this._pick(branch, "measure", "the measure", "what counts as a change",
             [["speed", "the speed, either way"], ["slowdown", "the speed, falling only"], ["velocity", "the vector: a turn counts"]], tear.options().measure,
             function (v) { tear.set({ measure: v }); }));
-        var reset = new ButtonBuilder().label("Put them back").colour("secondary").onClick(function () { self._stage.reset(); say("Reset     every chip back on the strip"); });
-        controls.appendChild(reset.build(branch.createElement("reset", reset.tag)).el);
+        controls.appendChild(self._press(new SecondaryButton(SecondaryButtonFactory.create(branch, "reset"), {
+            label: "Put them back" }), function () { self._stage.reset(); say("Reset     every chip back on the strip"); }).el);
 
         var readout = branch.createElement("readout", "div");
         css.addClass(readout, tl_readout);
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         var lines = 0;
         function say(line) { lines++; log.textContent += (lines > 1 ? "\n" : "") + lines + "  " + line; log.scrollTop = log.scrollHeight; }
@@ -89,6 +91,15 @@ class TearLabWidget {
         say("five chips on the strip; the escape " + d.escape + " px either side of it, the capture " + d.capture);
     }
 
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
+
     /** A choice among a few, labelled: the flight, and what counts as a change in it. */
     _pick(branch, id, text, aria, choices, value, onPick) {
         var row = branch.createElement(id, "div");
@@ -98,7 +109,7 @@ class TearLabWidget {
         label.textContent = text;
         row.appendChild(label);
         var pick = branch.createElement(id + "-pick", "select");
-        css.addClass(pick, mtp_new_pick);
+        new Look(Object.freeze({ LEAF: "select" }), ROLE.STANDALONE).wear(pick);   // the house's select, on the lab's own list
         pick.setAttribute("aria-label", aria);
         choices.forEach(function (m) {
             var opt = branch.createElement(id + "-" + m[0], "option");

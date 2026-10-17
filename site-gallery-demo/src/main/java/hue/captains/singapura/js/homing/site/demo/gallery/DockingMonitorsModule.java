@@ -1,6 +1,9 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
@@ -12,8 +15,8 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
-import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.FocusMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.StewardMonitorModule;
 import hue.captains.singapura.js.homing.ui.docking.DeskModule;
 import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
 
@@ -61,9 +64,13 @@ public record DockingMonitorsModule() implements DomModule<DockingMonitorsModule
     @Override
     public ImportsFor<DockingMonitorsModule> imports() {
         return ImportsFor.<DockingMonitorsModule>builder()
+                // its status and its log, the house's block of code
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))

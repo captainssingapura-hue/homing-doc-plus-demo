@@ -8,11 +8,16 @@
 //   (the rest is a ComponentDemo's)
 // =============================================================================
 
+const _stewardMonitorDemoOwner = Object.freeze({ toString: () => "stewardMonitorDemo" });
+
 class StewardMonitorDemo extends ComponentDemo {
     constructor(container, params) {
         super(container, "steward-monitor-demo", params);
         var host = this.el("host", "div", dm_row, this.stage);
-        this._monitor = new StewardMonitor(this.branch.createBranch("monitor"), { host: host });
+        var shown = this.branch.createBranch("monitor");
+        shown.activate(_stewardMonitorDemoOwner);
+        this._slot = new WidgetSlot({ branch: shown, host: host });
+        this._monitor = this._slot.show("steward", StewardMonitor, {});
         this.intro = "this page's keys, as one lamp: press around the page and it changes; ask what it says from the controls";
     }
 
@@ -22,5 +27,5 @@ class StewardMonitorDemo extends ComponentDemo {
         return "the lamp: " + this._monitor.lamp() + (broken.length ? " - broken: " + broken[0] : " - every invariant holds");
     }
 
-    disposed() { try { this._monitor.dispose(); } catch (e) {} }
+    disposed() { try { this._slot.disposeAll(); } catch (e) {} }
 }

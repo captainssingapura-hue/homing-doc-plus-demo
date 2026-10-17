@@ -27,7 +27,11 @@ function _leave(w) { w._off(); if (w.focus.in) w.focus.leave(); }
 // Three kinds of tab widget, each a class by the base's contract and the law.
 class CardTab {
     constructor(branch, params) {
-        this.root = new CardBuilder().title(params.title).badge(params.badge).text(params.text).build(branch.createBranch("card")).root;
+        var own = branch.createBranch("card");
+        own.activate(_owner);
+        var card = new PlainCard(own.elementMaker("frame"), {});
+        card.el.appendChild(new SummaryView(own.createBranch("summary"), { title: params.title, tag: params.badge, text: params.text }).root);
+        this.root = card.el;
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }
@@ -38,6 +42,7 @@ class CardTab {
 
 class CounterTab {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         this._value = params.start || 0;
         var root = branch.createElement("counter", "div");
@@ -46,8 +51,8 @@ class CounterTab {
         this._count.setAttribute("aria-live", "polite");
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
-        row.appendChild(new Button(branch.createElement("dec", Button.TAG), { label: "−", kind: "plain", onClick: function () { self._value--; self._draw(); } }).el);
-        this._inc = new Button(branch.createElement("inc", Button.TAG), { label: "+", onClick: function () { self._value++; self._draw(); } });
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "dec"), { label: "−" }), function () { self._value--; self._draw(); }).el);
+        this._inc = self._press(new PrimaryButton(PrimaryButtonFactory.create(branch, "inc"), { label: "+" }), function () { self._value++; self._draw(); });
         row.appendChild(this._inc.el);
         this._draw();
         root.appendChild(this._count);
@@ -55,6 +60,15 @@ class CounterTab {
         this.root = root;
         _join(this, branch, params);
     }
+
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
     _draw() { this._count.textContent = String(this._value); }
     activate() { Keys.claim(this.focus); }
     /** While the counter holds: ↑ and ↓ count, Escape yields to the pane. */
@@ -70,10 +84,9 @@ class CounterTab {
 
 class NoteTab {
     constructor(branch, params) {
-        var root = branch.createElement("note", "p");
-        css.addClass(root, ga_lede);
-        root.textContent = params.text;
-        this.root = root;
+        var root = new Lede(LedeFactory.create(branch, "note"), { text: params.text });
+        css.addClass(root.el, ga_lede);
+        this.root = root.el;
         _join(this, branch, params);
     }
     activate() { Keys.claim(this.focus); }
@@ -97,6 +110,8 @@ var NOTES = [
 
 class PanesWidget {
     constructor(branch, params) {
+        var self = this;
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         branch.activate(_owner);
         var dialogs = 0;   // each picker is a branch of its own
         var el = branch.createElement("root", "div");
@@ -104,25 +119,22 @@ class PanesWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-panes";
-        el.appendChild(kicker);
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-panes" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
 
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Panes";
-        el.appendChild(title);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Panes" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
 
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "One pane of tabs - a desk with one host. Each tab holds a widget by the base's contract, made on a branch "
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "One pane of tabs - a desk with one host. Each tab holds a widget by the base's contract, made on a branch "
             + "of the tab's own and a member of the dock's focus branch — the law; the plus asks the page, the page asks you. Switch by "
             + "click, reorder by drag, close on the cross; or press a chip and the pane holds the keys: ← → walk the tabs, Home and "
             + "End the ends, Shift+← → move the active tab along the rail, Shift+↓ asks to detach, Enter enters the widget — the "
             + "counter then counts ↑ ↓ — and Escape comes back up to the pane, and from the pane to no one. Every event the pane "
-            + "reports is written below it, as the data it is; the tree and the lamp beside it show who holds.";
-        el.appendChild(lede);
+            + "reports is written below it, as the data it is; the tree and the lamp beside it show who holds." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var row0 = branch.createElement("row0", "div");
         css.addClass(row0, ga_focus);
@@ -136,6 +148,7 @@ class PanesWidget {
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         el.appendChild(log);
         var lines = 0;
@@ -147,6 +160,7 @@ class PanesWidget {
 
         var status = branch.createElement("status", "div");
         css.addClass(status, ga_status);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(status);   // the house's block of code: a console's lines
         el.appendChild(status);
 
         var seq = 0;
@@ -197,10 +211,9 @@ class PanesWidget {
                 title: "Add a tab", keyboard: kb, keyboardId: "panes/picker",
                 size: { w: 420, h: 220 },
                 content: function (b, body) {
-                    var p = b.createElement("text", "p");
-                    css.addClass(p, ga_lede);
-                    p.textContent = "Which widget goes in the new tab?";
-                    body.appendChild(p);
+                    var p = new Lede(LedeFactory.create(b, "text"), { text: "Which widget goes in the new tab?" });
+                    css.addClass(p.el, ga_lede);
+                    body.appendChild(p.el);
                     return {};
                 },
                 actions: KINDS.map(function (kind, i) {
@@ -218,27 +231,42 @@ class PanesWidget {
         add(KINDS[2], { title: "About", text: NOTES[0] + " " + NOTES[1] }, { pinned: true });
         add(KINDS[0], { title: "Card 2", badge: "TAB", text: NOTES[2] });
         add(KINDS[1], { start: 7 });
-        this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
-        this._steward = new StewardMonitor(branch.createBranch("steward"), { host: monitorBox });
+        // the tree and the lamp under it, each a widget in a slot of its own over the box
+        this._monitors = [["monitor", FocusMonitor], ["steward", StewardMonitor]].map(function (m) {
+            var shown = branch.createBranch(m[0]);
+            shown.activate(_owner);
+            var slot = new WidgetSlot({ branch: shown, host: monitorBox });
+            slot.show(m[0], m[1], {});
+            return slot;
+        });
 
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_buttons);
         el.appendChild(row);
-        row.appendChild(new Button(branch.createElement("moveFirst", Button.TAG), { label: "Move the active tab first", kind: "plain", onClick: function () {
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "moveFirst"), { label: "Move the active tab first" }), function () {
             var id = pane.activeTab(); if (id) pane.moveTab(id, 0);
-        } }).el);
-        row.appendChild(new Button(branch.createElement("moveLast", Button.TAG), { label: "Move it last", kind: "plain", onClick: function () {
+        }).el);
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "moveLast"), { label: "Move it last" }), function () {
             var id = pane.activeTab(); if (id) pane.moveTab(id, pane.count() - 1);
-        } }).el);
-        row.appendChild(new Button(branch.createElement("closeAll", Button.TAG), { label: "Close every tab", kind: "plain", onClick: function () {
+        }).el);
+        row.appendChild(self._press(new PlainButton(PlainButtonFactory.create(branch, "closeAll"), { label: "Close every tab" }), function () {
             pane.getState().tabs.forEach(function (t) { if (!t.pinned) pane.removeTab(t.id); });
-        } }).el);
+        }).el);
         this.root = el;
         this._pane = pane;
         this._desk = desk;
     }
 
-    dispose() { this._steward.dispose(); this._monitor.dispose(); this._desk.dispose(); this._pane.dispose(); }   // the desk first: a pane is disposed only empty
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
+
+    dispose() { this._monitors.forEach(function (s) { s.disposeAll(); }); this._desk.dispose(); this._pane.dispose(); }   // the desk first: a pane is disposed only empty
 }
 
 function appMain(el, params) {

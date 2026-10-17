@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.ui.elements.LedeModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -7,9 +10,11 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.elements.SecondaryButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.SliderModule;
-import hue.captains.singapura.js.homing.ui.panes.PaneStyles;
 import hue.captains.singapura.js.homing.ui.panes.TabTearModule;
 
 import java.util.List;
@@ -36,12 +41,16 @@ public record TearLabApp() implements AppModule<AppModule._None, TearLabApp> {
     @Override
     public ImportsFor<TearLabApp> imports() {
         return ImportsFor.<TearLabApp>builder()
+                // its words the house's texts
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading1Module.Heading1(), new Heading1Module.Heading1Factory()), Heading1Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabTearModule.TabTear()), TabTearModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderModule.SliderBuilder()), SliderModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SecondaryButtonModule.SecondaryButton(), new SecondaryButtonModule.SecondaryButtonFactory()), SecondaryButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TearLabSceneModule.TearStage(), new TearLabSceneModule.TearChart()), TearLabSceneModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_new_pick()), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TearLabStyles.tl_readout()), TearLabStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryStyles.ga_kicker(),
@@ -52,6 +61,9 @@ public record TearLabApp() implements AppModule<AppModule._None, TearLabApp> {
                         new GalleryStyles.ga_control(),
                         new GalleryStyles.ga_control_label()
                 ), GalleryStyles.INSTANCE))
+                // its lists in the house's select look
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();
     }
 

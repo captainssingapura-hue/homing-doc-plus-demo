@@ -1,6 +1,12 @@
 package hue.captains.singapura.js.homing.site.demo.gallery;
 
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading1Module;
+import hue.captains.singapura.js.homing.ui.elements.LedeModule;
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -14,9 +20,10 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParty;
 import hue.captains.singapura.js.homing.relgrid.RelGridModule;
+import hue.captains.singapura.js.homing.relgrid.house.HouseGridModule;
 import hue.captains.singapura.js.homing.reltree.RelTreeModule;
-import hue.captains.singapura.js.homing.ui.focus.FocusMonitorModule;
-import hue.captains.singapura.js.homing.ui.focus.StewardMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.FocusMonitorModule;
+import hue.captains.singapura.js.homing.ui.monitors.StewardMonitorModule;
 
 import java.util.List;
 
@@ -47,13 +54,22 @@ public record RelFocusApp() implements AppModule<AppModule._None, RelFocusApp> {
     @Override
     public ImportsFor<RelFocusApp> imports() {
         return ImportsFor.<RelFocusApp>builder()
+                // its status and its log, the house's block of code
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                // its words the house's texts
+                .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading1Module.Heading1(), new Heading1Module.Heading1Factory()), Heading1Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusSceneModule.Leaf(), new FocusSceneModule.Panel()), FocusSceneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FocusMonitorModule.FocusMonitor()), FocusMonitorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StewardMonitorModule.StewardMonitor()), StewardMonitorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RelGridModule.RelGrid()), RelGridModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new HouseGridModule.HouseGrid()), HouseGridModule.INSTANCE))   // the design its grid is made with
                 .add(new ModuleImports<>(List.of(new RelTreeModule.RelTree()), RelTreeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new GalleryRelations.BooksStore(),

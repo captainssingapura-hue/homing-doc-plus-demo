@@ -131,10 +131,17 @@
             <artifactId>homing-site-mpa-standard</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
+        <!-- The house's styles ready-made: the styling the site's MPA installs (The Style Jars). -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-designs</artifactId>
-            <version>${homing.core.version}</version>
+            <artifactId>homing-ui-styles</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <!-- The grid's frame, registered with the house's styling (D51). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>rel-grid-house</artifactId>
+            <version>${homing.relgrid.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

@@ -11,11 +11,8 @@ import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.conformance.rules.OrphanCheck;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.Theme;
-import hue.captains.singapura.js.homing.design.Deployment;
-import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.server.ServedModules;
 import hue.captains.singapura.js.homing.site.mpa.ThemesGetAction;
-import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import org.junit.jupiter.api.Test;
 
@@ -93,51 +90,20 @@ class GalleryTest {
         assertTrue(checked >= 10, "the apps, the shell, the relations, the tree widget; checked " + checked);
     }
 
-    @Test
-    void themesListsSevenDesignsWithTheirOffers() {
-        String json = new ThemesGetAction(HomingDesigns.REGISTRY).serialize();
-        assertTrue(json.startsWith("{\"default\":\"editorial\""), json.substring(0, 60));
-        assertTrue(json.contains("\"slug\":\"neo-brutalism\",\"label\":"), json);
-        assertTrue(json.contains("{\"palette\":\"forest\",\"slug\":\"editorial_forest\",\"fits\":true}"), json);
-        assertTrue(json.contains("{\"palette\":\"harbour\",\"slug\":\"editorial\",\"own\":true,\"fits\":true}"), json);
-        assertTrue(json.contains("\"anchor\":\"editorial\""), json);
-    }
-
-    @Test
-    void everyDesignBindsEveryPairTheChromeTheAppsTheGridAndTheTreeWear() {
-        var served = ServedModules.of(List.of(GalleryCrate.INSTANCE));
-        var groups = new ArrayList<CssGroup<?>>();
-        for (var m : served.byName().values()) if (m instanceof CssGroup<?> g) groups.add(g);
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("RelGridStyles")), "the grid's styles are served");
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("RelTreeStyles")), "the tree's styles are served");
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("DialogStyles")), "the dialog's styles are served");
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("PreferencesStyles")), "the preferences' styles are served");
-        assertTrue(groups.stream().anyMatch(g -> g.getClass().getSimpleName().equals("PaneStyles")), "the panes' styles are served");
-        var worn = Deployment.wornBy(groups);
-        assertTrue(worn.size() > 60, "the chrome, the apps, the grid and the tree wear many pairs; found " + worn.size());
-        var scaled = Deployment.scaledBy(groups);
-        var grown = Deployment.grownBy(groups);
-        for (Theme t : HomingDesigns.REGISTRY.themes()) {
-            Design d = (Design) t;
-            var r = Deployment.of(worn, scaled, grown, d).resolve();
-            assertEquals(List.of(), r.findings(), () -> d.slug() + ": " + r.findings());
-        }
-    }
-
     /** The gallery is a vehicle: its widgets catalogued, and the page's menus derived from what the catalogued components need. */
     @Test
     void theGalleryIsAVehicle_andItsMenusAreDerivedFromItsComponentsNeeds() {
         assertEquals(List.of(), ComponentTrees.validate(List.of(GalleryCrate.INSTANCE)));
         var composed = ComponentTrees.compose("gallery", List.of(GalleryCrate.INSTANCE));
         assertEquals("gallery", composed.root().children().get(0).segment().value(), "the site's own catalogue first in the closure, then the crates it requires");
-        assertEquals(14, composed.root().children().size(), "the gallery and the thirteen vehicles in its closure, the base (the keyboard steward), the focus monitor, docking's dock grid and the viewer's pan and zoom among them: the split crate is not required");
+        assertEquals(13, composed.root().children().size(), "the gallery and the twelve vehicles in its closure, the base (the keyboard steward), the focus monitor, the split grid the preferences' view and the docks are laid out by, and the viewer's pan and zoom among them - docking catalogues nothing now, the desk's docking a static");
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(GalleryCrate.INSTANCE)));
-        assertEquals(List.of("animal", "counter", "swatch", "tab", "split"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three; the pane in the panes crate names the tab menu, the dock grid in the docking crate the split menu; nothing lists them");
+        assertEquals(List.of("animal", "counter", "swatch", "split", "tab"), GalleryMenus.REGISTRY.kinds().stream().map(k -> k.kind()).toList(), "derived: the context menus widget names three; the pane in the panes crate names the split menu and the tab menu, by name - the strip's ground and a chip - answered by the desk; nothing lists them");
         // the keys likewise: the slider and its group declare theirs; the page's map is derived, and no declared component listens for itself
         // no capture left in the closure: the grid's header drag hears its Escape on its own handle
         assertEquals(List.of(), KeyboardRegistry.validate(List.of(GalleryCrate.INSTANCE)));
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(List.of(GalleryCrate.INSTANCE)).stream().filter(m -> !m.startsWith("RelGrid") && !m.startsWith("RelTree") && !m.startsWith("Tree")).toList(), "the gallery's own widgets and the components it serves: every key through the party");
-        assertEquals(List.of("BooksTab", "Card", "ContextMenuSteward", "ContextMenusWidget", "Dialog", "DomOpsTab", "EscapeLayer", "EventsTab", "FloatLayer", "FocusTab", "FocusWidget", "KeyboardWidget", "Leaf", "ListMasterWidget", "ListPanel", "MultiTabPane", "NoteTab", "Panel", "PictureTab", "PreferencesView", "RegionList", "RelFocusWidget", "ShelvesTab", "Slider", "SliderGroup", "SplitGridMirror", "StewardTab", "SvgPanZoom", "SvgViewer", "TabOpener"),
+        assertEquals(List.of("BooksTab", "ClickableCard", "ContextMenuSteward", "ContextMenusWidget", "Dialog", "DomOpsTab", "EscapeLayer", "EventsTab", "FloatLayer", "FocusTab", "FocusWidget", "KeyboardWidget", "Leaf", "ListMasterWidget", "ListPanel", "MultiTabPane", "NoteTab", "Panel", "PictureTab", "PreferencesView", "RegionList", "RelFocusWidget", "ShelvesTab", "Slider", "SliderGroup", "SplitGridMirror", "StewardTab", "SvgPanZoom", "SvgViewer", "TabOpener"),
                 KeyboardRegistry.requiredBy(List.of(GalleryCrate.INSTANCE)).byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList());
     }
 }

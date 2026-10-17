@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.demo.components;
 
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -11,6 +13,8 @@ import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
 import java.util.List;
 
 /** {@code DialogDemo}: the house's dialog in action - opened modal or not, and closed, by its options; settled by its actions or its keys. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 5,
+        reason = "It makes its own elements, places elements, wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record DialogDemoModule() implements DomModule<DialogDemoModule> {
 
     public static final DialogDemoModule INSTANCE = new DialogDemoModule();

@@ -25,6 +25,17 @@
             <artifactId>homing-ui-taxonomy</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
+        <!-- The house styles and palettes, and the Look manager: the coverage matrix is derived from what they answer and what wears it. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-styles</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-elements</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
         <!-- The house's components in action - each a demo of its own - and what controls them. -->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -80,6 +91,18 @@
             <artifactId>rel-grid</artifactId>
             <version>${homing.relgrid.version}</version>
         </dependency>
+        <!-- the house's design of the grid's frame: every grid here is made with it -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>rel-grid-house</artifactId>
+            <version>${homing.relgrid.version}</version>
+        </dependency>
+        <!-- the stock cells, out of the box: a text cell and a label header -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>rel-grid-cells</artifactId>
+            <version>${homing.relgrid.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
@@ -123,7 +146,7 @@
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-rules</artifactId>
             <version>${homing.core.version}</version>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

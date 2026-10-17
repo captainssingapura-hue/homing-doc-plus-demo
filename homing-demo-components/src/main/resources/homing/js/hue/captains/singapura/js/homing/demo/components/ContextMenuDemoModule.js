@@ -17,10 +17,13 @@
 
 var _DOCUMENT_MENU = Object.freeze({ kind: "document", nodes: [
     { id: "open", label: "Open" },
-    { id: "pin", label: "Pin it", icon: "pin" },
+    { id: "pin", label: "Pin it", icon: "pin-icon" },
     { id: "rename", label: "Rename", hint: "F2" },
+    { id: "turn", label: "Turn", section: 1, nodes: [{ id: "rotate", label: "Rotate a quarter", icon: "rotate-icon" },
+                                                      { id: "flip", label: "Flip", icon: "flip-icon" },
+                                                      { id: "reset", label: "As it was", icon: "reset-icon" }] },
     { id: "share", label: "Share", section: 1, nodes: [{ id: "link", label: "Copy the link" }, { id: "mail", label: "Send it by mail" }] },
-    { id: "delete", label: "Delete", icon: "remove", section: 2 }
+    { id: "delete", label: "Delete", icon: "remove-icon", section: 2 }
 ] });
 
 class ContextMenuDemo extends ComponentDemo {
@@ -28,8 +31,13 @@ class ContextMenuDemo extends ComponentDemo {
         super(container, "context-menu-demo", params);
         var self = this;
         this._shown = false;
+        this._pinned = false;   // the document's: while pinned, the row that pins leads with the check
         this._layer = this.el("layer", "div", dm_layer);
-        this._menu = new ContextMenu(this.branch.createBranch("menu"), _DOCUMENT_MENU, { pick: function (id) { self.say("picked: " + id); self._hide(null); } });
+        this._menu = new ContextMenu(this.branch.createBranch("menu"), _DOCUMENT_MENU, { pick: function (id) {
+            if (id === "pin") self._pinned = !self._pinned;
+            self.say("picked: " + id + (id === "pin" ? (self._pinned ? " - pinned: its row leads with the check" : " - unpinned") : ""));
+            self._hide(null);
+        } });
         this._target = this.el("target", "div", dm_host, this.stage);
         this.el("target-text", "p", dm_text, this._target, "A document. Right-press anywhere in this box for what applies to it.");
         this._target.addEventListener("contextmenu", function (e) { e.preventDefault(); self._show(e.clientX, e.clientY, false); });
@@ -51,7 +59,7 @@ class ContextMenuDemo extends ComponentDemo {
 
     _show(x, y, fromKeyboard) {
         if (this._shown) this._hide("replaced");
-        this._menu.bind(this);
+        this._menu.bind(this, function (id, demo) { return id === "pin" ? { checked: demo._pinned } : {}; });
         document.body.appendChild(this._layer);
         var at = this._menu.show(this._layer, { x: x, y: y }, { w: window.innerWidth, h: window.innerHeight }, fromKeyboard);
         // as its steward's claim does: the frame does not keep the browser's focus, so the keys come through their holder

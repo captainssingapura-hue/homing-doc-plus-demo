@@ -22,6 +22,18 @@
 
 const _owner = Object.freeze({ toString: () => "focusScene" });
 
+/** The scene's native controls in the house's look: a text box, a select, a checkbox - realized on the scene's own elements. */
+const _SCENE_TEXT_BOX = Object.freeze({ LEAF: "text-box" });
+const _SCENE_SELECT = Object.freeze({ LEAF: "select" });
+const _SCENE_CHECKBOX = Object.freeze({ LEAF: "checkbox" });
+
+/** A leaf's yield: the keys given back, from the leaf that holds them. */
+class LeafYield {
+    constructor(leaf) { this._leaf = leaf; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { Keys.yield(this._leaf.focus); }
+}
+
 /** A leaf of the logical world: a member; a press claims, the arrows count while it holds, Escape or its button yields; never natively focused. */
 class Leaf {
     constructor(branch, host, focusBranch, name, onHold) {
@@ -36,21 +48,19 @@ class Leaf {
         var count = branch.createElement("count", "span");
         css.addClass(count, ga_leaf_count);
         count.textContent = "0";
-        var yieldBtn = branch.createElement("yield", "button");
-        yieldBtn.type = "button";
-        yieldBtn.tabIndex = -1;
-        css.addClass(yieldBtn, ga_leaf_yield);
-        yieldBtn.textContent = "yield";
-        yieldBtn.setAttribute("aria-label", "yield the keys");
+        // the house's plain button, a size down; it takes no focus of its own - the leaf holds the keys, never natively
+        var yieldBtn = new PlainButton(PlainButtonFactory.create(branch, "yield"), { label: "yield", size: -0.5 });
+        yieldBtn.el.tabIndex = -1;
+        yieldBtn.el.setAttribute("aria-label", "yield the keys");
         root.appendChild(label);
         root.appendChild(count);
-        root.appendChild(yieldBtn);
+        root.appendChild(yieldBtn.el);
         host.appendChild(root);
         this.root = root; this._count = count; this._n = 0; this._onHold = onHold || null;
         this.focus = focusBranch.join(name, this);
         this._off = Keys.claimOn(root, this.focus);
-        yieldBtn.addEventListener("mousedown", function (ev) { ev.preventDefault(); });   // the press claimed by the convention; the button takes no focus of its own
-        yieldBtn.addEventListener("click", function () { Keys.yield(self.focus); });
+        yieldBtn.el.addEventListener("mousedown", function (ev) { ev.preventDefault(); });   // the press claimed by the convention; the button takes no focus of its own
+        yieldBtn.setOnClick(new LeafYield(this));
     }
     keyDown(ev) {
         if (ev.key === "Escape") { Keys.yield(this.focus); return true; }
@@ -68,6 +78,8 @@ class Leaf {
         var box = branch.createElement("check", "input");
         box.type = "checkbox";
         box.setAttribute("aria-label", label);
+        css.addClass(box, el_checkbox);   // the browser's mark, in the colour of the house's checkbox
+        new Look(_SCENE_CHECKBOX, ROLE.STANDALONE).wear(box);
         this.root.insertBefore(box, this._count);
         return box;
     }
@@ -110,20 +122,22 @@ class Panel {
         var input = branch.createElement("field", "input");
         input.type = "text";
         css.addClass(input, ga_field);
+        new Look(_SCENE_TEXT_BOX, ROLE.STANDALONE).wear(input);
         input.setAttribute("aria-label", label);
         input.placeholder = label;
         this.root.appendChild(input);
         return input;
     }
-    /** A native button inside the panel, wired to nothing but its click: Enter and Space are the browser's; an Escape lets it go, a yield from it - the panel asked first, as any ancestor. */
+    /**
+     * A button inside the panel - the house's plain button, a native one - wired to nothing but its click, told to the
+     * handler given: Enter and Space are the browser's; an Escape lets it go, a yield from it - the panel asked first, as any ancestor.
+     */
     button(branch, label, onClick) {
         branch.activate(_owner);
-        var btn = branch.createElement("button", "button");
-        btn.type = "button";
-        css.addClass(btn, ga_button);
-        btn.textContent = label;
-        btn.addEventListener("click", onClick);
-        this.root.appendChild(btn);
+        var btn = new PlainButton(PlainButtonFactory.create(branch, "button"), { label: label });
+        css.addClass(btn.el, ga_button);
+        btn.setOnClick(onClick);
+        this.root.appendChild(btn.el);
         return btn;
     }
     /** Asked when a descendant yields: a catching panel holds, the other lets the keys go on up. */
@@ -149,7 +163,7 @@ class ListPanel extends Panel {
         super(branch, host, focusBranch, name, true);
         var self = this;
         var list = branch.createElement("list", "select");
-        css.addClass(list, ga_panel_list);
+        new Look(_SCENE_SELECT, ROLE.STANDALONE).wear(list);
         list.setAttribute("size", "3");
         list.setAttribute("aria-label", "which leaf holds the keys; Enter confirms");
         this.root.appendChild(list);

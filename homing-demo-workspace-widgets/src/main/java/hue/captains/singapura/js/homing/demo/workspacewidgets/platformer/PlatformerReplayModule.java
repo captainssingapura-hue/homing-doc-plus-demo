@@ -1,11 +1,15 @@
 package hue.captains.singapura.js.homing.demo.workspacewidgets.platformer;
 
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
 import hue.captains.singapura.js.homing.component.keyboard.focusParties;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -25,6 +29,8 @@ import java.util.List;
  * joining mid-run, handed the world as it stands, a snapshot of records inside
  * records. It makes nothing of its own: no terrain, no keys, no sound.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 14,
+        reason = "It makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record PlatformerReplayModule() implements DomModule<PlatformerReplayModule> {
 
     public record PlatformerReplay() implements SelfContainedWidget<PlatformerReplayModule>, NeedKeyboard {
@@ -37,6 +43,9 @@ public record PlatformerReplayModule() implements DomModule<PlatformerReplayModu
     @Override
     public ImportsFor<PlatformerReplayModule> imports() {
         return ImportsFor.<PlatformerReplayModule>builder()
+                // its title, the house's heading of its level
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new domOpsParties()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParties()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))

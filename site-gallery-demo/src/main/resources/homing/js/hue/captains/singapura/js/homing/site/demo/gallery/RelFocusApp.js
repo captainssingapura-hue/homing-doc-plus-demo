@@ -42,24 +42,21 @@ class RelFocusWidget {
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-rel-grid · homing-ui-focus";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Relations in focus";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "The relation tree and the relation grid, both the native world — a focusable host, their own keys, worked hard "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-rel-grid · homing-ui-monitors" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Relations in focus" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "The relation tree and the relation grid, both the native world — a focusable host, their own keys, worked hard "
             + "for the keyboard — under the focus model, wrapped and unwrapped. Unwrapped, straight on the page: a press claims nothing, "
             + "the steward goes dormant on the host, the keys are theirs, and whoever held resumes when the host lets go. Wrapped in a "
             + "panel of the logical world: a press claims the panel, the innermost member; the panel is dormant while the host has the "
             + "focus; an Escape the grid did not want blurs the host and the panel has the keys; the next Escape yields. The leaf holds "
             + "the keys when nothing is focused. Arrows, Enter on a cell, Escape in the editor, a header drag, Ctrl+C: every one of them "
-            + "should be the grid's, and none of them should move the holder.";
-        el.appendChild(lede);
+            + "should be the grid's, and none of them should move the holder." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_focus);
@@ -84,7 +81,7 @@ class RelFocusWidget {
         function grid(box, b) {
             var relation = new BooksRelation(store, { branch: domain.createBranch("cells-" + b.name) });
             self._relations.push(relation);
-            var g = new RelGrid({ container: box, branch: b, relation: relation, header: { show: true, sticky: true }, label: "Books" });
+            var g = new RelGrid({ container: box, branch: b, relation: relation, design: HouseGrid, header: { show: true, sticky: true }, label: "Books" });
             g.setColumnWidths({ title: 180, author: 120, year: 56, rating: 56 });
             return g;
         }
@@ -112,11 +109,18 @@ class RelFocusWidget {
         var leaf = new Leaf(branch.createBranch("x"), scene, top, "x");
         this._parts = [panelT, panelG, leaf];
 
-        this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
-        this._steward = new StewardMonitor(branch.createBranch("steward"), { host: monitorBox });
+        // the tree and the lamp under it, each a widget in a slot of its own over the box
+        this._monitors = [["monitor", FocusMonitor], ["steward", StewardMonitor]].map(function (m) {
+            var shown = branch.createBranch(m[0]);
+            shown.activate(_owner);
+            var slot = new WidgetSlot({ branch: shown, host: monitorBox });
+            slot.show(m[0], m[1], {});
+            return slot;
+        });
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         el.appendChild(log);
         var lines = 0;
@@ -136,7 +140,7 @@ class RelFocusWidget {
     }
 
     dispose() {
-        this._offKb(); this._steward.dispose(); this._monitor.dispose();
+        this._offKb(); this._monitors.forEach(function (s) { s.disposeAll(); });
         this._parts.forEach(function (p) { p.dispose(); });
         this._widgets.forEach(function (w) { w.destroy(); });
         this._relations.forEach(function (r) { r.dispose(); });

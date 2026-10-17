@@ -67,9 +67,54 @@
             <artifactId>homing-ui-elements</artifactId>
             <version>${homing.components.version}</version>
         </dependency>
+        <!-- The platformer's scene: a design branch of virtual leaves in the house's taxonomy, and the house's
+             design of it, drawn in the house's colours and read and served as the grid's frame is. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-component-taxonomy</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- The platformer's scene: a local-style branch, and the house's local style of it. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-design-local-style</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-colours</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-base</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-look</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- The house's instance, installed as a site serving the platformer installs it: the gate renders the scene's design. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-styles</artifactId>
+            <version>${homing.components.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- The widgets' own module type and rule set - the game loop, held to the RAF rule: a
@@ -83,12 +128,6 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-engine</artifactId>
-            <version>${homing.core.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-designs</artifactId>
             <version>${homing.core.version}</version>
             <scope>test</scope>
         </dependency>

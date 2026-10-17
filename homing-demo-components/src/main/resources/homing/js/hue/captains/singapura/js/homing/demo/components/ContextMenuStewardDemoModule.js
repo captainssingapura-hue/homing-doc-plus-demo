@@ -34,8 +34,8 @@ class ContextMenuStewardDemo extends ComponentDemo {
             this.intro = "asked to keep this page's menus: refused - " + e.message;
             return;
         }
-        this._menus.define("file").row("open", "Open").row("rename", "Rename", { hint: "F2" }).divider().row("delete", "Delete", { icon: "remove" }).done();
-        this._menus.define("folder").row("open", "Open").row("new-file", "New file", { icon: "add" }).divider().row("delete", "Delete", { icon: "remove" }).done();
+        this._menus.define("file").row("open", "Open").row("rename", "Rename", { hint: "F2" }).divider().row("delete", "Delete", { icon: "remove-icon" }).done();
+        this._menus.define("folder").row("open", "Open").row("new-file", "New file", { icon: "add-icon" }).divider().row("delete", "Delete", { icon: "remove-icon" }).done();
         this._menus.handle("file", { pick: function () {} });
         this._menus.handle("folder", { pick: function () {} });
         var row = this.el("targets", "div", dm_row, this.stage);

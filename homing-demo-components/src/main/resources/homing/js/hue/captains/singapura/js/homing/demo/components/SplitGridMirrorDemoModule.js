@@ -35,7 +35,7 @@ class SplitGridMirrorDemo extends ComponentDemo {
     _build() {
         var self = this, n = ++this._built;
         this._grid = new SplitGrid(this.branch.createBranch("grid-" + n), {
-            host: this._host, seam: true, layout: JSON.parse(JSON.stringify(_MIRRORED_START)),
+            host: this._host, resizable: true, layout: JSON.parse(JSON.stringify(_MIRRORED_START)),
             onEvent: function (ev) {
                 if (ev.kind === "Subdivided" || ev.kind === "Removed" || ev.kind === "TracksChanged") self._reflect();
                 if (ev.kind === "Subdivided") self.el("room-" + n + "-" + ev.newCellId, "p", dm_text, self._grid.cell(ev.newCellId), "Room " + ev.newCellId);

@@ -15,28 +15,43 @@
 
 const _owner = Object.freeze({ toString: () => "viewerFocusPage" });
 
+/** Case 7's button: take the home away, or name it again - a home named with no one holding holds at once - and say which it does next. */
+class ViewerHomeToggle {
+    constructor(steward, home, board, renamed) { this._steward = steward; this._home = home; this._board = board; this._renamed = renamed; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle(event) {
+        var steward = this._steward, home = this._home, board = this._board;
+        if (steward.homed()) { Keys.home(null); this.say(event.source); return; }
+        var before = steward.holder();
+        Keys.home(home.focus);
+        var after = steward.holder();
+        this._renamed.expect(before === null ? "the home, at once: no one held" : "no change: " + board.nameOf(before) + " holds");
+        this._renamed.verdict(before === null ? after === home.focus.id : after === before, "the keys at: " + board.nameOf(after));
+        this.say(event.source);
+    }
+    /** What the button does next, on it. */
+    say(button) { button.label = this._steward.homed() ? "Take the home away" : "Name the home again"; }
+}
+
 class ViewerFocusWidget {
     constructor(branch, params) {
         branch.activate(_owner);
         var self = this, steward = KeyboardStewardInstance;
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-panzoom · homing-ui-focus · a case board";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Viewers in focus";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "Where the keys go when a widget's native control lets them go. Each viewer is a widget, a member of its own "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-panzoom · homing-ui-monitors · a case board" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Viewers in focus" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "Where the keys go when a widget's native control lets them go. Each viewer is a widget, a member of its own "
             + "focus party; the viewport inside it is the native world: a press puts the browser's focus there, + and − zoom, 0 fits, "
             + "the arrows pan. One Escape it has no use for lets it go - a yield: the viewer is asked first and, with nothing "
             + "designed for holding the keys, passed by; the keys reach the first that would hold them, else the root's default, "
-            + "the home. Every case says what to do and what to expect, and its lamps say what happened.";
-        el.appendChild(lede);
+            + "the home. Every case says what to do and what to expect, and its lamps say what happened." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
         var chain = new DOMParser().parseFromString(focusTree, "image/svg+xml").documentElement;   // served as text by ViewerDrawings
         css.addClass(chain, ga_case_figure);
         chain.setAttribute("role", "img");
@@ -120,28 +135,25 @@ class ViewerFocusWidget {
 
         var c7 = aCase(7, "No home", "Take the home away, press the drawing, Escape: the yield reaches the root, and no one holds. Name "
             + "the home again: no one holding, it holds at once.");
-        var toggle = branch.createElement("toggleHome", "button");
-        toggle.type = "button";
-        css.addClass(toggle, ga_button);
-        c7.body.appendChild(toggle);
+        var toggle = new PlainButton(PlainButtonFactory.create(branch, "toggleHome"), { label: "Take the home away" });
+        css.addClass(toggle.el, ga_button);
+        c7.body.appendChild(toggle.el);
         var v7 = viewer("homeless", c7.body, top, "with no home");
         board.watch(v7.focus, toRoot(c7.check("Escape in the drawing")));
-        var renamed = c7.check("Naming the home again");
-        function toggled() { toggle.textContent = steward.homed() ? "Take the home away" : "Name the home again"; }
-        toggle.addEventListener("click", function () {
-            if (steward.homed()) { Keys.home(null); toggled(); return; }
-            var before = steward.holder();
-            Keys.home(home.focus);
-            var after = steward.holder();
-            renamed.expect(before === null ? "the home, at once: no one held" : "no change: " + board.nameOf(before) + " holds");
-            renamed.verdict(before === null ? after === home.focus.id : after === before, "the keys at: " + board.nameOf(after));
-            toggled();
-        });
+        var toggler = new ViewerHomeToggle(steward, home, board, c7.check("Naming the home again"));
+        toggle.setOnClick(toggler);
 
-        this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
-        this._steward = new StewardMonitor(branch.createBranch("steward"), { host: monitorBox });
+        // the tree and the lamp under it, each a widget in a slot of its own over the box
+        this._monitors = [["monitor", FocusMonitor], ["steward", StewardMonitor]].map(function (m) {
+            var shown = branch.createBranch(m[0]);
+            shown.activate(_owner);
+            var slot = new WidgetSlot({ branch: shown, host: monitorBox });
+            slot.show(m[0], m[1], {});
+            return slot;
+        });
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         el.appendChild(log);
         var lines = 0;
         function say(line) {
@@ -162,14 +174,14 @@ class ViewerFocusWidget {
         Keys.home(home.focus);
         entering.expect("the home, from the start");
         entering.verdict(steward.holder() === home.focus.id, "the keys at: " + board.nameOf(steward.holder()));
-        toggled();
+        toggler.say(toggle);
         this.root = el;
     }
 
     dispose() {
         Keys.home(null);
         this._offTrace(); this._offKb(); this._board.dispose();
-        this._steward.dispose(); this._monitor.dispose();
+        this._monitors.forEach(function (s) { s.disposeAll(); });
         this._viewers.forEach(function (v) { v.dispose(); });
         this._parts.forEach(function (p) { p.dispose(); });
     }

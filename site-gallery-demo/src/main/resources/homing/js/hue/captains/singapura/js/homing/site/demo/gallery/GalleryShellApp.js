@@ -32,14 +32,13 @@ function _load(entry) {
 function appMain(el, params) {
     var branch = domOpsParty.createBranch("galleryShell");
     branch.activate(_owner);
-    css.addClass(el, mpa_main_full);
 
     var shell = branch.createElement("shell", "div");
     css.addClass(shell, ga_shell);
     el.appendChild(shell);
 
     var grid = new SplitGrid(branch.createBranch("grid"), {
-        host: shell, minCellPx: 160,
+        host: shell, minCellPx: 160, resizable: true,
         layout: { kind: "split", orientation: "horizontal", children: [
             { node: { kind: "cell", id: "nav" }, ratio: 1 },
             { node: { kind: "split", orientation: "vertical", children: [
@@ -58,21 +57,23 @@ function appMain(el, params) {
     var explain = branch.createElement("explain", "div");
     css.addClass(explain, ga_shell_explain);
     grid.cell("explain").appendChild(explain);
-    var kicker = branch.createElement("kicker", "div");
-    css.addClass(kicker, ga_kicker);
-    var title = branch.createElement("title", "h2");
-    css.addClass(title, ga_title);
-    var summary = branch.createElement("summary", "p");
-    css.addClass(summary, ga_lede);
+    // what is picked, said in the house's texts: its path a kicker, its name a heading of the second level, its summary a
+    // lede, and the way to its own page the house's link
+    var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "" });
+    css.addClass(kicker.el, ga_kicker);
+    var title = new Heading2(Heading2Factory.create(branch, "title"), { text: "" });
+    css.addClass(title.el, ga_title);
+    var summary = new Lede(LedeFactory.create(branch, "summary"), { text: "" });
+    css.addClass(summary.el, ga_lede);
     var text = branch.createElement("text", "p");
     css.addClass(text, ga_explain_text);
-    var link = branch.createElement("link", "a");
-    css.addClass(link, ga_explain_link);
-    explain.appendChild(kicker);
-    explain.appendChild(title);
-    explain.appendChild(summary);
+    var link = new Link(LinkFactory.create(branch, "link"), { text: "" });
+    css.addClass(link.el, ga_explain_link);
+    explain.appendChild(kicker.el);
+    explain.appendChild(title.el);
+    explain.appendChild(summary.el);
     explain.appendChild(text);
-    explain.appendChild(link);
+    explain.appendChild(link.el);
 
     var keyboard = params && params.keyboard;
     if (!keyboard) throw new Error("[galleryShell] the page's keyboard steward is required: params.keyboard");
@@ -83,21 +84,21 @@ function appMain(el, params) {
     var wanted = null;
 
     function describe(path, d) {
-        kicker.textContent = path;
-        title.textContent = d.label;
-        summary.textContent = d.summary;
+        kicker.text = path;
+        title.text = d.label;
+        summary.text = d.summary;
         text.textContent = d.explanation;
-        link.textContent = "Open as a page →";
-        HrefManagerInstance.set(link, d.page);
+        link.text = "Open as a page →";
+        link.to = d.page;
     }
 
     function describeGroup(path, g) {
-        kicker.textContent = path;
-        title.textContent = g.label;
-        summary.textContent = g.summary;
+        kicker.text = path;
+        title.text = g.label;
+        summary.text = g.summary;
         text.textContent = g.demos.map(function (p) { return DEMOS.demos[p].label + " — " + DEMOS.demos[p].summary; }).join("\n");
-        link.textContent = "Open " + DEMOS.demos[g.demos[0]].label + " as a page →";
-        HrefManagerInstance.set(link, DEMOS.demos[g.demos[0]].page);
+        link.text = "Open " + DEMOS.demos[g.demos[0]].label + " as a page →";
+        link.to = DEMOS.demos[g.demos[0]].page;
     }
 
     function show(path, d) {

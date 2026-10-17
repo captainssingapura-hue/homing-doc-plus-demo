@@ -5,9 +5,12 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.panes.PaneStyles;
-import hue.captains.singapura.js.homing.ui.panes.TabChipModule;
 import hue.captains.singapura.js.homing.ui.panes.TabDragModule;
+import hue.captains.singapura.js.homing.ui.panes.TabModule;
 
 import java.util.List;
 
@@ -37,12 +40,13 @@ public record TearLabSceneModule() implements DomModule<TearLabSceneModule> {
     @Override
     public ImportsFor<TearLabSceneModule> imports() {
         return ImportsFor.<TearLabSceneModule>builder()
-                .add(new ModuleImports<>(List.of(new TabChipModule.TabChip()), TabChipModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabDragModule.TabDrag()), TabDragModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_strip(),
-                        new PaneStyles.mtp_chip_seated(),
-                        new PaneStyles.mtp_chip_dragging(),
                         new PaneStyles.mtp_chip_shifted()
                 ), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(

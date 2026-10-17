@@ -20,6 +20,22 @@
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "focusPage" });
+/** The tools' fields: the house's text box, realized on the page's own native fields. */
+const _FOCUS_TEXT_BOX = Object.freeze({ LEAF: "text-box" });
+
+/** The tools' reset: every leaf's count back to nothing. */
+class FocusReset {
+    constructor(page) { this._page = page; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._page._leaves.forEach(function (l) { l.reset(); }); }
+}
+
+/** Panel B's button, wired to nothing but its own count. */
+class FocusBeep {
+    constructor() { this._beeps = 0; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle(event) { event.source.label = "beep " + (++this._beeps); }
+}
 
 class FocusWidget {
     constructor(branch, params) {
@@ -27,17 +43,13 @@ class FocusWidget {
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-focus";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Who is in focus";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "The logical-focus tree, as the focus party keeps it and the monitor shows it, in two worlds. The panels, "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-monitors" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Who is in focus" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "The logical-focus tree, as the focus party keeps it and the monitor shows it, in two worlds. The panels, "
             + "panel A's and B's leaves and the loose leaf are logical: never natively focused, a press claims for the innermost, "
             + "the arrows go to whoever holds and a leaf counts them, Escape yields up the tree — panel A catches, panel B lets "
             + "pass to no one. Tab is not bound for now: the native Tab walks the native controls, a press reaches a member. Panel C picks "
@@ -46,8 +58,9 @@ class FocusWidget {
             + "which puts the focus back in its list. More of the native world "
             + "stresses the line: a search field and a notes field outside every container — the notes keep their Tab — a note "
             + "field in panel A that lets go on Escape, a button in panel B wired to nothing, a checkbox inside the logical leaf a2. "
-            + "The steward monitor shows whether the steward is routing keys, and where every key went.";
-        el.appendChild(lede);
+            + "The steward monitor shows whether the steward is routing keys, and where every key went." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         var row = branch.createElement("row", "div");
         css.addClass(row, ga_focus);
@@ -69,11 +82,13 @@ class FocusWidget {
         var search = branch.createElement("search", "input");
         search.type = "search";
         css.addClass(search, ga_field);
+        new Look(_FOCUS_TEXT_BOX, ROLE.STANDALONE).wear(search);
         search.setAttribute("aria-label", "search");
         search.placeholder = "search — outside every container";
         tools.appendChild(search);
         var notes = branch.createElement("notes", "textarea");
         css.addClass(notes, ga_field);
+        new Look(_FOCUS_TEXT_BOX, ROLE.STANDALONE).wear(notes);
         notes.setAttribute("aria-label", "notes");
         notes.rows = 1;
         notes.placeholder = "notes — keeps its Tab";
@@ -86,12 +101,10 @@ class FocusWidget {
             ev.stopPropagation();
         });
         tools.appendChild(notes);
-        var reset = branch.createElement("reset", "button");
-        reset.type = "button";
-        css.addClass(reset, ga_button);
-        reset.textContent = "reset counts";
-        reset.addEventListener("click", function () { self._leaves.forEach(function (l) { l.reset(); }); });
-        tools.appendChild(reset);
+        var reset = new PlainButton(PlainButtonFactory.create(branch, "reset"), { label: "reset counts" });
+        css.addClass(reset.el, ga_button);
+        reset.setOnClick(new FocusReset(self));
+        tools.appendChild(reset.el);
 
         // the scene: three panels holding branches under the party's root, and a loose leaf beside them
         var top = focusParty.root;
@@ -102,8 +115,7 @@ class FocusWidget {
         panelA.field(branch.createBranch("a-note"), "a note in panel A — Escape lets go");
         var panelB = new Panel(branch.createBranch("panel-b"), scene, top, "panel B", false);
         var b1 = panelB.leaf(branch.createBranch("b1"), "b1");
-        var beeps = 0;
-        var beep = panelB.button(branch.createBranch("b-beep"), "beep 0", function () { beep.textContent = "beep " + (++beeps); });
+        panelB.button(branch.createBranch("b-beep"), "beep 0", new FocusBeep());
         var panelC = new ListPanel(branch.createBranch("panel-c"), scene, top, "panel C");
         var c1 = panelC.leaf(branch.createBranch("c1"), "c1");
         var c2 = panelC.leaf(branch.createBranch("c2"), "c2");
@@ -112,11 +124,18 @@ class FocusWidget {
         this._parts = [panelA, panelB, panelC, loose];
         this._leaves = [a1, a2, b1, c1, c2, c3, loose];
 
-        this._monitor = new FocusMonitor(branch.createBranch("monitor"), { host: monitorBox });
-        this._steward = new StewardMonitor(branch.createBranch("steward"), { host: monitorBox });
+        // the tree and the lamp under it, each a widget in a slot of its own over the box
+        this._monitors = [["monitor", FocusMonitor], ["steward", StewardMonitor]].map(function (m) {
+            var shown = branch.createBranch(m[0]);
+            shown.activate(_owner);
+            var slot = new WidgetSlot({ branch: shown, host: monitorBox });
+            slot.show(m[0], m[1], {});
+            return slot;
+        });
 
         var log = branch.createElement("log", "div");
         css.addClass(log, ga_log);
+        new Look(Object.freeze({ LEAF: "code-block" }), ROLE.STANDALONE).wear(log);   // the house's block of code: a console's lines
         log.setAttribute("aria-live", "polite");
         el.appendChild(log);
         var lines = 0;
@@ -135,7 +154,7 @@ class FocusWidget {
         this.root = el;
     }
 
-    dispose() { this._offKb(); this._steward.dispose(); this._monitor.dispose(); this._parts.forEach(function (p) { p.dispose(); }); }
+    dispose() { this._offKb(); this._monitors.forEach(function (s) { s.disposeAll(); }); this._parts.forEach(function (p) { p.dispose(); }); }
 }
 
 function appMain(el, params) {

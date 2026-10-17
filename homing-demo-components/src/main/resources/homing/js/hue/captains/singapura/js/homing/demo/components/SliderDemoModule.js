@@ -12,13 +12,13 @@ class SliderDemo extends ComponentDemo {
     constructor(container, params) {
         super(container, "slider-demo", params);
         var self = this;
-        this._slider = new SliderBuilder()
-            .label("Volume")
-            .range(0, 100, 1).value(40).detent(50)
-            .ticks([{ at: 0, label: "0" }, { at: 25, label: "25" }, { at: 50, label: "50" }, { at: 75, label: "75" }, { at: 100, label: "100" }])
-            .format(function (v) { return v + "%"; })
-            .onChange(function (v) { self.say("set to " + v + "%" + (v === 50 ? " - rested at the detent" : "")); })
-            .build(this.branch.createBranch("slider"));
+        this._slider = new Slider(this.branch.createBranch("slider"), {
+            label: "Volume",
+            min: 0, max: 100, step: 1, value: 40, detents: [50],
+            ticks: [{ at: 0, label: "0" }, { at: 25, label: "25" }, { at: 50, label: "50" }, { at: 75, label: "75" }, { at: 100, label: "100" }],
+            format: function (v) { return v + "%"; },
+            onChange: function (v) { self.say("set to " + v + "%" + (v === 50 ? " - rested at the detent" : "")); }
+        });
         this.stage.appendChild(this._slider.root);
         this._on = true;
         this.intro = "drag the knob, press the rail anywhere, or press it and use the arrows, Home, End, PageUp and PageDown";

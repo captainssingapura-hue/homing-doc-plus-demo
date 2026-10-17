@@ -19,7 +19,6 @@ class PartsTable extends TaxonomyWidget {
         var self = this;
         this._hint = this.el("hint", "p", tx_hint, this.body, "");
         var frame = this.el("frame", "div", tx_frame, this.body);
-        css.addClass(frame, hrg_frame, hrg_lit);
         var port = this.el("port", "div", tx_port, frame);
         // the domain's cells, on a branch of its own: the grid places them and owns none
         var cells = this.branch.createBranch("cells");
@@ -27,10 +26,11 @@ class PartsTable extends TaxonomyWidget {
         var made = new Map(), seq = 0;
         this._owner = "";
         this._rows = [];
+        var heads = new RelGridLabels({ branch: this.branch.createBranch("heads"), labels: _PT_LABELS });
         var relation = {
             view: function () { return self._rows.slice(); },
             columns: function () { return _PT_COLUMNS.slice(); },
-            labels: function () { return _PT_LABELS; },
+            headerFor: function (col) { return heads.headerFor(col); },   // what a column is called: its label header
             readOnlyColumns: function () { return _PT_COLUMNS.slice(); },
             cellFor: function (pk, column) {
                 var key = pk + "\n" + column, cell = made.get(key);
@@ -44,7 +44,7 @@ class PartsTable extends TaxonomyWidget {
         this._made = made;
         this._grid = new RelGrid({
             container: port, branch: this.branch.createBranch("grid"), relation: relation, label: "Parts",
-            frame: false, header: { sticky: true }
+            design: HouseGrid, box: frame, header: { sticky: true }   // the frame round the scrollport wears the grid's edge
         });
         this.keysTo = this._grid;
         this.selected(this.picked());

@@ -14,7 +14,7 @@
     <description>
         The demo's conformance, as a downstream of the framework's: every crate the demo
         serves - the workspace widgets, the workspaces, the gallery, the site, the mermaid
-        site, the bare app - graded by the framework's policy extended with the widgets'
+        site - graded by the framework's policy extended with the widgets'
         own game-loop rule set (RFC 0044), strictly, with no ledger; the report exported
         on every build; and the conformance studio served over them - the studio repo's
         workbench, on port 8091 (DemoConformanceStudioServer).
@@ -63,11 +63,6 @@
             <artifactId>mermaid-mirror-demo</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>bare-app-demo</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- THE CHECK: the rules, the engine that grades a run, the export that writes the report. -->
         <dependency>
@@ -103,6 +98,17 @@
             <version>${homing.core.version}</version>
         </dependency>
 
+        <!-- The demo's instance, installed before its modules are served: the house's styling with the grid's frame (D51). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-styles</artifactId>
+            <version>${homing.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.ssjs</groupId>
+            <artifactId>rel-grid-house</artifactId>
+            <version>${homing.relgrid.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

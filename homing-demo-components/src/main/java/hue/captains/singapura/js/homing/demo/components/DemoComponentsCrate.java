@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
@@ -12,12 +11,12 @@ import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
-import hue.captains.singapura.js.homing.ui.focus.UiFocusCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
+import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
 import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomCrate;
-import hue.captains.singapura.js.homing.ui.split.UiSplitCrate;
 import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import hue.captains.singapura.js.homing.workspace.widgets.WorkspaceWidgetsCrate;
 
@@ -41,20 +40,19 @@ public final class DemoComponentsCrate implements Crate {
         return List.of(
                 CoreJsCrate.INSTANCE,
                 ServerCrate.INSTANCE,
-                DesignCrate.INSTANCE,
                 // What is shown, and what of it is controlled.
+                UiLookCrate.INSTANCE,
                 UiElementsCrate.INSTANCE,
                 UiIconsCrate.INSTANCE,
                 UiDialogCrate.INSTANCE,
                 UiMenuCrate.INSTANCE,
                 UiFloatingCrate.INSTANCE,
-                UiSplitCrate.INSTANCE,
                 UiSplitGridCrate.INSTANCE,
                 UiDockingCrate.INSTANCE,
                 UiPanesCrate.INSTANCE,
                 UiPreferencesCrate.INSTANCE,
                 UiPanZoomCrate.INSTANCE,
-                UiFocusCrate.INSTANCE,
+                UiMonitorsCrate.INSTANCE,
                 UiControlPanelCrate.INSTANCE,
                 // The widgets' contract.
                 WorkspaceWidgetsCrate.INSTANCE);
@@ -73,8 +71,9 @@ public final class DemoComponentsCrate implements Crate {
                 // The demo every one extends, and the demos.
                 CrateEntry.of(ComponentDemoModule.INSTANCE),
                 CrateEntry.of(ButtonDemoModule.INSTANCE),
-                CrateEntry.of(IconDemoModule.INSTANCE),
-                CrateEntry.of(SummaryCardDemoModule.INSTANCE),
+                CrateEntry.of(TextDemoModule.INSTANCE),
+                CrateEntry.of(LinkDemoModule.INSTANCE),
+                CrateEntry.of(SummaryViewDemoModule.INSTANCE),
                 CrateEntry.of(SliderDemoModule.INSTANCE),
                 CrateEntry.of(SliderGroupDemoModule.INSTANCE),
                 CrateEntry.of(PanelDemoModule.INSTANCE),
@@ -84,14 +83,11 @@ public final class DemoComponentsCrate implements Crate {
                 CrateEntry.of(ContextMenuStewardDemoModule.INSTANCE),
                 CrateEntry.of(FloatingPaneDemoModule.INSTANCE),
                 CrateEntry.of(FloatLayerDemoModule.INSTANCE),
-                CrateEntry.of(SplitPaneDemoModule.INSTANCE),
                 CrateEntry.of(SplitGridDemoModule.INSTANCE),
                 CrateEntry.of(SplitGridMirrorDemoModule.INSTANCE),
                 // the tab controls in a room of their own, the list master, the pictures and their drawings, the monitors
                 CrateEntry.of(DemoDocksModule.INSTANCE),
                 CrateEntry.of(TabOpenerDemoModule.INSTANCE),
-                CrateEntry.of(AddTabDemoModule.INSTANCE),
-                CrateEntry.of(PaneThumbsDemoModule.INSTANCE),
                 CrateEntry.of(ListMasterWidgetDemoModule.INSTANCE),
                 CrateEntry.of(DemoDrawingsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(SvgPanZoomDemoModule.INSTANCE),

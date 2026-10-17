@@ -51,6 +51,7 @@ var _NOTE = "A tab is one record — id, title, widget — and has one placement
 
 class DockingWidget {
     constructor(branch, params) {
+        this._acts = new Map();   // what each of its buttons does: the page is the handler of every press it makes
         var self = this;
         branch.activate(_owner);
         var el = branch.createElement("root", "div");
@@ -60,17 +61,13 @@ class DockingWidget {
         var kb = params && params.keyboard;
         if (!kb) throw new Error("[gallery] the page's keyboard steward is required: params.keyboard");
 
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, ga_kicker);
-        kicker.textContent = "homing-ui-docking";
-        el.appendChild(kicker);
-        var title = branch.createElement("title", "h1");
-        css.addClass(title, ga_title);
-        title.textContent = "Dock and undock";
-        el.appendChild(title);
-        var lede = branch.createElement("lede", "p");
-        css.addClass(lede, ga_lede);
-        lede.textContent = "Docks in a split grid and a desk over them, holding what a workspace holds: the books as a relation grid, the shelves as a "
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "homing-ui-docking" });
+        css.addClass(kicker.el, ga_kicker);
+        el.appendChild(kicker.el);
+        var title = new Heading1(Heading1Factory.create(branch, "title"), { text: "Dock and undock" });
+        css.addClass(title.el, ga_title);
+        el.appendChild(title.el);
+        var lede = new Lede(LedeFactory.create(branch, "lede"), { text: "Docks in a split grid and a desk over them, holding what a workspace holds: the books as a relation grid, the shelves as a "
             + "relation tree, a picture zoomed by its own keys. Right-click the empty ground of a tab bar to part the room — beside or below — or to "
             + "merge one away: its tabs go to the region you name and its room to the pane across a splitter of its own. Drag a chip along a strip: it "
             + "reorders, on its rail. Pull it off the strip and it tears into a float of its own, which follows your hand from where you "
@@ -93,15 +90,15 @@ class DockingWidget {
             + "same question the other way about: it opens a tab with the chooser in it, and what you pick becomes that very tab, in the place you made it. The Tab key walks the chips, "
             + "and the region you are working in is the lit one. THE ROOM'S EDGE is a strip's: the thin lip along the foot of the box is all it takes of the room, "
             + "and the hand brought to it lays the strip over the room's foot - what the room holds, and the switcher offered to the hand as F6 offers it to the keys - "
-            + "until the hand leaves it, when the room has its foot back. The workspace's own strip is this one.";
-        el.appendChild(lede);
+            + "until the hand leaves it, when the room has its foot back. The workspace's own strip is this one." });
+        css.addClass(lede.el, ga_lede);
+        el.appendChild(lede.el);
 
         // ── the chips' size and aspect ────────────────────────────────────
         var controls = branch.createElement("controls", "div");
         css.addClass(controls, ga_buttons);
         el.appendChild(controls);
-        // the new-tab control's own row, above the workspace it points at: its picture of the panes is the same
-        // arrangement you are looking at, so it wants to be read next to it rather than tucked among the sliders
+        // the keys picker's own row, above the workspace whose docks it sets, rather than tucked among the sliders
         var newRow = branch.createElement("new-row", "div");
         css.addClass(newRow, ga_buttons);
         el.appendChild(newRow);
@@ -119,12 +116,12 @@ class DockingWidget {
         function labelOf(tab) { return tab.id + (typeof tab.title === "function" ? " \u201c" + tab.title() + "\u201d" : ""); }   // which tab, and what it says it is
         function sink(ev) {
             if (domopsOf()) domopsOf().refresh();   // the party changes with every one of these
-            if (tabs) tabs.refresh();             // and so does how full each dock is, and where the panes are, which is what the new-tab control shows
+            if (tabs) tabs.refresh();             // and so do the docks the keys picker offers
             if (edge) countRoom();                // and what the strip on the room's edge says it holds
             switch (ev.kind) {
                 case "Subdivided":   say("Split     " + nameOf(ev.cellId) + " " + ev.side + " - " + nameOf(ev.newCellId)); break;
                 case "Removed":      say("Merged    " + nameOf(ev.cellId) + " - its tabs and its room gone to a neighbour"); break;
-                case "TracksChanged": say("Tracks    " + ev.path.join(".") + "  " + ev.ratios.map(function (r) { return r.toFixed(2); }).join(" : ")); break;
+                case "TracksChanged": say("Tracks    " + (ev.path || "root") + "  " + ev.ratios.map(function (r) { return r.toFixed(2); }).join(" : ")); break;
                 case "Opened":       say("Opened    " + ev.id + "  at " + ev.x + "," + ev.y); break;
                 case "Released":     say("Released  " + ev.id + "  (left the desk for a dock)"); break;
                 case "Moved":        say("Moved     " + ev.id + "  to " + ev.x + "," + ev.y); break;
@@ -172,39 +169,39 @@ class DockingWidget {
         // life - its focus branch, where a widget rests while no dock holds it, its floats, and every move between them
         this._desk = new Desk(branch.createBranch("desk"), { host: box, budget: 16, onEvent: sink, keyboard: kb, keyboardId: "docking/desk", menus: menus, focusName: "afloat" });
         var desk = this._desk;
-        // THE REGIONS ARE THE DOCK GRID'S: a region is a cell of the grid and a dock in it, nothing between, and parting,
-        // merging and closing one is said once, in the component - the workspace is built from the same one (RFC 0066 E3,
-        // the workspace detour). The grid draws every line and nothing else draws any; the room being worked in is said on
-        // its tab bar, lit a shade, by the dock itself. The page names the regions for its log and its switcher, and asks
-        // which region a merge goes into.
+        // THE LAYOUT IS A SPLIT GRID, THE DOCKS ITS RESIDENTS: a region is a cell of the grid and the dock residing in it,
+        // nothing between; parting, merging and closing one is the desk's docking, said once - the workspace is built the
+        // same way (RFC 0066 E3, the workspace detour; RFC 0068). The grid draws every line and nothing else draws any; the
+        // room being worked in is said on its tab bar, lit a shade, by the dock itself. The page names the regions for its
+        // log and its switcher, and asks which region a merge goes into.
         var names = {}, named = 0;
         function nameOf(id) { return names[id] || (names[id] = "region " + (++named)); }
-        var docks = new DockGrid(branch.createBranch("docks"), { host: box, desk: desk, menus: menus, onEvent: sink, dock: { addable: true },
+        var grid = new SplitGrid(branch.createBranch("grid"), { host: box, minCellPx: 160, resizable: true, onEvent: sink,
+            layout: { kind: "split", orientation: "horizontal", children: [
+                { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
+        var docks = desk.dock(branch.createBranch("docks"), grid, { menus: menus, onEvent: sink, dock: { addable: true },
             chooseRegion: function (from, others, pick) {
                 askRegion("Merge " + nameOf(from.id) + " into", others, 0, function (to) {
                     var plan = pick(to);
                     if (!plan.ok) say("Refused   " + nameOf(from.id) + " into " + nameOf(to.id) + " - " + plan.says);
                 });
-            },
-            layout: { kind: "split", orientation: "horizontal", children: [
-                { node: { kind: "cell", id: "left" }, ratio: 1 }, { node: { kind: "cell", id: "right" }, ratio: 1 } ] } });
+            } });
         this._docks = docks;
-        var grid = docks.grid;
+        this._grid = grid;
         var left = docks.region("left").dock, right = docks.region("right").dock;
         nameOf("left"); nameOf("right");
 
         // ── the room's edge: a strip over the box's foot, a thin lip all it takes of the room ──
         // What the room holds, and the way to another region by the hand, as F6 is by the keys. It lies over the
         // room while the hand is at the lip or on it: the workspace's control strip is this same component.
-        edge = new EdgeStripBuilder().label("The room").host(box).build(branch.createBranch("edge"));
+        edge = new EdgeStrip(branch.createBranch("edge"), { label: "The room", host: box });
         this._edge = edge;
         var census = branch.createElement("census", "span");
         css.addClass(census, ga_strip_census);
         edge.root.appendChild(census);
-        var goTo = new ButtonBuilder();
-        var goEl = branch.createElement("go", goTo.tag);
-        goTo.label("Go to a region…").plain().size(-1).onClick(function () { if (!switcher) openSwitcher(); }).build(goEl);
-        edge.root.appendChild(goEl);
+        var goTo = self._press(new PlainButton(PlainButtonFactory.create(branch, "go"), {
+            label: "Go to a region…", size: -1 }), function () { if (!switcher) openSwitcher(); });
+        edge.root.appendChild(goTo.el);
         function countRoom() {
             var regions = docks.regions(), held = 0, afloat = desk.floats().length;
             regions.forEach(function (r) { held += r.dock.count(); });
@@ -248,13 +245,14 @@ class DockingWidget {
         }
         var switches = 0;
         function domopsOf() { return instruments ? instruments.domops() : null; }
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/lines").label("the lines").range(0, 6, 1).detent(1).value(1).icon("size")
-            .format(function (v) { return v === 0 ? "none" : v + "px"; })
-            .onInput(function (v) { grid.thickness(v); }).labelWidth("6em")
-            .build(branch.createBranch("lines")).root);
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/size").label("the tabs' size").axis().icon("size").labelWidth("9em").onInput(function (v) { docks.regions().forEach(function (r) { r.dock.size(v); }); }).format(function (v) { return v.toFixed(1); }).build(branch.createBranch("size")).root);
-        controls.appendChild(new SliderBuilder().keyboard(kb, "docking/aspect").label("the tabs' aspect").axis().icon("aspect").labelWidth("9em").onInput(function (v) { docks.regions().forEach(function (r) { r.dock.aspect(v); }); })
-            .format(function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); }).build(branch.createBranch("aspect")).root);
+        controls.appendChild(new Slider(branch.createBranch("size"), {
+            keyboard: kb, keyboardId: "docking/size", label: "the tabs' size", axis: true, icon: ICON.SIZE_ICON, labelWidth: "9em",
+            onInput: function (v) { docks.regions().forEach(function (r) { r.dock.size(v); }); },
+            format: function (v) { return v.toFixed(1); } }).root);
+        controls.appendChild(new Slider(branch.createBranch("aspect"), {
+            keyboard: kb, keyboardId: "docking/aspect", label: "the tabs' aspect", axis: true, icon: ICON.ASPECT_ICON, labelWidth: "9em",
+            onInput: function (v) { docks.regions().forEach(function (r) { r.dock.aspect(v); }); },
+            format: function (v) { return v.toFixed(1) + (v === 0 ? "  the design's" : v > 0 ? "  wider" : "  narrower"); } }).root);
         // the tab menu's picks are the desk's, which was handed the steward: Detach floats the tab under its chip - off
         // on a tab afloat already - and Close asks it to close
 
@@ -269,16 +267,15 @@ class DockingWidget {
         var store = new BooksStore();
         var domain = branch.createBranch("domain");
         domain.activate(_owner);
-        // WHERE THE TABS COME FROM, all of them: DockingTabs holds the source and the new-tab control, and the four
+        // WHERE THE TABS COME FROM, all of them: DockingTabs holds the source and the keys picker, and the four
         // this page opens with are asked for exactly the way a later one is.
         tabs = new DockingTabs(branch.createBranch("tabs"), { host: newRow, store: store, domain: domain, note: _NOTE,
             desk: desk,
-            panes: function () { return docks.regions().map(function (r) { return r.dock; }); },
-            onAdded: function (pane, tab) { var r = docks.regionOf(pane); say("Added     " + tab.id + "  to " + (r ? nameOf(r.id) : pane.slotId)); } });
+            panes: function () { return docks.regions().map(function (r) { return r.dock; }); } });
         this._tabs = tabs;
         // QUIET: a page seeding its own workspace is not answering anybody, so nothing is brought forward and
         // nothing takes the keys - the pane's own rule leaves the first of each pair showing, which is all that is
-        // wanted. The plus and the control say otherwise, each in its own way.
+        // wanted. The plus says otherwise.
         tabs.addTo(left, "books", "quiet");
         tabs.addTo(left, "shelves", "quiet");
         tabs.addTo(right, "plate", "quiet");
@@ -289,9 +286,18 @@ class DockingWidget {
         this.root = el;
     }
 
+    /** One of its buttons, its press kept with it: the page is the handler of every press it makes. */
+    _press(button, act) { this._acts.set(button, act); button.setOnClick(this); return button; }
+
+    /** A page handles its buttons' presses. */
+    canHandle(type) { return type === EVENT.CLICK; }
+
+    /** A press: what the page keeps for the button pressed. */
+    handle(event) { this._acts.get(event.source)(event); }
+
     dispose() { this._offMenus(); this._offF6(); this._edge.dispose(); this._desk.dispose(); this._instruments.dispose();   // the desks first: a dock is disposed only empty
                 if (this._ownMenus) this._ownMenus.dispose(); this._tabs.dispose();
-                this._docks.dispose(); }
+                this._docks.dispose(); this._grid.dispose(); }
 }
 
 function appMain(el, params) {

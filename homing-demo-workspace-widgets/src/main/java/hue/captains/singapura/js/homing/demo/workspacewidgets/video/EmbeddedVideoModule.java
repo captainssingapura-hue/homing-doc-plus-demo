@@ -6,10 +6,14 @@ import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
 import hue.captains.singapura.js.homing.component.keyboard.focusParties;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.core.js.domOpsParties;
 import hue.captains.singapura.js.homing.workspace.widgets.SelfContainedWidget;
@@ -24,6 +28,8 @@ import java.util.List;
  * again when it is seen only if it was the one that paused it - by the state
  * the player says - so it never starts audio you did not.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 26,
+        reason = "It makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record EmbeddedVideoModule() implements DomModule<EmbeddedVideoModule> {
 
     public record EmbeddedVideo() implements SelfContainedWidget<EmbeddedVideoModule>, NeedKeyboard {
@@ -51,6 +57,9 @@ public record EmbeddedVideoModule() implements DomModule<EmbeddedVideoModule> {
                 .add(new ModuleImports<>(List.of(new focusParties()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WidgetStyles.wg_fill()), WidgetStyles.INSTANCE))
+                // the strip and its takes in the house's tab look
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new EmbeddedVideoStyles.vd_root(), new EmbeddedVideoStyles.vd_head(), new EmbeddedVideoStyles.vd_title(),
                         new EmbeddedVideoStyles.vd_count(), new EmbeddedVideoStyles.vd_note(), new EmbeddedVideoStyles.vd_stage(),
                         new EmbeddedVideoStyles.vd_frame(), new EmbeddedVideoStyles.vd_rail(), new EmbeddedVideoStyles.vd_take()), EmbeddedVideoStyles.INSTANCE))

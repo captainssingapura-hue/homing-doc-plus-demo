@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.demo.components;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@code SplitGridMirrorDemo}: the house's split-grid mirror in action - a grid drawn small, its cursor moved by press or keys; the grid arranged by its options at the cursor. */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 5,
+        reason = "It touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record SplitGridMirrorDemoModule() implements DomModule<SplitGridMirrorDemoModule> {
 
     public static final SplitGridMirrorDemoModule INSTANCE = new SplitGridMirrorDemoModule();
