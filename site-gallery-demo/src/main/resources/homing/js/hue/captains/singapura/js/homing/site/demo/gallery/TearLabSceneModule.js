@@ -50,7 +50,7 @@ class TearStage {
         css.addClass(stage, tl_stage);
         this._strip = branch.createElement("strip", "div");
         css.addClass(this._strip, mtp_strip, tl_strip);
-        new Look(_LAB_STRIP, ROLE.STANDALONE).wear(this._strip, { except: ["size-gap", "size-inset"] });   // no tail, so none of the strip's room
+        new Look(_LAB_STRIP, ROLE.STANDALONE).wear(this._strip);   // the strip whole: its room is its tail's, and the lab's row has no tail
         this._strip.setAttribute("role", "tablist");
         stage.appendChild(this._strip);
         this._edge = ["escape-top", "escape-bottom", "capture-top", "capture-bottom"].map(function (n, i) {

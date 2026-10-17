@@ -26,6 +26,17 @@
     </properties>
 
     <dependencies>
+        <!-- The tree's and the document widgets' components, registered with the house's styling (RFC 0067, D17). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.ws</groupId>
+            <artifactId>homing-workspace-tree</artifactId>
+            <version>${homing.ws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js.studio</groupId>
+            <artifactId>homing-docview-widgets</artifactId>
+            <version>${homing.studio.version}</version>
+        </dependency>
         <!-- The docs: the model, and the SVG doc the composed doc holds. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
