@@ -14,8 +14,8 @@ import java.util.List;
 
 /**
  * The house's design of the platformer's scene, in every house style and palette, drawn in the palette's own colours:
- * the stage's backdrop its recessed layer, the sky a wash of its accent, a platform its neutral with the groove's edge,
- * the platform underfoot its accent - the one spot of it, lit where the animal stands - and the card when a run is over
+ * the stage's backdrop its recessed layer, the sky a wash of its accent, a platform its title colour - as a tab in use
+ * is drawn - the platform underfoot its accent, lit where the animal stands, and the card when a run is over
  * raised over the stage. The lava alone keeps the house's danger, the same in every palette, so it always reads as
  * danger. Every colour is the house's own (RFC 0067, D43), so the scene follows the palette worn.
  */
@@ -50,18 +50,18 @@ public record HousePlatformerScene() implements Design<BaseScheme, PlatformerSce
         }
     }
 
-    /** A platform: the palette's neutral, its edge the groove's - firm enough to land on at a glance, and plain, so the one underfoot stands out. */
+    /** A platform: the palette's title colour, face and edge, as a tab in use is drawn - firm enough to land on at a glance; the one underfoot its accent. */
     public record Platform() implements PlatformerScene.Platform.Concrete<HousePlatformerScene>, Drawn {
         public static final Platform INSTANCE = new Platform();
         @Override public List<Drawing<?>> drawings(Dressed theme) {
-            return List.of(new Drawing.Painted<>(GROUND, ground(new BaseColours.PrimaryNeutral())),
+            return List.of(new Drawing.Painted<>(GROUND, ground(new BaseColours.Title())),
                            new Drawing.Own<>(BORDER, "border-width: 2px; border-style: solid;"),
-                           new Drawing.Painted<>(BORDER_COLOUR, new Paint.With<>(new BaseColours.GrooveEdge())),
+                           new Drawing.Painted<>(BORDER_COLOUR, new Paint.With<>(new BaseColours.Title())),
                            new Drawing.Own<>(CORNER, "border-radius: 3px;"));
         }
     }
 
-    /** The platform underfoot: the palette's accent, its edge the accent's - the one spot of the accent in the scene. */
+    /** The platform underfoot: the palette's accent, its edge the accent's - the one platform that is not the title's. */
     public record PlatformUnderfoot() implements PlatformerScene.PlatformUnderfoot.Concrete<HousePlatformerScene>, Drawn {
         public static final PlatformUnderfoot INSTANCE = new PlatformUnderfoot();
         @Override public List<Drawing<?>> drawings(Dressed theme) {

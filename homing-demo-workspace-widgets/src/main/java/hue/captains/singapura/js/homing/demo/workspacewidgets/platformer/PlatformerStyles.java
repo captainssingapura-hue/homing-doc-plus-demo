@@ -13,7 +13,7 @@ import java.util.Set;
  * The bodies lay out; how each shape of the scene looks - its colours, its
  * edge, its corner - is the scene's design ({@link HousePlatformerScene}),
  * whose leaves the stage wears beside these classes. The stage is the game's
- * own size, 700 by 500 of its units, scaled to the box it is lent by
+ * own size, 1000 by 500 of its units - twice as wide as tall - scaled to the box it is lent by
  * {@code --pf-scale}; everything in it is placed by the game's numbers, each a
  * custom property its class reads - the stage never writes a style of its own.
  */
@@ -104,7 +104,7 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
         @Override public String body() { return """
             flex: 0 0 auto;
             position: relative;
-            width: 700px;
+            width: 1000px;
             height: 500px;
             overflow: hidden;
             transform: scale(var(--pf-scale, 1));

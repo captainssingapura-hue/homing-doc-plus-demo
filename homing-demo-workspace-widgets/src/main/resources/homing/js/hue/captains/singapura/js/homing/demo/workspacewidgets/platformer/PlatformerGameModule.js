@@ -32,7 +32,7 @@
 
 class PlatformerGame {
 
-    static WIDTH = 700;
+    static WIDTH = 1000;
     static HEIGHT = 500;
     static ANIMAL = 50;
     static SKY = 120;
