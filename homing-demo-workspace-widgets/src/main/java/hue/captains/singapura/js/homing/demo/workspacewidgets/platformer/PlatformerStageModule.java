@@ -14,7 +14,7 @@ import java.util.List;
  * The platformer, drawn: {@code new PlatformerStage(branch, { onAgain })} - a
  * stage of the game's own size scaled to its box, the world, the platforms,
  * the lava, the animal, and a card when the run is over; every place a custom
- * property its class reads.
+ * property its class reads, every shape a leaf of the scene its design draws.
  */
 public record PlatformerStageModule() implements DomModule<PlatformerStageModule> {
 
@@ -31,9 +31,12 @@ public record PlatformerStageModule() implements DomModule<PlatformerStageModule
                 .add(new ModuleImports<>(List.of(new AnimalsModule.Animals()), AnimalsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ElementStyles.el_button(), new ElementStyles.el_button_primary()), ElementStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlatformerStyles.pf_view(), new PlatformerStyles.pf_stage(), new PlatformerStyles.pf_sky(),
-                        new PlatformerStyles.pf_world(), new PlatformerStyles.pf_platform(), new PlatformerStyles.pf_platform_under(),
+                        new PlatformerStyles.pf_world(), new PlatformerStyles.pf_platform(),
                         new PlatformerStyles.pf_gone(), new PlatformerStyles.pf_animal(), new PlatformerStyles.pf_left(), new PlatformerStyles.pf_lava(),
                         new PlatformerStyles.pf_over(), new PlatformerStyles.pf_over_title(), new PlatformerStyles.pf_hint()), PlatformerStyles.INSTANCE))
+                // what each shape looks like: a leaf of the scene, worn through the house's design of it
+                .add(new ModuleImports<>(List.of(new PlatformerSceneModule.PLATFORMER_SCENE()), PlatformerSceneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new HousePlatformerSceneModule.HousePlatformerScene()), HousePlatformerSceneModule.INSTANCE))
                 .build();
     }
 

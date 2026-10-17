@@ -13,6 +13,10 @@ import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.conformance.GameLoopConformance;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CssGroup;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSceneBaseModule;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -31,6 +35,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class WidgetsConformanceTest {
 
     private static final List<Crate> TOP = List.of(DemoWorkspaceWidgetsCrate.INSTANCE);
+
+    /** The instance a site serving the platformer installs - the house's styling with the platformer's scene: the scene's design object is made from it (D51). */
+    @BeforeAll
+    static void anInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling(List.of(PlatformerSceneBaseModule.INSTANCE))); }
 
     private static Set<String> own() {
         return TOP.stream().flatMap(c -> c.entries().stream()).map(e -> e.moduleClass()).collect(Collectors.toSet());

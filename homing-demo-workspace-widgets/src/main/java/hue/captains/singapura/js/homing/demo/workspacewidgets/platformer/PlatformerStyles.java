@@ -9,13 +9,13 @@ import java.util.Set;
 
 
 /**
- * The platformer's sheet, in the design's words and nothing of its own: the
- * bodies lay out, the designs colour, set and shape. The stage is the game's
+ * The platformer's sheet: where everything goes, and nothing of how it looks.
+ * The bodies lay out; how each shape of the scene looks - its colours, its
+ * edge, its corner - is the scene's design ({@link HousePlatformerScene}),
+ * whose leaves the stage wears beside these classes. The stage is the game's
  * own size, 700 by 500 of its units, scaled to the box it is lent by
  * {@code --pf-scale}; everything in it is placed by the game's numbers, each a
  * custom property its class reads - the stage never writes a style of its own.
- * The sky is the design's base, the ground its recess, a platform raised - the
- * one underfoot a success - and the lava its danger.
  */
 public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
 
@@ -98,7 +98,7 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
         }
     }
 
-    /** The stage: the game's own size, scaled by {@code --pf-scale} to fit, the ground the design's recess. */
+    /** The stage: the game's own size, scaled by {@code --pf-scale} to fit; its ground the scene's backdrop. */
     public record pf_stage() implements CssClass<PlatformerStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pf-scale")); }
         @Override public String body() { return """
@@ -114,7 +114,7 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
         }
     }
 
-    /** The sky: a band along the top, the design's base. */
+    /** The sky: a band along the top. */
     public record pf_sky() implements CssClass<PlatformerStyles> {
         @Override public String body() { return """
             position: absolute;
@@ -138,7 +138,7 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
         }
     }
 
-    /** A platform, raised: at {@code --pf-x}, {@code --pf-y}, {@code --pf-w} wide. */
+    /** A platform: at {@code --pf-x}, {@code --pf-y}, {@code --pf-w} wide. */
     public record pf_platform() implements CssClass<PlatformerStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pf-x"), new CssVar("--pf-y"), new CssVar("--pf-w")); }
         @Override public String body() { return """
@@ -150,11 +150,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
             box-sizing: border-box;
             """;
         }
-    }
-
-    /** The platform underfoot: a success. */
-    public record pf_platform_under() implements CssClass<PlatformerStyles> {
-        @Override public String body() { return ""; }
     }
 
     /** Gone for now: a place for a platform, empty; the card, while the run goes on. Last in the sheet, so it wins. */
@@ -181,7 +176,7 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
         @Override public String body() { return "transform: scaleX(-1);"; }
     }
 
-    /** The lava: along the foot, the design's danger. */
+    /** The lava: along the foot. */
     public record pf_lava() implements CssClass<PlatformerStyles> {
         @Override public String body() { return """
             position: absolute;
@@ -189,7 +184,6 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
             right: 0;
             bottom: 0;
             height: 40px;
-            border-top: 2px solid;
             box-sizing: border-box;
             """;
         }
@@ -220,7 +214,7 @@ public record PlatformerStyles() implements CssGroup<PlatformerStyles> {
     public List<CssClass<PlatformerStyles>> cssClasses() {
         // pf_gone last: what is gone stays gone, whatever display the thing it hides has
         return List.of(new pf_root(), new pf_head(), new pf_title(), new pf_score(), new pf_hint(), new pf_controls(), new pf_view(), new pf_stage(), new pf_sky(),
-                       new pf_world(), new pf_platform(), new pf_platform_under(), new pf_animal(), new pf_left(), new pf_lava(),
+                       new pf_world(), new pf_platform(), new pf_animal(), new pf_left(), new pf_lava(),
                        new pf_over(), new pf_over_title(), new pf_gone());
     }
 }

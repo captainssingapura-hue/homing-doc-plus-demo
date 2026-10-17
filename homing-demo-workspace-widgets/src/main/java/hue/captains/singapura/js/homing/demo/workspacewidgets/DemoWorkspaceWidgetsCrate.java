@@ -24,6 +24,9 @@ import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.Platfor
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSoundModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerStageModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerStyles;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSceneModule;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.HousePlatformerSceneSheet;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.HousePlatformerSceneModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoDeclaration;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.video.EmbeddedVideoStyles;
@@ -101,6 +104,9 @@ public final class DemoWorkspaceWidgetsCrate implements Crate {
                 CrateEntry.of(PlatformerSoundModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 // the game drawn, and played
                 CrateEntry.of(PlatformerStyles.INSTANCE),
+                CrateEntry.of(PlatformerSceneModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                CrateEntry.of(HousePlatformerSceneSheet.INSTANCE),
+                CrateEntry.of(HousePlatformerSceneModule.INSTANCE),
                 CrateEntry.of(PlatformerStageModule.INSTANCE, StandardJsModuleType.CONSUMER),
                 CrateEntry.of(PlatformerPlayModule.INSTANCE, GameLoopModuleType.GAME_LOOP),
                 // and watched: the run re-simulated, a snapshot of records inside records to join by

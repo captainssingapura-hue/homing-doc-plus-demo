@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.demo.site;
 
 import hue.captains.singapura.js.homing.catalogue.site.AppListing;
 import hue.captains.singapura.js.homing.relgrid.house.GridFrameBaseModule;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSceneBaseModule;
 import hue.captains.singapura.js.homing.site.Path;
 import hue.captains.singapura.js.homing.site.Router;
 import hue.captains.singapura.js.homing.site.Site;
@@ -27,7 +28,7 @@ public record DemoSite() implements Site {
      * The site's one MPA: its brand, the designs it offers, the preferences behind the bar's button
      * - the gallery's, which its preferences page shows too - and the crate it serves.
      */
-    public static final StandardMpa MPA = StandardMpa.of(Brand.of("Homing · demo"), HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE)), GalleryPreferences.INSTANCE, DemoSiteCrate.INSTANCE);
+    public static final StandardMpa MPA = StandardMpa.of(Brand.of("Homing · demo"), HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE)), GalleryPreferences.INSTANCE, DemoSiteCrate.INSTANCE);
 
     /** Read once: the tree is checked when the site is made, not when a request arrives. */
     public static final CatalogueRouter ROUTER = CatalogueRouter.at(Path.ROOT, DemoCatalogue.INSTANCE, MPA).listing(AppListing.INSTANCE);

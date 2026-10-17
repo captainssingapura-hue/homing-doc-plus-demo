@@ -7,7 +7,11 @@
 //
 // IT DRAWS WHAT IT IS HANDED, and decides nothing: every place, size and the
 // scale is a custom property a typed class reads (PlatformerStyles) — never a
-// style of its own. The platforms are a fixed set of places, each shown with
+// style of its own — and what each shape looks like is the scene's design: the
+// stage wears a leaf of the scene (PLATFORMER_SCENE) through the house's design
+// of it (HousePlatformerScene), in the palette worn, and never learns a class;
+// the platform underfoot is worn in the platform's place. The platforms are a
+// fixed set of places, each shown with
 // the platform it holds now, or hidden: the world makes and lets go platforms
 // all the time, and a page's elements are the branch's, made once.
 //
@@ -35,19 +39,24 @@ class PlatformerStage {
         var stage = this._stage = PlatformerStage._el(b, "stage", "div", pf_stage, view);
         stage.setAttribute("role", "img");
         stage.setAttribute("aria-label", "The platformer's stage");
-        PlatformerStage._el(b, "sky", "div", pf_sky, stage);
+        HousePlatformerScene.wear(PLATFORMER_SCENE.BACKDROP, stage);
+        HousePlatformerScene.wear(PLATFORMER_SCENE.SKY, PlatformerStage._el(b, "sky", "div", pf_sky, stage));
         var world = this._world = PlatformerStage._el(b, "world", "div", pf_world, stage);
         this._places = [];
         this._held = [];
+        this._under = [];   // whether each place wears the platform underfoot, in the platform's place
         for (var i = 0; i < PlatformerStage.PLACES; i++) {
             var p = PlatformerStage._el(b, "platform" + i, "div", pf_platform, world);
+            HousePlatformerScene.wear(PLATFORMER_SCENE.PLATFORM, p);
             css.addClass(p, pf_gone);
             this._places.push(p);
             this._held.push(null);
+            this._under.push(false);
         }
         this._animal = PlatformerStage._el(b, "animal", "div", pf_animal, world);
-        PlatformerStage._el(b, "lava", "div", pf_lava, stage);
+        HousePlatformerScene.wear(PLATFORMER_SCENE.LAVA, PlatformerStage._el(b, "lava", "div", pf_lava, stage));
         var card = this._card = PlatformerStage._el(b, "over", "div", pf_over, stage);
+        HousePlatformerScene.wear(PLATFORMER_SCENE.SCORE_CARD, card);
         PlatformerStage._el(b, "overTitle", "h3", pf_over_title, card).textContent = "Game over";
         this._final = PlatformerStage._el(b, "overScore", "p", pf_hint, card);
         if (typeof o.onAgain === "function") {   // a stage that only watches has no run of its own to begin again
@@ -79,7 +88,12 @@ class PlatformerStage {
                     el.style.setProperty("--pf-w", String(p.w));
                 }
             }
-            css.toggleClass(el, pf_platform_under, p !== null && p === s.active);
+            var under = p !== null && p === s.active;
+            if (under !== this._under[i]) {   // the platform underfoot, worn in the platform's place: it owns what a platform owns
+                this._under[i] = under;
+                HousePlatformerScene.shed(under ? PLATFORMER_SCENE.PLATFORM : PLATFORMER_SCENE.PLATFORM_UNDERFOOT, el);
+                HousePlatformerScene.wear(under ? PLATFORMER_SCENE.PLATFORM_UNDERFOOT : PLATFORMER_SCENE.PLATFORM, el);
+            }
         }
     }
 

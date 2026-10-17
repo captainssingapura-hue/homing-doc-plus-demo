@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.conformance.GameLoopModuleType;
 import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import hue.captains.singapura.js.homing.relgrid.house.GridFrameBaseModule;
+import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSceneBaseModule;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class DemoConformanceTest {
 
     /** The demo's instance, as its site installs it - the house's styling with the grid's frame: what is made from its taxonomy is served (D51). */
     @BeforeAll
-    static void theSitesInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE))); }
+    static void theSitesInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE))); }
 
     @Test
     void everyServedModuleKeepsItsLane_strictly() {
