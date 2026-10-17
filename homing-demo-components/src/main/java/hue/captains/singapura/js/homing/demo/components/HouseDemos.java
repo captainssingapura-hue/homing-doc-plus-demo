@@ -37,7 +37,6 @@ public record HouseDemos() implements StatelessFunctionalObject {
     public List<Demo> demos() {
         var button = new ModuleImports<>(List.of(new ButtonDemoModule.ButtonDemo()), ButtonDemoModule.INSTANCE);
         var text = new ModuleImports<>(List.of(new TextDemoModule.TextDemo()), TextDemoModule.INSTANCE);
-        var icon = new ModuleImports<>(List.of(new IconDemoModule.IconDemo()), IconDemoModule.INSTANCE);
         return List.of(
                 // the elements: the nine buttons are one button, each as its leaf says
                 new Demo(HouseControls.PlainButton.INSTANCE, button),
@@ -67,27 +66,6 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new Demo(HouseText.Wordmark.INSTANCE, text),
                 // a way to somewhere else
                 new Demo(HouseControls.Link.INSTANCE, new ModuleImports<>(List.of(new LinkDemoModule.LinkDemo()), LinkDemoModule.INSTANCE)),
-                // the twenty icons are one icon, each as its leaf says (D52)
-                new Demo(HouseIcons.AddIcon.INSTANCE, icon),
-                new Demo(HouseIcons.RemoveIcon.INSTANCE, icon),
-                new Demo(HouseIcons.CloseIcon.INSTANCE, icon),
-                new Demo(HouseIcons.ResetIcon.INSTANCE, icon),
-                new Demo(HouseIcons.RotateIcon.INSTANCE, icon),
-                new Demo(HouseIcons.FlipIcon.INSTANCE, icon),
-                new Demo(HouseIcons.PinIcon.INSTANCE, icon),
-                new Demo(HouseIcons.CheckIcon.INSTANCE, icon),
-                new Demo(HouseIcons.GripIcon.INSTANCE, icon),
-                new Demo(HouseIcons.DiscloseIcon.INSTANCE, icon),
-                new Demo(HouseIcons.SettingsIcon.INSTANCE, icon),
-                new Demo(HouseIcons.SizeIcon.INSTANCE, icon),
-                new Demo(HouseIcons.AspectIcon.INSTANCE, icon),
-                new Demo(HouseIcons.ExtentIcon.INSTANCE, icon),
-                new Demo(HouseIcons.LevelIcon.INSTANCE, icon),
-                new Demo(HouseIcons.ColumnIcon.INSTANCE, icon),
-                new Demo(HouseIcons.RowIcon.INSTANCE, icon),
-                new Demo(HouseIcons.MergeIcon.INSTANCE, icon),
-                new Demo(HouseIcons.DetachIcon.INSTANCE, icon),
-                new Demo(HouseIcons.WithinIcon.INSTANCE, icon),
                 new Demo(HouseContainers.SummaryView.INSTANCE,
                         new ModuleImports<>(List.of(new SummaryViewDemoModule.SummaryViewDemo()), SummaryViewDemoModule.INSTANCE)),
                 new Demo(HouseControls.Slider.INSTANCE, new ModuleImports<>(List.of(new SliderDemoModule.SliderDemo()), SliderDemoModule.INSTANCE)),
@@ -141,6 +119,27 @@ public record HouseDemos() implements StatelessFunctionalObject {
                 new ShownAround(HouseControls.Lip.INSTANCE, "the line at a host's foot, in the edge strip's demo: where the hand reveals the strip"),
                 new ShownAround(HouseRegions.SliderRack.INSTANCE, "the row a group of sliders stands in, in its demo: framed as one"),
                 new ShownAround(HouseContainers.ClickableCard.INSTANCE, "the card the summary view is shown on, in its demo: pressed by the hand, or Enter or Space"),
+                // the icons: each a part only, seen in what holds it (D52)
+                new ShownAround(HouseIcons.AddIcon.INSTANCE, "the face of the icon button, in its demo; the plus at the end of every bar of tabs"),
+                new ShownAround(HouseIcons.RemoveIcon.INSTANCE, "leading the row that deletes, in the context menu's demo"),
+                new ShownAround(HouseIcons.CloseIcon.INSTANCE, "the face of the close button, in its demo; the cross on every tab and every floating pane"),
+                new ShownAround(HouseIcons.ResetIcon.INSTANCE, "leading the row that turns it back as it was, under Turn, in the context menu's demo"),
+                new ShownAround(HouseIcons.RotateIcon.INSTANCE, "leading the row that rotates, under Turn, in the context menu's demo"),
+                new ShownAround(HouseIcons.FlipIcon.INSTANCE, "leading the row that flips, under Turn, in the context menu's demo"),
+                new ShownAround(HouseIcons.PinIcon.INSTANCE, "leading the row that pins, in the context menu's demo, while it is not pinned"),
+                new ShownAround(HouseIcons.CheckIcon.INSTANCE, "leading a checked row, in the context menu's demo: the row that pins, once picked"),
+                new ShownAround(HouseIcons.GripIcon.INSTANCE, "on the slider's knob, in its demo: a slider that says nothing of what it sets"),
+                new ShownAround(HouseIcons.DiscloseIcon.INSTANCE, "at the end of a row that opens rows, in the context menu's demo: Share, Turn"),
+                new ShownAround(HouseIcons.SettingsIcon.INSTANCE, "the face of the preferences button, at the end of the bar at the top of the page"),
+                new ShownAround(HouseIcons.SizeIcon.INSTANCE, "on the knob of the control panel's size slider, beside the demos"),
+                new ShownAround(HouseIcons.AspectIcon.INSTANCE, "on the knob of the control panel's aspect slider, beside the demos"),
+                new ShownAround(HouseIcons.ExtentIcon.INSTANCE, "on the knob of the control panel's colour slider, beside the demos"),
+                new ShownAround(HouseIcons.LevelIcon.INSTANCE, "on the knob of each fader, in the slider group's demo"),
+                new ShownAround(HouseIcons.ColumnIcon.INSTANCE, "leading Split beside, in the menu of a bar of tabs, opened by a right-click on its empty ground"),
+                new ShownAround(HouseIcons.RowIcon.INSTANCE, "leading Split below, in the menu of a bar of tabs, opened by a right-click on its empty ground"),
+                new ShownAround(HouseIcons.MergeIcon.INSTANCE, "leading each Merge, in the menu of a bar of tabs, opened by a right-click on its empty ground"),
+                new ShownAround(HouseIcons.DetachIcon.INSTANCE, "leading Detach, in a tab's menu, opened by a right-click on its chip"),
+                new ShownAround(HouseIcons.WithinIcon.INSTANCE, "on a tab's chip while the keys are inside the tab"),
                 // the panel beside the demos
                 new ShownAround(HouseControlPanel.ControlPanel.INSTANCE, "the control panel beside the demos: a slider for each degree the picked component varies by, a button for each switch, action and question"),
                 // the page's chrome

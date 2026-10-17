@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.demo.components;
 
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
@@ -36,6 +37,7 @@ public record SliderGroupDemoModule() implements DomModule<SliderGroupDemoModule
         return ImportsFor.<SliderGroupDemoModule>builder()
                 .add(new ModuleImports<>(List.of(new ComponentDemoModule.ComponentDemo()), ComponentDemoModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderGroupModule.SliderGroup()), SliderGroupModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 .build();
     }
 

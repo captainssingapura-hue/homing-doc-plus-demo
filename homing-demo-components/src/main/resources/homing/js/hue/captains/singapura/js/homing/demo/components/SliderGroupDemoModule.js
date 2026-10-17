@@ -15,7 +15,7 @@ class SliderGroupDemo extends ComponentDemo {
         var self = this;
         this._group = new SliderGroup(this.branch.createBranch("group"), { title: "Equaliser", across: true });
         ["Bass", "Middle", "Treble"].forEach(function (name) {
-            self._group.add(name.toLowerCase(), { label: name, vertical: true, axis: true,
+            self._group.add(name.toLowerCase(), { label: name, vertical: true, axis: true, icon: ICON.LEVEL_ICON,
                 format: function (v) { return (v > 0 ? "+" : "") + v.toFixed(1); },
                 onChange: function (v) { self.say(name + " set to " + (v > 0 ? "+" : "") + v.toFixed(1)); } });
         });
