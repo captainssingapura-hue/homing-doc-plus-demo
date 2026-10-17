@@ -13,10 +13,11 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import java.util.List;
 
 /**
- * The house's design of the platformer's scene, in every house style and palette: the stage's backdrop the recessed
- * layer, the sky the page's ground, a platform raised on it with an edge, the platform underfoot a success, the lava
- * the danger along the foot, and the card when a run is over raised over the stage. Every colour is the house's own
- * (RFC 0067, D43), so the scene follows the palette worn.
+ * The house's design of the platformer's scene, in every house style and palette, drawn in the palette's own colours:
+ * the stage's backdrop its recessed layer, the sky a wash of its accent, a platform its neutral with the groove's edge,
+ * the platform underfoot its accent - the one spot of it, lit where the animal stands - and the card when a run is over
+ * raised over the stage. The lava alone keeps the house's danger, the same in every palette, so it always reads as
+ * danger. Every colour is the house's own (RFC 0067, D43), so the scene follows the palette worn.
  */
 public record HousePlatformerScene() implements Design<BaseScheme, PlatformerScene> {
 
@@ -41,32 +42,32 @@ public record HousePlatformerScene() implements Design<BaseScheme, PlatformerSce
         }
     }
 
-    /** The sky: the page's ground, a band over the recessed stage. */
+    /** The sky: a wash of the palette's accent, a band over the recessed stage. */
     public record Sky() implements PlatformerScene.Sky.Concrete<HousePlatformerScene>, Drawn {
         public static final Sky INSTANCE = new Sky();
         @Override public List<Drawing<?>> drawings(Dressed theme) {
-            return List.of(new Drawing.Painted<>(GROUND, ground(new BaseColours.Ground())));
+            return List.of(new Drawing.Painted<>(GROUND, ground(new BaseColours.AccentWash())));
         }
     }
 
-    /** A platform: the raised layer, its edge the groove's - firm enough to land on at a glance. */
+    /** A platform: the palette's neutral, its edge the groove's - firm enough to land on at a glance, and plain, so the one underfoot stands out. */
     public record Platform() implements PlatformerScene.Platform.Concrete<HousePlatformerScene>, Drawn {
         public static final Platform INSTANCE = new Platform();
         @Override public List<Drawing<?>> drawings(Dressed theme) {
-            return List.of(new Drawing.Painted<>(GROUND, ground(new BaseColours.Raised())),
+            return List.of(new Drawing.Painted<>(GROUND, ground(new BaseColours.PrimaryNeutral())),
                            new Drawing.Own<>(BORDER, "border-width: 2px; border-style: solid;"),
                            new Drawing.Painted<>(BORDER_COLOUR, new Paint.With<>(new BaseColours.GrooveEdge())),
                            new Drawing.Own<>(CORNER, "border-radius: 3px;"));
         }
     }
 
-    /** The platform underfoot: the success's tint, its edge the success's ink. */
+    /** The platform underfoot: the palette's accent, its edge the accent's - the one spot of the accent in the scene. */
     public record PlatformUnderfoot() implements PlatformerScene.PlatformUnderfoot.Concrete<HousePlatformerScene>, Drawn {
         public static final PlatformUnderfoot INSTANCE = new PlatformUnderfoot();
         @Override public List<Drawing<?>> drawings(Dressed theme) {
-            return List.of(new Drawing.Painted<>(GROUND, ground(new BaseColours.SuccessTint())),
+            return List.of(new Drawing.Painted<>(GROUND, ground(new BaseColours.Accent())),
                            new Drawing.Own<>(BORDER, "border-width: 2px; border-style: solid;"),
-                           new Drawing.Painted<>(BORDER_COLOUR, new Paint.With<>(new BaseColours.SuccessInk())),
+                           new Drawing.Painted<>(BORDER_COLOUR, new Paint.With<>(new BaseColours.AccentEdge())),
                            new Drawing.Own<>(CORNER, "border-radius: 3px;"));
         }
     }
