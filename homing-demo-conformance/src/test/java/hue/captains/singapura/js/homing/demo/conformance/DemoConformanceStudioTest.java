@@ -5,6 +5,8 @@ import hue.captains.singapura.js.homing.conformance.workbench.ConformanceStudio;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerPlayModule;
 import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import hue.captains.singapura.js.homing.relgrid.house.GridFrameBaseModule;
+import hue.captains.singapura.js.homing.workspace.tree.TreeBaseModule;
+import hue.captains.singapura.js.homing.docview.widgets.DocViewBaseModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSceneBaseModule;
 import hue.captains.singapura.js.homing.site.Path;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
@@ -22,7 +24,7 @@ class DemoConformanceStudioTest {
 
     /** The demo's instance, as its site installs it - the house's styling with the grid's frame: what is made from its taxonomy is served (D51). */
     @BeforeAll
-    static void theSitesInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE))); }
+    static void theSitesInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE, TreeBaseModule.INSTANCE, DocViewBaseModule.INSTANCE))); }
 
     @Test
     void theReportCoversTheDemo_theGameLoopUnderItsOwnType() {
@@ -36,7 +38,7 @@ class DemoConformanceStudioTest {
 
     @Test
     void theStudioIsMadeOverTheDemosCrates_noOldStudioOnTheClasspath() {
-        var studio = new ConformanceStudio("Homing · demo conformance", HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE)), DemoConformance.TOP_LEVEL,
+        var studio = new ConformanceStudio("Homing · demo conformance", HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE, TreeBaseModule.INSTANCE, DocViewBaseModule.INSTANCE)), DemoConformance.TOP_LEVEL,
                 ConformanceStudio.exportedReport(DemoConformanceStudioServer.class));
         assertTrue(studio.site().router().resolve(Path.parse("/conformance")).isPresent());
         assertThrows(ClassNotFoundException.class, () -> Class.forName("hue.captains.singapura.js.homing.studio.base.Bootstrap"),

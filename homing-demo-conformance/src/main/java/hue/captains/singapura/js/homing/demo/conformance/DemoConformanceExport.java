@@ -6,6 +6,8 @@ import hue.captains.singapura.js.homing.conformance.export.ConformanceReportWrit
 import hue.captains.singapura.js.homing.conformance.rules.report.ConformanceRun;
 import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import hue.captains.singapura.js.homing.relgrid.house.GridFrameBaseModule;
+import hue.captains.singapura.js.homing.workspace.tree.TreeBaseModule;
+import hue.captains.singapura.js.homing.docview.widgets.DocViewBaseModule;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSceneBaseModule;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 
@@ -25,7 +27,7 @@ public final class DemoConformanceExport {
     public static void main(String[] args) throws IOException {
         if (args.length != 1) throw new IllegalArgumentException("Usage: DemoConformanceExport <output-directory>");
         Path dir = Path.of(args[0]);
-        InstalledStyling.install(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE)));   // the demo's instance, as its site installs it (D51)
+        InstalledStyling.install(HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE, TreeBaseModule.INSTANCE, DocViewBaseModule.INSTANCE)));   // the demo's instance, as its site installs it (D51)
         ConformanceRun run = new ConformanceEngine(DemoConformance.POLICY, new ServedModuleRenderer())
                 .assemble(DemoConformance.TOP_LEVEL, DemoConformance.grader());
         new ConformanceReportWriter().write(dir, run);

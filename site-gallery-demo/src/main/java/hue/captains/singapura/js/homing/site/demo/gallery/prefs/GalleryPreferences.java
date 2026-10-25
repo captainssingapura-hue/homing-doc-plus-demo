@@ -15,12 +15,12 @@ import java.util.Map;
 
 /**
  * The gallery's preferences: a rigid tree with a widget on every node,
- * stamped into this module. The theme is the MPA's own widget over
- * {@code /themes}; the rest are the generic kinds. The master is the
+ * stamped into this module. The theme - its style and its palette, each its own preference - is the MPA's own
+ * widget over {@code /themes}; the rest are the generic kinds. The master is the
  * relation tree, from its own repo, wrapped as a widget. Given to the MPA,
  * so the bar's button opens this tree; also a page of its own.
  *
- * <p>Only the theme is read by anything today. The locale and the editor
+ * <p>Only the style and the palette are read by anything today. The locale and the editor
  * settings are kept by the steward and shown here so that the tree, the
  * kinds and the overview are proved on more than one preference; the
  * widgets say so.</p>
@@ -29,12 +29,12 @@ public final class GalleryPreferences extends PreferencesRegistry {
 
     static final PreferenceTree TREE = PreferenceTree.of(
             PreferenceNode.of("preferences", "Preferences", "What this site remembers for you, in this browser.",
-                    overview("Preferences", "What this site remembers for you, in this browser: the theme it wears, and, once the site reads them, your locale and how the editor shows text.",
-                             setting("theme", "Theme"), setting("locale/language", "Language"),
+                    overview("Preferences", "What this site remembers for you, in this browser: the design it wears - its style, and its colours - and, once the site reads them, your locale and how the editor shows text.",
+                             setting("style", "Style"), setting("palette", "Colours"), setting("locale/language", "Language"),
                              setting("editor/font-size", "Font size"), setting("editor/wrap", "Wrap lines")),
                     PreferenceNode.of("theme", "Theme", "The design this site wears, and the colours it wears it in.",
-                            WidgetProvider.of(ThemeWidgetModule.INSTANCE, Map.of("name", "theme", "label", "Theme",
-                                    "summary", "Seven designs, each offered in the colours that suit it. A pick switches every sheet on the page; another tab follows."))),
+                            WidgetProvider.of(ThemeWidgetModule.INSTANCE, Map.of("label", "Style",
+                                    "summary", "The styles this site offers, then the colours the chosen one is offered in - each kept on its own. A pick switches its own sheet on the page; another tab follows."))),
                     PreferenceNode.of("locale", "Locale", "Language, numbers and dates.",
                             overview("Locale", "How the site would speak to you - once it does. The value is kept and rides on every module address today; nothing reads it yet.",
                                      setting("locale/language", "Language")),

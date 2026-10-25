@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.demo.conformance;
 import hue.captains.singapura.js.homing.conformance.workbench.ConformanceStudio;
 import hue.captains.singapura.js.homing.demo.workspacewidgets.platformer.PlatformerSceneBaseModule;
 import hue.captains.singapura.js.homing.relgrid.house.GridFrameBaseModule;
+import hue.captains.singapura.js.homing.workspace.tree.TreeBaseModule;
+import hue.captains.singapura.js.homing.docview.widgets.DocViewBaseModule;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public final class DemoConformanceStudioServer {
 
     public static void main(String[] args) {
         int port = Integer.getInteger("conformance.port", 8091);
-        new ConformanceStudio("Homing · demo conformance", HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE)), DemoConformance.TOP_LEVEL,   // the demo site's instance
+        new ConformanceStudio("Homing · demo conformance", HouseStyles.INSTANCE.styling(List.of(GridFrameBaseModule.INSTANCE, PlatformerSceneBaseModule.INSTANCE, TreeBaseModule.INSTANCE, DocViewBaseModule.INSTANCE)), DemoConformance.TOP_LEVEL,   // the demo site's instance
                 ConformanceStudio.exportedReport(DemoConformanceStudioServer.class)).serve(port);
     }
 }
